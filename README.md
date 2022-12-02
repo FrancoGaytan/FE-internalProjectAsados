@@ -8,28 +8,72 @@ Documentación Requerimientos:
 * permitir que varios usuarios se puedan unir al evento
 * permitir definir quien va a ser el asador
 * quien va a colaborar con las compras
-* permitir que todos puedan cargar sus cbu (el co-organizador debe tener su cbu precargado en su perfil)
-* permitir seleccionar el medio de pago a la hora de pagarle al co-organizador
-* permitir validar del lado del co-organizador si recibio el pago.
+* permitir que todos puedan cargar sus cbu (el encargado de compras debe tener su cbu precargado en su perfil)
+* permitir seleccionar el medio de pago a la hora de pagarle al encargado de compras
+* permitir validar del lado del encargado de compras si recibio el pago.
 * permitir subir comprobante de pago
-* que sea visible para el co-organizador que tenga visibilidad de saber cuantos faltan abonar y quienes son los que faltan.
+* que sea visible para el encargado de compras que tenga visibilidad de saber cuantos faltan abonar y quienes son los que faltan.
 * que sea visible para los comensales sepan si les falta abonar.
 * bloquear a un usuario indicado a subirse a un nuevo asado sin haber abonado el anterior (pensar en los casos de posponer pagos).
 * seleccionar el medio de pago(efectivo, transferencia, ver si se puede mercado pago).
-* permitir subir el ticket de pago por parte del co-organizador.
-* hacer el calculo para determinar cuando debe abonar cada comensal y cuanto a favor o en contra tiene cada co-organizador.
-* obligar al co-organizador que suba todos los comprobantes de pago antes de una determinada hora o momento.
-* que el co-organizador pueda bloquear la lista de comensales en el momento en el que esta realizando las compras para que ya ninguno se pueda bajar del evento.
+* permitir subir el ticket de pago por parte del encargado de compras.
+* hacer el calculo para determinar cuando debe abonar cada comensal y cuanto a favor o en contra tiene cada encargado de compras.
+* obligar al encargado de compras que suba todos los comprobantes de pago antes de una determinada hora o momento.
+* que el encargado de compras pueda bloquear la lista de comensales en el momento en el que esta realizando las compras para que ya ninguno se pueda bajar del evento.
 * permitir modificar los datos del usuario (foto, cbu/alias, nombre de usuario)
 * definir un numero maximo de comensales para un asado determinado (definido por el asador).
-* permitir subir la descripcion del menu que se esta cosinando.
+* permitir subir la descripcion del menu que se esta cocinando.
 * permitir subir fotos de un asado determinado.
 * pensar en la idea de permitir colaborar en futuras compras que se tienen que realizar para conseguir elementos (tabla, cubiertos, etc)<-- fuera de mvp
 * seccion de foro para hacer propuestas, ponernos en contacto, etc.
+* feedback de una comida (puntuación)<-- a revisar, fuera de mvp
 
 
 Roles
 * asador
 * inicializador / organizador
-* co-organizador (el que hace las compras)
+* encargado de compras (el que hace las compras) 
 * comensal
+
+----------------------------------------------------------------------
+
+CUR
+
+* Login
+* Registro
+* Forgot Password
+
+* Listado de Eventos (main page/dashboard)
+    - Añadirse a Evento (popup) 
+    - Bloquear a usuario para añadirse a nuevo evento (deuda)
+
+* Generación de Evento
+    - definir roles
+    - definir cantidad máxima de comensales
+    - definir info general del evento(fecha, hora, descripción,...)
+
+* Evento
+    - Pago
+    - seleccionar medio de pago
+    - Validación de Pago
+    - Ver/Subir comprobante/ticket (forzar al co-organizador)
+    - Ver cantidad de gente (a definir si los participantes)
+    - Cerrar lista de comensales. (co-organizador)
+    - Ver total a abonar (realizar calculo)
+    - Ver datos del evento
+    - Visibilizar quienes pagaron/faltan pagar (co-organizador) - Saber si faltas pagar (comensal)
+
+
+* Actualización del profile (cbu, foto, nombre) - configuraciones
+
+* FAQ
+    - foro, subir imagenes (a implementar a futuro)
+    - colaboraciones (a futuro)
+
+Pages
+* Login/Registro
+* Listado de Evento
+* Generación de eventos
+* User Perfile
+* Evento
+* FAQ
