@@ -48,9 +48,9 @@ CUR
     - Bloquear a usuario para añadirse a nuevo evento (deuda)
 
 * Generación de Evento
-    - definir roles
+    - definir roles (cuando se selecciona al encargado de compras, debe estar la restricción de no poder seleccionar a un usuario que no tenga cargado su cbu - popup informativo o usuario bloqueado --> hover)
     - definir cantidad máxima de comensales
-    - definir info general del evento(fecha, hora, descripción,...)
+    - definir info general del evento(fecha, hora, descripción...)
 
 * Evento
     - Pago
@@ -64,16 +64,52 @@ CUR
     - Visibilizar quienes pagaron/faltan pagar (co-organizador) - Saber si faltas pagar (comensal)
 
 
-* Actualización del profile (cbu, foto, nombre) - configuraciones
+* Actualización del profile (cbu, foto, nombre, dieta, restricciones (sal, etc)<--opcionales) 
+    - configuraciones
 
 * FAQ
     - foro, subir imagenes (a implementar a futuro)
     - colaboraciones (a futuro)
 
-Pages
-* Login/Registro
+------------------------------------------------------
+
+Pages (select language en todas las páginas)
+
+* Landing
+    - login
+    - signup
+
+* Login
+    - mail
+    - contraseña
+    - link a recuperar contraseña
+
+* Forgot Password
+    - mail (para enviar código de autenticación)
+    - en otra página: 
+        + Código de autenticación.
+        + Contraseña 
+        + Confirmar contraseña
+
+* Registro
+    - nombre 
+    - apellido
+    - mail de endava
+    - contraseña
+    - confirmar contraseña
+    - restricción alimenticia (opcional)?
+
 * Listado de Evento
+
 * Generación de eventos
+
 * User Perfile
+    - ver nombre y apellido
+    - ver mail
+    - cargar cbu / alias (opcional)
+    - restricción alimenticia
+    - cargar foto (opcional)
+
 * Evento
+
 * FAQ
