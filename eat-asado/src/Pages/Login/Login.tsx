@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
+import { useTranslation } from '../../stores/LocalizationContext';
 
 const Login = () => {
-  return (
-	<div>
-	  login page
-	</div>
-  )
-}
+	const translation = useTranslation('login');
+	return (
+		<div>{translation.username}</div>
+	);
+};
 
-export default Login
+export default Login;
