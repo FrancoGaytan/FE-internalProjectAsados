@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './Pages/Login/login';
 import routes, { IRoute } from './routes';
 import { GlobalProvider } from './stores/GlobalContext';
 import { LocalizationProvider } from './stores/LocalizationContext';
