@@ -2,3 +2,6 @@
 @use '/src/styles/shared';
 @use '/src/styles/custom-properties';
 
+.clase{
+	background-color: var(--test);
+}

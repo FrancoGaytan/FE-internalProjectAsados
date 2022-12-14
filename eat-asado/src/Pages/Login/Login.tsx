@@ -5,7 +5,7 @@ import './styles.scss';
 const Login = () => {
 	const translation = useTranslation('login');
 	return (
-		<div>{translation.username}</div>
+		<div className='clase'>{translation.username}</div>
 	);
 };
 
