@@ -17,5 +17,5 @@ export function translateWithParams(localizationString: string, translationParam
 }
 
 export function changeTitle(title: string): void {
-	document.title = `Eat-Asado- ${title}`;
+	document.title = `Eat-Asado - ${title}`;
 }

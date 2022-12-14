@@ -1,0 +1,24 @@
+// Gets keys from a map
+@function _get-keys-from-map($map) {
+	$result: '';
+
+	@each $key, $value in $map {
+		$result: $result + $key;
+
+		// Adds the comma if not the last element
+		@if index($map, ($key $value)) != length($map) {
+			$result: $result + ', ';
+		}
+	}
+
+	@return $result;
+}
+
+// Gets a value from a map
+@function get-from-map($map, $key) {
+	@if map-has-key($map, $key) {
+		@return map-get($map, $key);
+	} @else {
+		@error "Key #{$key} doesn't exist. Available keys: #{_get-keys-from-map($map)}...";
+	}
+}

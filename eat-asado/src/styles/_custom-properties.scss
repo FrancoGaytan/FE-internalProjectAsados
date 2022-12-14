@@ -1,0 +1,24 @@
+@use '/src/styles/variables';
+
+:root {
+	--primaryFont: 'Inter', sans-serif;
+	--secondaryFont: 'Nunito', sans-serif;
+
+	// Colors
+	// ====================
+
+	--backgroundColorPrimary: #191b1f;
+	--test: yellow;
+
+	//Mono
+	--transparent: rgba(#111111, 0%);
+
+	// Layout
+	// =====================
+	--borderRadiusPrimary: 8px;
+	--menuPadding: 15px;
+
+	// Shadows
+	// ======================
+	--wrapperShadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.3);
+}
