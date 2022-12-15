@@ -155,6 +155,8 @@ Pages (select language en todas las páginas)
 		+ si pago o no pago <-- definir como
 		+ restricciones alimenticias (lo que esta en el perfil del usuario)
 	- eliminar evento (advertir que hay inscriptos - avisar de la cancelación)
+	- cerrar evento (cuando ya hiciste las compras)
+	- terminar evento (cuando ya estan cargados los comprobantes)
 
 * Evento (como comensal)
 	-  ver info del evento
@@ -173,6 +175,25 @@ Pages (select language en todas las páginas)
 		-  comprobantes (ver comprobantes) <-- a priori no visibles
 		-  encargado de compras + cbu o alias del encargado
 		-  establecer como pagado
+	
+* Evento (como encargado de compras)
+	-  ver info del evento
+		+ menu
+		+ cantidad de comensales actuales
+		+ fecha y hora del evento
+		+ limite de personas
+		+ asador
+	- asignarse como encargado de compras (en caso que no este asignado)
+	- asignarse como asador (en caso que no este asignado)
+	- pagar (si ya estan cargados los comprobantes - evento terminado / sino bloquear el boton)
+	- ver lista de participantes 
+		+ nombre y apellido 
+		+ si pago o no pago <-- definir como
+
+	* Información a pago
+		-  costo total
+		-  costo unitario de pago
+		-  comprobantes (ver comprobantes) <-- a priori no visibles
 		-  subir comprobante de pago
 
 * FAQ
