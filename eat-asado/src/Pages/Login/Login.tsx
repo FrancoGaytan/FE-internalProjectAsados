@@ -7,6 +7,7 @@ const Login = () => {
 	return (
 		<>
 			<div className="clase">{translation.username}</div>
+			<button>prueba</button>
 		</>
 	);
 };
