@@ -6,8 +6,7 @@ const Login = () => {
 	const translation = useTranslation('login');
 	return (
 		<>
-			<div className="clase">{translation.username}</div>
-			<button>prueba</button>
+			<div className="inProgress">In Progress...</div>
 		</>
 	);
 };
