@@ -1,0 +1,41 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+button {
+	border: none;
+	border-radius: 45px;
+	color: white;
+	font-family: var(--secondaryFont);
+	font-weight: bold;
+
+	//kind
+
+	&.primary {
+		background-color: var(--btnPrimary);
+		&:hover {
+			background-color: var(--btnPrimaryDarker);
+		}
+	}
+	&.secondary {
+		background-color: green;
+	}
+
+	//size
+
+	&.size-short {
+		width: 140px;
+		height: 40px;
+	}
+
+	&.size-medium {
+	}
+
+	&.size-large {
+		width: 300px;
+		height: 40px;
+	}
+
+	&.full {
+	}
+}

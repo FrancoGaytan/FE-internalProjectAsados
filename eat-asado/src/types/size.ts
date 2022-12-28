@@ -1,0 +1,1 @@
+export type TSize = 'short' | 'medium' | 'large' | 'full';

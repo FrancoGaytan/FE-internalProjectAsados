@@ -1,14 +1,29 @@
 @use '/src/styles/variables';
 
+@font-face {
+	font-family: 'della respira';
+	src: url('./variables/fonts/DellaRespira-Regular.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'raleway';
+	src: url('./variables/fonts/Raleway-VariableFont_wght.ttf') format('truetype');
+}
+
 :root {
-	--primaryFont: 'Inter', sans-serif;
-	--secondaryFont: 'Nunito', sans-serif;
+	--primaryFont: 'della respira', sans-serif;
+	--secondaryFont: 'raleway', sans-serif;
 
 	// Colors
 	// ====================
-
-	--backgroundColorPrimary: #191b1f;
-	--test: yellow;
+	--btnPrimary: #bf334d;
+	--btnPrimaryDarker: #a50321;
+	--iconsSecondary: #5787a5;
+	--backgroundMain: #333333;
+	--backgroundSecondaryLighter: #d88f8f;
+	--backgroundNeutralDarker: #0c0c20;
+	--backgroundNeutralLighter: #f2f2f2;
+	--backgroundNeutral: #4f5d2f;
 
 	//Mono
 	--transparent: rgba(#111111, 0%);
@@ -20,5 +35,7 @@
 
 	// Shadows
 	// ======================
-	--wrapperShadow: 0px 0px 20px -5px rgba(0, 0, 0, 0.3);
+	--dropShadow: 0px 4px 8px rgba(246, 250, 249, 0.15);
+	--dropShadow1: 0px 4px 8px rgba(246, 250, 249, 0.1);
+	--dropShadow2: 0px 2px 4px rgba(246, 250, 249, 0.1);
 }

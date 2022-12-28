@@ -1,0 +1,53 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.loginBody {
+	background: #7e7d7d
+		url('https://img.freepik.com/free-photo/lamb-steak-pieces-with-sauces-grilled-pepper-fresh-salad-wooden-board_140725-10580.jpg?w=996&t=st=1671126816~exp=1671127416~hmac=9240892c9c1e4ba45c248cd00be82377b16d791a242bd33d76dd835eee67612b');
+	background-blend-mode: multiply;
+	background-repeat: no-repeat;
+	min-height: 100vh;
+	min-width: 100vw;
+	background-size: cover;
+	overflow: hidden;
+	background-position: center;
+	margin: 0;
+	box-sizing: border-box;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.container {
+	min-height: 500px;
+	min-width: 400px;
+	border-radius: 4px;
+	background-color: var(--backgroundMain);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+	.title {
+		color: white;
+		font-family: var(--secondaryFont);
+		font-weight: bold;
+		align-self: flex-start;
+		margin-left: 2.5rem;
+	}
+}
+
+input {
+	background: none;
+	border: 1px solid white;
+	min-width: 300px;
+	min-height: 40px;
+	padding-left: 15px;
+	margin-bottom: 35px;
+
+	&::placeholder {
+		color: grey;
+	}
+}

@@ -14,7 +14,7 @@ export default function EatAsado(): JSX.Element {
 		<BrowserRouter>
 			<GlobalProvider>
 				<LocalizationProvider>
-					<Routes>{Object.entries(routes).map(([_, routes]) => renderRoute(routes))}</Routes>;
+					<Routes>{Object.entries(routes).map(([_, routes]) => renderRoute(routes))}</Routes>
 				</LocalizationProvider>
 			</GlobalProvider>
 		</BrowserRouter>
