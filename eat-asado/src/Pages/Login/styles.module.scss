@@ -2,52 +2,30 @@
 @use '/src/styles/shared';
 @use '/src/styles/custom-properties';
 
-body {
-	margin: 0;
-	background-size: cover;
-	overflow: hidden;
+// TO DO: que los childrens usen un 100% del ancho, acomodar alineacion
+
+.title {
+	color: white;
+	font-family: var(--secondaryFont);
+	font-weight: bold;
+	align-self: flex-start;
+	margin-top: 4rem;
+	margin-left: 5.625rem;
 }
 
-.loginBody {
-	background: #7e7d7d
-		url('https://img.freepik.com/free-photo/lamb-steak-pieces-with-sauces-grilled-pepper-fresh-salad-wooden-board_140725-10580.jpg?w=996&t=st=1671126816~exp=1671127416~hmac=9240892c9c1e4ba45c248cd00be82377b16d791a242bd33d76dd835eee67612b');
-	background-blend-mode: multiply;
-	background-repeat: no-repeat;
-	min-height: 100vh;
-	min-width: 100vw;
-	background-size: cover;
-	overflow: hidden;
-	background-position: center;
-	margin: 0;
-	box-sizing: border-box;
-	padding: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.container {
-	min-height: 500px;
-	min-width: 400px;
-	border-radius: 4px;
-	background-color: var(--backgroundMain);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-
-	.title {
-		color: white;
-		font-family: var(--secondaryFont);
-		font-weight: bold;
-		align-self: flex-start;
-		margin-left: 2.5rem;
-	}
+.loginLabel {
+	color: var(--backgroundNeutralLighter);
+	font-family: var(--secondaryFont);
+	align-self: flex-start;
+	margin-bottom: 10px;
+	margin-left: 5.5rem;
 }
 
 input {
 	background: none;
 	border: 1px solid white;
+	color: var(--backgroundNeutralLighter);
+	font-family: var(--secondaryFont);
 	min-width: 300px;
 	min-height: 40px;
 	padding-left: 15px;
@@ -56,4 +34,13 @@ input {
 	&::placeholder {
 		color: grey;
 	}
+}
+
+.forgotPassword {
+	font-size: 13px;
+	font-family: var(--secondaryFont);
+	text-decoration: none;
+	color: var(--backgroundNeutralLighter);
+	margin: 40px 80px 0 0;
+	align-self: flex-end;
 }
