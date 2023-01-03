@@ -1,4 +1,4 @@
-@use '/src/styles/variables';
+@use '/src/styles/variables' as variables;
 @use '/src/styles/shared';
 @use '/src/styles/custom-properties';
 
@@ -11,7 +11,7 @@
 	transform: rotate(45deg);
 	position: absolute;
 	top: 20px;
-	right: 30px;
+	right: 50px;
 
 	&::after {
 		content: '';
@@ -31,6 +31,13 @@
 	font-weight: bold;
 	align-self: flex-start;
 	margin-top: 4rem;
+
+	@media #{variables.media-query(max, lg)} {
+        margin-top: 0;
+		margin-bottom: 30px;
+		font-weight: variables.font-weight(bold);
+		font-size: 30px;
+	}
 }
 
 .loginLabel {
@@ -38,6 +45,11 @@
 	font-family: var(--secondaryFont);
 	align-self: flex-start;
 	margin-bottom: 10px;
+	
+	@media #{variables.media-query(max, lg)} {
+		font-weight: variables.font-weight(bold);
+		font-size: 16px;
+	}
 }
 
 input {
@@ -49,17 +61,22 @@ input {
 	min-height: 40px;
 	padding-left: 15px;
 	margin-bottom: 35px;
+	border-radius: 6px;
 
 	&::placeholder {
-		color: grey;
+		color: var(--placeholderColor);
+	}
+
+	&:focus {
+		box-shadow: var(--inputShadow)
 	}
 }
 
 .forgotPassword {
-	font-size: 13px;
+	font-size: 18px;
 	font-family: var(--secondaryFont);
 	text-decoration: none;
 	color: var(--backgroundNeutralLighter);
-	margin: 40px 80px 0 0;
+	margin: 30px auto;
 	align-self: flex-end;
 }

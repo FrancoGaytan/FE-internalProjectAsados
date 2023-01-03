@@ -40,4 +40,10 @@ body {
 	flex-direction: column;
 	position: relative;
 	padding: 50px;
+	
+	@media #{variables.media-query(max, lg)} {
+        height: 100vh;
+		justify-content: center;
+		padding: 0px 50px;
+	}
 }

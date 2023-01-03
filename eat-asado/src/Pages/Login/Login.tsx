@@ -9,20 +9,20 @@ const Login = () => {
 	return (
 		<FormLayout>
 			<div className={styles.closeBtn}></div>
-			<p className={styles.title}>LOGIN</p>
+			<h3 className={styles.title}>LOGIN</h3>
 			<label htmlFor="email" className={styles.loginLabel}>
-				Email Endava
+				Email
 			</label>
-			<input id="email" placeholder="EMAIL" type="text" />
+			<input id="email" placeholder="usuario@endava.com" type="text" />
 			<label htmlFor="password" className={styles.loginLabel}>
 				Clave
 			</label>
-			<input id="password" placeholder="CONTRASEÑA" type="password" />
+			<input id="password" placeholder="Clave" type="password" />
 			<Button kind="primary" size="large">
 				LOGIN
 			</Button>
 			<a href="/register" className={styles.forgotPassword}>
-				FORGOT PASSWORD
+				¿No te acordas de tu clave?
 			</a>
 		</FormLayout>
 	);
