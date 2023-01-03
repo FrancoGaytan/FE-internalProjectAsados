@@ -3,29 +3,25 @@ import styles from './styles.module.scss';
 import Button from '../../Components/micro/Button/Button';
 import FormLayout from '../../Components/macro/layout/FormLayout';
 
-const Login = () => {
+const Register = () => {
 	const translation = useTranslation('login');
 
 	return (
 		<FormLayout>
-			<div className={styles.closeBtn}></div>
-			<p className={styles.title}>LOGIN</p>
-			<label htmlFor="email" className={styles.loginLabel}>
+			<p className={styles.title}>REGISTER</p>
+			<label htmlFor="email" className={styles.registerLabel}>
 				Email Endava
 			</label>
 			<input id="email" placeholder="EMAIL" type="text" />
-			<label htmlFor="password" className={styles.loginLabel}>
+			<label htmlFor="password" className={styles.registerLabel}>
 				Clave
 			</label>
 			<input id="password" placeholder="CONTRASEÑA" type="password" />
 			<Button kind="primary" size="large">
-				LOGIN
+				REGISTER
 			</Button>
-			<a href="/register" className={styles.forgotPassword}>
-				FORGOT PASSWORD
-			</a>
 		</FormLayout>
 	);
 };
 
-export default Login;
+export default Register;
