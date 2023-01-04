@@ -33,7 +33,7 @@
 	margin-top: 4rem;
 
 	@media #{variables.media-query(max, lg)} {
-        margin-top: 0;
+		margin-top: 0;
 		margin-bottom: 30px;
 		font-weight: variables.font-weight(bold);
 		font-size: 30px;
@@ -45,7 +45,7 @@
 	font-family: var(--secondaryFont);
 	align-self: flex-start;
 	margin-bottom: 10px;
-	
+
 	@media #{variables.media-query(max, lg)} {
 		font-weight: variables.font-weight(bold);
 		font-size: 16px;
@@ -68,7 +68,7 @@ input {
 	}
 
 	&:focus {
-		box-shadow: var(--inputShadow)
+		box-shadow: var(--inputShadow);
 	}
 }
 
