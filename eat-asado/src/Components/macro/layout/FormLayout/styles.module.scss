@@ -8,6 +8,27 @@ body {
 	overflow: hidden;
 }
 
+.closeBtn {
+	background-color: var(--backgroundNeutralLighter);
+	height: 25px;
+	width: 2px;
+	transform: rotate(45deg);
+	position: absolute;
+	top: 20px;
+	right: 50px;
+
+	&::after {
+		content: '';
+		background-color: var(--backgroundNeutralLighter);
+		height: 25px;
+		width: 2px;
+		transform: rotate(270deg);
+		position: absolute;
+		top: 0px;
+		right: 0px;
+	}
+}
+
 .formLayout {
 	background: #7e7d7d
 		url('https://img.freepik.com/free-photo/lamb-steak-pieces-with-sauces-grilled-pepper-fresh-salad-wooden-board_140725-10580.jpg?w=996&t=st=1671126816~exp=1671127416~hmac=9240892c9c1e4ba45c248cd00be82377b16d791a242bd33d76dd835eee67612b');

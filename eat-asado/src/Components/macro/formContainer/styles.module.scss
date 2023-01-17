@@ -1,0 +1,28 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.formContainer {
+    width: auto;
+    height: auto;
+    display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-direction: column;
+	position: relative;
+    overflow: auto;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media #{variables.media-query(max, lg)} {
+        top: 80px;
+        padding: 0px 0px 200px 0px;
+	}
+
+    button {
+        margin-top: 65px;
+    }
+}

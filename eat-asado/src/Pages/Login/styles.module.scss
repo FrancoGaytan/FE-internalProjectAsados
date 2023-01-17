@@ -4,27 +4,6 @@
 
 // TO DO: que los childrens usen un 100% del ancho, acomodar alineacion
 
-.closeBtn {
-	background-color: var(--backgroundNeutralLighter);
-	height: 25px;
-	width: 2px;
-	transform: rotate(45deg);
-	position: absolute;
-	top: 20px;
-	right: 50px;
-
-	&::after {
-		content: '';
-		background-color: var(--backgroundNeutralLighter);
-		height: 25px;
-		width: 2px;
-		transform: rotate(270deg);
-		position: absolute;
-		top: 0px;
-		right: 0px;
-	}
-}
-
 .title {
 	color: white;
 	font-family: var(--secondaryFont);
@@ -34,7 +13,7 @@
 
 	@media #{variables.media-query(max, lg)} {
 		margin-top: 0;
-		margin-bottom: 30px;
+		margin-bottom: -5px;
 		font-weight: variables.font-weight(bold);
 		font-size: 30px;
 	}
@@ -45,6 +24,7 @@
 	font-family: var(--secondaryFont);
 	align-self: flex-start;
 	margin-bottom: 10px;
+	margin-top: 35px;
 
 	@media #{variables.media-query(max, lg)} {
 		font-weight: variables.font-weight(bold);
@@ -68,6 +48,7 @@ input {
 	}
 
 	&:focus {
+		outline: none;
 		box-shadow: var(--inputShadow);
 	}
 }
