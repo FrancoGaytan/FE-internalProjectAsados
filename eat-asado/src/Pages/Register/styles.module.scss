@@ -31,9 +31,32 @@
 	margin-top: 2rem;
 
 	@media #{variables.media-query(max, lg)} {
-		margin-top: 0;
 		font-weight: variables.font-weight(bold);
 		font-size: 30px;
+	}
+}
+
+.inputSection {
+	display: flex;
+	@media #{variables.media-query(max, lg)} {
+		flex-direction: column;
+		overflow: auto;
+		&::-webkit-scrollbar {
+			display: none;
+		}
+	}
+
+	.firstColumn {
+		width: 50%;
+		@media #{variables.media-query(max, lg)} {
+			width: 100%;
+		}
+	}
+	.secondColumn {
+		width: 50%;
+		@media #{variables.media-query(max, lg)} {
+			width: 100%;
+		}
 	}
 }
 
@@ -43,6 +66,7 @@
 	align-self: flex-start;
 	margin-bottom: 10px;
 	margin-top: 35px;
+	display: block;
 
 	@media #{variables.media-query(max, lg)} {
 		font-weight: variables.font-weight(bold);
@@ -56,12 +80,17 @@ input {
 	color: var(--backgroundNeutralLighter);
 	font-family: var(--secondaryFont);
 	min-width: 300px;
+	max-width: 100%;
 	min-height: 40px;
 	padding-left: 15px;
 	margin-bottom: 0px;
 	border-radius: 6px;
-	margin-left: auto;
-	margin-right: auto;
+	display: block;
+
+	@media #{variables.media-query(max, lg)} {
+		margin-left: 0;
+		margin-right: 0;
+	}
 
 	&::placeholder {
 		color: var(--placeholderColor);
@@ -79,4 +108,40 @@ input {
 	font-size: small;
 	margin-top: 5px;
 	max-width: 300px;
+}
+
+.checkboxesContainer {
+	margin-top: 35px;
+
+	.internalTitle {
+		margin-bottom: 20px;
+	}
+
+	.extraDescription {
+		color: white;
+		font-family: var(--secondaryFont);
+		align-self: flex-start;
+		font-size: small;
+		margin-top: 5px;
+		max-width: 300px;
+		margin-left: 5px;
+	}
+	.title {
+		align-self: flex-start;
+		margin-bottom: 30px;
+	}
+
+	.registerLabel {
+		margin-top: 0px;
+	}
+	.checkbox {
+		min-width: 15px;
+		min-height: 15px;
+		margin-left: 0px;
+		align-self: flex-start;
+		margin-right: 14px;
+		border-radius: 25%;
+		cursor: pointer;
+		display: inline;
+	}
 }
