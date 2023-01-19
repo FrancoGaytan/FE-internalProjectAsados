@@ -44,6 +44,6 @@ body {
 	@media #{variables.media-query(max, lg)} {
         height: 100vh;
 		justify-content: center;
-		padding: 0px 50px;
+		padding: 0px 50px 30px 50px;
 	}
 }

@@ -38,6 +38,7 @@
 
 .inputSection {
 	display: flex;
+
 	@media #{variables.media-query(max, lg)} {
 		flex-direction: column;
 		overflow: auto;
@@ -47,15 +48,17 @@
 	}
 
 	.firstColumn {
-		width: 50%;
+		min-width: 50%;
+		padding-right: 4%;
 		@media #{variables.media-query(max, lg)} {
-			width: 100%;
+			min-width: 100%;
 		}
 	}
 	.secondColumn {
-		width: 50%;
+		min-width: 50%;
+		padding-right: 4%;
 		@media #{variables.media-query(max, lg)} {
-			width: 100%;
+			min-width: 100%;
 		}
 	}
 }
@@ -106,6 +109,7 @@ input {
 	font-family: var(--secondaryFont);
 	align-self: flex-start;
 	font-size: small;
+	display: inline-block;
 	margin-top: 5px;
 	max-width: 300px;
 }

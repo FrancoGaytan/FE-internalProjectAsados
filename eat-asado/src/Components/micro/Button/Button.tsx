@@ -13,7 +13,8 @@ const Button = (props: PropsWithChildren<IButtonProps>): JSX.Element => {
 		<button
 			onClick={props.onClick}
 			{...className(styles.button, styles[props.kind ?? 'primary'], props.className, styles[`size-${props.size ?? 'auto'}`])}
-			style={{ ...props.style }}>
+			style={{ ...props.style }}
+			id={props.id}>
 			{props.children}
 		</button>
 	);
