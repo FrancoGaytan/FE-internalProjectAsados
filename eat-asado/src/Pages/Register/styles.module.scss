@@ -41,7 +41,9 @@
 
 	@media #{variables.media-query(max, lg)} {
 		flex-direction: column;
-		overflow: auto;
+		overflow-y: auto;
+		overflow-x: hidden;
+
 		&::-webkit-scrollbar {
 			display: none;
 		}
@@ -50,13 +52,16 @@
 	.firstColumn {
 		min-width: 50%;
 		padding-right: 4%;
+
 		@media #{variables.media-query(max, lg)} {
 			min-width: 100%;
 		}
 	}
+
 	.secondColumn {
 		min-width: 50%;
 		padding-right: 4%;
+
 		@media #{variables.media-query(max, lg)} {
 			min-width: 100%;
 		}
@@ -130,6 +135,7 @@ input {
 		max-width: 300px;
 		margin-left: 5px;
 	}
+
 	.title {
 		align-self: flex-start;
 		margin-bottom: 30px;
@@ -138,6 +144,7 @@ input {
 	.registerLabel {
 		margin-top: 0px;
 	}
+
 	.checkbox {
 		min-width: 15px;
 		min-height: 15px;
