@@ -1,6 +1,7 @@
 import { Navigate, PathRouteProps } from 'react-router-dom';
 import { Translation } from './localization';
 import { settingNewPassword } from './localization/en-us/settingNewPassword';
+import CreateEvent from './Pages/CreateEvent/CreateEvent';
 import Login from './Pages/Login/Login';
 import RecoverKey from './Pages/RecoverKey/RecoverKey';
 import Register from './Pages/Register/Register';
@@ -42,6 +43,12 @@ const routes: { [key: string]: IRoute } = {
 		path: '/userProfile',
 		localizationKey: 'userProfile',
 		element: <UserProfile />,
+		isPublic: true
+	},
+	createEvent: {
+		path: '/createEvent',
+		localizationKey: 'createEvent',
+		element: <CreateEvent />,
 		isPublic: true
 	}
 };

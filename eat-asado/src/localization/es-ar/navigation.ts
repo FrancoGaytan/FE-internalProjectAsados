@@ -4,4 +4,5 @@ export const navigation = Object.seal({
 	recoverKey: 'RecoverKey',
 	settingNewPassword: 'SettingNewPassword',
 	userProfile: 'UserProfile',
+	createEvent: 'CreateEvent',
 });

@@ -4,6 +4,7 @@ import { register } from "./register";
 import { recoverKey } from "./recoverKey";
 import { settingNewPassword } from "./settingNewPassword";
 import { userProfile } from "./userProfile";
+import { createEvent } from "./createEvent";
 
 export const esAr = Object.seal({
 	appName: 'Eat-Asado',
@@ -13,4 +14,5 @@ export const esAr = Object.seal({
 	recoverKey,
 	settingNewPassword,
 	userProfile,
+	createEvent,
 });
