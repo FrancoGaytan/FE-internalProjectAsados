@@ -1,6 +1,9 @@
 import { login } from "./login";
 import { navigation } from "./navigation";
 import { register } from "./register";
+import { recoverKey } from "./recoverKey";
+import { settingNewPassword } from "./settingNewPassword";
+import { userProfile } from "./userProfile";
 import { createEvent } from "./createEvent";
 
 export const enUS = Object.seal({
@@ -8,5 +11,8 @@ export const enUS = Object.seal({
 	login,
 	navigation,
 	register,
-	createEvent
+	recoverKey,
+	settingNewPassword,
+	userProfile,
+	createEvent,
 });
