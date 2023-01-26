@@ -31,7 +31,7 @@ const CreateEvent = () => {
     }
 
     const handleHiddenRange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEvent({...event, isCook: e.target.checked})
+        setEvent({ ...event, isCook: e.target.checked })
         setHidden(!e.target.checked)
     }
 
@@ -41,91 +41,89 @@ const CreateEvent = () => {
 
     return (
         <FormLayout>
-            <form>
-                <div className={styles.closeBtn}></div>
-                <label className={styles.title}>Crear Evento</label>
-                <div className={styles.inputSection}>
-                    <section className={styles.column}>
-                        <label htmlFor="nombreEvento" className={styles.fieldLabel}>
-                            Nombre del Evento (opcional)
-                        </label>
-                        <input id="nombreEvento" placeholder="Nombre del Evento (opcional)" type="text" value={event.name} onChange={e => {
-                            setEvent({ ...event, name: e.target.value })
+            <div className={styles.closeBtn}></div>
+            <label className={styles.title}>Crear Evento</label>
+            <div className={styles.inputSection}>
+                <section className={styles.column}>
+                    <label htmlFor="nombreEvento" className={styles.fieldLabel}>
+                        Nombre del Evento (opcional)
+                    </label>
+                    <input id="nombreEvento" placeholder="Nombre del Evento (opcional)" type="text" value={event.name} onChange={e => {
+                        setEvent({ ...event, name: e.target.value })
+                    }} />
+                    <label htmlFor="fechaHora" className={styles.fieldLabel}>
+                        Fecha y Hora
+                    </label>
+                    <input id="fechaHora" placeholder="Fecha y Hora" type="text" value={event.dateAndHour} onChange={e => {
+                        setEvent({ ...event, dateAndHour: e.target.value })
+                    }} />
+                    <label htmlFor="descripcion" className={styles.fieldLabel}>
+                        Descripción
+                    </label>
+                    <textarea
+                        id="descripcion"
+                        name="descripcion"
+                        className={styles.textArea}
+                        placeholder="Descripción"
+                        value={event.description}
+                        onChange={e => {
+                            setEvent({ ...event, description: e.target.value })
                         }} />
-                        <label htmlFor="fechaHora" className={styles.fieldLabel}>
-                            Fecha y Hora
+                </section>
+                <section className={styles.column}>
+                    <section className={styles.checkboxesContainer}>
+                        <div className={styles.internalTitle}>
+                            <label className={styles.title}>Roles</label>
+                            <span className={styles.extraDescription}>(opcional)</span>
+                        </div>
+                        <label htmlFor="isAsador" className={styles.fieldLabel}>
+                            <input id="isAsador" type="checkbox" className={styles.checkbox} checked={event.isCook} onChange={handleHiddenRange} />
+                            Asador
                         </label>
-                        <input id="fechaHora" placeholder="Fecha y Hora" type="text" value={event.dateAndHour} onChange={e => {
-                            setEvent({ ...event, dateAndHour: e.target.value })
-                        }} />
-                        <label htmlFor="descripcion" className={styles.fieldLabel}>
-                            Descripción
-                        </label>
-                        <textarea
-                            id="descripcion"
-                            name="descripcion"
-                            className={styles.textArea}
-                            placeholder="Descripción"
-                            value={event.description}
-                            onChange={e => {
-                                setEvent({...event, description: e.target.value})
+                        <label htmlFor="isEncargadoCompras" className={styles.fieldLabel}>
+                            <input id="isEncargadoCompras" type="checkbox" className={styles.checkbox} checked={event.isBuyer} onChange={e => {
+                                setEvent({ ...event, isBuyer: e.target.checked })
                             }} />
+                            Encargado de Compras
+                        </label>
                     </section>
-                    <section className={styles.column}>
-                        <section className={styles.checkboxesContainer}>
-                            <div className={styles.internalTitle}>
-                                <label className={styles.title}>Roles</label>
-                                <span className={styles.extraDescription}>(opcional)</span>
-                            </div>
-                            <label htmlFor="isAsador" className={styles.fieldLabel}>
-                                <input id="isAsador" type="checkbox" className={styles.checkbox} checked={event.isCook} onChange={handleHiddenRange} />
-                                Asador
-                            </label>
-                            <label htmlFor="isEncargadoCompras" className={styles.fieldLabel}>
-                                <input id="isEncargadoCompras" type="checkbox" className={styles.checkbox} checked={event.isBuyer} onChange={e => {
-                                    setEvent({...event, isBuyer: e.target.checked})
-                                }}/>
-                                Encargado de Compras
-                            </label>
-                        </section>
-                        <section className={styles.rangeSelectionContainer} hidden={hidden}>
-                            <label htmlFor="diners" className={styles.fieldLabel} >
-                                Cantidad Máxima de Comensales
-                            </label>
-                            <input
-                                id="dinersRange"
-                                type="range"
-                                min={0}
-                                max={100}
-                                list="dinersMarkers"
-                                step={1}
-                                value={event['diners']}
-                                onChange={handleDinersChange} />
-                            <input
-                                id="dinersQuantity"
-                                className={styles.dinersQuantity}
-                                type="number"
-                                value={event['diners']}
-                                max={100}
-                                min={0}
-                                onChange={handleDinersChange} />
-                            <datalist id="dinersMarkers">
-                                <option value="0" label="0" />
-                                <option value="25" label="25" />
-                                <option value="50" label="50" />
-                                <option value="75" label="75" />
-                                <option value="100" label="100" />
-                            </datalist>
-                        </section>
+                    <section className={styles.rangeSelectionContainer} hidden={hidden}>
+                        <label htmlFor="diners" className={styles.fieldLabel} >
+                            Cantidad Máxima de Comensales
+                        </label>
+                        <input
+                            id="dinersRange"
+                            type="range"
+                            min={0}
+                            max={100}
+                            list="dinersMarkers"
+                            step={1}
+                            value={event['diners']}
+                            onChange={handleDinersChange} />
+                        <input
+                            id="dinersQuantity"
+                            className={styles.dinersQuantity}
+                            type="number"
+                            value={event['diners']}
+                            max={100}
+                            min={0}
+                            onChange={handleDinersChange} />
+                        <datalist id="dinersMarkers">
+                            <option value="0" label="0" />
+                            <option value="25" label="25" />
+                            <option value="50" label="50" />
+                            <option value="75" label="75" />
+                            <option value="100" label="100" />
+                        </datalist>
                     </section>
-                </div>
-                <Button kind="primary" size="large" id='registerBtn' style={{ marginBottom: 30 }} onClick={(e) => {
-                    e.preventDefault();
-                    handleSubmit();
-                }}>
-                    CREAR EVENTO
-                </Button>
-            </form>
+                </section>
+            </div>
+            <Button kind="primary" size="large" id='registerBtn' style={{ marginBottom: 30 }} onClick={(e) => {
+                e.preventDefault();
+                handleSubmit();
+            }}>
+                CREAR EVENTO
+            </Button>
         </FormLayout>
     )
 }
