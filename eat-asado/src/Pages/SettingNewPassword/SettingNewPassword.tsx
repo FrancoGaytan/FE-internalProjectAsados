@@ -8,7 +8,7 @@ const SettingNewPassword = () => {
 		<div>
 			<PrivateFormLayout>
 				<div className={styles.userProfileContainer}>
-					<h1>Setear Nueva Contraseña</h1>
+					<h1>Setear Nueva Contraseña </h1>
 				</div>
 			</PrivateFormLayout>
 		</div>
