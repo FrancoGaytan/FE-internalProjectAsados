@@ -13,11 +13,11 @@ const Login = () => {
 			<label htmlFor="email" className={styles.loginLabel}>
 				Email
 			</label>
-			<input id="email" placeholder="usuario@endava.com" type="text" />
+			<input id="email" className={styles.loginInput} placeholder="usuario@endava.com" type="text" />
 			<label htmlFor="password" className={styles.loginLabel}>
 				Clave
 			</label>
-			<input id="password" placeholder="Clave" type="password" />
+			<input id="password" className={styles.loginInput} placeholder="Clave" type="password" />
 			<Button kind="primary" size="large">
 				LOGIN
 			</Button>
