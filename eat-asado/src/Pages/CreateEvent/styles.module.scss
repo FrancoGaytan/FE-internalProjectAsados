@@ -39,6 +39,33 @@
 .inputSection {
 	display: flex;
 
+	input {
+		background: none;
+		border: 1px solid white;
+		color: var(--backgroundNeutralLighter);
+		font-family: var(--secondaryFont);
+		min-width: 300px;
+		max-width: 100%;
+		min-height: 40px;
+		padding-left: 15px;
+		margin-bottom: 0px;
+		border-radius: 6px;
+		display: block;
+
+		@media #{variables.media-query(max, lg)} {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		&::placeholder {
+			color: var(--placeholderColor);
+		}
+
+		&:focus {
+			box-shadow: var(--inputShadow);
+		}
+	}
+
 	@media #{variables.media-query(max, lg)} {
 		flex-direction: column;
 		overflow-y: auto;
@@ -49,7 +76,7 @@
 		}
 	}
 
-	.firstColumn {
+	.column {
 		min-width: 50%;
 		padding-right: 4%;
 
@@ -58,17 +85,31 @@
 		}
 	}
 
-	.secondColumn {
-		min-width: 50%;
-		padding-right: 4%;
+	.textArea {
+		min-width: 320px;
+		max-width: 100%;
+		min-height: 150px;
+		box-sizing: border-box;
+		background: none;
+		border: 1px solid white;
+		color: var(--backgroundNeutralLighter);
+		font-family: var(--secondaryFont);
+		padding: 15px;
+		margin-bottom: 0px;
+		border-radius: 6px;
+		resize: none;
 
-		@media #{variables.media-query(max, lg)} {
-			min-width: 100%;
+		&::placeholder {
+			color: var(--placeholderColor);
+		}
+
+		&:focus {
+			box-shadow: var(--inputShadow);
 		}
 	}
 }
 
-.registerLabel {
+.fieldLabel {
 	color: var(--backgroundNeutralLighter);
 	font-family: var(--secondaryFont);
 	align-self: flex-start;
@@ -79,33 +120,6 @@
 	@media #{variables.media-query(max, lg)} {
 		font-weight: variables.font-weight(bold);
 		font-size: 16px;
-	}
-}
-
-input {
-	background: none;
-	border: 1px solid white;
-	color: var(--backgroundNeutralLighter);
-	font-family: var(--secondaryFont);
-	min-width: 300px;
-	max-width: 100%;
-	min-height: 40px;
-	padding-left: 15px;
-	margin-bottom: 0px;
-	border-radius: 6px;
-	display: block;
-
-	@media #{variables.media-query(max, lg)} {
-		margin-left: 0;
-		margin-right: 0;
-	}
-
-	&::placeholder {
-		color: var(--placeholderColor);
-	}
-
-	&:focus {
-		box-shadow: var(--inputShadow);
 	}
 }
 
@@ -121,6 +135,7 @@ input {
 
 .checkboxesContainer {
 	margin-top: 35px;
+	min-width: 300px;
 
 	.internalTitle {
 		margin-bottom: 20px;
@@ -141,7 +156,7 @@ input {
 		margin-bottom: 30px;
 	}
 
-	.registerLabel {
+	.fieldLabel {
 		margin-top: 0px;
 	}
 
@@ -154,5 +169,39 @@ input {
 		border-radius: 25%;
 		cursor: pointer;
 		display: inline;
+	}
+}
+
+.rangeSelectionContainer {
+
+	input {
+		min-width: 200px;
+		display: inline;
+		min-height: fit-content;
+
+		&:focus {
+			box-shadow: none;
+		}
+	}
+
+	.dinersQuantity {
+		min-width: 40px;
+		max-width: 40px;
+		display: inline-block;
+		min-height: 40px;
+		margin-left: 10px;
+	}
+}
+
+datalist {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 200px;
+	margin-left: 20px;
+
+	option {
+		color: var(--backgroundNeutralLighter);
+		font-family: var(--secondaryFont);
 	}
 }
