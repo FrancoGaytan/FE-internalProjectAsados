@@ -141,7 +141,7 @@ const CreateEvent = () => {
 				kind="primary"
 				size="large"
 				id="registerBtn"
-				style={{ marginBottom: 30 }}
+				style={{ marginBottom: "10vh" }}
 				onClick={e => {
 					e.preventDefault();
 					handleSubmit();
