@@ -136,7 +136,8 @@ const CreateEvent = () => {
 						</datalist>
 					</section>
 				</section>
-				<Button
+			</div>
+			<Button
 				kind="primary"
 				size="large"
 				id="registerBtn"
@@ -145,9 +146,8 @@ const CreateEvent = () => {
 					e.preventDefault();
 					handleSubmit();
 				}}>
-					CREAR EVENTO
-				</Button>
-			</div>
+				CREAR EVENTO
+			</Button>
 		</FormLayout>
 	);
 };
