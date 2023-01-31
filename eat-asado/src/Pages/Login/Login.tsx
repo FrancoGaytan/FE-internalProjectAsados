@@ -21,8 +21,11 @@ const Login = () => {
 			<Button kind="primary" size="large">
 				LOGIN
 			</Button>
-			<a href="/register" className={styles.forgotPassword}>
+			<a href="/recoverkey" className={styles.forgotPassword} id="recoverKey">
 				¿No te acordas de tu clave?
+			</a>
+			<a href="/register" className={styles.register} id="register">
+				<span>¿No estás registrado? </span><span className={styles.registerHighlighted}>Registrate acá</span>
 			</a>
 		</FormLayout>
 	);
