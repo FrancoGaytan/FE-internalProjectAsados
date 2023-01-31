@@ -41,7 +41,8 @@
 
 	@media #{variables.media-query(max, lg)} {
 		flex-direction: column;
-		overflow: auto;
+		overflow-y: auto;
+		overflow-x: hidden;
 		&::-webkit-scrollbar {
 			display: none;
 		}
