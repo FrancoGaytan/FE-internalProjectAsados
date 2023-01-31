@@ -44,6 +44,7 @@ body {
 	background-size: cover;
 	display: flex;
 	align-items: center;
+	position: relative;
 
 	@media #{variables.media-query(max, lg)} {
 		min-height: 121px;
@@ -54,6 +55,21 @@ body {
 		height: 75px;
 		width: 75px;
 		margin-left: 10%;
+	}
+	.fire {
+		position: absolute;
+		width: 100%;
+		height: 70px;
+		background-image: url('../../../../../public/assets/pictures/fire.png');
+		background-size: contain;
+		z-index: 1;
+		bottom: 0;
+		//transform: translateY(220px);
+		@media #{variables.media-query(max, lg)} {
+			// height: 40px;
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
 	}
 }
 
@@ -92,5 +108,18 @@ body {
 	@media #{variables.media-query(max, lg)} {
 		height: 100vh;
 		padding: 0px 50px 30px 50px;
+	}
+}
+
+.footerFire {
+	position: absolute;
+	width: 100%;
+	height: 75px;
+	background-image: url('../../../../../public/assets/pictures/fire.png');
+	background-size: cover;
+	bottom: 0;
+	z-index: 1;
+	@media #{variables.media-query(max, lg)} {
+		transform: translateY(20px);
 	}
 }

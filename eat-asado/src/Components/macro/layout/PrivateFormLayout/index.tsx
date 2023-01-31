@@ -17,10 +17,12 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 			</section>
 			<section className={styles.secondHeader}>
 				<div className={styles.logo}></div>
+				<div className={styles.fire}></div>
 			</section>
 			<section>
 				<div className={styles.containerLayout}>{props.children}</div>
 			</section>
+			<div className={styles.footerFire}></div>
 		</div>
 	);
 }
