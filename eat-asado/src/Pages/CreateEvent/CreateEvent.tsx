@@ -61,7 +61,7 @@ const CreateEvent = () => {
 					<input
 						id="fechaHora"
 						placeholder="Fecha y Hora"
-						type="text"
+						type="datetime-local"
 						value={event.dateAndHour}
 						onChange={e => {
 							setEvent({ ...event, dateAndHour: e.target.value });
@@ -136,8 +136,7 @@ const CreateEvent = () => {
 						</datalist>
 					</section>
 				</section>
-			</div>
-			<Button
+				<Button
 				kind="primary"
 				size="large"
 				id="registerBtn"
@@ -146,8 +145,9 @@ const CreateEvent = () => {
 					e.preventDefault();
 					handleSubmit();
 				}}>
-				CREAR EVENTO
-			</Button>
+					CREAR EVENTO
+				</Button>
+			</div>
 		</FormLayout>
 	);
 };
