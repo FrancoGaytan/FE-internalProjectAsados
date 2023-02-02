@@ -42,7 +42,7 @@ const CreateEvent = () => {
 			<div className={styles.closeBtn}></div>
 			<label className={styles.title}>Crear Evento</label>
 			<div className={styles.inputSection}>
-				<section className={styles.column}>
+				<section className={styles.firstColumn}>
 					<label htmlFor="nombreEvento" className={styles.fieldLabel}>
 						Nombre del Evento (opcional)
 					</label>
@@ -81,7 +81,7 @@ const CreateEvent = () => {
 						}}
 					/>
 				</section>
-				<section className={styles.column}>
+				<section className={styles.secondColumn} style = {hidden ? {minHeight: 150} : {minHeight: 250}}>
 					<section className={styles.checkboxesContainer}>
 						<div className={styles.internalTitle}>
 							<label className={styles.title}>Roles</label>
@@ -136,18 +136,20 @@ const CreateEvent = () => {
 						</datalist>
 					</section>
 				</section>
+				<section className={styles.buttonContainer}>
+					<Button
+						kind="primary"
+						size="large"
+						id="registerBtn"
+						style={{ marginBottom: "10vh" }}
+						onClick={e => {
+							e.preventDefault();
+							handleSubmit();
+						}}>
+						CREAR EVENTO
+					</Button>
+				</section>
 			</div>
-			<Button
-				kind="primary"
-				size="large"
-				id="registerBtn"
-				style={{ marginBottom: "10vh" }}
-				onClick={e => {
-					e.preventDefault();
-					handleSubmit();
-				}}>
-				CREAR EVENTO
-			</Button>
 		</FormLayout>
 	);
 };
