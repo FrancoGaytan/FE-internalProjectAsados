@@ -2,12 +2,6 @@
 @use '/src/styles/shared';
 @use '/src/styles/custom-properties';
 
-body {
-	margin: 0;
-	background-size: cover;
-	overflow: hidden;
-}
-
 .privateHeader {
 	background-color: var(--backgroundMain);
 	display: flex;
@@ -64,9 +58,7 @@ body {
 		background-size: contain;
 		z-index: 1;
 		bottom: 0;
-		//transform: translateY(220px);
 		@media #{variables.media-query(max, lg)} {
-			// height: 40px;
 			background-repeat: no-repeat;
 			background-size: cover;
 		}
@@ -96,6 +88,7 @@ body {
 }
 
 .containerLayout {
+	scroll-behavior: auto;
 	border-radius: 4px;
 	background-color: white;
 	display: flex;
@@ -103,7 +96,7 @@ body {
 	align-items: center;
 	flex-direction: column;
 	position: relative;
-	padding: 50px;
+	padding: 0 50px;
 
 	@media #{variables.media-query(max, lg)} {
 		height: 100vh;

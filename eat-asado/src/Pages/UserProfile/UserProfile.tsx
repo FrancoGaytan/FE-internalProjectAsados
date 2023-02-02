@@ -8,10 +8,14 @@ const UserProfile = () => {
 		<div>
 			<PrivateFormLayout>
 				<div className={styles.userProfileContainer}>
-					<h1>Perfil de Usuario</h1>
+					<h1>Editar Usuario</h1>
 					<section className={styles.dataSection}>
 						<div className={styles.firstColumnProfile}>
-							<div className={styles.userPicture}></div>
+							<h3>Perfil de Usuario</h3>
+							<div className={styles.pictureRow}>
+								<div className={styles.userPicture}></div>
+								<p>Editar Imagen</p>
+							</div>
 							<label htmlFor="cbu" className={styles.cbuLabel}>
 								CBU
 							</label>
@@ -21,8 +25,35 @@ const UserProfile = () => {
 							</label>
 							<input className={styles.input} id="aliasCbu" placeholder="Alias CBU" type="text" />
 						</div>
-						<div className={styles.secondColumnProfile}></div>
+						<div className={styles.secondColumnProfile}>
+							<h3>Preferencias Alimenticias</h3>
+							<section className={styles.checkboxesContainer}>
+								<label className={styles.profileLabel}>
+									<input id="isVegan" type="checkbox" className={styles.checkbox} />
+									Sos Vegano?
+								</label>
+
+								<label className={styles.profileLabel}>
+									<input id="isVegetarian" type="checkbox" className={styles.checkbox} />
+									Sos Vegetariano?
+								</label>
+
+								<label className={styles.profileLabel}>
+									<input id="isHypertensive" type="checkbox" className={styles.checkbox} />
+									Sos Hipertenso?
+								</label>
+								<label className={styles.profileLabel}>
+									<input id="isCeliac" type="checkbox" className={styles.checkbox} />
+									Sos Celíaco?
+								</label>
+							</section>
+						</div>
 					</section>
+					<div className={styles.btnSection}>
+						<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }}>
+							GUARDAR
+						</Button>
+					</div>
 				</div>
 			</PrivateFormLayout>
 		</div>

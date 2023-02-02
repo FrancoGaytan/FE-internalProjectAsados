@@ -63,7 +63,7 @@ const Register = () => {
 					</section>
 				</section>
 			</div>
-			<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }}>
+			<Button kind="primary" size="large" id="profileBtn" style={{ marginBottom: 30 }}>
 				REGISTER
 			</Button>
 		</FormLayout>
