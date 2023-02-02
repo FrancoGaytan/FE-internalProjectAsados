@@ -81,7 +81,7 @@ const CreateEvent = () => {
 						}}
 					/>
 				</section>
-				<section className={styles.secondColumn} style = {hidden ? {minHeight: 150} : {minHeight: 250}}>
+				<section className={styles.secondColumn}>
 					<section className={styles.checkboxesContainer}>
 						<div className={styles.internalTitle}>
 							<label className={styles.title}>Roles</label>
