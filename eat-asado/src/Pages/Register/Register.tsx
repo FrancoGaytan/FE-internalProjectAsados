@@ -62,9 +62,11 @@ const Register = () => {
 						</label>
 					</section>
 				</section>
-				<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: '15vh' }}>
-					REGISTER
-				</Button>
+				<section className={styles.buttonContainer}>
+					<Button kind="primary" size="large" id="registerBtn">
+						REGISTER
+					</Button>
+				</section>
 			</div>
 		</FormLayout>
 	);
