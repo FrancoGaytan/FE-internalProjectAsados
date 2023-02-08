@@ -53,8 +53,8 @@
 			max-height: 150px;
 			grid-column-start: auto;
 			grid-column-end: auto;
+			margin-bottom: 30px;
 		}
-
 	}
 
 	@media #{variables.media-query(max, lg)} {
@@ -75,7 +75,7 @@
 		@media #{variables.media-query(max, lg)} {
 			min-width: 100%;
 			min-height: 450px;
-			margin-right: 0px;;
+			margin-right: 0px;
 		}
 	}
 
