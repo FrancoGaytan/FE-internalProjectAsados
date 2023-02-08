@@ -10,22 +10,29 @@
 	}
 
 	.dataSection {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 70px;
+		display: flex;
+
+		@media #{variables.media-query(max, lg)} {
+			flex-direction: column;
+		}
 
 		.firstColumnProfile {
-			grid-column: 1;
-
+			margin-right: 50px;
+			@media #{variables.media-query(max, lg)} {
+				margin-right: 0px;
+			}
 			.userPicture {
-				background-color: grey;
+				background-image: url('../../../public/assets/pictures/profile.png');
+				background-size: contain;
 				width: 100px;
 				height: 100px;
 			}
 		}
 		.secondColumnProfile {
-			grid-column: 2;
-
+			margin-left: 50px;
+			@media #{variables.media-query(max, lg)} {
+				margin-left: 0px;
+			}
 			.profileLabel {
 				color: var(--backgroundNeutralDarker);
 				font-family: var(--secondaryFont);

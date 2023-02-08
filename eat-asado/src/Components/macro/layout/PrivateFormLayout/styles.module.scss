@@ -32,6 +32,7 @@
 }
 
 .secondHeader {
+	// cambiarle el alto a vw
 	min-height: 225px;
 	background: #7e7d7d url('../../../../../public/assets/pictures/imageMeat2.png');
 	background-repeat: no-repeat;
@@ -97,6 +98,7 @@
 	flex-direction: column;
 	position: relative;
 	padding: 0 50px;
+	height: 100vh;
 
 	@media #{variables.media-query(max, lg)} {
 		height: 100vh;
