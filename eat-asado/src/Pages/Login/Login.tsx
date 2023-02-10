@@ -4,25 +4,29 @@ import Button from '../../Components/micro/Button/Button';
 import FormLayout from '../../Components/macro/layout/FormLayout';
 
 const Login = () => {
-	const translation = useTranslation('login');
+	const lang = useTranslation('login');
 
 	return (
 		<FormLayout>
 			<div className={styles.closeBtn}></div>
-			<h3 className={styles.title}>LOGIN</h3>
+			<h3 className={styles.title}>{lang.loginTitle}</h3>
 			<label htmlFor="email" className={styles.loginLabel}>
-				Email
+				{lang.email}
 			</label>
-			<input id="email" className={styles.loginInput} placeholder="usuario@endava.com" type="text" />
+			<input id="email" className={styles.loginInput} placeholder={lang.user} type="text" />
 			<label htmlFor="password" className={styles.loginLabel}>
-				Clave
+				{lang.password}
 			</label>
-			<input id="password" className={styles.loginInput} placeholder="Clave" type="password" />
+			<input id="password" className={styles.loginInput} placeholder={lang.password} type="password" />
 			<Button kind="primary" size="large">
-				LOGIN
+				{lang.loginBtn}
 			</Button>
-			<a href="/register" className={styles.forgotPassword}>
-				¿No te acordas de tu clave?
+			<a href="/recoverkey" className={styles.forgotPassword} id="recoverKey">
+				{lang.forgotPassword}
+			</a>
+			<a href="/register" className={styles.register} id="register">
+				<span>{lang.alreadyRegistered} </span>
+				<span className={styles.registerHighlighted}>{lang.registerHere}</span>
 			</a>
 		</FormLayout>
 	);

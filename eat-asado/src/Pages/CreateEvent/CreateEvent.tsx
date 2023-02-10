@@ -5,6 +5,7 @@ import Button from '../../Components/micro/Button/Button';
 import React, { useEffect, useState } from 'react';
 
 const CreateEvent = () => {
+	const lang = useTranslation('createEvent');
 	const initialEvent = {
 		name: '',
 		dateAndHour: '',
@@ -40,15 +41,15 @@ const CreateEvent = () => {
 	return (
 		<FormLayout>
 			<div className={styles.closeBtn}></div>
-			<label className={styles.title}>Crear Evento</label>
+			<label className={styles.title}>{lang.createEventTitle}</label>
 			<div className={styles.inputSection}>
-				<section className={styles.column}>
+				<section className={styles.firstColumn}>
 					<label htmlFor="nombreEvento" className={styles.fieldLabel}>
-						Nombre del Evento (opcional)
+						{lang.eventName}
 					</label>
 					<input
 						id="nombreEvento"
-						placeholder="Nombre del Evento (opcional)"
+						placeholder={lang.eventName}
 						type="text"
 						value={event.name}
 						onChange={e => {
@@ -56,40 +57,40 @@ const CreateEvent = () => {
 						}}
 					/>
 					<label htmlFor="fechaHora" className={styles.fieldLabel}>
-						Fecha y Hora
+						{lang.dateTime}
 					</label>
 					<input
 						id="fechaHora"
 						placeholder="Fecha y Hora"
-						type="text"
+						type="datetime-local"
 						value={event.dateAndHour}
 						onChange={e => {
 							setEvent({ ...event, dateAndHour: e.target.value });
 						}}
 					/>
 					<label htmlFor="descripcion" className={styles.fieldLabel}>
-						Descripción
+						{lang.eventDescription}
 					</label>
 					<textarea
 						id="descripcion"
 						name="descripcion"
 						className={styles.textArea}
-						placeholder="Descripción"
+						placeholder={lang.eventDescription}
 						value={event.description}
 						onChange={e => {
 							setEvent({ ...event, description: e.target.value });
 						}}
 					/>
 				</section>
-				<section className={styles.column}>
+				<section className={styles.secondColumn}>
 					<section className={styles.checkboxesContainer}>
 						<div className={styles.internalTitle}>
-							<label className={styles.title}>Roles</label>
-							<span className={styles.extraDescription}>(opcional)</span>
+							<label className={styles.title}>{lang.rolesTitle}</label>
+							<span className={styles.extraDescription}>{lang.optionalDescription}</span>
 						</div>
 						<label htmlFor="isAsador" className={styles.fieldLabel}>
 							<input id="isAsador" type="checkbox" className={styles.checkbox} checked={event.isCook} onChange={handleHiddenRange} />
-							Asador
+							{lang.chef}
 						</label>
 						<label htmlFor="isEncargadoCompras" className={styles.fieldLabel}>
 							<input
@@ -101,12 +102,12 @@ const CreateEvent = () => {
 									setEvent({ ...event, isBuyer: e.target.checked });
 								}}
 							/>
-							Encargado de Compras
+							{lang.shoppingDesignee}
 						</label>
 					</section>
 					<section className={styles.rangeSelectionContainer} hidden={hidden}>
 						<label htmlFor="diners" className={styles.fieldLabel}>
-							Cantidad Máxima de Comensales
+							{lang.memberLimit}
 						</label>
 						<input
 							id="dinersRange"
@@ -136,18 +137,20 @@ const CreateEvent = () => {
 						</datalist>
 					</section>
 				</section>
+				<section className={styles.buttonContainer}>
+					<Button
+						kind="primary"
+						size="large"
+						id="registerBtn"
+						style={{ marginBottom: '10vh' }}
+						onClick={e => {
+							e.preventDefault();
+							handleSubmit();
+						}}>
+						{lang.createEventBtn}
+					</Button>
+				</section>
 			</div>
-			<Button
-				kind="primary"
-				size="large"
-				id="registerBtn"
-				style={{ marginBottom: 30 }}
-				onClick={e => {
-					e.preventDefault();
-					handleSubmit();
-				}}>
-				CREAR EVENTO
-			</Button>
 		</FormLayout>
 	);
 };

@@ -37,37 +37,29 @@
 }
 
 .inputSection {
-	display: flex;
+	display: grid;
+	grid-template-rows: 450px 150px;
+	grid-template-columns: 50% 50%;
 
-	input {
-		background: none;
-		border: 1px solid white;
-		color: var(--backgroundNeutralLighter);
-		font-family: var(--secondaryFont);
-		min-width: 300px;
-		max-width: 100%;
-		min-height: 40px;
-		padding-left: 15px;
+	.buttonContainer {
+		display: grid;
+		grid-column-start: 1;
+		grid-column-end: 3;
+		justify-content: center;
 		margin-bottom: 0px;
-		border-radius: 6px;
-		display: block;
 
 		@media #{variables.media-query(max, lg)} {
-			margin-left: 0;
-			margin-right: 0;
-		}
-
-		&::placeholder {
-			color: var(--placeholderColor);
-		}
-
-		&:focus {
-			box-shadow: var(--inputShadow);
+			margin-top: 50px;
+			max-height: 150px;
+			grid-column-start: auto;
+			grid-column-end: auto;
+			margin-bottom: 30px;
 		}
 	}
 
 	@media #{variables.media-query(max, lg)} {
-		flex-direction: column;
+		grid-template-columns: 100%;
+		grid-template-rows: 450px;
 		overflow-y: auto;
 		overflow-x: hidden;
 
@@ -76,17 +68,29 @@
 		}
 	}
 
-	.column {
+	.firstColumn {
 		min-width: 50%;
-		padding-right: 4%;
+		margin-right: 30px;
 
 		@media #{variables.media-query(max, lg)} {
 			min-width: 100%;
+			min-height: 450px;
+			margin-right: 0px;
+		}
+	}
+
+	.secondColumn {
+		min-width: 50%;
+		margin-left: 30px;
+
+		@media #{variables.media-query(max, lg)} {
+			min-width: 100%;
+			margin-left: 0px;
 		}
 	}
 
 	.textArea {
-		min-width: 320px;
+		min-width: 300px;
 		max-width: 100%;
 		min-height: 150px;
 		box-sizing: border-box;
@@ -98,6 +102,35 @@
 		margin-bottom: 0px;
 		border-radius: 6px;
 		resize: none;
+
+		&::placeholder {
+			color: var(--placeholderColor);
+		}
+
+		&:focus {
+			box-shadow: var(--inputShadow);
+		}
+	}
+
+	input {
+		background: none;
+		border: 1px solid white;
+		color: var(--backgroundNeutralLighter);
+		font-family: var(--secondaryFont);
+		min-width: 300px;
+		box-sizing: border-box;
+		max-width: 100%;
+		min-height: 40px;
+		padding-left: 15px;
+		padding-right: 15px;
+		margin-bottom: 0px;
+		border-radius: 6px;
+		display: block;
+
+		@media #{variables.media-query(max, lg)} {
+			margin-left: 0;
+			margin-right: 0;
+		}
 
 		&::placeholder {
 			color: var(--placeholderColor);
@@ -184,11 +217,13 @@
 	}
 
 	.dinersQuantity {
-		min-width: 40px;
-		max-width: 40px;
+		min-width: 50px;
+		max-width: 50px;
 		display: inline-block;
 		min-height: 40px;
 		margin-left: 10px;
+		padding-left: 10px;
+		padding-right: 0px;
 	}
 }
 

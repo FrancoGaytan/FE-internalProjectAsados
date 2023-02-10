@@ -37,11 +37,30 @@
 }
 
 .inputSection {
-	display: flex;
+	display: grid;
+	grid-template-rows: 450px 150px;
+	grid-template-columns: 50% 50%;
+
+	.buttonContainer {
+		display: grid;
+		grid-column-start: 1;
+		grid-column-end: 3;
+		justify-content: center;
+		margin-bottom: 0px;
+
+		@media #{variables.media-query(max, lg)} {
+			max-height: 150px;
+			grid-column-start: auto;
+			grid-column-end: auto;
+		}
+
+	}
 
 	@media #{variables.media-query(max, lg)} {
-		flex-direction: column;
-		overflow: auto;
+		grid-template-columns: 100%;
+		grid-template-rows: 330px 500px 150px;
+		overflow-y: auto;
+		overflow-x: hidden;
 		&::-webkit-scrollbar {
 			display: none;
 		}
@@ -49,16 +68,22 @@
 
 	.firstColumn {
 		min-width: 50%;
-		padding-right: 4%;
+		min-height: fit-content;
+		box-sizing: border-box;
+		margin-right: 30px;
 		@media #{variables.media-query(max, lg)} {
-			min-width: 100%;
+			min-width: 90%;
+			margin-right: 0;
 		}
 	}
 	.secondColumn {
 		min-width: 50%;
-		padding-right: 4%;
+		min-height: fit-content;
+		box-sizing: border-box;
+		margin-left: 30px;
 		@media #{variables.media-query(max, lg)} {
-			min-width: 100%;
+			min-width: 90%;
+			margin-left: 0;
 		}
 	}
 }
@@ -80,6 +105,7 @@
 .registerInput {
 	background: none;
 	border: 1px solid white;
+	box-sizing: border-box;
 	color: var(--backgroundNeutralLighter);
 	font-family: var(--secondaryFont);
 	min-width: 300px;
