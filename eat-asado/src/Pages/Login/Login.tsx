@@ -2,9 +2,16 @@ import { useTranslation } from '../../stores/LocalizationContext';
 import styles from './styles.module.scss';
 import Button from '../../Components/micro/Button/Button';
 import FormLayout from '../../Components/macro/layout/FormLayout';
+import { useState } from 'react';
 
 const Login = () => {
 	const lang = useTranslation('login');
+	const initialUserState = {
+		userEmail: '',
+		userPassword: ''
+	};
+
+	const [event, setEvent] = useState(initialUserState);
 
 	return (
 		<FormLayout>
