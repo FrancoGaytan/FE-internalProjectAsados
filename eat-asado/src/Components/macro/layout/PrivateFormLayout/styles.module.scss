@@ -2,95 +2,100 @@
 @use '/src/styles/shared';
 @use '/src/styles/custom-properties';
 
-body {
-	margin: 0;
-	background-size: cover;
-	overflow: hidden;
-}
-
-.privateHeader {
-	background-color: var(--backgroundMain);
-	display: flex;
-
-	.navbar {
+.privateContainer {
+	overflow-x: hidden;
+	.privateHeader {
+		background-color: var(--backgroundMain);
 		display: flex;
-		width: 100%;
-		height: 60px;
-		justify-content: flex-end;
-		margin-right: 10%;
-		gap: 20px;
-		.welcomeMsg {
-			display: flex;
-			align-items: center;
-			color: white;
-		}
-		.logoutBtnSection {
-			display: flex;
 
-			.logoutBtn {
-				margin: 0 auto;
-				background-color: var(--backgroundMain);
+		.navbar {
+			display: flex;
+			width: 100%;
+			height: 60px;
+			justify-content: flex-end;
+			margin-right: 10%;
+			gap: 20px;
+			.welcomeMsg {
+				display: flex;
+				align-items: center;
 				color: white;
-				cursor: pointer;
+			}
+			.logoutBtnSection {
+				display: flex;
+
+				.logoutBtn {
+					margin: 0 auto;
+					background-color: var(--backgroundMain);
+					color: white;
+					cursor: pointer;
+				}
 			}
 		}
 	}
-}
 
-.secondHeader {
-	min-height: 225px;
-	background: #7e7d7d url('../../../../../public/assets/pictures/imageMeat2.png');
-	background-repeat: no-repeat;
-	background-size: cover;
-	display: flex;
-	align-items: center;
+	.secondHeader {
+		// cambiarle el alto a vw
+		min-height: 225px;
+		background: #7e7d7d url('../../../../../public/assets/pictures/imageMeat2.png');
+		background-repeat: no-repeat;
+		background-size: cover;
+		display: flex;
+		align-items: center;
+		position: relative;
 
-	@media #{variables.media-query(max, lg)} {
-		min-height: 121px;
+		@media #{variables.media-query(max, lg)} {
+			min-height: 121px;
+		}
+		.logo {
+			background-image: url('../../../../../public/assets/pictures/EatAsadoLogo.png');
+			background-size: contain;
+			height: 75px;
+			width: 75px;
+			margin-left: 10%;
+		}
+		.fire {
+			position: absolute;
+			width: 400%;
+			height: 70px;
+			background-image: url('../../../../../public/assets/pictures/fire.png');
+			background-size: contain;
+			z-index: 1;
+			bottom: 0;
+			@media #{variables.media-query(max, lg)} {
+				background-repeat: repeat;
+				background-size: contain;
+			}
+		}
 	}
-	.logo {
-		background-image: url('../../../../../public/assets/pictures/EatAsadoLogo.png');
-		background-size: contain;
+
+	.containerLayout {
+		// scroll-behavior: auto;
+		border-radius: 4px;
+		background-color: white;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		flex-direction: column;
+		position: relative;
+		padding: 0 50px;
+
+		@media #{variables.media-query(max, lg)} {
+			//height: 100vh;
+			padding: 0px 50px 30px 50px;
+		}
+	}
+
+	.footerFire img {
+		//position: absolute;
+		width: 100%;
 		height: 75px;
-		width: 75px;
-		margin-left: 10%;
-	}
-}
-
-.formLayout {
-	background: white;
-	background-blend-mode: multiply;
-	background-repeat: no-repeat;
-	min-height: 100vh;
-	min-width: 100vw;
-	background-size: cover;
-	overflow: hidden;
-	background-position: center;
-	margin: 0;
-	box-sizing: border-box;
-	padding: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	@media #{variables.media-query(max, lg)} {
-		background: none;
-		background-color: var(--backgroundMain);
-	}
-}
-
-.containerLayout {
-	border-radius: 4px;
-	background-color: white;
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	flex-direction: column;
-	position: relative;
-	padding: 50px;
-
-	@media #{variables.media-query(max, lg)} {
-		height: 100vh;
-		padding: 0px 50px 30px 50px;
+		//bottom: 0;
+		z-index: 1;
+		background-repeat: repeat;
+		background-size: cover;
+		@media #{variables.media-query(max, lg)} {
+			background-repeat: repeat;
+			background-size: contain;
+		}
 	}
 }

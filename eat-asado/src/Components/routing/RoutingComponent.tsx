@@ -5,6 +5,7 @@ import PublicLayout from '../macro/PublicLayout';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { IRoute } from '../../routes';
 import { changeTitle } from '../../utils/common';
+import PrivateFormLayout from '../macro/layout/PrivateFormLayout';
 
 interface RoutingComponentProps {
 	//isPublic?: boolean;
@@ -19,11 +20,13 @@ export default function RoutingComponent(props: RoutingComponentProps): JSX.Elem
 
 	if (props.route.isPublic) {
 		return <PublicLayout>{props.route.element}</PublicLayout>;
+	} else {
+		return <PrivateFormLayout>{props.route.element}</PrivateFormLayout>;
 	}
 
-	return <Navigate to="/login" />;
+	//return <Navigate to="/login" />;
 
 	//return !authenticated ? <Navigate to="/login" /> : <PrivateLayout>{props.route.element}</PrivateLayout>;
 	//todo: ver como nos vamos a autenticar, en este ejemplo comentado teníamos un hook useAuth que utilizaba
-			// apolo y validaba si un usuario esta autenticado o no 
+	// apolo y validaba si un usuario esta autenticado o no
 }
