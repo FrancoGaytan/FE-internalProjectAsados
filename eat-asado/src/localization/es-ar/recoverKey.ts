@@ -1,3 +1,6 @@
 export const recoverKey = Object.seal({
-	login: 'Login',
+	newPassword: 'Nueva Contraseña',
+	email: 'Email',
+	sendEmail: 'ENVIAR EMAIL',
+	changeDescription: 'Te enviaremos un código de verificación a tu casilla de emial y con ella seras capaz de establecer una nueva contraseña.'
 });
