@@ -49,7 +49,7 @@ const routes: { [key: string]: IRoute } = {
 		path: '/createEvent',
 		localizationKey: 'createEvent',
 		element: <CreateEvent />,
-		isPublic: false
+		isPublic: true
 	}
 };
 
