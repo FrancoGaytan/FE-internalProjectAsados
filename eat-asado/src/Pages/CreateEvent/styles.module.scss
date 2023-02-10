@@ -217,11 +217,13 @@
 	}
 
 	.dinersQuantity {
-		min-width: 40px;
-		max-width: 40px;
+		min-width: 50px;
+		max-width: 50px;
 		display: inline-block;
 		min-height: 40px;
 		margin-left: 10px;
+		padding-left: 10px;
+		padding-right: 0px;
 	}
 }
 
