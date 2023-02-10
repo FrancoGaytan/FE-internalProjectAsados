@@ -43,13 +43,13 @@ const routes: { [key: string]: IRoute } = {
 		path: '/userProfile',
 		localizationKey: 'userProfile',
 		element: <UserProfile />,
-		isPublic: true
+		isPublic: false
 	},
 	createEvent: {
 		path: '/createEvent',
 		localizationKey: 'createEvent',
 		element: <CreateEvent />,
-		isPublic: true
+		isPublic: false
 	}
 };
 
