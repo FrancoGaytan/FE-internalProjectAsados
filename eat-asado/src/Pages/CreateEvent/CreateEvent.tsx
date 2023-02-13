@@ -31,7 +31,7 @@ const CreateEvent = () => {
 
 	const handleHiddenRange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setEvent({ ...event, isCook: e.target.checked });
-		setHidden(!e.target.checked);
+		setHidden(!e.target.checked); //esto no es necesario
 	};
 
 	const handleSubmit = () => {
@@ -105,6 +105,7 @@ const CreateEvent = () => {
 							{lang.shoppingDesignee}
 						</label>
 					</section>
+					{/* cambiar este renderizado, en vez de hidden validar con el true o false de chef */}
 					<section className={styles.rangeSelectionContainer} hidden={hidden}>
 						<label htmlFor="diners" className={styles.fieldLabel}>
 							{lang.memberLimit}

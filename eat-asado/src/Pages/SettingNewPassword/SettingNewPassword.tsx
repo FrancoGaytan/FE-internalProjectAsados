@@ -2,24 +2,26 @@ import React from 'react';
 import styles from './styles.module.scss';
 import Button from '../../Components/micro/Button/Button';
 import PrivateFormLayout from '../../Components/macro/layout/PrivateFormLayout';
+import { useTranslation } from '../../stores/LocalizationContext';
 
 const SettingNewPassword = () => {
+	const lang = useTranslation('settingNewPassword');
 	return (
 		<div>
 			<PrivateFormLayout>
 				<div className={styles.settingNewPasswordContainer}>
-					<h1>Setear Nueva Contraseña </h1>
+					<h1>{lang.setNewPasswordTitle}</h1>
 					<label htmlFor="Password" className={styles.passwordLabel}>
-						Contraseña
+						{lang.password}
 					</label>
-					<input className={styles.input} id="password" placeholder="Password" type="password" />
-					<p className={styles.mainDesc}>La clave debe ser alfanumerica y tener un mínimo de 8 caracteres</p>
+					<input className={styles.input} id="password" placeholder={lang.password} type="password" />
+					<p className={styles.mainDesc}>{lang.passwordDescription}</p>
 					<label htmlFor="Password" className={styles.passwordLabel}>
-						Confirmar Contraseña
+						{lang.confirmPassword}
 					</label>
-					<input className={styles.input} id="confirmPassword" placeholder="Confirm Password" type="password" />
+					<input className={styles.input} id="confirmPassword" placeholder={lang.confirmPassword} type="password" />
 					<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }}>
-						SETEAR CLAVE
+						{lang.setKeyBtn}
 					</Button>
 				</div>
 			</PrivateFormLayout>
