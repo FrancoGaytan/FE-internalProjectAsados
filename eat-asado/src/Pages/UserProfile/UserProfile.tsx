@@ -1,9 +1,26 @@
 import styles from './styles.module.scss';
 import Button from '../../Components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
+import { useState } from 'react';
 
 const UserProfile = () => {
 	const lang = useTranslation('userProfile');
+	const initialUser = {
+		userImage: '',
+		userCbu: '',
+		userAlias: '',
+		userVegan: false,
+		userVegetarian: false,
+		userHypertensive: false,
+		userCeliac: false
+	};
+
+	const [user, setUser] = useState(initialUser);
+
+	const handleSubmit = () => {
+		console.log(user);
+	};
+
 	return (
 		<div className={styles.userProfileContainer}>
 			<h1>{lang.profileTitle}</h1>
@@ -17,38 +34,88 @@ const UserProfile = () => {
 					<label htmlFor="cbu" className={styles.cbuLabel}>
 						{lang.cbu}
 					</label>
-					<input className={styles.input} id="cbu" placeholder={lang.cbu} type="text" />
-					<label htmlFor="aliasCbu" className={styles.cbuLabel}>
+					<input
+						className={styles.input}
+						id="cbu"
+						placeholder={lang.cbu}
+						type="text"
+						value={user.userCbu}
+						onChange={e => {
+							setUser({ ...user, userCbu: e.target.value });
+						}}
+					/>
+					<label htmlFor="alias" className={styles.cbuLabel}>
 						{lang.alias}
 					</label>
-					<input className={styles.input} id="aliasCbu" placeholder={lang.alias} type="text" />
+					<input
+						className={styles.input}
+						id="alias"
+						placeholder={lang.alias}
+						type="text"
+						value={user.userAlias}
+						onChange={e => {
+							setUser({ ...user, userAlias: e.target.value });
+						}}
+					/>
 				</div>
 				<div className={styles.secondColumnProfile}>
 					<h3>{lang.specialDietTitle}</h3>
 					<section className={styles.checkboxesContainer}>
 						<label className={styles.profileLabel}>
-							<input id="isVegan" type="checkbox" className={styles.checkbox} />
+							<input
+								id="isVegan"
+								type="checkbox"
+								className={styles.checkbox}
+								checked={user.userVegan}
+								onChange={e => {
+									setUser({ ...user, userVegan: e.target.checked });
+								}}
+							/>
 							{lang.veganDiet}
 						</label>
 
 						<label className={styles.profileLabel}>
-							<input id="isVegetarian" type="checkbox" className={styles.checkbox} />
+							<input
+								id="isVegetarian"
+								type="checkbox"
+								className={styles.checkbox}
+								checked={user.userVegetarian}
+								onChange={e => {
+									setUser({ ...user, userVegetarian: e.target.checked });
+								}}
+							/>
 							{lang.vegetarianDiet}
 						</label>
 
 						<label className={styles.profileLabel}>
-							<input id="isHypertensive" type="checkbox" className={styles.checkbox} />
+							<input
+								id="isHypertensive"
+								type="checkbox"
+								className={styles.checkbox}
+								checked={user.userHypertensive}
+								onChange={e => {
+									setUser({ ...user, userHypertensive: e.target.checked });
+								}}
+							/>
 							{lang.hypertensiveDiet}
 						</label>
 						<label className={styles.profileLabel}>
-							<input id="isCeliac" type="checkbox" className={styles.checkbox} />
+							<input
+								id="isCeliac"
+								type="checkbox"
+								className={styles.checkbox}
+								checked={user.userHypertensive}
+								onChange={e => {
+									setUser({ ...user, userHypertensive: e.target.checked });
+								}}
+							/>
 							{lang.celiacDiet}
 						</label>
 					</section>
 				</div>
 			</section>
 			<div className={styles.btnSection}>
-				<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }}>
+				<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleSubmit}>
 					{lang.saveBtn}
 				</Button>
 			</div>
