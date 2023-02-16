@@ -15,7 +15,6 @@ const CreateEvent = () => {
 		diners: 0
 	};
 
-	const [hidden, setHidden] = useState(true);
 	const [event, setEvent] = useState(initialEvent);
 
 	const handleDinersChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,11 +26,6 @@ const CreateEvent = () => {
 		} else {
 			setEvent({ ...event, diners: value });
 		}
-	};
-
-	const handleHiddenRange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEvent({ ...event, isCook: e.target.checked });
-		setHidden(!e.target.checked); //esto no es necesario
 	};
 
 	const handleSubmit = () => {
@@ -89,7 +83,11 @@ const CreateEvent = () => {
 							<span className={styles.extraDescription}>{lang.optionalDescription}</span>
 						</div>
 						<label htmlFor="isAsador" className={styles.fieldLabel}>
-							<input id="isAsador" type="checkbox" className={styles.checkbox} checked={event.isCook} onChange={handleHiddenRange} />
+							<input id="isAsador" type="checkbox" className={styles.checkbox} checked={event.isCook} onChange={
+								e => {
+									setEvent({...event, isCook: e.target.checked})
+								}
+							}/>
 							{lang.chef}
 						</label>
 						<label htmlFor="isEncargadoCompras" className={styles.fieldLabel}>
@@ -105,38 +103,39 @@ const CreateEvent = () => {
 							{lang.shoppingDesignee}
 						</label>
 					</section>
-					{/* cambiar este renderizado, en vez de hidden validar con el true o false de chef */}
-					<section className={styles.rangeSelectionContainer} hidden={hidden}>
-						<label htmlFor="diners" className={styles.fieldLabel}>
-							{lang.memberLimit}
-						</label>
-						<input
-							id="dinersRange"
-							type="range"
-							min={0}
-							max={100}
-							list="dinersMarkers"
-							step={1}
-							value={event['diners']}
-							onChange={handleDinersChange}
-						/>
-						<input
-							id="dinersQuantity"
-							className={styles.dinersQuantity}
-							type="number"
-							value={event['diners']}
-							max={100}
-							min={0}
-							onChange={handleDinersChange}
-						/>
-						<datalist id="dinersMarkers">
-							<option value="0" label="0" />
-							<option value="25" label="25" />
-							<option value="50" label="50" />
-							<option value="75" label="75" />
-							<option value="100" label="100" />
-						</datalist>
-					</section>
+					{event.isCook && 
+						<section className={styles.rangeSelectionContainer}>
+							<label htmlFor="diners" className={styles.fieldLabel}>
+								{lang.memberLimit}
+							</label>
+							<input
+								id="dinersRange"
+								type="range"
+								min={0}
+								max={100}
+								list="dinersMarkers"
+								step={1}
+								value={event['diners']}
+								onChange={handleDinersChange}
+							/>
+							<input
+								id="dinersQuantity"
+								className={styles.dinersQuantity}
+								type="number"
+								value={event['diners']}
+								max={100}
+								min={0}
+								onChange={handleDinersChange}
+							/>
+							<datalist id="dinersMarkers">
+								<option value="0" label="0" />
+								<option value="25" label="25" />
+								<option value="50" label="50" />
+								<option value="75" label="75" />
+								<option value="100" label="100" />
+							</datalist>
+						</section>
+					}
 				</section>
 				<section className={styles.buttonContainer}>
 					<Button
