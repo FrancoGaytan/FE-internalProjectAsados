@@ -9,5 +9,7 @@ export const userProfile = Object.seal({
 	vegetarianDiet: 'Are you Vegetarian?',
 	hypertensiveDiet: 'Are you hypertensive?',
 	celiacDiet: 'Are you Celiac?',
-	saveBtn: 'SAVE'
+	saveBtn: 'SAVE',
+	headerWelcome: "Welcome: ",
+	logoutBtn: "LOGOUT"
 });
