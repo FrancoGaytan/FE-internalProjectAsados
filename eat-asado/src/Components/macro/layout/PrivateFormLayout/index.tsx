@@ -8,22 +8,26 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 	// const { isSomethingLoading } = useGlobal();
 	const lang = useTranslation('userProfile');
 
-	const [user, setUser] = useState(localStorage.getItem("user"));
+	const [user, setUser] = useState(localStorage.getItem('user'));
 	const navigate = useNavigate();
 
 	const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		localStorage.removeItem("user");
-		navigate("/");
-	}
+		localStorage.removeItem('user');
+		navigate('/');
+	};
 
 	return (
 		<div className={styles.privateContainer}>
 			<header className={styles.privateHeader}>
 				<nav className={styles.navbar}>
-					<div className={styles.welcomeMsg}>{lang.headerWelcome} {user}</div>
+					<div className={styles.welcomeMsg}>
+						{lang.headerWelcome} {user}
+					</div>
 					<div className={styles.logoutBtnSection}>
-						<button className={styles.logoutBtn} onClick={handleLogout}>{lang.logoutBtn}</button>
+						<button className={styles.logoutBtn} onClick={handleLogout}>
+							{lang.logoutBtn}
+						</button>
 					</div>
 				</nav>
 			</header>
@@ -32,9 +36,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 				<div className={styles.fire}></div>
 			</section>
 			<section className={styles.containerLayout}>{props.children}</section>
-			<footer className={styles.footerFire}>
-				<img src="/assets/pictures/fire.png" alt="" />
-			</footer>
+			<footer className={styles.footerFire}>{/* <img src="/assets/pictures/fire.png" alt="" /> */}</footer>
 		</div>
 	);
 }

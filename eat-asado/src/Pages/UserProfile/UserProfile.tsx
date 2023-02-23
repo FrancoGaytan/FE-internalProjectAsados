@@ -3,11 +3,21 @@ import Button from '../../Components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { useState } from 'react';
 
+interface UserProfileInterface {
+	userImage?: any;
+	userCbu?: number;
+	userAlias?: string;
+	userVegan?: boolean;
+	userVegetarian?: boolean;
+	userHypertensive?: boolean;
+	userCeliac?: boolean;
+}
+
 const UserProfile = () => {
 	const lang = useTranslation('userProfile');
 	const initialUser = {
 		userImage: '',
-		userCbu: '',
+		userCbu: undefined,
 		userAlias: '',
 		userVegan: false,
 		userVegetarian: false,
@@ -15,7 +25,7 @@ const UserProfile = () => {
 		userCeliac: false
 	};
 
-	const [user, setUser] = useState(initialUser);
+	const [user, setUser] = useState<UserProfileInterface>(initialUser);
 
 	const handleSubmit = () => {
 		console.log(user);
@@ -104,9 +114,9 @@ const UserProfile = () => {
 								id="isCeliac"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userHypertensive}
+								checked={user.userCeliac}
 								onChange={e => {
-									setUser({ ...user, userHypertensive: e.target.checked });
+									setUser({ ...user, userCeliac: e.target.checked });
 								}}
 							/>
 							{lang.celiacDiet}

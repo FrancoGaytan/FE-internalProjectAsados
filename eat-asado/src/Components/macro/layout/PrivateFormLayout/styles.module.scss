@@ -34,7 +34,6 @@
 	}
 
 	.secondHeader {
-		// cambiarle el alto a vw
 		min-height: 225px;
 		background: #7e7d7d url('../../../../../public/assets/pictures/imageMeat2.png');
 		background-repeat: no-repeat;
@@ -47,11 +46,16 @@
 			min-height: 121px;
 		}
 		.logo {
-			background-image: url('../../../../../public/assets/pictures/EatAsadoLogo.png');
+			background-image: url('../../../../../public/assets/pictures/eatAsadoTransparentLogo.png');
 			background-size: contain;
-			height: 75px;
-			width: 75px;
+			height: 150px;
+			width: 150px;
 			margin-left: 10%;
+			@media #{variables.media-query(max, lg)} {
+				transform: translateY(-15px);
+				height: 75px;
+				width: 75px;
+			}
 		}
 		.fire {
 			position: absolute;
@@ -80,19 +84,18 @@
 		padding: 0 50px;
 
 		@media #{variables.media-query(max, lg)} {
-			//height: 100vh;
 			padding: 0px 50px 30px 50px;
 		}
 	}
 
-	.footerFire img {
+	.footerFire {
 		//position: absolute;
-		width: 100%;
-		height: 75px;
-		//bottom: 0;
+		width: 400%;
+		height: 70px;
+		background-image: url('../../../../../public/assets/pictures/fire.png');
+		background-size: contain;
 		z-index: 1;
-		background-repeat: repeat;
-		background-size: cover;
+		bottom: 0;
 		@media #{variables.media-query(max, lg)} {
 			background-repeat: repeat;
 			background-size: contain;
