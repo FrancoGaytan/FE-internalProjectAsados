@@ -51,7 +51,7 @@ const UserProfile = () => {
 						type="text"
 						value={user.userCbu}
 						onChange={e => {
-							setUser({ ...user, userCbu: e.target.value });
+							setUser({ ...user, userCbu: Number(e.target.value) });
 						}}
 					/>
 					<label htmlFor="alias" className={styles.cbuLabel}>
