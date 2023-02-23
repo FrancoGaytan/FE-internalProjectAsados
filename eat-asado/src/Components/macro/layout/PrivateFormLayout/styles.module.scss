@@ -1,0 +1,104 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.privateContainer {
+	overflow-x: hidden;
+	.privateHeader {
+		background-color: var(--backgroundMain);
+		display: flex;
+
+		.navbar {
+			display: flex;
+			width: 100%;
+			height: 60px;
+			justify-content: flex-end;
+			margin-right: 10%;
+			gap: 20px;
+			.welcomeMsg {
+				display: flex;
+				align-items: center;
+				color: white;
+			}
+			.logoutBtnSection {
+				display: flex;
+
+				.logoutBtn {
+					margin: 0 auto;
+					background-color: var(--backgroundMain);
+					color: white;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+
+	.secondHeader {
+		min-height: 225px;
+		background: #7e7d7d url('../../../../../public/assets/pictures/imageMeat2.png');
+		background-repeat: no-repeat;
+		background-size: cover;
+		display: flex;
+		align-items: center;
+		position: relative;
+
+		@media #{variables.media-query(max, lg)} {
+			min-height: 121px;
+		}
+		.logo {
+			background-image: url('../../../../../public/assets/pictures/eatAsadoTransparentLogo.png');
+			background-size: contain;
+			height: 150px;
+			width: 150px;
+			margin-left: 10%;
+			@media #{variables.media-query(max, lg)} {
+				transform: translateY(-15px);
+				height: 75px;
+				width: 75px;
+			}
+		}
+		.fire {
+			position: absolute;
+			width: 400%;
+			height: 70px;
+			background-image: url('../../../../../public/assets/pictures/fire.png');
+			background-size: contain;
+			z-index: 1;
+			bottom: 0;
+			@media #{variables.media-query(max, lg)} {
+				background-repeat: repeat;
+				background-size: contain;
+			}
+		}
+	}
+
+	.containerLayout {
+		// scroll-behavior: auto;
+		border-radius: 4px;
+		background-color: white;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		flex-direction: column;
+		position: relative;
+		padding: 0 50px;
+
+		@media #{variables.media-query(max, lg)} {
+			padding: 0px 50px 30px 50px;
+		}
+	}
+
+	.footerFire {
+		//position: absolute;
+		width: 400%;
+		height: 70px;
+		background-image: url('../../../../../public/assets/pictures/fire.png');
+		background-size: contain;
+		z-index: 1;
+		bottom: 0;
+		@media #{variables.media-query(max, lg)} {
+			background-repeat: repeat;
+			background-size: contain;
+		}
+	}
+}

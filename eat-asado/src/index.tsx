@@ -5,10 +5,9 @@ import EatAsado from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
-  <React.StrictMode>
-    <EatAsado />
-  </React.StrictMode>
+	<React.StrictMode>
+		<EatAsado />
+	</React.StrictMode>
 );
 
 reportWebVitals();
-

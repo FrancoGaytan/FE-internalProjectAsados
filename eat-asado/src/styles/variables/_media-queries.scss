@@ -1,0 +1,27 @@
+@use '../shared/functions';
+
+$_max: (
+	sm: '(max-width: 575px)',
+	md: '(max-width: 767px)',
+	lg: '(max-width: 991px)',
+	xl: '(max-width: 1199px)',
+	xxl: '(max-width: 1499px)'
+);
+
+$_min: (
+	sm: '(min-width: 576px)',
+	md: '(min-width: 768px)',
+	lg: '(min-width: 992px)',
+	xl: '(min-width: 1200px)',
+	xxl: '(min-width: 1500px)'
+);
+
+$_media-queries: (
+	max: $_max,
+	min: $_min
+);
+
+@function media-query($map-key, $key) {
+    @return functions.get-from-map(functions.get-from-map($_media-queries, $map-key), $key);
+}
+
