@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import Button from '../../Components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../Components/micro/DragAndDrop/DragAndDrop';
 
 export interface UserProfileInterface {
@@ -48,9 +48,8 @@ const UserProfile = () => {
 	}
 
 	const setProfileImage = (file: File) => {
-		console.log(user);
-		setUser({...user, userImage: file})
-		console.log(user);
+		setUser(prev => ({...prev, userImage: file}))
+		// setUser({userImage: file})
 	}
 
 	return (
