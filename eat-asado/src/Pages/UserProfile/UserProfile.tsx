@@ -27,7 +27,7 @@ const UserProfile = () => {
 
 	const [user, setUser] = useState<UserProfileInterface>(initialUser);
 
-	const handleSubmit = () => {
+	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		console.log(user);
 	};
 

@@ -4,6 +4,12 @@ import Button from '../../Components/micro/Button/Button';
 import PrivateFormLayout from '../../Components/macro/layout/PrivateFormLayout';
 import { useTranslation } from '../../stores/LocalizationContext';
 
+interface InitialNewPasswordInterface {
+	userVerificationCode: string;
+	userPassword: string;
+	userConfirmedPassword: string;
+}
+
 const SettingNewPassword = () => {
 	const lang = useTranslation('settingNewPassword');
 	const initialNewPassword = {
@@ -11,9 +17,9 @@ const SettingNewPassword = () => {
 		userPassword: '',
 		userConfirmedPassword: ''
 	};
-	const [newPassword, setNewPassword] = useState(initialNewPassword);
+	const [newPassword, setNewPassword] = useState<InitialNewPasswordInterface>(initialNewPassword);
 
-	const handleSubmit = () => {
+	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		console.log(newPassword);
 	};
 
