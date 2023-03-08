@@ -1,0 +1,1 @@
+export type TEventState = 'available' | 'closed' | 'completed' | 'canceled';//available puede ser open tambien, decidir con la gente de ba

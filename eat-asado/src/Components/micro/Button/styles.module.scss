@@ -20,10 +20,17 @@ button {
 		}
 	}
 	&.secondary {
-		background-color: green;
+		background-color: white;
+		color: var(--btnPrimary);
+		border: 3px solid var(--btnPrimary);
 	}
 
 	//size
+
+	&.size-small {
+		width: 100px;
+		height: 40px;
+	}
 
 	&.size-short {
 		width: 140px;

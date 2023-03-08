@@ -12,7 +12,14 @@ const Button = (props: PropsWithChildren<IButtonProps>): JSX.Element => {
 	return (
 		<button
 			onClick={props.onClick}
-			{...className(styles.button, styles[props.kind ?? 'primary'], props.className, styles[`size-${props.size ?? 'auto'}`])}
+			{...className(
+				styles.button,
+				styles[props.kind ?? 'primary'],
+				styles[props.kind ?? 'secondary'],
+				styles[props.kind ?? 'tertiary'],
+				props.className,
+				styles[`size-${props.size ?? 'auto'}`]
+			)}
 			style={{ ...props.style }}
 			id={props.id}>
 			{props.children}

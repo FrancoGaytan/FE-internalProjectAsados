@@ -2,6 +2,7 @@ import styles from './styles.module.scss';
 import Button from '../../Components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { useState } from 'react';
+import EventCard from '../../Components/macro/EventCard/EventCard';
 
 interface UserProfileInterface {
 	userImage?: any;
@@ -29,6 +30,22 @@ const UserProfile = () => {
 
 	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		console.log(user);
+	};
+
+	const fakeDate = new Date(2017, 4, 4, 17, 23, 42, 11);
+	const fakeState = 'available';
+	const fakeTitle = 'CORDERITO SOLEADO';
+	const fakeDescription = 'Cordero al fuego por tres horas con unas verduritas a la parrilla';
+	const fakeParticipants = 8;
+	const fakeParticipantsLimit = 10;
+	const fakeCook = 'Pablito';
+
+	const fakeEventData = {
+		eventTitle: fakeTitle,
+		eventDescription: fakeDescription,
+		eventParticipants: fakeParticipants,
+		eventParticipantLimit: fakeParticipantsLimit,
+		eventCook: fakeCook
 	};
 
 	return (
@@ -123,6 +140,7 @@ const UserProfile = () => {
 						</label>
 					</section>
 				</div>
+				<EventCard eventDateTime={fakeDate} eventState={fakeState} eventData={fakeEventData} />
 			</section>
 			<div className={styles.btnSection}>
 				<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleSubmit}>
