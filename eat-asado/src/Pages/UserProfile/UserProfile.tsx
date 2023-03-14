@@ -4,6 +4,7 @@ import { useTranslation } from '../../stores/LocalizationContext';
 import React, { useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../Components/micro/DragAndDrop/DragAndDrop';
 import EventCard from '../../Components/macro/EventCard/EventCard';
+import { EventStatesEnum } from '../../enums/EventState.enum';
 
 export interface UserProfileInterface {
 	userImage?: File;
@@ -54,7 +55,7 @@ const UserProfile = () => {
 	};
 
 	const fakeDate = new Date(2017, 4, 4, 17, 23, 42, 11);
-	const fakeState = 'available';
+	const fakeState = EventStatesEnum.Available;
 	const fakeTitle = 'CORDERITO SOLEADO';
 	const fakeDescription = 'Cordero al fuego por tres horas con unas verduritas a la parrilla';
 	const fakeParticipants = 8;

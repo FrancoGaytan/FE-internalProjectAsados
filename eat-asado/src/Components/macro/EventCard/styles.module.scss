@@ -21,16 +21,6 @@
 		}
 	}
 
-	&.canceled {
-		border-top: 5px solid var(--btnPrimaryDarker);
-		.availabilityDesc {
-			background-color: var(--btnPrimaryDarker);
-		}
-		.eventCardDate {
-			color: var(--btnPrimaryDarker);
-		}
-	}
-
 	&.closed {
 		border-top: 5px solid var(--btnPrimaryDarker);
 		.availabilityDesc {
@@ -41,7 +31,27 @@
 		}
 	}
 
-	&.completed {
+	&.subscribed {
+		border-top: 5px solid var(--subscribedPrimary);
+		.availabilityDesc {
+			background-color: var(--subscribedPrimary);
+		}
+		.eventCardDate {
+			color: var(--subscribedPrimary);
+		}
+	}
+
+	&.canceled {
+		border-top: 5px solid var(--btnPrimaryDarker);
+		.availabilityDesc {
+			background-color: var(--btnPrimaryDarker);
+		}
+		.eventCardDate {
+			color: var(--btnPrimaryDarker);
+		}
+	}
+
+	&.full {
 		border-top: 5px solid var(--btnPrimaryDarker);
 		.availabilityDesc {
 			background-color: var(--btnPrimaryDarker);
@@ -104,14 +114,22 @@
 				display: inline;
 			}
 		}
-	}
-	.infoBtn {
-		display: flex;
-		justify-content: flex-end;
+		.cardBtn {
+			display: flex;
+			justify-content: space-between;
+			position: relative;
+			margin-top: 60px;
 
-		button {
-			position: absolute;
-			bottom: 60px;
+			.participateBtn {
+				width: 100px;
+				position: relative;
+				left: 0px;
+			}
+			.infoBtn {
+				width: 100px;
+				position: relative;
+				right: 0px;
+			}
 		}
 	}
 }
