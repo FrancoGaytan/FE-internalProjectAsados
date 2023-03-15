@@ -1,0 +1,93 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.messageContainer {
+    min-height: 75px;
+    max-height: fit-content;
+    display: flex;
+    align-items: center;
+    width: 400px;
+    padding: 5px 10px 5px 10px;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    z-index: 20;
+    border-radius: 15px;
+    animation: move-left 0.5s ease-in-out, move-right 0.5s ease-in-out 2.6s;
+}
+
+@keyframes move-left {
+    from {
+      transform: translateX(400px);
+    }
+    to {
+      transform: translateX(0);
+    }
+}
+
+@keyframes move-right {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(400px);
+    }
+}
+
+.messageIcon {
+    min-height: 50px;
+    max-height: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    border-radius: 35%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 35px;
+}
+
+.success {
+    border: 1px solid var(--messageSuccessPrimary);
+    background-color: var(--messageSuccessSecondary);
+
+    .messageIcon {
+        background-color: var(--messageSuccessPrimary);
+    }
+}
+
+.error {
+    border: 1px solid var(--messageErrorPrimary);
+    background-color: var(--messageErrorSecondary);
+
+    .messageIcon {
+        background-color: var(--messageErrorPrimary);;
+    }
+}
+
+.info {
+    border: 1px solid var(--messageInfoPrimary);
+    background-color: var(--messageInfoSecondary);
+
+    .messageIcon {
+        background-color: var(--messageInfoPrimary);
+    }
+}
+
+.warning {
+    border: 1px solid var(--messageWarningPrimary);
+    background-color: var(--messageWarningSecondary);
+
+    .messageIcon {
+        background-color: var(--messageWarningPrimary);
+    }
+}
+
+.message {
+    font-family: var(--secondaryFont);
+    font-size: 15px;
+    display: inline;
+    max-width: fit-content;
+    margin: 15px 10px 15px 10px;
+}

@@ -4,9 +4,13 @@ import Button from '../../Components/micro/Button/Button';
 import FormLayout from '../../Components/macro/layout/FormLayout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAlert from '../../hooks/useAlert';
+import { AlertTypes } from '../../Components/micro/AlertPopup/AlertPopup';
 
 const Login = () => {
 	const lang = useTranslation('login');
+	const {setAlert} = useAlert();
+
 	const initialState = {
 		"email": "",
 		"password": ""
@@ -47,8 +51,9 @@ const Login = () => {
 		if (result != null) {
 			localStorage.setItem("user", result.user);
 			navigate("/userProfile");
+			setAlert(`¡Bienvenido ${result.user}!`, AlertTypes.SUCCESS);
 		} else {
-			alert("Los datos ingresados no coinciden con ningun usuario")
+			setAlert("Los datos ingresados no coinciden con ningun usuario", AlertTypes.ERROR);
 		}
 	}
 
