@@ -3,10 +3,13 @@ import styles from './styles.module.scss';
 import Button from '../../Components/micro/Button/Button';
 import PrivateFormLayout from '../../Components/macro/layout/PrivateFormLayout';
 import { useTranslation } from '../../stores/LocalizationContext';
+import useAlert from '../../hooks/useAlert';
+import { AlertTypes } from '../../Components/micro/AlertPopup/AlertPopup';
 
 const RecoverKey = () => {
 	const lang = useTranslation('recoverKey');
 	const [userEmail, setUserEmail] = useState('');
+	const {setAlert} = useAlert();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setUserEmail(e.target.value);
@@ -14,6 +17,7 @@ const RecoverKey = () => {
 
 	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		console.log(userEmail);
+		setAlert(`${lang.emailSentConfirmation}`, AlertTypes.INFO)
 	}
 
 	return (

@@ -51,9 +51,9 @@ const Login = () => {
 		if (result != null) {
 			localStorage.setItem("user", result.user);
 			navigate("/userProfile");
-			setAlert(`¡Bienvenido ${result.user}!`, AlertTypes.SUCCESS);
+			setAlert(`${lang.welcomeMessage} ${result.user}!`, AlertTypes.SUCCESS);
 		} else {
-			setAlert("Los datos ingresados no coinciden con ningun usuario", AlertTypes.ERROR);
+			setAlert(`${lang.loginErrorMessage}`, AlertTypes.ERROR);
 		}
 	}
 
