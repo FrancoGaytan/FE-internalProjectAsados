@@ -19,9 +19,17 @@ export default function RoutingComponent(props: RoutingComponentProps): JSX.Elem
 	useEffect(() => changeTitle(translation[props.route.localizationKey || '']), [props.route, translation]);
 
 	if (props.route.isPublic) {
-		return <PublicLayout>{props.route.element}</PublicLayout>;
+		return (
+			<PublicLayout>
+				{props.route.element}
+			</PublicLayout>
+			);
 	} else {
-		return <PrivateFormLayout>{props.route.element}</PrivateFormLayout>;
+		return (
+			<PrivateFormLayout>
+				{props.route.element}
+			</PrivateFormLayout>
+			);
 	}
 
 	//return <Navigate to="/login" />;
