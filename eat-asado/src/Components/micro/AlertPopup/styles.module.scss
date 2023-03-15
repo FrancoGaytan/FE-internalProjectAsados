@@ -1,4 +1,4 @@
-@use '/src/styles/variables';
+@use '/src/styles/variables' as variables;
 @use '/src/styles/shared';
 @use '/src/styles/custom-properties';
 
@@ -9,12 +9,27 @@
     align-items: center;
     width: 400px;
     padding: 5px 10px 5px 10px;
-    position: absolute;
+    position: fixed;
     bottom: 15px;
     right: 15px;
     z-index: 20;
     border-radius: 15px;
     animation: move-left 0.5s ease-in-out, move-right 0.5s ease-in-out 2.6s;
+
+    @media #{variables.media-query(max, lg)} {
+		min-height: 50px;
+        height: 50px;
+        max-height: fit-content;
+        width: 300px;
+        padding: 5px;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        margin-left: auto; 
+        margin-right: auto;
+        border-radius: 10px;
+        animation: move-down 0.5s ease-in-out, move-up 0.5s ease-in-out 2.6s;
+	}
 }
 
 @keyframes move-left {
@@ -32,6 +47,24 @@
     }
     to {
       transform: translateX(400px);
+    }
+}
+
+@keyframes move-down {
+    from {
+      transform: translateY(-50px);
+    }
+    to {
+      transform: translateY(0);
+    }
+}
+
+@keyframes move-up {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50px);
     }
 }
 

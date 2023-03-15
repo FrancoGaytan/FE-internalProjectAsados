@@ -6,7 +6,6 @@ import { useTranslation } from '../../stores/LocalizationContext';
 import { IRoute } from '../../routes';
 import { changeTitle } from '../../utils/common';
 import PrivateFormLayout from '../macro/layout/PrivateFormLayout';
-import AlertPopup from '../micro/AlertPopup/AlertPopup';
 
 interface RoutingComponentProps {
 	//isPublic?: boolean;
@@ -22,14 +21,12 @@ export default function RoutingComponent(props: RoutingComponentProps): JSX.Elem
 	if (props.route.isPublic) {
 		return (
 			<PublicLayout>
-				<AlertPopup />
 				{props.route.element}
 			</PublicLayout>
 			);
 	} else {
 		return (
 			<PrivateFormLayout>
-				<AlertPopup />
 				{props.route.element}
 			</PrivateFormLayout>
 			);
