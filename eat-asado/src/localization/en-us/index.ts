@@ -5,6 +5,7 @@ import { recoverKey } from "./recoverKey";
 import { settingNewPassword } from "./settingNewPassword";
 import { userProfile } from "./userProfile";
 import { createEvent } from "./createEvent";
+import { eventHome} from "./eventHome"
 
 export const enUS = Object.seal({
 	appName: 'Eat-Meat',
@@ -15,4 +16,5 @@ export const enUS = Object.seal({
 	settingNewPassword,
 	userProfile,
 	createEvent,
+	eventHome
 });
