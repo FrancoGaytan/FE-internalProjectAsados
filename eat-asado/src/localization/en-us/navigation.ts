@@ -5,4 +5,5 @@ export const navigation = Object.seal({
 	settingNewPassword: 'SettingNewPassword',
 	userProfile: 'UserProfile',
 	createEvent: 'CreateEvent',
+	eventHome: 'EventHome'
 });

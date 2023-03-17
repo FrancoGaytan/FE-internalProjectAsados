@@ -1,0 +1,191 @@
+@use '/src/styles/variables' as variables;
+
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 0;
+    *{
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+.participationInfo{
+    position:relative;
+    width: fit-content;
+    img{
+        width: 784px;
+        @media #{variables.media-query(max, lg)} {
+            display: none;
+        }
+        @media #{variables.media-query(max, xl)} {
+            width: 54vw;
+        }
+    }
+    .description{
+        padding: 10px 23px 10px 36px;
+        width: 440px;
+        height: 342px;
+        background: #F6FAF9;
+        border-radius: 50px 4px;
+        position: absolute;
+        top:50%;
+        left: 100%;
+        transform: translate(-50%,-50%);
+        @media #{variables.media-query(max, xl)} {
+            left: 50%;
+            width: 56%;
+            height: initial;
+        }
+        @media #{variables.media-query(max, lg)} {
+            width: 80vw;
+            margin: 0 10vw;
+            position: initial;
+            transform: translate(0,0);
+            border: 2px solid #5787a5b5;
+        }
+        h1{
+            font-family: 'Della Respira';
+            font-style: normal;
+            font-weight: 500;
+            font-size: 32px;
+            line-height: 44px;
+            color: #A50321;
+        }
+        p{
+            font-family: 'Raleway';
+            font-style: normal;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 18px;
+        }
+    }
+}
+.participationSteps{
+    padding-top: 56px;
+    width: 70vw;
+    max-width: 1013px;
+    font-family: 'Raleway';
+    font-style: normal;
+    .container{
+        background: #FFFFFF;
+        border: 2px solid #5787A5;
+        border-radius: 4px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 60px 40px;
+        .title{
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            margin: 0;
+            width: fit-content;
+            height: fit-content;
+            background: #FFFFFF;
+            font-family: 'Della Respira';
+            font-style: normal;
+            font-weight: 500;       
+            font-size: 60px;
+            color: #A50321;
+            @media #{variables.media-query(max, xl)} {
+                font-size: 4vw;
+            }
+            white-space: nowrap;
+            line-height: 82px;
+            text-align: center;
+            padding: 0 40px;
+        }
+        .participateButton{
+            background: #FFFFFF;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 47%;
+            Button{
+                margin: 0;
+                width: 82%;
+            }
+        }
+    }
+    .icons{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        @media #{variables.media-query(max, lg)} {
+            flex-direction: column;
+            padding: 0;
+        }
+    }
+}
+.stepItem{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        list-style-type: none;
+    img{
+        height: 57px;
+        width: fit-content;
+    }
+    h1{
+        color: #5787A5;
+    }
+}
+.header{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Raleway';
+    font-style: normal;
+    *{
+        margin-left:auto;
+        margin-right:auto;
+    }
+    h1{
+        background: #5787A5;
+        opacity: 0.9;
+        border-radius: 50px 4px;
+        width: 30%;
+        font-weight: 600;
+        font-size: 56px;
+        line-height: 66px;
+        text-align: center;
+        color: #F6FAF9;
+
+    }
+    Button{
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 27px;
+        max-width: 314px;
+    }
+}
+.incomingEvents{
+    h1{
+        width: fit-content;
+        font-family: 'Raleway';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 56px;
+        line-height: 66px;
+        @media #{variables.media-query(max, xl)} {
+            font-size: 4vw;
+        }
+        border-bottom: solid 4px #A50321;
+        ;
+    }
+    .underlineBlock{
+
+    }
+}
