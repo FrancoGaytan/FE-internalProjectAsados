@@ -162,6 +162,9 @@
         line-height: 66px;
         text-align: center;
         color: #F6FAF9;
+        @media #{variables.media-query(max, xl)} {
+            font-size: 4vw;
+        }
 
     }
     Button{
