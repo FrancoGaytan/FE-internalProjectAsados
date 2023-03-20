@@ -2,6 +2,7 @@
 import React, { PropsWithChildren, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../../../stores/LocalizationContext';
+import AlertPopup from '../../../micro/AlertPopup/AlertPopup';
 import styles from './styles.module.scss';
 
 export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element {
@@ -19,6 +20,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 
 	return (
 		<div className={styles.privateContainer}>
+			<AlertPopup />
 			<header className={styles.privateHeader}>
 				<nav className={styles.navbar}>
 					<div className={styles.welcomeMsg}>
