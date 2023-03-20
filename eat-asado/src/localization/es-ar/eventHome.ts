@@ -20,5 +20,14 @@ export const eventHome = Object.seal({
         title:"Y A COMER",
         description: 'Lorem ipsum dolor sit ame'
     },
-    participateButton:'QUIERO PARTICIPAR'
+    participateButton:'QUIERO PARTICIPAR',
+	actualParticipants: 'Participantes actuales: ',
+	cook:'Asador: ',
+	participateBtn: 'PARTICIPAR',
+	infoBtn: 'INFO',
+	available: 'disponible',
+	subscribed: 'subscripto',
+	closed: 'cerrado',
+	canceled: 'cancelado',
+	full: 'lleno'
 });

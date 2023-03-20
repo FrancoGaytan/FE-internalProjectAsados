@@ -20,5 +20,14 @@ export const eventHome = Object.seal({
         title:"LETS' EAT",
         description: 'Lorem ipsum dolor sit ame'
     },
-    participateButton:'I WANNA BE INTO'
+    participateButton:'I WANNA BE INTO',
+	actualParticipants: 'Actual Participants: ',
+	cook:'Cook: ',
+	participateBtn: 'PARTICIPATE',
+	infoBtn: 'INFO',
+	available: 'available',
+	subscribed: 'subscribed',
+	closed: 'closed',
+	canceled: 'canceled',
+	full: 'full'
 });

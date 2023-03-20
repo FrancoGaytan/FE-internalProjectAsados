@@ -3,8 +3,6 @@ import Button from '../../Components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import React, { useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../Components/micro/DragAndDrop/DragAndDrop';
-import EventCard from '../../Components/macro/EventCard/EventCard';
-import { EventStatesEnum } from '../../enums/EventState.enum';
 
 export interface UserProfileInterface {
 	userImage?: File;
@@ -52,22 +50,6 @@ const UserProfile = () => {
 	const setProfileImage = (file: File) => {
 		setUser(prev => ({ ...prev, userImage: file }));
 		// setUser({userImage: file})
-	};
-
-	const fakeDate = new Date(2017, 4, 4, 17, 23, 42, 11);
-	const fakeState = EventStatesEnum.Available;
-	const fakeTitle = 'CORDERITO SOLEADO';
-	const fakeDescription = 'Cordero al fuego por tres horas con unas verduritas a la parrilla';
-	const fakeParticipants = 8;
-	const fakeParticipantsLimit = 10;
-	const fakeCook = 'Pablito';
-
-	const fakeEventData = {
-		eventTitle: fakeTitle,
-		eventDescription: fakeDescription,
-		eventParticipants: fakeParticipants,
-		eventParticipantLimit: fakeParticipantsLimit,
-		eventCook: fakeCook
 	};
 
 	return (
@@ -171,7 +153,6 @@ const UserProfile = () => {
 						</label>
 					</section>
 				</div>
-				<EventCard eventDateTime={fakeDate} eventState={fakeState} eventData={fakeEventData} />
 			</section>
 			<div className={styles.btnSection}>
 				<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleSubmit}>

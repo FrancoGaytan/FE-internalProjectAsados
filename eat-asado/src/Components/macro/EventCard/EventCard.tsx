@@ -5,6 +5,7 @@ import Button from '../../micro/Button/Button';
 import { className } from '../../../utils/className';
 import { useState, useEffect } from 'react';
 import { EventStatesEnum } from '../../../enums/EventState.enum';
+import { useTranslation } from '../../../stores/LocalizationContext';
 
 interface IEventData {
 	eventTitle: String;
@@ -21,6 +22,8 @@ interface IEventCardProps {
 }
 
 const EventCard = (props: IEventCardProps) => {
+	const lang = useTranslation('eventHome');
+
 	const evState = props.eventState; //esta prop va a ser para darle el estilo a la card
 	const evDateTime = props.eventDateTime; //esto va a haber que pasarlo x una funcion que seccione la fecha y la hora y despues separarlos en dos variables diferentes
 	const evTitle = props.eventData.eventTitle;
@@ -42,13 +45,13 @@ const EventCard = (props: IEventCardProps) => {
 	};
 
 	const verifySubscription = () => {
-		//esta funcion va a chequear en el back si el usuario esta subscripto a un evento o no, esta funcion quizas debería importarse de otro archivo
+		//todo: esta funcion va a chequear en el back si el usuario esta subscripto a un evento o no, esta funcion quizas debería importarse de otro archivo
 		//x ahora le pongo una comparacion muy obvia
-		return true; //esto tiene qe retornar si esta subscripto o no
+		return false; //esto tiene qe retornar si esta subscripto o no
 	};
 
 	let eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.Incompleted : EventStatesEnum.Full;
-	let subscribedUser: TSubscribedState = verifySubscription() ? 'not-subscribed' : 'subscribed'; // de aca tiene que obtener con una funcion si el usuario esta anotado o no al evento
+	let subscribedUser: TSubscribedState = verifySubscription() ? 'subscribed' : 'not-subscribed'; // de aca tiene que obtener con una funcion si el usuario esta anotado o no al evento
 
 	const verifyState = () => {
 		if (subscribedUser === 'subscribed' && evState !== EventStatesEnum.Canceled) {
@@ -66,32 +69,30 @@ const EventCard = (props: IEventCardProps) => {
 		//la clase cardContainer tiene que ir acompañado con una clase que represente al estado del evento que trae por props
 		<div
 			{...className(
-				styles.cardContainer,
+				styles.cardContainer, //aca es importante el orden, si es que no condiciono las clases
 				styles[evState ?? EventStatesEnum.Available],
 				styles[evState ?? EventStatesEnum.Canceled],
 				styles[eventParticipationState ?? EventStatesEnum.Full],
 				styles[subscribedUser ?? 'subscribed'],
-				styles[evState ?? EventStatesEnum.Closed]
+				styles[evState ?? EventStatesEnum.Closed] //decidir bien que se va a mostrar si se esta suscripto y el evento se cierra
 			)}>
 			<section className={styles.cardTitleInfo}>
 				<div className={styles.availabilityDesc}>{eventDescription.toUpperCase()}</div>
-				{/* x ahora se lo hardcodeo */}
+				{/* todo: buscar la manera de incluir el lang para traducir el estado de evento */}
 				<div className={styles.eventCardDate}>{evDate.toString()}</div>
-				{/* x ahora se lo hardcodeo */}
 			</section>
 			<section className={styles.cardMainInfo}>
 				<div className={styles.eventTime}>{evTime} hrs</div>
-				{/* x ahora se lo hardcodeo */}
 				<div className={styles.eventTitle}>{evTitle}</div>
 				<div className={styles.eventDescription}>{evDescription}</div>
 				<div className={styles.eventParticipants}>
-					Participantes actuales:{' '}
+					{lang.actualParticipants}
 					<p>
 						{evParticipants.toString()}/{evParticipantsLimit.toString()}
 					</p>
 				</div>
 				<div className={styles.eventCook}>
-					Asador: <p>{evCook}</p>
+					{lang.cook} <p>{evCook}</p>
 				</div>
 				<section className={styles.cardBtn}>
 					<div className={styles.participateBtn}>
@@ -107,7 +108,7 @@ const EventCard = (props: IEventCardProps) => {
 										e.preventDefault();
 										handleParticipation();
 									}}>
-									PARTICIPAR
+									{lang.participateBtn}
 								</Button>
 							)}
 					</div>
@@ -121,7 +122,7 @@ const EventCard = (props: IEventCardProps) => {
 								e.preventDefault();
 								handleInfo();
 							}}>
-							INFO
+							{lang.infoBtn}
 						</Button>
 					</div>
 				</section>
