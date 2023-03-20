@@ -55,7 +55,7 @@ const routes: { [key: string]: IRoute } = {
 		path: '/eventHome',
 		localizationKey: 'eventHome',
 		element: <EventHome />,
-		isPublic: false
+		isPublic: true
 	}
 };
 
