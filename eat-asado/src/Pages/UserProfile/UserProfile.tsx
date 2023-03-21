@@ -27,12 +27,12 @@ const UserProfile = () => {
 		userHypertensive: false,
 		userCeliac: false
 	};
-	
+
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [user, setUser] = useState<UserProfileInterface>(initialUser);
-	
+
 	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault()
+		e.preventDefault();
 		console.log(user);
 	};
 
@@ -42,15 +42,15 @@ const UserProfile = () => {
 		const target = e.target;
 
 		//Prevents deleting current image when user press Cancel in the dialog window
-		if(target.files?.length && target.files.length > 0) {
-			setUser({...user, userImage: target.files[0]})
+		if (target.files?.length && target.files.length > 0) {
+			setUser({ ...user, userImage: target.files[0] });
 		}
-	}
+	};
 
 	const setProfileImage = (file: File) => {
-		setUser(prev => ({...prev, userImage: file}))
+		setUser(prev => ({ ...prev, userImage: file }));
 		// setUser({userImage: file})
-	}
+	};
 
 	return (
 		<div className={styles.userProfileContainer}>
@@ -60,13 +60,16 @@ const UserProfile = () => {
 					<h3>{lang.personalData}</h3>
 					<div className={styles.pictureRow}>
 						<DragAndDrop setState={setProfileImage}>
-							{ user.userImage !== undefined ? 
-								<img src={URL.createObjectURL(user.userImage)} className={styles.userPicture} alt='selected'/> :
-								<img src='/assets/pictures/profile.png' className={styles.userPicture} alt='placeholder'/>
-							}
+							{user.userImage !== undefined ? (
+								<img src={URL.createObjectURL(user.userImage)} className={styles.userPicture} alt="selected" />
+							) : (
+								<img src="/assets/pictures/profile.png" className={styles.userPicture} alt="placeholder" />
+							)}
 						</DragAndDrop>
-						<p onClick={() => inputRef.current?.click()} style={{cursor: 'pointer'}}>{lang.editImg}</p>
-						<input type="file" style={{display: 'none'}} onChange={handleFile} ref={inputRef} />
+						<p onClick={() => inputRef.current?.click()} style={{ cursor: 'pointer' }}>
+							{lang.editImg}
+						</p>
+						<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
 					</div>
 					<label htmlFor="cbu" className={styles.cbuLabel}>
 						{lang.cbu}
@@ -78,7 +81,7 @@ const UserProfile = () => {
 						type="text"
 						value={user.userCbu}
 						onChange={e => {
-							setUser({ ...user, userCbu: e.target.value});
+							setUser({ ...user, userCbu: e.target.value });
 						}}
 					/>
 					<label htmlFor="alias" className={styles.cbuLabel}>

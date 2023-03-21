@@ -1,0 +1,135 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.cardContainer {
+	border-radius: 3px;
+	max-width: 325px;
+	max-height: 320px;
+	background-color: #f6faf9;
+	border-top: 5px solid var(availabilityPrimary);
+	padding: 20px;
+	padding-top: 30px;
+
+	&.available {
+		border-top: 5px solid var(--availabilityPrimary);
+		.availabilityDesc {
+			background-color: var(--availabilityPrimary);
+		}
+		.eventCardDate {
+			color: var(--availabilityPrimary);
+		}
+	}
+
+	&.closed {
+		border-top: 5px solid var(--btnPrimaryDarker);
+		.availabilityDesc {
+			background-color: var(--btnPrimaryDarker);
+		}
+		.eventCardDate {
+			color: var(--btnPrimaryDarker);
+		}
+	}
+
+	&.subscribed {
+		border-top: 5px solid var(--subscribedPrimary);
+		.availabilityDesc {
+			background-color: var(--subscribedPrimary);
+		}
+		.eventCardDate {
+			color: var(--subscribedPrimary);
+		}
+	}
+
+	&.canceled {
+		border-top: 5px solid var(--btnPrimaryDarker);
+		.availabilityDesc {
+			background-color: var(--btnPrimaryDarker);
+		}
+		.eventCardDate {
+			color: var(--btnPrimaryDarker);
+		}
+	}
+
+	&.full {
+		border-top: 5px solid var(--btnPrimaryDarker);
+		.availabilityDesc {
+			background-color: var(--btnPrimaryDarker);
+		}
+		.eventCardDate {
+			color: var(--btnPrimaryDarker);
+		}
+	}
+
+	.cardTitleInfo {
+		display: flex;
+
+		.availabilityDesc {
+			width: 125px;
+			height: 30px;
+			color: white;
+			font-size: 14px;
+			font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+			border-radius: 3px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-right: 25px;
+		}
+
+		.eventCardDate {
+			font-weight: bold;
+			font-size: 14px;
+			margin-top: 5px;
+		}
+	}
+
+	.cardMainInfo {
+		.eventTime {
+			margin-top: 25px;
+			font-size: 13px;
+		}
+		.eventTitle {
+			font-size: 23px;
+			margin-top: 5px;
+			font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+		}
+		.eventDescription {
+			margin-top: 15px;
+			font-size: 12px;
+		}
+		.eventParticipants {
+			margin-top: 5px;
+			font-size: 12px;
+			p {
+				font-weight: bold;
+				display: inline;
+			}
+		}
+		.eventCook {
+			margin-top: 10px;
+			font-size: 13px;
+			p {
+				font-weight: bold;
+				display: inline;
+			}
+		}
+		.cardBtn {
+			display: flex;
+			justify-content: space-between;
+			position: relative;
+			margin-top: 60px;
+
+			.participateBtn {
+				width: 100px;
+				position: relative;
+				left: 0px;
+			}
+			.infoBtn {
+				width: 100px;
+				position: relative;
+				right: 0px;
+			}
+		}
+	}
+}
