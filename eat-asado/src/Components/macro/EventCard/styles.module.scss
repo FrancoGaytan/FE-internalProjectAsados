@@ -11,6 +11,10 @@
 	padding: 20px;
 	padding-top: 30px;
 
+	@media #{variables.media-query(max, md)} {
+		width: 80vw;
+	}
+
 	&.available {
 		border-top: 5px solid var(--availabilityPrimary);
 		.availabilityDesc {
