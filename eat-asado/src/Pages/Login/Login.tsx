@@ -9,7 +9,7 @@ import { AlertTypes } from '../../Components/micro/AlertPopup/AlertPopup';
 
 const Login = () => {
 	const lang = useTranslation('login');
-	const {setAlert} = useAlert();
+	const { setAlert } = useAlert();
 
 	const initialState = {
 		"email": "",
@@ -30,8 +30,8 @@ const Login = () => {
 			"user": "fgaytan"
 		}
 	]
-	
-	const[loginCredentials, setLoginCredentials] = useState(initialState);
+
+	const [loginCredentials, setLoginCredentials] = useState(initialState);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setLoginCredentials({
@@ -40,12 +40,12 @@ const Login = () => {
 		})
 	}
 
-	const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		validateCredentials(loginCredentials);
 	}
 
-	const validateCredentials = ({email, password }: any) => {
+	const validateCredentials = ({ email, password }: any) => {
 		//Temporary call for design purposes, the lines above will change when we have an API that validates an user.
 		const result = Users.find(user => user.email === email && user.password === password);
 		if (result != null) {
@@ -58,18 +58,18 @@ const Login = () => {
 	}
 
 	return (
-		<FormLayout>
+		<FormLayout onSubmit={handleLogin}>
 			<div className={styles.closeBtn}></div>
 			<h3 className={styles.title}>{lang.loginTitle}</h3>
 			<label htmlFor="email" className={styles.loginLabel}>
 				{lang.email}
 			</label>
-			<input id="email" className={styles.loginInput} placeholder={lang.user} type="text"onChange={handleChange}/>
+			<input id="email" className={styles.loginInput} placeholder={lang.user} type="text" onChange={handleChange} />
 			<label htmlFor="password" className={styles.loginLabel}>
 				{lang.password}
 			</label>
 			<input id="password" className={styles.loginInput} placeholder={lang.password} type="password" onChange={handleChange} />
-			<Button kind="primary" size="large" onClick={handleLogin}>
+			<Button kind="primary" size="large" type='submit'>
 				{lang.loginBtn}
 			</Button>
 			<a href="/recoverkey" className={styles.forgotPassword} id="recoverKey">

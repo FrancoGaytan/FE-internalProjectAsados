@@ -3,6 +3,20 @@ import styles from './styles.module.scss';
 import Button from '../../Components/micro/Button/Button';
 import FormLayout from '../../Components/macro/layout/FormLayout';
 import { useState } from 'react';
+import useAlert from '../../hooks/useAlert';
+import { AlertTypes } from '../../Components/micro/AlertPopup/AlertPopup';
+
+interface Register {
+	name: string,
+	lastName: string,
+	email: string,
+	password: string,
+	confirmPassword: string,
+	isVegan: boolean,
+	isVegetarian: boolean,
+	isHypertensive: boolean,
+	isCeliac: boolean
+}
 
 const Register = () => {
 	const lang = useTranslation('register');
@@ -18,7 +32,8 @@ const Register = () => {
 		isCeliac: false
 	};
 
-	const [register, setRegister] = useState(initialState);
+	const [register, setRegister] = useState<Register>(initialState);
+	const {setAlert} = useAlert();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setRegister({
@@ -34,9 +49,43 @@ const Register = () => {
 		});
 	};
 
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		validateRegister(register);
+		//setAlert('Usuario registrado con exito!', AlertTypes.INFO);
+	}
+
+	const validateRegister = (register: Register) => {
+		let errors: string = '';
+
+		if(!register.name) {
+			errors += "Name cannot be empty.\n"
+		}
+
+		if(!register.lastName) {
+			errors += "Last Name cannot be empty.\n"
+		}
+
+		if(!register.email) {
+			errors += "Email cannot be empty.\n"
+		} else {
+			let emailValid = register.email.match(/^.+@endava.com$/)
+			if(!emailValid) {
+				errors += "You must use your endava email.\n"
+			}
+		}
+
+		if(errors.length > 0) {
+			console.log(errors)
+			setAlert(errors, AlertTypes.ERROR);
+		} else {
+			setAlert("User created successfully!", AlertTypes.SUCCESS)
+		}
+	} 
+
 	return (
 		//todo: meter todos los inputs y label adentro de un contenedor para manipular mejor el ancho y luego aplicar grid en desk
-		<FormLayout>
+		<FormLayout onSubmit={handleSubmit}>
 			<div className={styles.closeBtn}></div>
 			<label className={styles.title}>{lang.registerTitle}</label>
 			<div className={styles.inputSection}>
@@ -113,10 +162,8 @@ const Register = () => {
 						kind="primary"
 						size="large"
 						id="registerBtn"
-						onClick={e => {
-							e.preventDefault();
-							console.log(register);
-						}}>
+						type='submit'
+						>
 						{lang.registerBtn}
 					</Button>
 				</section>

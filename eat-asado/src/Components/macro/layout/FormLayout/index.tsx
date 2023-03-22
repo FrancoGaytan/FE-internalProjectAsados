@@ -2,14 +2,18 @@
 import { PropsWithChildren } from 'react';
 import styles from './styles.module.scss';
 
-export default function FormLayout(props: PropsWithChildren): JSX.Element {
+interface FormLayoutProps extends PropsWithChildren {
+	onSubmit?: React.FormEventHandler<HTMLFormElement>
+}
+
+export default function FormLayout(props: FormLayoutProps): JSX.Element {
 	// const { isSomethingLoading } = useGlobal();
 
 	return (
 		<div className={styles.formLayout}>
-			<section>
+			<form onSubmit={props.onSubmit}>
 				<div className={styles.containerLayout}>{props.children}</div>
-			</section>
+			</form>
 		</div>
 	);
 }
