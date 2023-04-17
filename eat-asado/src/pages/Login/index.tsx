@@ -1,61 +1,61 @@
 import { useTranslation } from '../../stores/LocalizationContext';
 import styles from './styles.module.scss';
-import Button from '../../Components/micro/Button/Button';
-import FormLayout from '../../Components/macro/layout/FormLayout';
+import Button from '../../components/micro/Button/Button';
+import FormLayout from '../../components/macro/layout/FormLayout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAlert from '../../hooks/useAlert';
-import { AlertTypes } from '../../Components/micro/AlertPopup/AlertPopup';
+import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
+import { useAlert } from '../../stores/AlertContext';
 
-const Login = () => {
+export function Login(): JSX.Element {
 	const lang = useTranslation('login');
-	const {setAlert} = useAlert();
+	const { setAlert } = useAlert();
 
 	const initialState = {
-		"email": "",
-		"password": ""
-	}
+		email: '',
+		password: ''
+	};
 
 	const navigate = useNavigate();
 
 	const Users = [
 		{
-			"email": "martin.lazarte@endava.com",
-			"password": "1234",
-			"user": "mlazarte"
+			email: 'martin.lazarte@endava.com',
+			password: '1234',
+			user: 'mlazarte'
 		},
 		{
-			"email": "franco.gaytan@endava.com",
-			"password": "1234",
-			"user": "fgaytan"
+			email: 'franco.gaytan@endava.com',
+			password: '1234',
+			user: 'fgaytan'
 		}
-	]
-	
-	const[loginCredentials, setLoginCredentials] = useState(initialState);
+	];
+
+	const [loginCredentials, setLoginCredentials] = useState(initialState);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setLoginCredentials({
 			...loginCredentials,
 			[e.target.id]: e.target.value
-		})
-	}
+		});
+	};
 
 	const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		validateCredentials(loginCredentials);
-	}
+	};
 
-	const validateCredentials = ({email, password }: any) => {
+	const validateCredentials = ({ email, password }: any) => {
 		//Temporary call for design purposes, the lines above will change when we have an API that validates an user.
 		const result = Users.find(user => user.email === email && user.password === password);
 		if (result != null) {
-			localStorage.setItem("user", result.user);
-			navigate("/userProfile");
+			localStorage.setItem('user', result.user);
+			navigate('/userProfile');
 			setAlert(`${lang.welcomeMessage} ${result.user}!`, AlertTypes.SUCCESS);
 		} else {
 			setAlert(`${lang.loginErrorMessage}`, AlertTypes.ERROR);
 		}
-	}
+	};
 
 	return (
 		<FormLayout>
@@ -64,7 +64,7 @@ const Login = () => {
 			<label htmlFor="email" className={styles.loginLabel}>
 				{lang.email}
 			</label>
-			<input id="email" className={styles.loginInput} placeholder={lang.user} type="text"onChange={handleChange}/>
+			<input id="email" className={styles.loginInput} placeholder={lang.user} type="text" onChange={handleChange} />
 			<label htmlFor="password" className={styles.loginLabel}>
 				{lang.password}
 			</label>
@@ -81,6 +81,4 @@ const Login = () => {
 			</a>
 		</FormLayout>
 	);
-};
-
-export default Login;
+}

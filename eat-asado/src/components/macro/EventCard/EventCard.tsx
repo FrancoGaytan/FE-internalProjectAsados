@@ -1,11 +1,9 @@
-import React from 'react';
 import { TEventState, TSubscribedState, TEventParticipationState } from '../../../types/eventState';
-import styles from './styles.module.scss';
 import Button from '../../micro/Button/Button';
 import { className } from '../../../utils/className';
-import { useState, useEffect } from 'react';
 import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
+import styles from './styles.module.scss';
 
 interface IEventData {
 	eventTitle: String;
@@ -50,14 +48,14 @@ const EventCard = (props: IEventCardProps) => {
 		return false; //esto tiene qe retornar si esta subscripto o no
 	};
 
-	let eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.Incompleted : EventStatesEnum.Full;
+	let eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
 	let subscribedUser: TSubscribedState = verifySubscription() ? 'subscribed' : 'not-subscribed'; // de aca tiene que obtener con una funcion si el usuario esta anotado o no al evento
 
 	const verifyState = () => {
-		if (subscribedUser === 'subscribed' && evState !== EventStatesEnum.Canceled) {
+		if (subscribedUser === 'subscribed' && evState !== EventStatesEnum.CANCELED) {
 			return 'subscribed';
-		} else if (eventParticipationState === EventStatesEnum.Full) {
-			return EventStatesEnum.Full;
+		} else if (eventParticipationState === EventStatesEnum.FULL) {
+			return EventStatesEnum.FULL;
 		} else {
 			return evState;
 		}
@@ -70,11 +68,11 @@ const EventCard = (props: IEventCardProps) => {
 		<div
 			{...className(
 				styles.cardContainer, //aca es importante el orden, si es que no condiciono las clases
-				styles[evState ?? EventStatesEnum.Available],
-				styles[evState ?? EventStatesEnum.Canceled],
-				styles[eventParticipationState ?? EventStatesEnum.Full],
+				styles[evState ?? EventStatesEnum.AVAILABLE],
+				styles[evState ?? EventStatesEnum.CANCELED],
+				styles[eventParticipationState ?? EventStatesEnum.FULL],
 				styles[subscribedUser ?? 'subscribed'],
-				styles[evState ?? EventStatesEnum.Closed] //decidir bien que se va a mostrar si se esta suscripto y el evento se cierra
+				styles[evState ?? EventStatesEnum.CLOSED] //decidir bien que se va a mostrar si se esta suscripto y el evento se cierra
 			)}>
 			<section className={styles.cardTitleInfo}>
 				<div className={styles.availabilityDesc}>{eventDescription.toUpperCase()}</div>
@@ -96,8 +94,8 @@ const EventCard = (props: IEventCardProps) => {
 				</div>
 				<section className={styles.cardBtn}>
 					<div className={styles.participateBtn}>
-						{evState === EventStatesEnum.Available &&
-							eventParticipationState === EventStatesEnum.Incompleted &&
+						{evState === EventStatesEnum.AVAILABLE &&
+							eventParticipationState === EventStatesEnum.INCOMPLETED &&
 							subscribedUser !== 'subscribed' && (
 								<Button
 									kind="secondary"

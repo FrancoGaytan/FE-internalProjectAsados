@@ -1,10 +1,10 @@
 import { useTranslation } from '../../stores/LocalizationContext';
 import styles from './styles.module.scss';
-import Button from '../../Components/micro/Button/Button';
-import FormLayout from '../../Components/macro/layout/FormLayout';
+import Button from '../../components/micro/Button/Button';
+import FormLayout from '../../components/macro/layout/FormLayout';
 import { useState } from 'react';
 
-const Register = () => {
+export function Register(): JSX.Element {
 	const lang = useTranslation('register');
 	const initialState = {
 		name: '',
@@ -123,6 +123,4 @@ const Register = () => {
 			</div>
 		</FormLayout>
 	);
-};
-
-export default Register;
+}

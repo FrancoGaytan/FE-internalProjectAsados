@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './styles.module.scss';
-import Button from '../../Components/micro/Button/Button';
-import PrivateFormLayout from '../../Components/macro/layout/PrivateFormLayout';
+import Button from '../../components/micro/Button/Button';
+import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import { useTranslation } from '../../stores/LocalizationContext';
 
 interface InitialNewPasswordInterface {
@@ -10,7 +10,7 @@ interface InitialNewPasswordInterface {
 	userConfirmedPassword: string;
 }
 
-const SettingNewPassword = () => {
+export function SettingNewPassword(): JSX.Element {
 	const lang = useTranslation('settingNewPassword');
 	const initialNewPassword = {
 		userVerificationCode: '',
@@ -75,6 +75,4 @@ const SettingNewPassword = () => {
 			</PrivateFormLayout>
 		</div>
 	);
-};
-
-export default SettingNewPassword;
+}

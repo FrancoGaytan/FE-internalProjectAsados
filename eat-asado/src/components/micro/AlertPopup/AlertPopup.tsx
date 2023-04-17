@@ -1,4 +1,5 @@
-import useAlert from '../../../hooks/useAlert';
+
+import { useAlert } from '../../../stores/AlertContext';
 import styles from './styles.module.scss';
 
 export enum AlertTypes {
