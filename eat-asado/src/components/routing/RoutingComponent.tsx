@@ -8,33 +8,18 @@ import { changeTitle } from '../../utils/common';
 import PrivateFormLayout from '../macro/layout/PrivateFormLayout';
 
 interface RoutingComponentProps {
-	//isPublic?: boolean;
 	route: IRoute;
 }
 
 export default function RoutingComponent(props: RoutingComponentProps): JSX.Element {
-	//const { authenticated } = useAuth();
+	const authenticated = true; // TODO: Here we should check if user is auth.
 	const translation = useTranslation('navigation');
 
 	useEffect(() => changeTitle(translation[props.route.localizationKey || '']), [props.route, translation]);
 
 	if (props.route.isPublic) {
-		return (
-			<PublicLayout>
-				{props.route.element}
-			</PublicLayout>
-			);
-	} else {
-		return (
-			<PrivateFormLayout>
-				{props.route.element}
-			</PrivateFormLayout>
-			);
+		return <PublicLayout>{props.route.element}</PublicLayout>;
 	}
 
-	//return <Navigate to="/login" />;
-
-	//return !authenticated ? <Navigate to="/login" /> : <PrivateLayout>{props.route.element}</PrivateLayout>;
-	//todo: ver como nos vamos a autenticar, en este ejemplo comentado teníamos un hook useAuth que utilizaba
-	// apolo y validaba si un usuario esta autenticado o no
+	return !authenticated ? <Navigate to="/login" /> : <PrivateFormLayout>{props.route.element}</PrivateFormLayout>;
 }

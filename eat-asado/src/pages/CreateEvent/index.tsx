@@ -1,10 +1,10 @@
+import { useState } from 'react';
 import { useTranslation } from '../../stores/LocalizationContext';
-import FormLayout from '../../Components/macro/layout/FormLayout';
+import FormLayout from '../../components/macro/layout/FormLayout';
+import Button from '../../components/micro/Button/Button';
 import styles from './styles.module.scss';
-import Button from '../../Components/micro/Button/Button';
-import React, { useEffect, useState } from 'react';
 
-const CreateEvent = () => {
+export function CreateEvent(): JSX.Element {
 	const lang = useTranslation('createEvent');
 	const initialEvent = {
 		name: '',
@@ -83,11 +83,15 @@ const CreateEvent = () => {
 							<span className={styles.extraDescription}>{lang.optionalDescription}</span>
 						</div>
 						<label htmlFor="isAsador" className={styles.fieldLabel}>
-							<input id="isAsador" type="checkbox" className={styles.checkbox} checked={event.isCook} onChange={
-								e => {
-									setEvent({...event, isCook: e.target.checked})
-								}
-							}/>
+							<input
+								id="isAsador"
+								type="checkbox"
+								className={styles.checkbox}
+								checked={event.isCook}
+								onChange={e => {
+									setEvent({ ...event, isCook: e.target.checked });
+								}}
+							/>
 							{lang.chef}
 						</label>
 						<label htmlFor="isEncargadoCompras" className={styles.fieldLabel}>
@@ -103,7 +107,7 @@ const CreateEvent = () => {
 							{lang.shoppingDesignee}
 						</label>
 					</section>
-					{event.isCook && 
+					{event.isCook && (
 						<section className={styles.rangeSelectionContainer}>
 							<label htmlFor="diners" className={styles.fieldLabel}>
 								{lang.memberLimit}
@@ -135,7 +139,7 @@ const CreateEvent = () => {
 								<option value="100" label="100" />
 							</datalist>
 						</section>
-					}
+					)}
 				</section>
 				<section className={styles.buttonContainer}>
 					<Button
@@ -153,6 +157,4 @@ const CreateEvent = () => {
 			</div>
 		</FormLayout>
 	);
-};
-
-export default CreateEvent;
+}

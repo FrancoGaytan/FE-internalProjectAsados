@@ -1,9 +1,9 @@
-import PrivateFormLayout from '../../Components/macro/layout/PrivateFormLayout';
-import Button from '../../Components/micro/Button/Button';
+import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
+import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import styles from './styles.module.scss';
 import { EventStatesEnum } from '../../enums/EventState.enum';
-import EventCard from '../../Components/macro/EventCard/EventCard';
+import EventCard from '../../components/macro/EventCard/EventCard';
 import { TEventState, TSubscribedState, TEventParticipationState } from '../../types/eventState';
 
 interface IStepItem {
@@ -16,7 +16,7 @@ const events = [
 	{
 		eventId: 'ad5f4d0005d4s5df4',
 		fakeDate: new Date(2017, 4, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.Available,
+		fakeState: EventStatesEnum.AVAILABLE,
 		fakeEventData: {
 			eventTitle: 'CORDERITO SOLEADO',
 			eventDescription: 'Cordero al fuego por tres horas con unas verduritas a la parrilla',
@@ -28,7 +28,7 @@ const events = [
 	{
 		eventId: 'ad5f4dab511d4s5df4',
 		fakeDate: new Date(2017, 4, 5, 18, 20, 42, 11),
-		fakeState: EventStatesEnum.Available,
+		fakeState: EventStatesEnum.AVAILABLE,
 		fakeEventData: {
 			eventTitle: 'PATA REBOZADA',
 			eventDescription: 'Pata rebozada al horno durante 6 horas',
@@ -40,7 +40,7 @@ const events = [
 	{
 		eventId: 'ad1f4d22af5d4s5df4',
 		fakeDate: new Date(2016, 4, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.Canceled,
+		fakeState: EventStatesEnum.CANCELED,
 		fakeEventData: {
 			eventTitle: 'ASADO DE VIERNES',
 			eventDescription: 'Una tiritas a la parrila con ensalada',
@@ -52,7 +52,7 @@ const events = [
 	{
 		eventId: 'aa5f4daf5d433s5df4',
 		fakeDate: new Date(2018, 8, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.Closed,
+		fakeState: EventStatesEnum.CLOSED,
 		fakeEventData: {
 			eventTitle: 'PARRILLA DE LOS JEFES',
 			eventDescription: 'Asado completo con ensaladas',
@@ -64,7 +64,7 @@ const events = [
 	{
 		eventId: 'ad5f4da44f5hjs5df4',
 		fakeDate: new Date(2017, 4, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.Available,
+		fakeState: EventStatesEnum.AVAILABLE,
 		fakeEventData: {
 			eventTitle: 'ASADO NOCTURNO',
 			eventDescription: 'Asadito a las brazas con vegetales a la parri',
@@ -76,7 +76,7 @@ const events = [
 	{
 		eventId: 'ad5f4daf5d4s555004',
 		fakeDate: new Date(2017, 4, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.Canceled,
+		fakeState: EventStatesEnum.CANCELED,
 		fakeEventData: {
 			eventTitle: 'OTRO CORDERITO SOLEADO',
 			eventDescription: 'Cordero al fuego por tres horas con unas verduritas a la parrilla',
@@ -97,7 +97,7 @@ const StepItem = (props: IStepItem) => {
 	);
 };
 
-export const EventHome = () => {
+export function EventHome(): JSX.Element {
 	const lang = useTranslation('eventHome');
 
 	const itemStepsData = [
@@ -162,4 +162,4 @@ export const EventHome = () => {
 			</div>
 		</PrivateFormLayout>
 	);
-};
+}

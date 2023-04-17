@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import routes, { IRoute } from './routes';
 import { GlobalProvider } from './stores/GlobalContext';
 import { LocalizationProvider } from './stores/LocalizationContext';
-import RoutingComponent from './Components/routing/RoutingComponent';
+import RoutingComponent from './components/routing/RoutingComponent';
 import { AlertProvider } from './stores/AlertContext';
 
 function renderRoute(route: IRoute): JSX.Element {

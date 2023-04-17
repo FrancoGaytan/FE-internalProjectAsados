@@ -1,7 +1,7 @@
 export enum EventStatesEnum{
-	Full = 'full',
-	Closed = 'closed',
-	Available = 'available',
-	Canceled = 'canceled',
-	Incompleted = 'incompleted'
+	FULL = 'full',
+	CLOSED = 'closed',
+	AVAILABLE = 'available',
+	CANCELED = 'canceled',
+	INCOMPLETED = 'incompleted'
 }

@@ -1,8 +1,8 @@
 import styles from './styles.module.scss';
-import Button from '../../Components/micro/Button/Button';
+import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import React, { useEffect, useRef, useState } from 'react';
-import DragAndDrop from '../../Components/micro/DragAndDrop/DragAndDrop';
+import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
 
 export interface UserProfileInterface {
 	userImage?: File;
@@ -14,7 +14,7 @@ export interface UserProfileInterface {
 	userCeliac?: boolean;
 }
 
-const UserProfile = () => {
+export function UserProfile(): JSX.Element {
 	const lang = useTranslation('userProfile');
 	let emptyFile = undefined as unknown as File;
 
@@ -161,6 +161,4 @@ const UserProfile = () => {
 			</div>
 		</div>
 	);
-};
-
-export default UserProfile;
+}
