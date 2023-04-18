@@ -1,10 +1,11 @@
+import { useMemo } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import styles from './styles.module.scss';
-import { EventStatesEnum } from '../../enums/EventState.enum';
 import EventCard from '../../components/macro/EventCard/EventCard';
-import { TEventState, TSubscribedState, TEventParticipationState } from '../../types/eventState';
+import { TEventState } from '../../types/eventState';
+import { eventsDataMock } from '../../mocks/eventsMockedData';
 
 interface IStepItem {
 	title: string;
@@ -12,99 +13,18 @@ interface IStepItem {
 	imagePath: string;
 }
 
-const events = [
-	{
-		eventId: 'ad5f4d0005d4s5df4',
-		fakeDate: new Date(2017, 4, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.AVAILABLE,
-		fakeEventData: {
-			eventTitle: 'CORDERITO SOLEADO',
-			eventDescription: 'Cordero al fuego por tres horas con unas verduritas a la parrilla',
-			eventParticipants: 8,
-			eventParticipantLimit: 10,
-			eventCook: 'Pablito'
-		}
-	},
-	{
-		eventId: 'ad5f4dab511d4s5df4',
-		fakeDate: new Date(2017, 4, 5, 18, 20, 42, 11),
-		fakeState: EventStatesEnum.AVAILABLE,
-		fakeEventData: {
-			eventTitle: 'PATA REBOZADA',
-			eventDescription: 'Pata rebozada al horno durante 6 horas',
-			eventParticipants: 15,
-			eventParticipantLimit: 15,
-			eventCook: 'Franco'
-		}
-	},
-	{
-		eventId: 'ad1f4d22af5d4s5df4',
-		fakeDate: new Date(2016, 4, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.CANCELED,
-		fakeEventData: {
-			eventTitle: 'ASADO DE VIERNES',
-			eventDescription: 'Una tiritas a la parrila con ensalada',
-			eventParticipants: 2,
-			eventParticipantLimit: 10,
-			eventCook: 'Pablito'
-		}
-	},
-	{
-		eventId: 'aa5f4daf5d433s5df4',
-		fakeDate: new Date(2018, 8, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.CLOSED,
-		fakeEventData: {
-			eventTitle: 'PARRILLA DE LOS JEFES',
-			eventDescription: 'Asado completo con ensaladas',
-			eventParticipants: 10,
-			eventParticipantLimit: 10,
-			eventCook: 'Juanca'
-		}
-	},
-	{
-		eventId: 'ad5f4da44f5hjs5df4',
-		fakeDate: new Date(2017, 4, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.AVAILABLE,
-		fakeEventData: {
-			eventTitle: 'ASADO NOCTURNO',
-			eventDescription: 'Asadito a las brazas con vegetales a la parri',
-			eventParticipants: 3,
-			eventParticipantLimit: 10,
-			eventCook: 'Pablito'
-		}
-	},
-	{
-		eventId: 'ad5f4daf5d4s555004',
-		fakeDate: new Date(2017, 4, 4, 17, 23, 42, 11),
-		fakeState: EventStatesEnum.CANCELED,
-		fakeEventData: {
-			eventTitle: 'OTRO CORDERITO SOLEADO',
-			eventDescription: 'Cordero al fuego por tres horas con unas verduritas a la parrilla',
-			eventParticipants: 10,
-			eventParticipantLimit: 10,
-			eventCook: 'Franco'
-		}
-	}
-];
-
-const StepItem = (props: IStepItem) => {
-	return (
-		<li className={styles.stepItem}>
-			<img src={props.imagePath} alt="stepItem" />
-			<h1>{props.title}</h1>
-			<p>{props.description}</p>
-		</li>
-	);
-};
-
 export function EventHome(): JSX.Element {
 	const lang = useTranslation('eventHome');
 
-	const itemStepsData = [
-		{ title: lang.LogInTheApp.title, description: lang.LogInTheApp.description, imagePath: '/assets/pictures/joinAppLogo.png' },
-		{ title: lang.joinToAnBarbecue.title, description: lang.joinToAnBarbecue.description, imagePath: '/assets/pictures/calendarLogo.png' },
-		{ title: lang.letsEat.title, description: lang.letsEat.description, imagePath: '/assets/pictures/chickenLeg.png' }
-	];
+	const itemStepsData = useMemo(
+		() => [
+			{ title: lang.LogInTheApp.title, description: lang.LogInTheApp.description, imagePath: '/assets/pictures/joinAppLogo.png' },
+			{ title: lang.joinToAnBarbecue.title, description: lang.joinToAnBarbecue.description, imagePath: '/assets/pictures/calendarLogo.png' },
+			{ title: lang.letsEat.title, description: lang.letsEat.description, imagePath: '/assets/pictures/chickenLeg.png' }
+		],
+		[lang]
+	);
+
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -119,7 +39,7 @@ export function EventHome(): JSX.Element {
 					<div className={styles.underlineBlock}></div>
 				</section>
 				<section className={styles.eventsContainer}>
-					{events.map(event => {
+					{eventsDataMock.map(event => {
 						//todo: hay que ordenar los eventos por fecha de realizacion
 						return (
 							<EventCard
@@ -161,5 +81,15 @@ export function EventHome(): JSX.Element {
 				</section>
 			</div>
 		</PrivateFormLayout>
+	);
+}
+
+function StepItem(props: IStepItem) {
+	return (
+		<li className={styles.stepItem}>
+			<img src={props.imagePath} alt="stepItem" />
+			<h1>{props.title}</h1>
+			<p>{props.description}</p>
+		</li>
 	);
 }
