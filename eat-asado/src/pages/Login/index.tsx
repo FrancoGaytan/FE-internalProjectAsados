@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { useAlert } from '../../stores/AlertContext';
+import { usersDataMock } from '../../mocks/usersMockedData';
 
 export function Login(): JSX.Element {
 	const lang = useTranslation('login');
@@ -17,19 +18,6 @@ export function Login(): JSX.Element {
 	};
 
 	const navigate = useNavigate();
-
-	const Users = [
-		{
-			email: 'martin.lazarte@endava.com',
-			password: '1234',
-			user: 'mlazarte'
-		},
-		{
-			email: 'franco.gaytan@endava.com',
-			password: '1234',
-			user: 'fgaytan'
-		}
-	];
 
 	const [loginCredentials, setLoginCredentials] = useState(initialState);
 
@@ -47,7 +35,7 @@ export function Login(): JSX.Element {
 
 	const validateCredentials = ({ email, password }: any) => {
 		//Temporary call for design purposes, the lines above will change when we have an API that validates an user.
-		const result = Users.find(user => user.email === email && user.password === password);
+		const result = usersDataMock.find(user => user.email === email && user.password === password);
 		if (result != null) {
 			localStorage.setItem('user', result.user);
 			navigate('/userProfile');

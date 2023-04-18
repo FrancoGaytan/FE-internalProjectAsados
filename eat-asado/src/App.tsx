@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import routes, { IRoute } from './routes';
 import { GlobalProvider } from './stores/GlobalContext';
 import { LocalizationProvider } from './stores/LocalizationContext';
+import { EventProvider } from './stores/EventContext';
 import RoutingComponent from './components/routing/RoutingComponent';
 import { AlertProvider } from './stores/AlertContext';
 
@@ -15,9 +16,11 @@ export default function EatAsado(): JSX.Element {
 		<BrowserRouter>
 			<GlobalProvider>
 				<LocalizationProvider>
-					<AlertProvider>
-						<Routes>{Object.entries(routes).map(([_, routes]) => renderRoute(routes))}</Routes>
-					</AlertProvider>
+					<EventProvider>
+						<AlertProvider>
+							<Routes>{Object.entries(routes).map(([_, routes]) => renderRoute(routes))}</Routes>
+						</AlertProvider>
+					</EventProvider>
 				</LocalizationProvider>
 			</GlobalProvider>
 		</BrowserRouter>
