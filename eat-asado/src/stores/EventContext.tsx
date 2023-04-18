@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
-import { getPublicEvents } from '../services/eventService';
+import { getPublicEvents } from '../service/eventService';
 import { IEvent } from '../models/event';
 
 interface IEventContext {
