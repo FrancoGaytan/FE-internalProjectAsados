@@ -1,5 +1,5 @@
 import { Dispatch, ReactElement, SetStateAction, useEffect, useRef } from 'react';
-import { UserProfileInterface } from '../../../Pages';
+import { UserProfileInterface } from '../../../pages';
 
 interface IDragAndDrop {
 	children: ReactElement;

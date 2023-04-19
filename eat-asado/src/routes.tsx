@@ -1,6 +1,6 @@
 import { PathRouteProps } from 'react-router-dom';
 import { Translation } from './localization';
-import { CreateEvent, EventHome, Login, RecoverKey, Register, SettingNewPassword, UserProfile } from './Pages';
+import { CreateEvent, EventHome, Login, RecoverKey, Register, SettingNewPassword, UserProfile } from './pages';
 
 export interface IRoute extends PathRouteProps {
 	localizationKey?: keyof Translation['navigation'];

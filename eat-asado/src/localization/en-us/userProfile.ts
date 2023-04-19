@@ -11,5 +11,6 @@ export const userProfile = Object.seal({
 	celiacDiet: 'Are you Celiac?',
 	saveBtn: 'SAVE',
 	headerWelcome: "Welcome: ",
-	logoutBtn: "LOGOUT"
+	logoutBtn: "LOGOUT",
+	loginBtn: "LOGIN"
 });

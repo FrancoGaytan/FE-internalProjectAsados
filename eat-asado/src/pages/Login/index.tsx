@@ -6,58 +6,52 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { useAlert } from '../../stores/AlertContext';
-import { usersDataMock } from '../../mocks/usersMockedData';
 import { login } from '../../service';
-import { LoginRequest } from '../../models/users';
+import { LoginRequest } from '../../models/user';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { localStorageKeys } from '../../utils/localStorageKeys';
 import { useAuth } from '../../stores/AuthContext';
 
 export function Login(): JSX.Element {
+	const navigate = useNavigate();
 	const lang = useTranslation('login');
 	const { setAlert } = useAlert();
-	const { setUser } = useAuth();
+	const { setUser, isLoading, setIsLoading } = useAuth();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_, setJWT] = useLocalStorage<string | null>(localStorageKeys.token, null);
-
-	const navigate = useNavigate();
 
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
 		email: 'prueba@endava.com',
 		password: 'contraseña'
 	});
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
 		setLoginCredentials({
 			...loginCredentials,
 			[e.target.id]: e.target.value
 		});
-	};
+	}
 
-	const handleLogin = (e: any) => {
+	function handleLogin(e: React.MouseEvent): void {
+		setIsLoading(true);
 		e.preventDefault();
-		login({ email: loginCredentials.email, password: loginCredentials.password }).then(res => {
-			setJWT(res.jwt);
-			navigate('/');
-			setUser(res);
-		});
-	};
-
-	/* const validateCredentials = ({ email, password }: any) => {
-		//Temporary call for design purposes, the lines above will change when we have an API that validates an user.
-		const result = usersDataMock.find(user => user.email === email && user.password === password);
-		if (result != null) {
-			localStorage.setItem('user', result.user);
-			navigate('/userProfile');
-			setAlert(`${lang.welcomeMessage} ${result.user}!`, AlertTypes.SUCCESS);
-		} else {
-			setAlert(`${lang.loginErrorMessage}`, AlertTypes.ERROR);
-		}
-	}; */
+		login<LoginRequest>({ email: loginCredentials.email, password: loginCredentials.password })
+			.then(res => {
+				setJWT(res.jwt);
+				setUser(res);
+				setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
+				navigate('/');
+			})
+			.catch(e => setAlert(`${lang.loginErrorMessage}`, AlertTypes.ERROR))
+			.finally(() => setIsLoading(false));
+	}
 
 	return (
 		<FormLayout>
-			<div className={styles.closeBtn}></div>
+			<div className={styles.closeBtn} onClick={() => navigate('/')}></div>
+
 			<h3 className={styles.title}>{lang.loginTitle}</h3>
+
 			<label htmlFor="email" className={styles.loginLabel}>
 				{lang.email}
 			</label>
@@ -69,6 +63,7 @@ export function Login(): JSX.Element {
 				onChange={e => handleChange(e)}
 				value={loginCredentials.email}
 			/>
+
 			<label htmlFor="password" className={styles.loginLabel}>
 				{lang.password}
 			</label>
@@ -80,12 +75,19 @@ export function Login(): JSX.Element {
 				onChange={e => handleChange(e)}
 				value={loginCredentials.password}
 			/>
-			<Button kind="primary" size="large" type="submit" onClick={e => handleLogin(e)}>
-				{lang.loginBtn}
-			</Button>
+
+			{isLoading ? (
+				<span style={{ color: '#fff' }}>Cargando... (⌐■_■)</span> //FIXME: Acá va un spinner para cuando esté cargando el login.
+			) : (
+				<Button kind="primary" size="large" type="submit" onClick={e => handleLogin(e)}>
+					{lang.loginBtn}
+				</Button>
+			)}
+
 			<a href="/recoverkey" className={styles.forgotPassword} id="recoverKey">
 				{lang.forgotPassword}
 			</a>
+
 			<a href="/register" className={styles.register} id="register">
 				<span>{lang.alreadyRegistered} </span>
 				<span className={styles.registerHighlighted}>{lang.registerHere}</span>

@@ -19,13 +19,21 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 			<AlertPopup />
 			<header className={styles.privateHeader}>
 				<nav className={styles.navbar}>
-					<div className={styles.welcomeMsg}>
-						{lang.headerWelcome} {user.name}
-					</div>
+					{!!user.name && (
+						<div className={styles.welcomeMsg}>
+							{lang.headerWelcome} {user.name}
+						</div>
+					)}
 					<div className={styles.logoutBtnSection}>
-						<button className={styles.logoutBtn} onClick={handleLogout}>
-							{lang.logoutBtn}
-						</button>
+						{!!user.name ? (
+							<button className={styles.logoutBtn} onClick={handleLogout}>
+								{lang.logoutBtn}
+							</button>
+						) : (
+							<button className={styles.logoutBtn} onClick={handleLogout}>
+								{lang.loginBtn}
+							</button>
+						)}
 					</div>
 				</nav>
 			</header>

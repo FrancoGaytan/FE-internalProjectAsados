@@ -1,4 +1,4 @@
-import { LoginRequest } from "../models/users";
+import { IUser } from '../models/user';
 
 const baseURL = process.env.REACT_APP_ENDPOINT;
 
@@ -14,9 +14,14 @@ const fetchConfig: RequestInit = {
 /**
  * post the user credentials in order to validate identity
  */
-export async function login(payload: any, signal?: AbortSignal, ): Promise<any> {//TODO: el payload tiene que ser de tipo LoginRequest
+export async function login<T = any>(payload: T, signal?: AbortSignal): Promise<IUser> {
 	try {
-		const response = await fetch(`${baseURL}/login/`, { ...fetchConfig, method: 'POST', signal, body: payload ? JSON.stringify(payload) : undefined });
+		const response = await fetch(`${baseURL}/login/`, {
+			...fetchConfig,
+			method: 'POST',
+			signal,
+			body: payload ? JSON.stringify(payload) : undefined
+		});
 
 		if (!response.ok) {
 			throw new Error('login failed');

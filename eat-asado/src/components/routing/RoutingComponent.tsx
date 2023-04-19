@@ -6,13 +6,15 @@ import { useTranslation } from '../../stores/LocalizationContext';
 import { IRoute } from '../../routes';
 import { changeTitle } from '../../utils/common';
 import PrivateFormLayout from '../macro/layout/PrivateFormLayout';
+import { useAuth } from '../../stores/AuthContext';
 
 interface RoutingComponentProps {
 	route: IRoute;
 }
 
 export default function RoutingComponent(props: RoutingComponentProps): JSX.Element {
-	const authenticated = true; // TODO: Here we should check if user is auth.
+	const { isAuthenticated } = useAuth();
+
 	const translation = useTranslation('navigation');
 
 	useEffect(() => changeTitle(translation[props.route.localizationKey || '']), [props.route, translation]);
@@ -21,5 +23,5 @@ export default function RoutingComponent(props: RoutingComponentProps): JSX.Elem
 		return <PublicLayout>{props.route.element}</PublicLayout>;
 	}
 
-	return !authenticated ? <Navigate to="/login" /> : <PrivateFormLayout>{props.route.element}</PrivateFormLayout>;
+	return !isAuthenticated ? <Navigate to="/login" /> : <PrivateFormLayout>{props.route.element}</PrivateFormLayout>;
 }

@@ -1,15 +1,15 @@
 import { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
 import { getPublicEvents } from '../service';
-import { IEvent } from '../models/event';
+import { IPublicEvent } from '../models/event';
 
 interface IEventContext {
-	publicEvents: IEvent[];
+	publicEvents: IPublicEvent[];
 }
 
 const EventContext = createContext<IEventContext>({} as IEventContext);
 
 export function EventProvider(props: PropsWithChildren<{}>): JSX.Element {
-	const [publicEvents, setPublicEvents] = useState<IEvent[]>([]);
+	const [publicEvents, setPublicEvents] = useState<IPublicEvent[]>([]);
 
 	/**
 	 * Fetches the public events for the Home Event page.
