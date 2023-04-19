@@ -1,21 +1,17 @@
-// import { useGlobal } from '../../../stores/GlobalContext';
-import React, { PropsWithChildren, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { PropsWithChildren } from 'react';
 import { useTranslation } from '../../../../stores/LocalizationContext';
 import AlertPopup from '../../../micro/AlertPopup/AlertPopup';
 import styles from './styles.module.scss';
+import { useAuth } from '../../../../stores/AuthContext';
 
 export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element {
-	// const { isSomethingLoading } = useGlobal();
 	const lang = useTranslation('userProfile');
 
-	const [user, setUser] = useState(localStorage.getItem('user'));
-	const navigate = useNavigate();
+	const { user, logout } = useAuth();
 
 	const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		localStorage.removeItem('user');
-		navigate('/');
+		logout();
 	};
 
 	return (
@@ -24,7 +20,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 			<header className={styles.privateHeader}>
 				<nav className={styles.navbar}>
 					<div className={styles.welcomeMsg}>
-						{lang.headerWelcome} {user}
+						{lang.headerWelcome} {user.name}
 					</div>
 					<div className={styles.logoutBtnSection}>
 						<button className={styles.logoutBtn} onClick={handleLogout}>

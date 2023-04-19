@@ -148,7 +148,7 @@ export function CreateEvent(): JSX.Element {
 						id="registerBtn"
 						type="submit"
 						style={{ marginBottom: '10vh' }}
-						onClick={e => {
+						onSubmit={e => {
 							e.preventDefault();
 							handleSubmit();
 						}}>

@@ -7,19 +7,24 @@ import { useNavigate } from 'react-router-dom';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { useAlert } from '../../stores/AlertContext';
 import { usersDataMock } from '../../mocks/usersMockedData';
+import { login } from '../../service';
+import { LoginRequest } from '../../models/users';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { localStorageKeys } from '../../utils/localStorageKeys';
+import { useAuth } from '../../stores/AuthContext';
 
 export function Login(): JSX.Element {
 	const lang = useTranslation('login');
 	const { setAlert } = useAlert();
-
-	const initialState = {
-		email: '',
-		password: ''
-	};
+	const { setUser } = useAuth();
+	const [_, setJWT] = useLocalStorage<string | null>(localStorageKeys.token, null);
 
 	const navigate = useNavigate();
 
-	const [loginCredentials, setLoginCredentials] = useState(initialState);
+	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
+		email: 'prueba@endava.com',
+		password: 'contraseña'
+	});
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setLoginCredentials({
@@ -28,12 +33,16 @@ export function Login(): JSX.Element {
 		});
 	};
 
-	const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleLogin = (e: any) => {
 		e.preventDefault();
-		validateCredentials(loginCredentials);
+		login({ email: loginCredentials.email, password: loginCredentials.password }).then(res => {
+			setJWT(res.jwt);
+			navigate('/');
+			setUser(res);
+		});
 	};
 
-	const validateCredentials = ({ email, password }: any) => {
+	/* const validateCredentials = ({ email, password }: any) => {
 		//Temporary call for design purposes, the lines above will change when we have an API that validates an user.
 		const result = usersDataMock.find(user => user.email === email && user.password === password);
 		if (result != null) {
@@ -43,7 +52,7 @@ export function Login(): JSX.Element {
 		} else {
 			setAlert(`${lang.loginErrorMessage}`, AlertTypes.ERROR);
 		}
-	};
+	}; */
 
 	return (
 		<FormLayout>
@@ -52,12 +61,26 @@ export function Login(): JSX.Element {
 			<label htmlFor="email" className={styles.loginLabel}>
 				{lang.email}
 			</label>
-			<input id="email" className={styles.loginInput} placeholder={lang.user} type="text" onChange={handleChange} />
+			<input
+				id="email"
+				className={styles.loginInput}
+				placeholder={lang.user}
+				type="text"
+				onChange={e => handleChange(e)}
+				value={loginCredentials.email}
+			/>
 			<label htmlFor="password" className={styles.loginLabel}>
 				{lang.password}
 			</label>
-			<input id="password" className={styles.loginInput} placeholder={lang.password} type="password" onChange={handleChange} />
-			<Button kind="primary" size="large" type="submit" onClick={handleLogin}>
+			<input
+				id="password"
+				className={styles.loginInput}
+				placeholder={lang.password}
+				type="password"
+				onChange={e => handleChange(e)}
+				value={loginCredentials.password}
+			/>
+			<Button kind="primary" size="large" type="submit" onClick={e => handleLogin(e)}>
 				{lang.loginBtn}
 			</Button>
 			<a href="/recoverkey" className={styles.forgotPassword} id="recoverKey">

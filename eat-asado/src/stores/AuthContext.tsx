@@ -1,11 +1,25 @@
-import { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createContext, useContext, useState, PropsWithChildren, useEffect, SetStateAction } from 'react';
+import { localStorageKeys } from '.././utils/localStorageKeys';
 
-interface IAuthContext {}
+interface IAuthContext {
+	user: any;
+	setUser: React.Dispatch<SetStateAction<any>>;
+	logout: () => void;
+}
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
-	return <AuthContext.Provider value={{}}>{props.children}</AuthContext.Provider>;
+	const [user, setUser] = useState({});
+	const navigate = useNavigate();
+
+	function logout() {
+		localStorage.removeItem(localStorageKeys.token);
+		navigate('/login');
+	}
+
+	return <AuthContext.Provider value={{ user, setUser, logout }}>{props.children}</AuthContext.Provider>;
 }
 
 export function useAuth(): IAuthContext {

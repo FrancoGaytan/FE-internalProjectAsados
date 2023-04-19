@@ -35,7 +35,7 @@ export function Register(): JSX.Element {
 	};
 
 	return (
-		//todo: meter todos los inputs y label adentro de un contenedor para manipular mejor el ancho y luego aplicar grid en desk
+		//TODO: meter todos los inputs y label adentro de un contenedor para manipular mejor el ancho y luego aplicar grid en desk
 		<FormLayout>
 			<div className={styles.closeBtn}></div>
 			<label className={styles.title}>{lang.registerTitle}</label>
@@ -114,7 +114,7 @@ export function Register(): JSX.Element {
 						size="large"
 						id="registerBtn"
 						type="submit"
-						onClick={e => {
+						onSubmit={e => {
 							e.preventDefault();
 							console.log(register);
 						}}>

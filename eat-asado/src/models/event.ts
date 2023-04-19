@@ -1,6 +1,6 @@
 export interface IEvent {
 	name: string,
-	//dateAndHour: DateTime,
+	dateAndHour: Date,
 	description: string,
 	diners: number
 }
