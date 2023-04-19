@@ -57,7 +57,7 @@ export function Login(): JSX.Element {
 				{lang.password}
 			</label>
 			<input id="password" className={styles.loginInput} placeholder={lang.password} type="password" onChange={handleChange} />
-			<Button kind="primary" size="large" onClick={handleLogin}>
+			<Button kind="primary" size="large" type="submit" onClick={handleLogin}>
 				{lang.loginBtn}
 			</Button>
 			<a href="/recoverkey" className={styles.forgotPassword} id="recoverKey">

@@ -1,19 +1,19 @@
-import { Dispatch, ReactElement, SetStateAction, useEffect, useRef } from "react";
-import { UserProfileInterface } from "../../../pages/UserProfile";
+import { Dispatch, ReactElement, SetStateAction, useEffect, useRef } from 'react';
+import { UserProfileInterface } from '../../../Pages';
 
 interface IDragAndDrop {
-    children: ReactElement,
-    setState: Function
+	children: ReactElement;
+	setState: Function;
 }
 
 const DragAndDrop = (props: IDragAndDrop) => {
-    const dropRef = useRef<HTMLDivElement>(null);
+	const dropRef = useRef<HTMLDivElement>(null);
 
-    const onUpload = (files: FileList) => {
-        props.setState(files[0]);
-	}
-    
-    useEffect(() => {
+	const onUpload = (files: FileList) => {
+		props.setState(files[0]);
+	};
+
+	useEffect(() => {
 		dropRef.current?.addEventListener('dragover', handleDragOver);
 		dropRef.current?.addEventListener('drop', handleDrop);
 
@@ -30,21 +30,17 @@ const DragAndDrop = (props: IDragAndDrop) => {
 
 	const handleDrop = (e: DragEvent) => {
 		e.preventDefault();
-  		e.stopPropagation();
+		e.stopPropagation();
 
-        const dataTransfer = e.dataTransfer as DataTransfer
+		const dataTransfer = e.dataTransfer as DataTransfer;
 
 		const files = dataTransfer.files;
-		if(files && files.length) {
+		if (files && files.length) {
 			onUpload(files);
 		}
-	}
+	};
 
-    return (
-        <div ref={dropRef}>
-            {props.children}
-        </div>
-    );
-}
+	return <div ref={dropRef}>{props.children}</div>;
+};
 
 export default DragAndDrop;

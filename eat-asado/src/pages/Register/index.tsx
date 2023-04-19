@@ -113,6 +113,7 @@ export function Register(): JSX.Element {
 						kind="primary"
 						size="large"
 						id="registerBtn"
+						type="submit"
 						onClick={e => {
 							e.preventDefault();
 							console.log(register);
