@@ -2,25 +2,29 @@ const baseURL = process.env.REACT_APP_ENDPOINT;
 
 const fetchConfig: RequestInit = {
 	mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
+	cache: 'no-cache',
+	credentials: 'same-origin',
 	headers: {
 		'Content-Type': 'application/json'
 	}
 };
 
-export async function getPublicEvents(): Promise<any> {
+/**
+ * Gets the public events for the Event Home page.
+ */
+export async function getPublicEvents(signal?: AbortSignal): Promise<any> {
 	try {
-		const response = await fetch(`${baseURL}/events/getPublicEvents`, {...fetchConfig, method: 'GET'});
+		const response = await fetch(`${baseURL}/events/getPublicEvents`, { ...fetchConfig, method: 'GET', signal });
 
 		if (!response.ok) {
-			throw new Error('Something unexpected happened');
+			throw new Error('getPublicEvents failed');
 		}
 
 		const data = await response.json();
 
 		return data;
-	} catch (e) {
-		console.error(e);
+	} catch (error) {
+		console.error(error);
+		throw new Error(`${error}`);
 	}
 }
