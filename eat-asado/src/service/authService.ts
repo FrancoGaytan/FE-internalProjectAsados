@@ -1,4 +1,4 @@
-import { IUser } from '../models/user';
+import { LoginResponse } from '../models/user';
 
 const baseURL = process.env.REACT_APP_ENDPOINT;
 
@@ -14,7 +14,7 @@ const fetchConfig: RequestInit = {
 /**
  * post the user credentials in order to validate identity
  */
-export async function login<T = any>(payload: T, signal?: AbortSignal): Promise<IUser> {
+export async function login<T = any>(payload: T, signal?: AbortSignal): Promise<LoginResponse> {
 	try {
 		const response = await fetch(`${baseURL}/login/`, {
 			...fetchConfig,

@@ -29,7 +29,7 @@ export function EventProvider(props: PropsWithChildren<{}>): JSX.Element {
 		return () => abortController.abort();
 	}, []);
 
-	return <EventContext.Provider value={{ publicEvents }}>{props.children}</EventContext.Provider>;
+	return <EventContext.Provider value={{ publicEvents }}>{props.children}</EventContext.Provider>; //este publicEvents es lo que me tengo que llevar para tener la data posta y reemplazar la moockeada
 }
 
 export function useEvent(): IEventContext {

@@ -1,4 +1,4 @@
-import { IPublicEvent } from '../models/event';
+import { IUser } from '../models/user';
 
 const baseURL = process.env.REACT_APP_ENDPOINT;
 
@@ -9,21 +9,80 @@ const fetchConfig: RequestInit = {
 };
 
 /**
- * Gets the public events for the Event Home page.
+ * Gets all users in the database.
  */
-export async function getPublicEvents(signal?: AbortSignal): Promise<IPublicEvent[]> {
+export async function getUsers(token: string, signal?: AbortSignal): Promise<IUser[]> {
 	try {
-		const response = await fetch(`${baseURL}/events/getPublicEvents`, {
+		const response = await fetch(`${baseURL}/users/getUsers`, {
 			...fetchConfig,
 			method: 'GET',
 			signal,
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: token
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error('getUsers failed');
+		}
+
+		const data = await response.json();
+
+		return data;
+	} catch (error) {
+		console.error(error);
+		throw new Error(`${error}`);
+	}
+}
+
+/**
+ * Gets a user by its id (12 byte object ID)
+ */
+export async function getUserById(id: number, token: string, signal?: AbortSignal): Promise<any> {
+	//FIXME: Type TBD
+	try {
+		const response = await fetch(`${baseURL}/users/getUserById/${id}`, {
+			...fetchConfig,
+			method: 'GET',
+			signal,
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: token
+			}
+		});
+
+		if (!response.ok) {
+			throw new Error('getUserById failed');
+		}
+
+		const data = await response.json();
+
+		return data;
+	} catch (error) {
+		console.error(error);
+		throw new Error(`${error}`);
+	}
+}
+
+/**
+ * Creates a user
+ */
+export async function register<T = any>(body: T, signal?: AbortSignal): Promise<any> {
+	//FIXME: Type TBD and add payload.
+	try {
+		const response = await fetch(`${baseURL}/events/register`, {
+			...fetchConfig,
+			method: 'POST',
+			signal,
+			body: body ? JSON.stringify(body) : undefined,
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
 
 		if (!response.ok) {
-			throw new Error('getPublicEvents failed');
+			throw new Error('register failed');
 		}
 
 		const data = await response.json();
@@ -35,73 +94,15 @@ export async function getPublicEvents(signal?: AbortSignal): Promise<IPublicEven
 	}
 }
 
-/**
- * Gets the events by its ID (12 byte object ID).
- */
-export async function getEventById(id: number, token: string, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD
-	try {
-		const response = await fetch(`${baseURL}/events/getEventById/${id}`, {
-			...fetchConfig,
-			method: 'GET',
-			signal,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('getEventById failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
-}
-
-/**
- * Gets the public events for the Event Home page.
- */
-export async function createEvent(body: Event, token: string, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD and add payload.
-	try {
-		const response = await fetch(`${baseURL}/events/createEvent`, {
-			...fetchConfig,
-			method: 'POST',
-			signal,
-			body: body ? JSON.stringify(body) : undefined,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('getPublicEvents failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
-}
 /**
  *
-Edits an event by its id (12 byte Object ID)
+Edits an user by its id (12 byte Object ID)
  */
 
-export async function editEvent<T = any>(id: number, payload: T, token: string, signal?: AbortSignal): Promise<any> {
-	//TODO: Nose si es necesario el body en este caso //FIXME: Type TBD and add payload.
+export async function editUser<T = any>(id: number, payload: T, token: string, signal?: AbortSignal): Promise<any> {
+	//FIXME: Type TBD and add payload.
 	try {
-		const response = await fetch(`${baseURL}/events/editEvent/${id}`, {
+		const response = await fetch(`${baseURL}/users/editUser/${id}`, {
 			...fetchConfig,
 			method: 'PUT',
 			signal,
@@ -113,7 +114,7 @@ export async function editEvent<T = any>(id: number, payload: T, token: string, 
 		});
 
 		if (!response.ok) {
-			throw new Error('editEvent failed');
+			throw new Error('editUser failed');
 		}
 
 		const data = await response.json();
@@ -128,10 +129,10 @@ export async function editEvent<T = any>(id: number, payload: T, token: string, 
 /**
  * Deletes an event by its id (12 byte Object ID)
  */
-export async function deleteEvent(id: number, token: string, signal?: AbortSignal): Promise<any> {
+export async function deleteUser(id: number, token: string, signal?: AbortSignal): Promise<any> {
 	//FIXME: Type TBD
 	try {
-		const response = await fetch(`${baseURL}/events/deleteEvent/${id}`, {
+		const response = await fetch(`${baseURL}/users/deleteUser/${id}`, {
 			...fetchConfig,
 			method: 'DELETE',
 			signal,
@@ -142,7 +143,7 @@ export async function deleteEvent(id: number, token: string, signal?: AbortSigna
 		});
 
 		if (!response.ok) {
-			throw new Error('deleteEvent failed');
+			throw new Error('deleteUser failed');
 		}
 
 		const data = await response.json();
