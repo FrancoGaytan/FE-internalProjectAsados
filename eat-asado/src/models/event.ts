@@ -32,7 +32,3 @@ export interface createRequest {
 	chef?: number;
 	shoppingDesignee?: number;
 }
-
-/* export interface editRequest {
-	//TODO: esta va a ser igual que IEvent así que no la haría de nuevo<-- corroborar
-} */

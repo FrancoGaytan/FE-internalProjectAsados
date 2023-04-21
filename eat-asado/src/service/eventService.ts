@@ -1,155 +1,45 @@
-import { IPublicEvent } from '../models/event';
-
-const baseURL = process.env.REACT_APP_ENDPOINT;
-
-const fetchConfig: RequestInit = {
-	mode: 'cors',
-	cache: 'no-cache',
-	credentials: 'same-origin'
-};
+import { IEvent, IPublicEvent } from '../models/event';
+import { _delete, _get, _post, _put } from './httpService';
 
 /**
  * Gets the public events for the Event Home page.
  */
 export async function getPublicEvents(signal?: AbortSignal): Promise<IPublicEvent[]> {
-	try {
-		const response = await fetch(`${baseURL}/events/getPublicEvents`, {
-			...fetchConfig,
-			method: 'GET',
-			signal,
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('getPublicEvents failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
+	const url = '/events/getPublicEvents';
+	return await _get<IPublicEvent[]>(url, signal);
 }
 
 /**
- * Gets the events by its ID (12 byte object ID).
+ * Gets the events by its ID.
  */
-export async function getEventById(id: number, token: string, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD
-	try {
-		const response = await fetch(`${baseURL}/events/getEventById/${id}`, {
-			...fetchConfig,
-			method: 'GET',
-			signal,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
+export async function getEventById(id: unknown, signal?: AbortSignal): Promise<any> {
+	const url = `/events/getEventById/${id}`;
 
-		if (!response.ok) {
-			throw new Error('getEventById failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
+	return await _get(url, signal);
 }
 
 /**
  * Gets the public events for the Event Home page.
  */
-export async function createEvent(body: Event, token: string, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD and add payload.
-	try {
-		const response = await fetch(`${baseURL}/events/createEvent`, {
-			...fetchConfig,
-			method: 'POST',
-			signal,
-			body: body ? JSON.stringify(body) : undefined,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('getPublicEvents failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
+export async function createEvent(payload: IEvent, signal?: AbortSignal): Promise<any> {
+	const url = '/events/createEvent';
+	return await _post<any, IEvent>(url, payload, signal);
 }
+
 /**
  *
-Edits an event by its id (12 byte Object ID)
+Edits an event by its ID
  */
 
-export async function editEvent<T = any>(id: number, payload: T, token: string, signal?: AbortSignal): Promise<any> {
-	//TODO: Nose si es necesario el body en este caso //FIXME: Type TBD and add payload.
-	try {
-		const response = await fetch(`${baseURL}/events/editEvent/${id}`, {
-			...fetchConfig,
-			method: 'PUT',
-			signal,
-			body: payload ? JSON.stringify(payload) : undefined,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('editEvent failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
+export async function editEvent(id: number, payload: IEvent, signal?: AbortSignal): Promise<any> {
+	const url = `/events/editEvent/${id}`;
+	return await _put<any, IEvent>(url, payload, signal);
 }
 
 /**
- * Deletes an event by its id (12 byte Object ID)
+ * Deletes an event by its ID
  */
-export async function deleteEvent(id: number, token: string, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD
-	try {
-		const response = await fetch(`${baseURL}/events/deleteEvent/${id}`, {
-			...fetchConfig,
-			method: 'DELETE',
-			signal,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('deleteEvent failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
+export async function deleteEvent(id: number, signal?: AbortSignal): Promise<any> {
+	const url = `/events/deleteEvent/${id}`;
+	return await _delete(url, signal);
 }

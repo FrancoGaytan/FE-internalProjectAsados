@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { createContext, useContext, useState, PropsWithChildren, SetStateAction } from 'react';
 import { localStorageKeys } from '.././utils/localStorageKeys';
+import { IUser } from '../models/user';
 
 interface IAuthContext {
-	user: any;
+	user: IUser | null;
 	isLoading: boolean;
 	setIsLoading: React.Dispatch<SetStateAction<boolean>>;
 	isAuthenticated: () => string | false;
@@ -14,7 +15,7 @@ interface IAuthContext {
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
-	const [user, setUser] = useState({});
+	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	 */
 	function logout() {
 		localStorage.removeItem(localStorageKeys.token);
-		setUser({});
+		setUser(null);
 		navigate('/login');
 	}
 

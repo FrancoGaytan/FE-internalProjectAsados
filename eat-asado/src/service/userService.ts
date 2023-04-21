@@ -1,156 +1,44 @@
 import { IUser } from '../models/user';
-
-const baseURL = process.env.REACT_APP_ENDPOINT;
-
-const fetchConfig: RequestInit = {
-	mode: 'cors',
-	cache: 'no-cache',
-	credentials: 'same-origin'
-};
-
-/**
- * Gets all users in the database.
- */
-export async function getUsers(token: string, signal?: AbortSignal): Promise<IUser[]> {
-	try {
-		const response = await fetch(`${baseURL}/users/getUsers`, {
-			...fetchConfig,
-			method: 'GET',
-			signal,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('getUsers failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
-}
-
-/**
- * Gets a user by its id (12 byte object ID)
- */
-export async function getUserById(id: number, token: string, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD
-	try {
-		const response = await fetch(`${baseURL}/users/getUserById/${id}`, {
-			...fetchConfig,
-			method: 'GET',
-			signal,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('getUserById failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
-}
+import { _delete, _get, _post, _put } from './httpService';
 
 /**
  * Creates a user
  */
-export async function register<T = any>(body: T, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD and add payload.
-	try {
-		const response = await fetch(`${baseURL}/events/register`, {
-			...fetchConfig,
-			method: 'POST',
-			signal,
-			body: body ? JSON.stringify(body) : undefined,
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+export async function register(payload: any, signal?: AbortSignal): Promise<any> {
+	const url = '/events/register';
+	return await _post(url, payload, signal);
+}
 
-		if (!response.ok) {
-			throw new Error('register failed');
-		}
+/**
+ * Gets all users in the database.
+ */
+export async function getUsers(signal?: AbortSignal): Promise<IUser[]> {
+	const url = '/users/getUsers';
+	return await _get(url, signal);
+}
 
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
+/**
+ * Gets a user by its ID
+ */
+export async function getUserById(id: unknown, signal?: AbortSignal): Promise<any> {
+	const url = `/users/getUserById/${id}`;
+	return await _get(url, signal);
 }
 
 /**
  *
-Edits an user by its id (12 byte Object ID)
+Edits an user by its ID
  */
 
-export async function editUser<T = any>(id: number, payload: T, token: string, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD and add payload.
-	try {
-		const response = await fetch(`${baseURL}/users/editUser/${id}`, {
-			...fetchConfig,
-			method: 'PUT',
-			signal,
-			body: payload ? JSON.stringify(payload) : undefined,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('editUser failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
+export async function editUser(id: unknown, payload: any, signal?: AbortSignal): Promise<any> {
+	const url = `/users/editUser/${id}`;
+	return await _put(url, payload, signal);
 }
 
 /**
  * Deletes an event by its id (12 byte Object ID)
  */
-export async function deleteUser(id: number, token: string, signal?: AbortSignal): Promise<any> {
-	//FIXME: Type TBD
-	try {
-		const response = await fetch(`${baseURL}/users/deleteUser/${id}`, {
-			...fetchConfig,
-			method: 'DELETE',
-			signal,
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: token
-			}
-		});
-
-		if (!response.ok) {
-			throw new Error('deleteUser failed');
-		}
-
-		const data = await response.json();
-
-		return data;
-	} catch (error) {
-		console.error(error);
-		throw new Error(`${error}`);
-	}
+export async function deleteUser(id: unknown, signal?: AbortSignal): Promise<any> {
+	const url = `/users/deleteUser/${id}`;
+	return await _delete(url, signal);
 }
