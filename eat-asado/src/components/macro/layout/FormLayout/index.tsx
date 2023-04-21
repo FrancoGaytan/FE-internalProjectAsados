@@ -7,9 +7,9 @@ export default function FormLayout(props: PropsWithChildren): JSX.Element {
 
 	return (
 		<div className={styles.formLayout}>
-			<section>
+			<form>
 				<div className={styles.containerLayout}>{props.children}</div>
-			</section>
+			</form>
 		</div>
 	);
 }

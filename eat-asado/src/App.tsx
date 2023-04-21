@@ -6,6 +6,8 @@ import { LocalizationProvider } from './stores/LocalizationContext';
 import { EventProvider } from './stores/EventContext';
 import RoutingComponent from './components/routing/RoutingComponent';
 import { AlertProvider } from './stores/AlertContext';
+import { AuthProvider } from './stores/AuthContext';
+import { UserProvider } from './stores/UserContext';
 
 function renderRoute(route: IRoute): JSX.Element {
 	return <Route key={route.path} path={route.path} element={<RoutingComponent route={route} />} />;
@@ -15,13 +17,17 @@ export default function EatAsado(): JSX.Element {
 	return (
 		<BrowserRouter>
 			<GlobalProvider>
-				<LocalizationProvider>
-					<EventProvider>
-						<AlertProvider>
-							<Routes>{Object.entries(routes).map(([_, routes]) => renderRoute(routes))}</Routes>
-						</AlertProvider>
-					</EventProvider>
-				</LocalizationProvider>
+				<AuthProvider>
+					<UserProvider>
+						<LocalizationProvider>
+							<EventProvider>
+								<AlertProvider>
+									<Routes>{Object.entries(routes).map(([_, routes]) => renderRoute(routes))}</Routes>
+								</AlertProvider>
+							</EventProvider>
+						</LocalizationProvider>
+					</UserProvider>
+				</AuthProvider>
 			</GlobalProvider>
 		</BrowserRouter>
 	);

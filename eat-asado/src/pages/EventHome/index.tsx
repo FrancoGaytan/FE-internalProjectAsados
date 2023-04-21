@@ -40,7 +40,7 @@ export function EventHome(): JSX.Element {
 				</section>
 				<section className={styles.eventsContainer}>
 					{eventsDataMock.map(event => {
-						//todo: hay que ordenar los eventos por fecha de realizacion
+						//TODO: hay que ordenar los eventos por fecha de realizacion
 						return (
 							<EventCard
 								key={event.eventId}

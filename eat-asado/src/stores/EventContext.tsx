@@ -1,15 +1,15 @@
 import { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
 import { getPublicEvents } from '../service';
-import { IEvent } from '../models/event';
+import { IPublicEvent } from '../models/event';
 
 interface IEventContext {
-	publicEvents: IEvent[];
+	publicEvents: IPublicEvent[];
 }
 
 const EventContext = createContext<IEventContext>({} as IEventContext);
 
 export function EventProvider(props: PropsWithChildren<{}>): JSX.Element {
-	const [publicEvents, setPublicEvents] = useState<IEvent[]>([]);
+	const [publicEvents, setPublicEvents] = useState<IPublicEvent[]>([]);
 
 	/**
 	 * Fetches the public events for the Home Event page.
@@ -29,7 +29,7 @@ export function EventProvider(props: PropsWithChildren<{}>): JSX.Element {
 		return () => abortController.abort();
 	}, []);
 
-	return <EventContext.Provider value={{ publicEvents }}>{props.children}</EventContext.Provider>;
+	return <EventContext.Provider value={{ publicEvents }}>{props.children}</EventContext.Provider>; //este publicEvents es lo que me tengo que llevar para tener la data posta y reemplazar la moockeada
 }
 
 export function useEvent(): IEventContext {
