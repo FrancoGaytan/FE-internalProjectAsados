@@ -5,7 +5,6 @@ export interface LoginResponse {
 }
 
 export interface IUser {
-	id: string;
 	name: string;
 	email: string;
 	password: string;
@@ -20,3 +19,5 @@ export interface LoginRequest {
 	email: string;
 	password: string;
 }
+
+//TODO: chequear si nani termino los endpoints de update y delete de usuario y completar las interfaces si es necesario

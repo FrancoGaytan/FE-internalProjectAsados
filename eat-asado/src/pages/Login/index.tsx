@@ -35,7 +35,7 @@ export function Login(): JSX.Element {
 	function handleLogin(e: React.MouseEvent): void {
 		setIsLoading(true);
 		e.preventDefault();
-		login<LoginRequest>({ email: loginCredentials.email, password: loginCredentials.password })
+		login({ email: loginCredentials.email, password: loginCredentials.password })
 			.then(res => {
 				setJWT(res.jwt);
 				setUser(res);
