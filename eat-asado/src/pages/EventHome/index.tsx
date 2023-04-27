@@ -6,6 +6,9 @@ import styles from './styles.module.scss';
 import EventCard from '../../components/macro/EventCard/EventCard';
 import { TEventState } from '../../types/eventState';
 import { eventsDataMock } from '../../mocks/eventsMockedData';
+import { useEvent } from '../../stores/EventContext';
+import { useAuth } from '../../stores/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface IStepItem {
 	title: string;
@@ -15,6 +18,9 @@ interface IStepItem {
 
 export function EventHome(): JSX.Element {
 	const lang = useTranslation('eventHome');
+	const { publicEvents } = useEvent();
+	const { user } = useAuth();
+	const navigate = useNavigate();
 
 	const itemStepsData = useMemo(
 		() => [
@@ -30,7 +36,7 @@ export function EventHome(): JSX.Element {
 			<div className={styles.content}>
 				<section className={styles.header}>
 					<h1>{lang.messageBanner}</h1>
-					<Button kind="primary" size="large">
+					<Button kind="primary" size="large" onClick={() => navigate('/createEvent')}>
 						{lang.newEventButton}
 					</Button>
 				</section>
@@ -39,14 +45,20 @@ export function EventHome(): JSX.Element {
 					<div className={styles.underlineBlock}></div>
 				</section>
 				<section className={styles.eventsContainer}>
-					{eventsDataMock.map(event => {
+					{publicEvents.map(event => {
 						//TODO: hay que ordenar los eventos por fecha de realizacion
 						return (
 							<EventCard
-								key={event.eventId}
-								eventDateTime={event.fakeDate}
-								eventState={event.fakeState as TEventState}
-								eventData={event.fakeEventData}
+								key={event._id}
+								eventDateTime={event.datetime}
+								eventState={event.state as TEventState}
+								eventData={{
+									eventTitle: event.description,
+									eventCook: event.chef,
+									eventDescription: event.description,
+									eventParticipants: event.members,
+									eventParticipantLimit: 10
+								}} //FIXME: hay que crear eventos con todos los datos para que esto reconozca todos
 							/>
 						);
 					})}

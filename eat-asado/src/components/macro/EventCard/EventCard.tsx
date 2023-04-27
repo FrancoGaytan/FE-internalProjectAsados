@@ -22,8 +22,16 @@ interface IEventCardProps {
 const EventCard = (props: IEventCardProps) => {
 	const lang = useTranslation('eventHome');
 
+	function parseMinutes(minutes: string) {
+		let newMinutes = minutes;
+		if (Number(minutes) < 10) {
+			newMinutes = '0' + minutes;
+		}
+		return newMinutes;
+	}
+
 	const evState = props.eventState; //esta prop va a ser para darle el estilo a la card
-	const evDateTime = props.eventDateTime; //esto va a haber que pasarlo x una funcion que seccione la fecha y la hora y despues separarlos en dos variables diferentes
+	const evDateTime = new Date(props.eventDateTime); //esto va a haber que pasarlo x una funcion que seccione la fecha y la hora y despues separarlos en dos variables diferentes
 	const evTitle = props.eventData.eventTitle;
 	const evDescription = props.eventData.eventDescription;
 	const evParticipants = props.eventData.eventParticipants;
@@ -31,9 +39,11 @@ const EventCard = (props: IEventCardProps) => {
 	const evCook = props.eventData.eventCook;
 
 	const evDate = evDateTime.getDate().toString() + '. ' + evDateTime.getMonth().toString() + '. ' + evDateTime.getFullYear().toString() + '.';
-	const evTime = evDateTime.getHours().toString() + ':' + evDateTime.getMinutes().toString();
+	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 
 	const handleInfo = () => {};
+
+	console.log(evDateTime);
 
 	const handleParticipation = () => {};
 

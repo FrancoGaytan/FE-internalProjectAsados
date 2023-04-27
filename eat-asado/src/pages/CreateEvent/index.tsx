@@ -3,33 +3,55 @@ import { useTranslation } from '../../stores/LocalizationContext';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import Button from '../../components/micro/Button/Button';
 import styles from './styles.module.scss';
+import { createEvent } from '../../service';
+import { useAuth } from '../../stores/AuthContext';
+import { IEvent } from '../../models/event';
+import { EventStatesEnum } from '../../enums/EventState.enum';
+import { IUser } from '../../models/user';
+import { useAlert } from '../../stores/AlertContext';
+import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 
 export function CreateEvent(): JSX.Element {
 	const lang = useTranslation('createEvent');
+	const { user } = useAuth();
+	const { setAlert } = useAlert();
+
 	const initialEvent = {
-		name: '',
-		dateAndHour: '',
+		title: '',
+		datetime: new Date(),
 		description: '',
-		isCook: false,
-		isBuyer: false,
-		diners: 0
+		memberLimit: 0,
+		members: [user?.id as number],
+		state: EventStatesEnum.AVAILABLE,
+		organizer: user?.id as number,
+		isChef: false,
+		isShoppingDesignee: false
 	};
 
-	const [event, setEvent] = useState(initialEvent);
+	console.log(initialEvent);
+	console.log(user);
+
+	const [event, setEvent] = useState<IEvent>(initialEvent);
 
 	const handleDinersChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		let value = parseInt(e.target.value);
 		if (value >= 100) {
-			setEvent({ ...event, diners: 100 });
+			setEvent({ ...event, memberLimit: 100 });
 		} else if (value <= 0) {
-			setEvent({ ...event, diners: 0 });
+			setEvent({ ...event, memberLimit: 0 });
 		} else {
-			setEvent({ ...event, diners: value });
+			setEvent({ ...event, memberLimit: value });
 		}
 	};
 
-	const handleSubmit = () => {
-		console.log(event);
+	const handleSubmit = (e: any) => {
+		e.preventDefault();
+		createEvent(event)
+			.then(e => {
+				console.log(e);
+				setAlert(`${lang.eventRegisteredConfirmation}!`, AlertTypes.SUCCESS);
+			})
+			.catch(() => setAlert(`${lang.eventRegistrationFailure}`, AlertTypes.ERROR));
 	};
 
 	return (
@@ -38,16 +60,16 @@ export function CreateEvent(): JSX.Element {
 			<label className={styles.title}>{lang.createEventTitle}</label>
 			<div className={styles.inputSection}>
 				<section className={styles.firstColumn}>
-					<label htmlFor="nombreEvento" className={styles.fieldLabel}>
+					<label htmlFor="titleEvent" className={styles.fieldLabel}>
 						{lang.eventName}
 					</label>
 					<input
-						id="nombreEvento"
+						id="titleEvent"
 						placeholder={lang.eventName}
 						type="text"
-						value={event.name}
+						value={event.title}
 						onChange={e => {
-							setEvent({ ...event, name: e.target.value });
+							setEvent({ ...event, title: e.target.value });
 						}}
 					/>
 					<label htmlFor="fechaHora" className={styles.fieldLabel}>
@@ -57,9 +79,9 @@ export function CreateEvent(): JSX.Element {
 						id="fechaHora"
 						placeholder="Fecha y Hora"
 						type="datetime-local"
-						value={event.dateAndHour}
+						value={event.datetime.toDateString()}
 						onChange={e => {
-							setEvent({ ...event, dateAndHour: e.target.value });
+							setEvent({ ...event, datetime: new Date(e.target.value) });
 						}}
 					/>
 					<label htmlFor="descripcion" className={styles.fieldLabel}>
@@ -87,9 +109,9 @@ export function CreateEvent(): JSX.Element {
 								id="isAsador"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={event.isCook}
+								checked={event.isChef}
 								onChange={e => {
-									setEvent({ ...event, isCook: e.target.checked });
+									setEvent({ ...event, isChef: e.target.checked });
 								}}
 							/>
 							{lang.chef}
@@ -99,47 +121,45 @@ export function CreateEvent(): JSX.Element {
 								id="isEncargadoCompras"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={event.isBuyer}
+								checked={event.isShoppingDesignee}
 								onChange={e => {
-									setEvent({ ...event, isBuyer: e.target.checked });
+									setEvent({ ...event, isShoppingDesignee: e.target.checked });
 								}}
 							/>
 							{lang.shoppingDesignee}
 						</label>
 					</section>
-					{event.isCook && (
-						<section className={styles.rangeSelectionContainer}>
-							<label htmlFor="diners" className={styles.fieldLabel}>
-								{lang.memberLimit}
-							</label>
-							<input
-								id="dinersRange"
-								type="range"
-								min={0}
-								max={100}
-								list="dinersMarkers"
-								step={1}
-								value={event['diners']}
-								onChange={handleDinersChange}
-							/>
-							<input
-								id="dinersQuantity"
-								className={styles.dinersQuantity}
-								type="number"
-								value={event['diners']}
-								max={100}
-								min={0}
-								onChange={handleDinersChange}
-							/>
-							<datalist id="dinersMarkers">
-								<option value="0" label="0" />
-								<option value="25" label="25" />
-								<option value="50" label="50" />
-								<option value="75" label="75" />
-								<option value="100" label="100" />
-							</datalist>
-						</section>
-					)}
+					<section className={styles.rangeSelectionContainer}>
+						<label htmlFor="diners" className={styles.fieldLabel}>
+							{lang.memberLimit}
+						</label>
+						<input
+							id="dinersRange"
+							type="range"
+							min={0}
+							max={100}
+							list="dinersMarkers"
+							step={1}
+							value={event.memberLimit}
+							onChange={handleDinersChange}
+						/>
+						<input
+							id="dinersQuantity"
+							className={styles.dinersQuantity}
+							type="number"
+							value={event.memberLimit}
+							max={100}
+							min={0}
+							onChange={handleDinersChange}
+						/>
+						<datalist id="dinersMarkers">
+							<option value="0" label="0" />
+							<option value="25" label="25" />
+							<option value="50" label="50" />
+							<option value="75" label="75" />
+							<option value="100" label="100" />
+						</datalist>
+					</section>
 				</section>
 				<section className={styles.buttonContainer}>
 					<Button
@@ -148,9 +168,8 @@ export function CreateEvent(): JSX.Element {
 						id="registerBtn"
 						type="submit"
 						style={{ marginBottom: '10vh' }}
-						onSubmit={e => {
-							e.preventDefault();
-							handleSubmit();
+						onClick={e => {
+							handleSubmit(e);
 						}}>
 						{lang.createEventBtn}
 					</Button>
