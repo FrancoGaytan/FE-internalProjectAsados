@@ -3,14 +3,14 @@ import { IUser } from './user';
 //TODO: validar que estas interfaces esten completas
 export interface IEvent {
 	title: string;
-	dateAndHour: Date;
+	datetime: Date;
 	description: string;
 	memberLimit: number;
 	state: string;
-	members: IUser[]; //TODO: Chequear que sea asi
+	members: number[];
 	organizer: number;
-	chef?: number;
-	shoppingDesignee?: number;
+	isChef?: boolean;
+	isShoppingDesignee?: boolean;
 }
 
 export interface IPublicEvent {
@@ -31,4 +31,18 @@ export interface createRequest {
 	organizer: number;
 	chef?: number;
 	shoppingDesignee?: number;
+}
+
+export interface createResponse {
+	title: string;
+	datetime: Date;
+	description: string;
+	memberLimit: number;
+	state: string;
+	members: string[];
+	organizer: string;
+	transferReceipts: [];
+	purchaseReceipts: [];
+	_id: string;
+	__v: 0;
 }
