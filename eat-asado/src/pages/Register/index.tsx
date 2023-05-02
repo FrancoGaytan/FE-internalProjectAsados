@@ -34,7 +34,7 @@ export function Register(): JSX.Element {
 		specialDiet: [],
 		cbu: '',
 		alias: '',
-		profilePicture: 'asd'
+		profilePicture: ''
 	});
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
