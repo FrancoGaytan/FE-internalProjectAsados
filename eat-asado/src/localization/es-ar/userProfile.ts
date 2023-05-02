@@ -2,6 +2,8 @@ export const userProfile = Object.seal({
 	profileTitle: 'Perfil de Usuario',
 	personalData: 'Datos Personales',
 	editImg: 'Editar Imagen',
+	name: 'Nombre',
+	email: 'Email',
 	cbu: 'CBU',
 	alias: 'Alias',
 	specialDietTitle: 'Dieta Especial',
@@ -10,7 +12,9 @@ export const userProfile = Object.seal({
 	hypertensiveDiet: '¿Sos Hipertenso?',
 	celiacDiet: '¿Sos Celíaco?',
 	saveBtn: 'GUARDAR',
-	headerWelcome: "Bienvenido: ",
-	logoutBtn: "SALIR",
-	loginBtn: "INICIAR SESION"
+	headerWelcome: 'Bienvenido: ',
+	logoutBtn: 'SALIR',
+	loginBtn: 'INICIAR SESION',
+	updateSuccessMessage: 'El usuario se actualizo exitosamente',
+	updateErrorMessage: 'Actualización de usuario fallida'
 });

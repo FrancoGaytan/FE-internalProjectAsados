@@ -1,11 +1,17 @@
 import styles from './styles.module.scss';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
+import { useAuth } from '../../stores/AuthContext';
+import { editUser } from '../../service';
+import { useAlert } from '../../stores/AlertContext';
+import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 
 export interface UserProfileInterface {
 	userImage?: File;
+	userName?: string;
+	userEmail?: string;
 	userCbu?: string;
 	userAlias?: string;
 	userVegan?: boolean;
@@ -16,10 +22,14 @@ export interface UserProfileInterface {
 
 export function UserProfile(): JSX.Element {
 	const lang = useTranslation('userProfile');
+	const { user, isLoading, setIsLoading } = useAuth();
+	const { setAlert } = useAlert();
 	let emptyFile = undefined as unknown as File;
 
 	const initialUser = {
 		userImage: emptyFile,
+		userName: '',
+		userEmail: user?.email,
 		userCbu: '',
 		userAlias: '',
 		userVegan: false,
@@ -29,12 +39,7 @@ export function UserProfile(): JSX.Element {
 	};
 
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [user, setUser] = useState<UserProfileInterface>(initialUser);
-
-	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
-		console.log(user);
-	};
+	const [updatedUser, setUser] = useState<UserProfileInterface>(initialUser);
 
 	const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
@@ -43,13 +48,27 @@ export function UserProfile(): JSX.Element {
 
 		//Prevents deleting current image when user press Cancel in the dialog window
 		if (target.files?.length && target.files.length > 0) {
-			setUser({ ...user, userImage: target.files[0] });
+			setUser({ ...updatedUser, userImage: target.files[0] });
 		}
 	};
 
 	const setProfileImage = (file: File) => {
 		setUser(prev => ({ ...prev, userImage: file }));
 		// setUser({userImage: file})
+	};
+
+	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+		const specialDietInputs = [updatedUser.userVegan, updatedUser.userVegetarian, updatedUser.userHypertensive, updatedUser.userCeliac];
+		const payloadObject = { cbu: updatedUser.userCbu, alias: updatedUser.userAlias, name: updatedUser.userName, specialDiet: specialDietInputs };
+
+		e.preventDefault();
+		editUser(user?.id, payloadObject)
+			.then(res => {
+				setAlert(`${lang.updateSuccessMessage}`, AlertTypes.SUCCESS);
+			})
+			.catch(e => setAlert(`${lang.updateErrorMessage}`, AlertTypes.ERROR))
+			.finally(() => setIsLoading(false));
+		console.log(updatedUser);
 	};
 
 	return (
@@ -60,8 +79,8 @@ export function UserProfile(): JSX.Element {
 					<h3>{lang.personalData}</h3>
 					<div className={styles.pictureRow}>
 						<DragAndDrop setState={setProfileImage}>
-							{user.userImage !== undefined ? (
-								<img src={URL.createObjectURL(user.userImage)} className={styles.userPicture} alt="selected" />
+							{updatedUser.userImage !== undefined ? (
+								<img src={URL.createObjectURL(updatedUser.userImage)} className={styles.userPicture} alt="selected" />
 							) : (
 								<img src="/assets/pictures/profile.png" className={styles.userPicture} alt="placeholder" />
 							)}
@@ -77,11 +96,11 @@ export function UserProfile(): JSX.Element {
 					<input
 						className={styles.input}
 						id="cbu"
-						placeholder={lang.cbu}
+						placeholder={user?.cbu ? user?.cbu : lang.cbu}
 						type="text"
-						value={user.userCbu}
+						value={updatedUser.userCbu}
 						onChange={e => {
-							setUser({ ...user, userCbu: e.target.value });
+							setUser({ ...updatedUser, userCbu: e.target.value });
 						}}
 					/>
 					<label htmlFor="alias" className={styles.cbuLabel}>
@@ -90,15 +109,33 @@ export function UserProfile(): JSX.Element {
 					<input
 						className={styles.input}
 						id="alias"
-						placeholder={lang.alias}
+						placeholder={user?.alias ? user?.alias : lang.alias}
 						type="text"
-						value={user.userAlias}
+						value={updatedUser.userAlias}
 						onChange={e => {
-							setUser({ ...user, userAlias: e.target.value });
+							setUser({ ...updatedUser, userAlias: e.target.value });
 						}}
 					/>
 				</div>
 				<div className={styles.secondColumnProfile}>
+					<label htmlFor="name" className={styles.cbuLabel}>
+						{/* {lang.name} */}Name {/* TODO: Deshardcodear esto */}
+					</label>
+					<input
+						className={styles.input}
+						id="name"
+						placeholder={user?.name ? user?.name : lang.name}
+						type="text"
+						value={updatedUser.userName}
+						onChange={e => {
+							setUser({ ...updatedUser, userName: e.target.value });
+						}}
+					/>
+					<label htmlFor="email" className={styles.cbuLabel}>
+						{/* {lang.email} */}Email{/* TODO: Deshardcodear esto */}
+					</label>
+					<input className={styles.input} id="email" placeholder={user?.email} type="text" disabled value={user?.email} />
+
 					<h3>{lang.specialDietTitle}</h3>
 					<section className={styles.checkboxesContainer}>
 						<label className={styles.profileLabel}>
@@ -106,9 +143,9 @@ export function UserProfile(): JSX.Element {
 								id="isVegan"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userVegan}
+								checked={updatedUser.userVegan}
 								onChange={e => {
-									setUser({ ...user, userVegan: e.target.checked });
+									setUser({ ...updatedUser, userVegan: e.target.checked });
 								}}
 							/>
 							{lang.veganDiet}
@@ -119,9 +156,9 @@ export function UserProfile(): JSX.Element {
 								id="isVegetarian"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userVegetarian}
+								checked={updatedUser.userVegetarian}
 								onChange={e => {
-									setUser({ ...user, userVegetarian: e.target.checked });
+									setUser({ ...updatedUser, userVegetarian: e.target.checked });
 								}}
 							/>
 							{lang.vegetarianDiet}
@@ -132,9 +169,9 @@ export function UserProfile(): JSX.Element {
 								id="isHypertensive"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userHypertensive}
+								checked={updatedUser.userHypertensive}
 								onChange={e => {
-									setUser({ ...user, userHypertensive: e.target.checked });
+									setUser({ ...updatedUser, userHypertensive: e.target.checked });
 								}}
 							/>
 							{lang.hypertensiveDiet}
@@ -144,9 +181,9 @@ export function UserProfile(): JSX.Element {
 								id="isCeliac"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userCeliac}
+								checked={updatedUser.userCeliac}
 								onChange={e => {
-									setUser({ ...user, userCeliac: e.target.checked });
+									setUser({ ...updatedUser, userCeliac: e.target.checked });
 								}}
 							/>
 							{lang.celiacDiet}

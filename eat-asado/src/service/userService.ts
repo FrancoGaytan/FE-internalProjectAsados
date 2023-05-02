@@ -21,7 +21,7 @@ export async function getUsers(signal?: AbortSignal): Promise<IUser[]> {
  * Gets a user by its ID
  */
 export async function getUserById(id: unknown, signal?: AbortSignal): Promise<any> {
-	const url = `/users/getUserById/${id}`;
+	const url = `/users/getUserById?id=${id}`; //TODO: agregarle el ?id= a todos los que buscan x id
 	return await _get(url, signal);
 }
 
@@ -31,7 +31,7 @@ Edits an user by its ID
  */
 
 export async function editUser(id: unknown, payload: any, signal?: AbortSignal): Promise<any> {
-	const url = `/users/editUser/${id}`;
+	const url = `/users/editUser?id=${id}`;
 	return await _put(url, payload, signal);
 }
 
@@ -39,6 +39,6 @@ export async function editUser(id: unknown, payload: any, signal?: AbortSignal):
  * Deletes an event by its id (12 byte Object ID)
  */
 export async function deleteUser(id: unknown, signal?: AbortSignal): Promise<any> {
-	const url = `/users/deleteUser/${id}`;
+	const url = `/users/deleteUser?id=${id}`;
 	return await _delete(url, signal);
 }
