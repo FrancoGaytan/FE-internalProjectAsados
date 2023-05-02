@@ -1,18 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { createContext, useContext, useState, PropsWithChildren, SetStateAction, useEffect } from 'react';
 import { localStorageKeys } from '.././utils/localStorageKeys';
-import { LoginResponse } from '../models/user';
+import { IUser, LoginResponse } from '../models/user';
 import { _login } from '../service';
 import { useAlert } from './AlertContext';
 import { AlertTypes } from '../components/micro/AlertPopup/AlertPopup';
 import { useTranslation } from './LocalizationContext';
 
 interface IAuthContext {
-	user: LoginResponse | null;
+	user: LoginResponse | IUser | null;
 	isLoading: boolean;
 	setIsLoading: React.Dispatch<SetStateAction<boolean>>;
 	isAuthenticated: () => boolean;
-	setUser: React.Dispatch<SetStateAction<LoginResponse | null>>;
+	setUser: React.Dispatch<SetStateAction<LoginResponse | IUser | null>>;
 	logout: () => void;
 	login: (email: string, password: string) => void;
 }
@@ -21,7 +21,7 @@ const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	const navigate = useNavigate();
-	const [user, setUser] = useState<LoginResponse | null>(null);
+	const [user, setUser] = useState<LoginResponse | IUser | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const { setAlert } = useAlert();
 	const lang = useTranslation('login');
@@ -61,7 +61,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 
 	/**
 	 * Checks if user is auth
-	*/
+	 */
 	function isAuthenticated(): boolean {
 		return !!getUserFromLocalStorage();
 	}

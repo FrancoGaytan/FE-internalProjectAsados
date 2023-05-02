@@ -26,10 +26,11 @@ export function UserProfile(): JSX.Element {
 	const { setAlert } = useAlert();
 	let emptyFile = undefined as unknown as File;
 
-	const initialUser = {
+	const initialUser: UserProfileInterface = {
 		userImage: emptyFile,
 		userName: '',
-		userEmail: user?.email,
+		/* userEmail: user?.email, */
+		userEmail: 'prueba@endava.com',
 		userCbu: '',
 		userAlias: '',
 		userVegan: false,
@@ -96,7 +97,7 @@ export function UserProfile(): JSX.Element {
 					<input
 						className={styles.input}
 						id="cbu"
-						placeholder={user?.cbu ? user?.cbu : lang.cbu}
+						/* placeholder={user?.cbu ? user?.cbu : lang.cbu} */
 						type="text"
 						value={updatedUser.userCbu}
 						onChange={e => {
@@ -109,7 +110,7 @@ export function UserProfile(): JSX.Element {
 					<input
 						className={styles.input}
 						id="alias"
-						placeholder={user?.alias ? user?.alias : lang.alias}
+						/* placeholder={user?.alias ? user?.alias : lang.alias} */
 						type="text"
 						value={updatedUser.userAlias}
 						onChange={e => {
@@ -134,7 +135,7 @@ export function UserProfile(): JSX.Element {
 					<label htmlFor="email" className={styles.cbuLabel}>
 						{/* {lang.email} */}Email{/* TODO: Deshardcodear esto */}
 					</label>
-					<input className={styles.input} id="email" placeholder={user?.email} type="text" disabled value={user?.email} />
+					<input className={styles.input} id="email" /* placeholder={user?.email} */ type="text" disabled /* value={user?.email} */ />
 
 					<h3>{lang.specialDietTitle}</h3>
 					<section className={styles.checkboxesContainer}>
