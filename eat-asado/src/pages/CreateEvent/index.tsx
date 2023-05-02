@@ -16,14 +16,14 @@ export function CreateEvent(): JSX.Element {
 	const { user } = useAuth();
 	const { setAlert } = useAlert();
 
-	const initialEvent = {
+	const initialEvent: IEvent = {
 		title: '',
 		datetime: new Date(),
 		description: '',
 		memberLimit: 0,
-		members: [user?.id as number],
+		members: [Number(user?.id)],
 		state: EventStatesEnum.AVAILABLE,
-		organizer: user?.id as number,
+		organizer: Number(user?.id),
 		isChef: false,
 		isShoppingDesignee: false
 	};

@@ -10,10 +10,12 @@ const UserContext = createContext<IUserContext>({} as IUserContext);
 
 export function UserProvider(props: PropsWithChildren<{}>): JSX.Element {
 	const [users, setUsers] = useState<IUser[]>([]);
+
 	/**
-	 * Fetches the public events for the Home Event page.
+	 * Fetches the users.
 	 */
-	useEffect(() => {
+	//FIXME: Check this.
+	/* useEffect(() => {
 		const abortController = new AbortController();
 
 		getUsers(abortController.signal)
@@ -26,7 +28,7 @@ export function UserProvider(props: PropsWithChildren<{}>): JSX.Element {
 			});
 
 		return () => abortController.abort();
-	}, []);
+	}, []); */
 
 	return <UserContext.Provider value={{ users }}>{props.children}</UserContext.Provider>;
 }

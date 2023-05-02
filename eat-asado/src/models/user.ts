@@ -1,25 +1,28 @@
+export interface LoginRequest {
+	email: string;
+	password: string;
+}
 export interface LoginResponse {
 	name: string;
 	jwt: string;
 	id: string;
 }
 
-export interface IUser {
-	//TODO: definir si el id va a ser un number o string asi lo normalizamos
-	id: number; //TODO: Esto lo necesitaba para vincularlo con la creacion del evento, necesita el id del organizador por lo que tiene que estar aca
+export interface RegisterRequest {
 	name: string;
+	lastName: string;
 	email: string;
 	password: string;
-	verificationCode?: string;
+	confirmPassword: string;
+	specialDiet: string[];
 	cbu?: string;
 	alias?: string;
 	profilePicture?: string;
-	specialDiet?: string[]; //TODO: validar que esto sea un arreglo de string
 }
 
-export interface LoginRequest {
-	email: string;
-	password: string;
+export interface IUser extends RegisterRequest {
+	id: string;
+	verificationCode?: string;
 }
 
 //TODO: chequear si nani termino los endpoints de update y delete de usuario y completar las interfaces si es necesario
