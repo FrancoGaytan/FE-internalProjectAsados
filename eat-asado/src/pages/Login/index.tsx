@@ -4,21 +4,14 @@ import Button from '../../components/micro/Button/Button';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
-import { useAlert } from '../../stores/AlertContext';
-import { login } from '../../service';
 import { LoginRequest } from '../../models/user';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import { localStorageKeys } from '../../utils/localStorageKeys';
 import { useAuth } from '../../stores/AuthContext';
 
 export function Login(): JSX.Element {
 	const navigate = useNavigate();
 	const lang = useTranslation('login');
-	const { setAlert } = useAlert();
-	const { setUser, isLoading, setIsLoading } = useAuth();
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [_, setJWT] = useLocalStorage<string | null>(localStorageKeys.token, null);
+	
+	const { login, isLoading } = useAuth();
 
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
 		email: 'prueba@endava.com',
@@ -33,17 +26,9 @@ export function Login(): JSX.Element {
 	}
 
 	function handleLogin(e: React.MouseEvent): void {
-		setIsLoading(true);
 		e.preventDefault();
-		login({ email: loginCredentials.email, password: loginCredentials.password })
-			.then(res => {
-				setJWT(res.jwt);
-				setUser(res);
-				setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
-				navigate('/');
-			})
-			.catch(e => setAlert(`${lang.loginErrorMessage}`, AlertTypes.ERROR))
-			.finally(() => setIsLoading(false));
+
+		login(loginCredentials.email, loginCredentials.password);
 	}
 
 	return (

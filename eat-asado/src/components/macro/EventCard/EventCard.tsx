@@ -43,8 +43,6 @@ const EventCard = (props: IEventCardProps) => {
 
 	const handleInfo = () => {};
 
-	console.log(evDateTime);
-
 	const handleParticipation = () => {};
 
 	const calculateAvailability = () => {

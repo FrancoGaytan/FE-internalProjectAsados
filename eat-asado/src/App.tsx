@@ -16,19 +16,19 @@ function renderRoute(route: IRoute): JSX.Element {
 export default function EatAsado(): JSX.Element {
 	return (
 		<BrowserRouter>
-			<GlobalProvider>
-				<AuthProvider>
-					<UserProvider>
-						<LocalizationProvider>
-							<EventProvider>
-								<AlertProvider>
+			<LocalizationProvider>
+				<AlertProvider>
+					<GlobalProvider>
+						<AuthProvider>
+							<UserProvider>
+								<EventProvider>
 									<Routes>{Object.entries(routes).map(([_, routes]) => renderRoute(routes))}</Routes>
-								</AlertProvider>
-							</EventProvider>
-						</LocalizationProvider>
-					</UserProvider>
-				</AuthProvider>
-			</GlobalProvider>
+								</EventProvider>
+							</UserProvider>
+						</AuthProvider>
+					</GlobalProvider>
+				</AlertProvider>
+			</LocalizationProvider>
 		</BrowserRouter>
 	);
 }
