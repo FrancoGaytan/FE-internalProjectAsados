@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../stores/LocalizationContext';
-import { RegisterRequest } from '../../models/user';
 import { register } from '../../service';
 import Button from '../../components/micro/Button/Button';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import styles from './styles.module.scss';
 import { useAuth } from '../../stores/AuthContext';
+import { IUser } from '../../models/user';
 
 interface ISpecialDiet {
 	name: string;
@@ -25,7 +25,7 @@ export function Register(): JSX.Element {
 	]);
 
 	// FIXME: El registro espera "cbu" y "alias" pero en el diseño no están esos campos.
-	const [inputData, setInputData] = useState<RegisterRequest>({
+	const [inputData, setInputData] = useState<IUser>({
 		name: '',
 		lastName: '',
 		email: '',

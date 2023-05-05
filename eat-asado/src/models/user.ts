@@ -2,14 +2,13 @@ export interface LoginRequest {
 	email: string;
 	password: string;
 }
-export interface LoginResponse {
-	name: string;
-	jwt: string;
-	id: string;
-}
 
-export interface RegisterRequest {
+// TODO: Check, login doesn't return this interface. This should be changed.
+export interface IUser {
+	id?: string;
+	jwt?: string;
 	name: string;
+	verificationCode?: string;
 	lastName: string;
 	email: string;
 	password: string;
@@ -18,11 +17,6 @@ export interface RegisterRequest {
 	cbu?: string;
 	alias?: string;
 	profilePicture?: string;
-}
-
-export interface IUser extends RegisterRequest {
-	id: string;
-	verificationCode?: string;
 }
 
 //TODO: chequear si nani termino los endpoints de update y delete de usuario y completar las interfaces si es necesario

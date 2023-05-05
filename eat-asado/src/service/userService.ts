@@ -1,12 +1,12 @@
-import { IUser, RegisterRequest } from '../models/user';
+import { IUser } from '../models/user';
 import { _delete, _get, _post, _put } from './httpService';
 
 /**
  * Creates a user
  */
-export async function register(payload: RegisterRequest, signal?: AbortSignal): Promise<any> {
+export async function register(payload: IUser, signal?: AbortSignal): Promise<IUser> {
 	const url = '/users/register';
-	return await _post<any>(url, payload, signal);
+	return await _post<IUser>(url, payload, signal);
 }
 
 /**
