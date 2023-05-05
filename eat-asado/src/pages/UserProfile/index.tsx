@@ -110,7 +110,7 @@ export function UserProfile(): JSX.Element {
 					<input
 						className={styles.input}
 						id="alias"
-						/* placeholder={user?.alias ? user?.alias : lang.alias} */
+						/* placeholder={user?.alias ? user?.alias : lang.alias}  */
 						type="text"
 						value={updatedUser.userAlias}
 						onChange={e => {
@@ -120,7 +120,7 @@ export function UserProfile(): JSX.Element {
 				</div>
 				<div className={styles.secondColumnProfile}>
 					<label htmlFor="name" className={styles.cbuLabel}>
-						{/* {lang.name} */}Name {/* TODO: Deshardcodear esto */}
+						{lang.name}
 					</label>
 					<input
 						className={styles.input}
@@ -133,7 +133,7 @@ export function UserProfile(): JSX.Element {
 						}}
 					/>
 					<label htmlFor="email" className={styles.cbuLabel}>
-						{/* {lang.email} */}Email{/* TODO: Deshardcodear esto */}
+						{lang.email}
 					</label>
 					<input className={styles.input} id="email" /* placeholder={user?.email} */ type="text" disabled /* value={user?.email} */ />
 
