@@ -22,7 +22,7 @@ export interface UserProfileInterface {
 
 export function UserProfile(): JSX.Element {
 	const lang = useTranslation('userProfile');
-	const { user, isLoading, setIsLoading } = useAuth();
+	const { user, isLoading, setIsLoading, updateUserLocalStorage } = useAuth();
 	const { setAlert } = useAlert();
 	let emptyFile = undefined as unknown as File;
 
@@ -65,6 +65,7 @@ export function UserProfile(): JSX.Element {
 		e.preventDefault();
 		editUser(user?.id, payloadObject)
 			.then(res => {
+				updateUserLocalStorage(res);
 				setAlert(`${lang.updateSuccessMessage}`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.updateErrorMessage}`, AlertTypes.ERROR))
@@ -97,7 +98,7 @@ export function UserProfile(): JSX.Element {
 					<input
 						className={styles.input}
 						id="cbu"
-						/* placeholder={user?.cbu ? user?.cbu : lang.cbu} */
+						placeholder={user?.cbu ? user?.cbu : lang.cbu}
 						type="text"
 						value={updatedUser.userCbu}
 						onChange={e => {
@@ -110,7 +111,7 @@ export function UserProfile(): JSX.Element {
 					<input
 						className={styles.input}
 						id="alias"
-						/* placeholder={user?.alias ? user?.alias : lang.alias}  */
+						placeholder={user?.alias ? user?.alias : lang.alias}
 						type="text"
 						value={updatedUser.userAlias}
 						onChange={e => {

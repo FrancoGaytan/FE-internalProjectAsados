@@ -3,6 +3,7 @@ import { createContext, useContext, useState, PropsWithChildren, SetStateAction,
 import { localStorageKeys } from '.././utils/localStorageKeys';
 import { IUser } from '../models/user';
 import { _login } from '../service';
+import { editUser } from '../service/userService';
 import { useAlert } from './AlertContext';
 import { AlertTypes } from '../components/micro/AlertPopup/AlertPopup';
 import { useTranslation } from './LocalizationContext';
@@ -15,6 +16,7 @@ interface IAuthContext {
 	setUser: React.Dispatch<SetStateAction<IUser | null>>;
 	logout: () => void;
 	login: (email: string, password: string) => void;
+	updateUserLocalStorage: (res: IUser) => void;
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
@@ -55,6 +57,15 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 		navigate('/login');
 	}
 
+	/**
+	 * update the user in the localStorage
+	 */
+	function updateUserLocalStorage(res: IUser): void {
+		localStorage.removeItem(localStorageKeys.user);
+		localStorage.setItem(localStorageKeys.user, JSON.stringify(res));
+		setUser(res);
+	}
+
 	function getUserFromLocalStorage(): IUser {
 		return JSON.parse(localStorage.getItem(localStorageKeys.user) ?? '{}');
 	}
@@ -74,7 +85,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ user, isLoading, setIsLoading, isAuthenticated, setUser, logout, login }}>
+		<AuthContext.Provider value={{ user, isLoading, setIsLoading, isAuthenticated, setUser, logout, login, updateUserLocalStorage }}>
 			{props.children}
 		</AuthContext.Provider>
 	);
