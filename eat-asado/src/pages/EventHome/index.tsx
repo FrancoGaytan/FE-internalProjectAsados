@@ -50,6 +50,7 @@ export function EventHome(): JSX.Element {
 						return (
 							<EventCard
 								key={event._id}
+								eventId={event._id}
 								eventDateTime={event.datetime}
 								eventState={event.state as TEventState}
 								eventData={{

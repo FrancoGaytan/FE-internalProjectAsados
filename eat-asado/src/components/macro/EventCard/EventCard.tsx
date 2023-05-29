@@ -4,6 +4,7 @@ import { className } from '../../../utils/className';
 import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import styles from './styles.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface IEventData {
 	eventTitle: String;
@@ -14,6 +15,7 @@ interface IEventData {
 }
 
 interface IEventCardProps {
+	eventId: String; //esto es nuevo, necesito saber si me la trae o no
 	eventState: TEventState;
 	eventDateTime: Date;
 	eventData: IEventData;
@@ -21,6 +23,7 @@ interface IEventCardProps {
 
 const EventCard = (props: IEventCardProps) => {
 	const lang = useTranslation('eventHome');
+	const navigate = useNavigate();
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -30,6 +33,7 @@ const EventCard = (props: IEventCardProps) => {
 		return newMinutes;
 	}
 
+	const evId = props.eventId;
 	const evState = props.eventState; //esta prop va a ser para darle el estilo a la card
 	const evDateTime = new Date(props.eventDateTime); //esto va a haber que pasarlo x una funcion que seccione la fecha y la hora y despues separarlos en dos variables diferentes
 	const evTitle = props.eventData.eventTitle;
@@ -41,11 +45,14 @@ const EventCard = (props: IEventCardProps) => {
 	const evDate = evDateTime.getDate().toString() + '. ' + evDateTime.getMonth().toString() + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 
-	const handleInfo = () => {};
+	const handleInfo = () => {
+		navigate(`/event/${evId}`);
+	};
 
-	console.log(evDateTime);
-
-	const handleParticipation = () => {};
+	const handleParticipation = () => {
+		navigate(`/event/${evId}`);
+		//TODO: Agregar la inscripcion del usuario al evento
+	};
 
 	const calculateAvailability = () => {
 		let availability = Number(evParticipantsLimit) - Number(evParticipants);

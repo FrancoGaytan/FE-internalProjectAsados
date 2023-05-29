@@ -124,6 +124,13 @@
 			position: relative;
 			margin-top: 60px;
 
+			button {
+				&:hover {
+					background-color: var(--btnPrimary);
+					color: var(--backgroundNeutralLighter);
+				}
+			}
+
 			.participateBtn {
 				width: 100px;
 				position: relative;
