@@ -72,7 +72,10 @@ export function Event(): JSX.Element {
 						{/* TODO: Sacar todos los operadores ternarios con los loadings */}
 						<main className={styles.eventData}>
 							<div className={styles.eventOrganization}>
-								<h3>Organización</h3>
+								<div className={styles.sectionTitle}>
+									<div className={styles.calendarLogo}></div>
+									<h3>Organización</h3>
+								</div>
 								<h5>Fecha: {getOnlyDate(new Date(event.datetime))}</h5>
 								<h5>Hora: {getOnlyHour(new Date(event.datetime))}</h5>
 								<h5>Organizador: {event.organizer.name}</h5>
@@ -80,15 +83,22 @@ export function Event(): JSX.Element {
 								{/* no tengo al chef ni al encargado de compras*/}
 								<h5>Encargado de Compras: {}</h5>
 
-								<h3>Menu/Descripción</h3>
-								<h5>{event.description}</h5>
+								<div className={styles.secondRow}>
+									<div className={styles.sectionTitle}>
+										<div className={styles.restaurantLogo}></div>
+										<h3>Menu/Descripción</h3>
+									</div>
+									<h5>{event.description}</h5>
+								</div>
 							</div>
 							<div className={styles.eventParticipants}>
 								<div className={styles.participantsTitle}></div>
-								<div className={styles.participantsLogo}></div>
-								<h3>
-									Comensales: {event.members.length}/{event.memberLimit}
-								</h3>
+								<div className={styles.sectionTitle}>
+									<div className={styles.participantsLogo}></div>
+									<h3>
+										Comensales: {event.members.length}/{event.memberLimit}
+									</h3>
+								</div>
 								{event.members.map((member: IUser) => (
 									<h5>{member.name}</h5>
 								))}
