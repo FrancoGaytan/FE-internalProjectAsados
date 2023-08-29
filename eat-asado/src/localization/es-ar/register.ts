@@ -14,5 +14,7 @@ export const register = Object.seal({
 	hypertensiveDiet: '¿Sos Hipertenso?',
 	celiacDiet: '¿Sos Celíaco?',
 	registerTitle: 'Registro',
-	registerBtn: 'REGISTRO'
+	registerBtn: 'REGISTRO',
+	successMsg: 'Se ha registrado con exito',
+	failureMsg: 'You coudn´t register successfully'
 });
