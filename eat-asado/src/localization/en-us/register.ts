@@ -16,5 +16,7 @@ export const register = Object.seal({
 		celiac: 'Are you Celiac?'
 	},
 	registerTitle: 'Register',
-	registerBtn: 'REGISTER'
+	registerBtn: 'REGISTER',
+	successMsg: 'You have registered successfully',
+	failureMsg: 'You coudn´t register successfully'
 });
