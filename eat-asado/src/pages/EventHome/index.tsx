@@ -1,14 +1,13 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import styles from './styles.module.scss';
 import EventCard from '../../components/macro/EventCard/EventCard';
 import { TEventState } from '../../types/eventState';
-import { eventsDataMock } from '../../mocks/eventsMockedData';
 import { useEvent } from '../../stores/EventContext';
-import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { getPublicEvents } from '../../service';
 
 interface IStepItem {
 	title: string;
@@ -19,7 +18,7 @@ interface IStepItem {
 export function EventHome(): JSX.Element {
 	const lang = useTranslation('eventHome');
 	const { publicEvents } = useEvent();
-	const { user } = useAuth();
+	const { setPublicEvents } = useEvent();
 	const navigate = useNavigate();
 
 	const itemStepsData = useMemo(
@@ -30,6 +29,24 @@ export function EventHome(): JSX.Element {
 		],
 		[lang]
 	);
+
+	/**
+	 * Fetches the public events when page initialize.
+	 */
+	useEffect(() => {
+		const abortController = new AbortController();
+
+		getPublicEvents(abortController.signal)
+			.then(res => {
+				setPublicEvents(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+
+		return () => abortController.abort();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<PrivateFormLayout>

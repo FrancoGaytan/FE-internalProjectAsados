@@ -1,16 +1,21 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../stores/LocalizationContext';
-import styles from './styles.module.scss';
+import { RegisterRequest } from '../../models/user';
 import Button from '../../components/micro/Button/Button';
 import FormLayout from '../../components/macro/layout/FormLayout';
-import { useEffect, useState } from 'react';
-import { useAuth } from '../../stores/AuthContext';
-import { RegisterRequest } from '../../models/user';
 import { registering } from '../../service';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { localStorageKeys } from '../../utils/localStorageKeys';
-import { useNavigate } from 'react-router-dom';
+import styles from './styles.module.scss';
+import { useAuth } from '../../stores/AuthContext';
+
+interface ISpecialDiet {
+	name: string;
+	value: boolean;
+}
 
 export function Register(): JSX.Element {
 	const { setIsLoading } = useAuth();
@@ -70,8 +75,6 @@ export function Register(): JSX.Element {
 		e.preventDefault();
 		setIsLoading(true);
 
-		console.log(registerCredentials);
-
 		registering({
 			email: registerCredentials.email,
 			password: registerCredentials.password,
@@ -88,11 +91,14 @@ export function Register(): JSX.Element {
 			.finally(() => setIsLoading(false));
 	}
 
+	console.log(lang);
+
 	return (
 		//TODO: meter todos los inputs y label adentro de un contenedor para manipular mejor el ancho y luego aplicar grid en desk
 		<FormLayout onSubmit={e => handleRegister(e)}>
 			<div className={styles.closeBtn}></div>
 			<label className={styles.title}>{lang.registerTitle}</label>
+
 			<div className={styles.inputSection}>
 				<section className={styles.firstColumn}>
 					<label htmlFor="name" className={styles.registerLabel}>
@@ -130,6 +136,7 @@ export function Register(): JSX.Element {
 					/>
 					<span className={styles.inputDescription}>{lang.emailDescription}</span>
 				</section>
+
 				<section className={styles.secondColumn}>
 					<label htmlFor="password" className={styles.registerLabel}>
 						{lang.password}
@@ -154,9 +161,11 @@ export function Register(): JSX.Element {
 						onChange={handleChange}
 						value={registerCredentials.repeatedPassword}
 					/>
+
 					<section className={styles.checkboxesContainer}>
 						<div className={styles.internalTitle}>
 							<label className={styles.title}>{lang.specialDiet}</label>
+
 							<span className={styles.extraDescription}>{lang.specialDietOptional}</span>
 						</div>
 						<label className={styles.registerLabel}>
@@ -167,9 +176,8 @@ export function Register(): JSX.Element {
 								checked={specialDietOptions.isVegan}
 								onChange={handleCheckbox}
 							/>
-							{lang.veganDiet}
+							{lang.specialDietOptions.vegan}
 						</label>
-
 						<label className={styles.registerLabel}>
 							<input
 								id="isVegetarian"
@@ -178,7 +186,7 @@ export function Register(): JSX.Element {
 								checked={specialDietOptions.isVegetarian}
 								onChange={handleCheckbox}
 							/>
-							{lang.vegetarianDiet}
+							{lang.specialDietOptions.vegetarian}
 						</label>
 
 						<label className={styles.registerLabel}>
@@ -189,7 +197,7 @@ export function Register(): JSX.Element {
 								checked={specialDietOptions.isHypertensive}
 								onChange={handleCheckbox}
 							/>
-							{lang.hypertensiveDiet}
+							{lang.specialDietOptions.hypertensive}
 						</label>
 						<label className={styles.registerLabel}>
 							<input
@@ -199,10 +207,11 @@ export function Register(): JSX.Element {
 								checked={specialDietOptions.isCeliac}
 								onChange={handleCheckbox}
 							/>
-							{lang.celiacDiet}
+							{lang.specialDietOptions.celiac}
 						</label>
 					</section>
 				</section>
+
 				<section className={styles.buttonContainer}>
 					<Button kind="primary" size="large" id="registerBtn" type="submit">
 						{lang.registerBtn}
