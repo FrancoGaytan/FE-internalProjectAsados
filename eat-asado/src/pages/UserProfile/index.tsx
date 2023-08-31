@@ -3,6 +3,8 @@ import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import React, { useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
+import { useAuth } from '../../stores/AuthContext';
+import { getUserById } from '../../service';
 
 export interface UserProfileInterface {
 	userImage?: File;
@@ -16,7 +18,35 @@ export interface UserProfileInterface {
 
 export function UserProfile(): JSX.Element {
 	const lang = useTranslation('userProfile');
+	const [actualUser, setActualUser] = useState();
+	const { user } = useAuth();
+
 	let emptyFile = undefined as unknown as File;
+
+	async function getUserData(userId: string | undefined) {
+		//fijate de donde guardar los datos del usuario una vez que el getuserbyid te los trae
+		const res = await getUserById(userId);
+		console.log(res);
+	}
+
+	useEffect(() => {
+		const abortController = new AbortController();
+
+		getUserById(user?.id, abortController.signal)
+			.then(res => {
+				setActualUser(res);
+				console.log(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+
+		return () => abortController.abort();
+	}, [user]);
+
+	/* 	console.log(user);
+	console.log('usuario:' + actualUser); */
+	getUserData(user?.id);
 
 	const initialUser = {
 		userImage: emptyFile,
@@ -29,11 +59,11 @@ export function UserProfile(): JSX.Element {
 	};
 
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [user, setUser] = useState<UserProfileInterface>(initialUser);
+	const [userProfle, setUser] = useState<UserProfileInterface>(initialUser);
 
 	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		console.log(user);
+		console.log(userProfle);
 	};
 
 	const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +73,7 @@ export function UserProfile(): JSX.Element {
 
 		//Prevents deleting current image when user press Cancel in the dialog window
 		if (target.files?.length && target.files.length > 0) {
-			setUser({ ...user, userImage: target.files[0] });
+			setUser({ ...userProfle, userImage: target.files[0] });
 		}
 	};
 
@@ -60,8 +90,8 @@ export function UserProfile(): JSX.Element {
 					<h3>{lang.personalData}</h3>
 					<div className={styles.pictureRow}>
 						<DragAndDrop setState={setProfileImage}>
-							{user.userImage !== undefined ? (
-								<img src={URL.createObjectURL(user.userImage)} className={styles.userPicture} alt="selected" />
+							{userProfle.userImage !== undefined ? (
+								<img src={URL.createObjectURL(userProfle.userImage)} className={styles.userPicture} alt="selected" />
 							) : (
 								<img src="/assets/pictures/profile.png" className={styles.userPicture} alt="placeholder" />
 							)}
@@ -79,9 +109,9 @@ export function UserProfile(): JSX.Element {
 						id="cbu"
 						placeholder={lang.cbu}
 						type="text"
-						value={user.userCbu}
+						value={userProfle.userCbu}
 						onChange={e => {
-							setUser({ ...user, userCbu: e.target.value });
+							setUser({ ...userProfle, userCbu: e.target.value });
 						}}
 					/>
 					<label htmlFor="alias" className={styles.cbuLabel}>
@@ -92,9 +122,9 @@ export function UserProfile(): JSX.Element {
 						id="alias"
 						placeholder={lang.alias}
 						type="text"
-						value={user.userAlias}
+						value={userProfle.userAlias}
 						onChange={e => {
-							setUser({ ...user, userAlias: e.target.value });
+							setUser({ ...userProfle, userAlias: e.target.value });
 						}}
 					/>
 				</div>
@@ -106,9 +136,9 @@ export function UserProfile(): JSX.Element {
 								id="isVegan"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userVegan}
+								checked={userProfle.userVegan}
 								onChange={e => {
-									setUser({ ...user, userVegan: e.target.checked });
+									setUser({ ...userProfle, userVegan: e.target.checked });
 								}}
 							/>
 							{lang.veganDiet}
@@ -119,9 +149,9 @@ export function UserProfile(): JSX.Element {
 								id="isVegetarian"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userVegetarian}
+								checked={userProfle.userVegetarian}
 								onChange={e => {
-									setUser({ ...user, userVegetarian: e.target.checked });
+									setUser({ ...userProfle, userVegetarian: e.target.checked });
 								}}
 							/>
 							{lang.vegetarianDiet}
@@ -132,9 +162,9 @@ export function UserProfile(): JSX.Element {
 								id="isHypertensive"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userHypertensive}
+								checked={userProfle.userHypertensive}
 								onChange={e => {
-									setUser({ ...user, userHypertensive: e.target.checked });
+									setUser({ ...userProfle, userHypertensive: e.target.checked });
 								}}
 							/>
 							{lang.hypertensiveDiet}
@@ -144,9 +174,9 @@ export function UserProfile(): JSX.Element {
 								id="isCeliac"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={user.userCeliac}
+								checked={userProfle.userCeliac}
 								onChange={e => {
-									setUser({ ...user, userCeliac: e.target.checked });
+									setUser({ ...userProfle, userCeliac: e.target.checked });
 								}}
 							/>
 							{lang.celiacDiet}
