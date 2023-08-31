@@ -21,32 +21,8 @@ export function UserProfile(): JSX.Element {
 	const [actualUser, setActualUser] = useState();
 	const { user } = useAuth();
 
+	// En un futuro esto debería estar en estado, para poder cambiarle el valor.
 	let emptyFile = undefined as unknown as File;
-
-	async function getUserData(userId: string | undefined) {
-		//fijate de donde guardar los datos del usuario una vez que el getuserbyid te los trae
-		const res = await getUserById(userId);
-		console.log(res);
-	}
-
-	useEffect(() => {
-		const abortController = new AbortController();
-
-		getUserById(user?.id, abortController.signal)
-			.then(res => {
-				setActualUser(res);
-				console.log(res);
-			})
-			.catch(e => {
-				console.error('Catch in context: ', e);
-			});
-
-		return () => abortController.abort();
-	}, [user]);
-
-	/* 	console.log(user);
-	console.log('usuario:' + actualUser); */
-	getUserData(user?.id);
 
 	const initialUser = {
 		userImage: emptyFile,
@@ -81,6 +57,39 @@ export function UserProfile(): JSX.Element {
 		setUser(prev => ({ ...prev, userImage: file }));
 		// setUser({userImage: file})
 	};
+
+	// MOVI LOS EFECTOS ABAJO, POR UN TEMA DE CONVENCIÓN. (No se si cambia algo a nivel arquitectónico)
+	// Este useEffect no está mal, pero no está comprobando que `user.id` exista. Por eso te va a fallar.
+
+	/* useEffect(() => {
+		const abortController = new AbortController();
+
+		getUserById(user?.id, abortController.signal)
+			.then(res => {
+				setActualUser(res);
+				console.log(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+
+		return () => abortController.abort();
+	}, [user?.id]);
+ */
+	/* 	console.log(user);
+	console.log('usuario:' + actualUser); */
+
+	useEffect(() => {
+		if (!user?.id) return;
+		const abortController = new AbortController();
+
+		/**
+		 * @param res trae la respuesta de la API, fijate que necesitas hacer con eso. De momento solo la estoy consologueando.
+		 */
+		getUserById(user.id).then(res => console.log(res));
+
+		return () => abortController.abort();
+	}, [user?.id]);
 
 	return (
 		<div className={styles.userProfileContainer}>
