@@ -10,7 +10,9 @@ export const userProfile = Object.seal({
 	hypertensiveDiet: 'Are you hypertensive?',
 	celiacDiet: 'Are you Celiac?',
 	saveBtn: 'SAVE',
-	headerWelcome: "Welcome: ",
-	logoutBtn: "LOGOUT",
-	loginBtn: "LOGIN"
+	headerWelcome: 'Welcome: ',
+	logoutBtn: 'LOGOUT',
+	loginBtn: 'LOGIN',
+	successMsg: 'Information successfully changed',
+	failureMsg: 'You couldn´t update successfully your information'
 });

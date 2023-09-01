@@ -4,7 +4,11 @@ import { useTranslation } from '../../stores/LocalizationContext';
 import React, { useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
 import { useAuth } from '../../stores/AuthContext';
-import { getUserById } from '../../service';
+import { editUser, getUserById } from '../../service';
+import FormLayout from '../../components/macro/layout/FormLayout';
+import { useAlert } from '../../stores/AlertContext';
+import { useNavigate } from 'react-router-dom';
+import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 
 export interface UserProfileInterface {
 	userImage?: File;
@@ -16,10 +20,23 @@ export interface UserProfileInterface {
 	userCeliac?: boolean;
 }
 
+export interface IUserByIdResponse {
+	email?: string;
+	name?: string;
+	password?: string;
+	specialDiet?: string[];
+}
+
 export function UserProfile(): JSX.Element {
 	const lang = useTranslation('userProfile');
-	const [actualUser, setActualUser] = useState();
-	const { user } = useAuth();
+	const [actualUser, setActualUser] = useState<IUserByIdResponse>({
+		email: '',
+		name: '',
+		password: '',
+		specialDiet: []
+	}); //este es el user que se utiliza para comparar la response del getUserById y despues actualizar el userProfile
+	const { user } = useAuth(); // usuario que llega primero desde el useAuth
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	// En un futuro esto debería estar en estado, para poder cambiarle el valor.
 	let emptyFile = undefined as unknown as File;
@@ -28,19 +45,42 @@ export function UserProfile(): JSX.Element {
 		userImage: emptyFile,
 		userCbu: '',
 		userAlias: '',
-		userVegan: false,
-		userVegetarian: false,
-		userHypertensive: false,
-		userCeliac: false
+		userVegan: chekingSpecialDiet('vegan'),
+		userVegetarian: chekingSpecialDiet('vegetarian'),
+		userHypertensive: chekingSpecialDiet('hypertensive'),
+		userCeliac: chekingSpecialDiet('celiac')
 	};
 
-	const inputRef = useRef<HTMLInputElement>(null);
-	const [userProfle, setUser] = useState<UserProfileInterface>(initialUser);
+	const [userProfle, setUser] = useState<UserProfileInterface>(initialUser); //este es el usuario que despues se va a submitear al form, el que se ve en los inputs
+	const { setIsLoading } = useAuth();
+	const { setAlert } = useAlert();
+	const navigate = useNavigate();
 
-	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+	function handleUpdateProfile(e: React.FormEvent<HTMLButtonElement>): void {
 		e.preventDefault();
-		console.log(userProfle);
-	};
+		setIsLoading(true);
+
+		const provisionalSendingUser = {
+			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
+			cbu: userProfle.userCbu,
+			userAlias: userProfle.userAlias,
+			userVegan: userProfle.userVegan,
+			userVegetarian: userProfle.userVegetarian,
+			userHypertensive: userProfle.userHypertensive,
+			userCeliac: userProfle.userCeliac
+		};
+
+		editUser(user?.id, provisionalSendingUser)
+			.then(res => {
+				setAlert(`${lang.successMsg}!`, AlertTypes.SUCCESS);
+			})
+			.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR))
+			.finally(() => setIsLoading(false));
+	}
+
+	function chekingSpecialDiet(diet: any) {
+		return actualUser?.specialDiet?.includes(diet);
+	}
 
 	const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
@@ -58,146 +98,128 @@ export function UserProfile(): JSX.Element {
 		// setUser({userImage: file})
 	};
 
-	// MOVI LOS EFECTOS ABAJO, POR UN TEMA DE CONVENCIÓN. (No se si cambia algo a nivel arquitectónico)
-	// Este useEffect no está mal, pero no está comprobando que `user.id` exista. Por eso te va a fallar.
-
-	/* useEffect(() => {
-		const abortController = new AbortController();
-
-		getUserById(user?.id, abortController.signal)
-			.then(res => {
-				setActualUser(res);
-				console.log(res);
-			})
-			.catch(e => {
-				console.error('Catch in context: ', e);
-			});
-
-		return () => abortController.abort();
-	}, [user?.id]);
- */
-	/* 	console.log(user);
-	console.log('usuario:' + actualUser); */
+	useEffect(() => {
+		setUser(initialUser);
+	}, [actualUser]);
 
 	useEffect(() => {
 		if (!user?.id) return;
 		const abortController = new AbortController();
 
-		/**
-		 * @param res trae la respuesta de la API, fijate que necesitas hacer con eso. De momento solo la estoy consologueando.
-		 */
-		getUserById(user.id).then(res => console.log(res));
+		getUserById(user.id).then(res => setActualUser(res));
 
 		return () => abortController.abort();
 	}, [user?.id]);
-
+	console.log(actualUser);
 	return (
 		<div className={styles.userProfileContainer}>
-			<h1>{lang.profileTitle}</h1>
-			<section className={styles.dataSection}>
-				<div className={styles.firstColumnProfile}>
-					<h3>{lang.personalData}</h3>
-					<div className={styles.pictureRow}>
-						<DragAndDrop setState={setProfileImage}>
-							{userProfle.userImage !== undefined ? (
-								<img src={URL.createObjectURL(userProfle.userImage)} className={styles.userPicture} alt="selected" />
-							) : (
-								<img src="/assets/pictures/profile.png" className={styles.userPicture} alt="placeholder" />
-							)}
-						</DragAndDrop>
-						<p onClick={() => inputRef.current?.click()} style={{ cursor: 'pointer' }}>
-							{lang.editImg}
-						</p>
-						<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
+			<form>
+				<h1>{lang.profileTitle}</h1>
+				<section className={styles.dataSection}>
+					<div className={styles.firstColumnProfile}>
+						<h3>{lang.personalData}</h3>
+						<div className={styles.pictureRow}>
+							<DragAndDrop setState={setProfileImage}>
+								{userProfle.userImage !== undefined ? (
+									<img src={URL.createObjectURL(userProfle.userImage)} className={styles.userPicture} alt="selected" />
+								) : (
+									<img src="/assets/pictures/profile.png" className={styles.userPicture} alt="placeholder" />
+								)}
+							</DragAndDrop>
+							<p onClick={() => inputRef.current?.click()} style={{ cursor: 'pointer' }}>
+								{lang.editImg}
+							</p>
+							<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
+						</div>
+						<label htmlFor="cbu" className={styles.cbuLabel}>
+							{lang.cbu}
+						</label>
+						<input
+							className={styles.input}
+							id="cbu"
+							placeholder={lang.cbu}
+							type="text"
+							value={userProfle.userCbu}
+							onChange={e => {
+								setUser({ ...userProfle, userCbu: e.target.value });
+							}}
+						/>
+						<label htmlFor="alias" className={styles.cbuLabel}>
+							{lang.alias}
+						</label>
+						<input
+							className={styles.input}
+							id="alias"
+							placeholder={lang.alias}
+							type="text"
+							value={userProfle.userAlias}
+							onChange={e => {
+								setUser({ ...userProfle, userAlias: e.target.value });
+							}}
+						/>
 					</div>
-					<label htmlFor="cbu" className={styles.cbuLabel}>
-						{lang.cbu}
-					</label>
-					<input
-						className={styles.input}
-						id="cbu"
-						placeholder={lang.cbu}
-						type="text"
-						value={userProfle.userCbu}
-						onChange={e => {
-							setUser({ ...userProfle, userCbu: e.target.value });
-						}}
-					/>
-					<label htmlFor="alias" className={styles.cbuLabel}>
-						{lang.alias}
-					</label>
-					<input
-						className={styles.input}
-						id="alias"
-						placeholder={lang.alias}
-						type="text"
-						value={userProfle.userAlias}
-						onChange={e => {
-							setUser({ ...userProfle, userAlias: e.target.value });
-						}}
-					/>
-				</div>
-				<div className={styles.secondColumnProfile}>
-					<h3>{lang.specialDietTitle}</h3>
-					<section className={styles.checkboxesContainer}>
-						<label className={styles.profileLabel}>
-							<input
-								id="isVegan"
-								type="checkbox"
-								className={styles.checkbox}
-								checked={userProfle.userVegan}
-								onChange={e => {
-									setUser({ ...userProfle, userVegan: e.target.checked });
-								}}
-							/>
-							{lang.veganDiet}
-						</label>
+					<div className={styles.secondColumnProfile}>
+						<h3>{lang.specialDietTitle}</h3>
+						<section className={styles.checkboxesContainer}>
+							<label className={styles.profileLabel}>
+								<input
+									id="isVegan"
+									type="checkbox"
+									className={styles.checkbox}
+									checked={userProfle.userVegan}
+									onChange={e => {
+										setUser({ ...userProfle, userVegan: e.target.checked });
+									}}
+								/>
+								{lang.veganDiet}
+							</label>
 
-						<label className={styles.profileLabel}>
-							<input
-								id="isVegetarian"
-								type="checkbox"
-								className={styles.checkbox}
-								checked={userProfle.userVegetarian}
-								onChange={e => {
-									setUser({ ...userProfle, userVegetarian: e.target.checked });
-								}}
-							/>
-							{lang.vegetarianDiet}
-						</label>
+							<label className={styles.profileLabel}>
+								<input
+									id="isVegetarian"
+									type="checkbox"
+									className={styles.checkbox}
+									checked={userProfle.userVegetarian}
+									onChange={e => {
+										setUser({ ...userProfle, userVegetarian: e.target.checked });
+									}}
+								/>
+								{lang.vegetarianDiet}
+							</label>
 
-						<label className={styles.profileLabel}>
-							<input
-								id="isHypertensive"
-								type="checkbox"
-								className={styles.checkbox}
-								checked={userProfle.userHypertensive}
-								onChange={e => {
-									setUser({ ...userProfle, userHypertensive: e.target.checked });
-								}}
-							/>
-							{lang.hypertensiveDiet}
-						</label>
-						<label className={styles.profileLabel}>
-							<input
-								id="isCeliac"
-								type="checkbox"
-								className={styles.checkbox}
-								checked={userProfle.userCeliac}
-								onChange={e => {
-									setUser({ ...userProfle, userCeliac: e.target.checked });
-								}}
-							/>
-							{lang.celiacDiet}
-						</label>
-					</section>
+							<label className={styles.profileLabel}>
+								<input
+									id="isHypertensive"
+									type="checkbox"
+									className={styles.checkbox}
+									checked={userProfle.userHypertensive}
+									onChange={e => {
+										setUser({ ...userProfle, userHypertensive: e.target.checked });
+									}}
+								/>
+								{lang.hypertensiveDiet}
+							</label>
+							<label className={styles.profileLabel}>
+								<input
+									id="isCeliac"
+									type="checkbox"
+									className={styles.checkbox}
+									checked={userProfle.userCeliac}
+									onChange={e => {
+										setUser({ ...userProfle, userCeliac: e.target.checked });
+									}}
+								/>
+								{lang.celiacDiet}
+							</label>
+						</section>
+					</div>
+				</section>
+				<div className={styles.btnSection}>
+					<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleUpdateProfile}>
+						{lang.saveBtn}
+					</Button>
 				</div>
-			</section>
-			<div className={styles.btnSection}>
-				<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleSubmit}>
-					{lang.saveBtn}
-				</Button>
-			</div>
+			</form>
 		</div>
 	);
 }
