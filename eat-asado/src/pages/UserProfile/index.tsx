@@ -56,6 +56,16 @@ export function UserProfile(): JSX.Element {
 	const { setAlert } = useAlert();
 	const navigate = useNavigate();
 
+	const checkSpecialDiet = (): string[] => {
+		let speDiet = [];
+		userProfle.userVegan && speDiet.push('vegan');
+		userProfle.userVegetarian && speDiet.push('vegetarian');
+		userProfle.userHypertensive && speDiet.push('hypertensive');
+		userProfle.userCeliac && speDiet.push('celiac');
+
+		return speDiet;
+	};
+
 	function handleUpdateProfile(e: React.FormEvent<HTMLButtonElement>): void {
 		e.preventDefault();
 		setIsLoading(true);
@@ -63,11 +73,8 @@ export function UserProfile(): JSX.Element {
 		const provisionalSendingUser = {
 			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
 			cbu: userProfle.userCbu,
-			userAlias: userProfle.userAlias,
-			userVegan: userProfle.userVegan,
-			userVegetarian: userProfle.userVegetarian,
-			userHypertensive: userProfle.userHypertensive,
-			userCeliac: userProfle.userCeliac
+			alias: userProfle.userAlias,
+			specialDiet: checkSpecialDiet()
 		};
 
 		editUser(user?.id, provisionalSendingUser)
@@ -79,7 +86,7 @@ export function UserProfile(): JSX.Element {
 	}
 
 	function chekingSpecialDiet(diet: any) {
-		return actualUser?.specialDiet?.includes(diet);
+		return actualUser?.specialDiet?.includes(diet) && diet.toString();
 	}
 
 	const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +120,7 @@ export function UserProfile(): JSX.Element {
 	console.log(actualUser);
 	return (
 		<div className={styles.userProfileContainer}>
-			<form>
+			<FormLayout onSubmit={e => handleUpdateProfile(e)}>
 				<h1>{lang.profileTitle}</h1>
 				<section className={styles.dataSection}>
 					<div className={styles.firstColumnProfile}>
@@ -215,11 +222,11 @@ export function UserProfile(): JSX.Element {
 					</div>
 				</section>
 				<div className={styles.btnSection}>
-					<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleUpdateProfile}>
+					<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }}>
 						{lang.saveBtn}
 					</Button>
 				</div>
-			</form>
+			</FormLayout>
 		</div>
 	);
 }
