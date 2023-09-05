@@ -7,8 +7,8 @@ export interface IEvent {
 	description: string;
 	memberLimit: number;
 	state: string;
-	members: number[];
-	organizer: number;
+	members: string[];
+	organizer: string;
 	isChef?: boolean;
 	isShoppingDesignee?: boolean;
 }
