@@ -66,7 +66,7 @@ export function UserProfile(): JSX.Element {
 		return speDiet;
 	};
 
-	function handleUpdateProfile(e: React.FormEvent<HTMLButtonElement>): void {
+	function handleUpdateProfile(e: any): void {
 		e.preventDefault();
 		setIsLoading(true);
 
@@ -120,7 +120,7 @@ export function UserProfile(): JSX.Element {
 	console.log(actualUser);
 	return (
 		<div className={styles.userProfileContainer}>
-			<FormLayout onSubmit={e => handleUpdateProfile(e)}>
+			<form onSubmit={e => handleUpdateProfile(e)}>
 				<h1>{lang.profileTitle}</h1>
 				<section className={styles.dataSection}>
 					<div className={styles.firstColumnProfile}>
@@ -226,7 +226,7 @@ export function UserProfile(): JSX.Element {
 						{lang.saveBtn}
 					</Button>
 				</div>
-			</FormLayout>
+			</form>
 		</div>
 	);
 }
