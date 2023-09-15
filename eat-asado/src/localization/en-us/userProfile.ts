@@ -4,6 +4,7 @@ export const userProfile = Object.seal({
 	editImg: 'Edit Image',
 	cbu: 'CBU',
 	alias: 'Alias',
+	name: 'Name',
 	specialDietTitle: 'Special Diet',
 	veganDiet: 'Are you Vegan?',
 	vegetarianDiet: 'Are you Vegetarian?',

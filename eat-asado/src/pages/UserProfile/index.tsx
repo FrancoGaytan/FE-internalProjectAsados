@@ -12,6 +12,7 @@ import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 
 export interface UserProfileInterface {
 	userImage?: File;
+	userName?: string;
 	userCbu?: string;
 	userAlias?: string;
 	userVegan?: boolean;
@@ -24,6 +25,8 @@ export interface IUserByIdResponse {
 	email?: string;
 	name?: string;
 	password?: string;
+	cbu?: string;
+	alias?: string;
 	specialDiet?: string[];
 }
 
@@ -32,6 +35,8 @@ export function UserProfile(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUserByIdResponse>({
 		email: '',
 		name: '',
+		alias: '',
+		cbu: '',
 		password: '',
 		specialDiet: []
 	}); //este es el user que se utiliza para comparar la response del getUserById y despues actualizar el userProfile
@@ -43,6 +48,7 @@ export function UserProfile(): JSX.Element {
 
 	const initialUser = {
 		userImage: emptyFile,
+		userName: '',
 		userCbu: '',
 		userAlias: '',
 		userVegan: chekingSpecialDiet('vegan'),
@@ -51,17 +57,17 @@ export function UserProfile(): JSX.Element {
 		userCeliac: chekingSpecialDiet('celiac')
 	};
 
-	const [userProfle, setUser] = useState<UserProfileInterface>(initialUser); //este es el usuario que despues se va a submitear al form, el que se ve en los inputs
+	const [userProfile, setUser] = useState<UserProfileInterface>(initialUser); //este es el usuario que despues se va a submitear al form, el que se ve en los inputs
 	const { setIsLoading } = useAuth();
 	const { setAlert } = useAlert();
 	const navigate = useNavigate();
 
 	const checkSpecialDiet = (): string[] => {
 		let speDiet = [];
-		userProfle.userVegan && speDiet.push('vegan');
-		userProfle.userVegetarian && speDiet.push('vegetarian');
-		userProfle.userHypertensive && speDiet.push('hypertensive');
-		userProfle.userCeliac && speDiet.push('celiac');
+		userProfile.userVegan && speDiet.push('vegan');
+		userProfile.userVegetarian && speDiet.push('vegetarian');
+		userProfile.userHypertensive && speDiet.push('hypertensive');
+		userProfile.userCeliac && speDiet.push('celiac');
 
 		return speDiet;
 	};
@@ -72,8 +78,9 @@ export function UserProfile(): JSX.Element {
 
 		const provisionalSendingUser = {
 			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
-			cbu: userProfle.userCbu,
-			alias: userProfle.userAlias,
+			name: userProfile.userName,
+			cbu: userProfile.userCbu,
+			alias: userProfile.userAlias,
 			specialDiet: checkSpecialDiet()
 		};
 
@@ -96,7 +103,7 @@ export function UserProfile(): JSX.Element {
 
 		//Prevents deleting current image when user press Cancel in the dialog window
 		if (target.files?.length && target.files.length > 0) {
-			setUser({ ...userProfle, userImage: target.files[0] });
+			setUser({ ...userProfile, userImage: target.files[0] });
 		}
 	};
 
@@ -127,8 +134,8 @@ export function UserProfile(): JSX.Element {
 						<h3>{lang.personalData}</h3>
 						<div className={styles.pictureRow}>
 							<DragAndDrop setState={setProfileImage}>
-								{userProfle.userImage !== undefined ? (
-									<img src={URL.createObjectURL(userProfle.userImage)} className={styles.userPicture} alt="selected" />
+								{userProfile.userImage !== undefined ? (
+									<img src={URL.createObjectURL(userProfile.userImage)} className={styles.userPicture} alt="selected" />
 								) : (
 									<img src="/assets/pictures/profile.png" className={styles.userPicture} alt="placeholder" />
 								)}
@@ -144,11 +151,11 @@ export function UserProfile(): JSX.Element {
 						<input
 							className={styles.input}
 							id="cbu"
-							placeholder={lang.cbu}
+							placeholder={actualUser.cbu}
 							type="text"
-							value={userProfle.userCbu}
+							value={userProfile.userCbu}
 							onChange={e => {
-								setUser({ ...userProfle, userCbu: e.target.value });
+								setUser({ ...userProfile, userCbu: e.target.value });
 							}}
 						/>
 						<label htmlFor="alias" className={styles.cbuLabel}>
@@ -157,11 +164,25 @@ export function UserProfile(): JSX.Element {
 						<input
 							className={styles.input}
 							id="alias"
-							placeholder={lang.alias}
+							placeholder={actualUser.alias}
 							type="text"
-							value={userProfle.userAlias}
+							value={userProfile.userAlias}
 							onChange={e => {
-								setUser({ ...userProfle, userAlias: e.target.value });
+								setUser({ ...userProfile, userAlias: e.target.value });
+							}}
+						/>
+
+						<label htmlFor="name" className={styles.cbuLabel}>
+							{lang.name}
+						</label>
+						<input
+							className={styles.input}
+							id="name"
+							placeholder={actualUser.name}
+							type="text"
+							value={userProfile.userName}
+							onChange={e => {
+								setUser({ ...userProfile, userName: e.target.value });
 							}}
 						/>
 					</div>
@@ -173,9 +194,9 @@ export function UserProfile(): JSX.Element {
 									id="isVegan"
 									type="checkbox"
 									className={styles.checkbox}
-									checked={userProfle.userVegan}
+									checked={userProfile.userVegan}
 									onChange={e => {
-										setUser({ ...userProfle, userVegan: e.target.checked });
+										setUser({ ...userProfile, userVegan: e.target.checked });
 									}}
 								/>
 								{lang.veganDiet}
@@ -186,9 +207,9 @@ export function UserProfile(): JSX.Element {
 									id="isVegetarian"
 									type="checkbox"
 									className={styles.checkbox}
-									checked={userProfle.userVegetarian}
+									checked={userProfile.userVegetarian}
 									onChange={e => {
-										setUser({ ...userProfle, userVegetarian: e.target.checked });
+										setUser({ ...userProfile, userVegetarian: e.target.checked });
 									}}
 								/>
 								{lang.vegetarianDiet}
@@ -199,9 +220,9 @@ export function UserProfile(): JSX.Element {
 									id="isHypertensive"
 									type="checkbox"
 									className={styles.checkbox}
-									checked={userProfle.userHypertensive}
+									checked={userProfile.userHypertensive}
 									onChange={e => {
-										setUser({ ...userProfle, userHypertensive: e.target.checked });
+										setUser({ ...userProfile, userHypertensive: e.target.checked });
 									}}
 								/>
 								{lang.hypertensiveDiet}
@@ -211,9 +232,9 @@ export function UserProfile(): JSX.Element {
 									id="isCeliac"
 									type="checkbox"
 									className={styles.checkbox}
-									checked={userProfle.userCeliac}
+									checked={userProfile.userCeliac}
 									onChange={e => {
-										setUser({ ...userProfle, userCeliac: e.target.checked });
+										setUser({ ...userProfile, userCeliac: e.target.checked });
 									}}
 								/>
 								{lang.celiacDiet}
