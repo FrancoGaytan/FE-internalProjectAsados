@@ -79,8 +79,8 @@ export function UserProfile(): JSX.Element {
 		const provisionalSendingUser = {
 			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
 			name: userProfile.userName,
-			cbu: userProfile.userCbu,
-			alias: userProfile.userAlias,
+			cbu: userProfile.userCbu ? userProfile.userCbu : actualUser.cbu,
+			alias: userProfile.userAlias ? userProfile.userAlias : actualUser.alias,
 			specialDiet: checkSpecialDiet()
 		};
 
@@ -155,6 +155,7 @@ export function UserProfile(): JSX.Element {
 							type="text"
 							value={userProfile.userCbu}
 							onChange={e => {
+								//TODO: chequear xq mierda cuando actualizo solo el cbu o el alias el otro se vuelve a actualizar como vacío
 								setUser({ ...userProfile, userCbu: e.target.value });
 							}}
 						/>
@@ -168,6 +169,7 @@ export function UserProfile(): JSX.Element {
 							type="text"
 							value={userProfile.userAlias}
 							onChange={e => {
+								//TODO: chequear xq mierda cuando actualizo solo el cbu o el alias el otro se vuelve a actualizar como vacío
 								setUser({ ...userProfile, userAlias: e.target.value });
 							}}
 						/>
