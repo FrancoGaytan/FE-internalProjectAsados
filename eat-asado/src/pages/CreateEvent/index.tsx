@@ -24,12 +24,9 @@ export function CreateEvent(): JSX.Element {
 		members: [user?.id as string],
 		state: EventStatesEnum.AVAILABLE,
 		organizer: user?.id as string,
-		isChef: false,
-		isShoppingDesignee: false
+		isChef: undefined,
+		isShoppingDesignee: undefined
 	};
-
-	console.log(initialEvent);
-	console.log(user);
 
 	const [event, setEvent] = useState<IEvent>(initialEvent);
 
@@ -52,7 +49,6 @@ export function CreateEvent(): JSX.Element {
 
 		createEvent(event)
 			.then(res => {
-				console.log(res);
 				setAlert(`${lang.eventRegisteredConfirmation}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
@@ -88,7 +84,7 @@ export function CreateEvent(): JSX.Element {
 						id="fechaHora"
 						placeholder="Fecha y Hora"
 						type="datetime-local"
-						value={event.datetime.toDateString()} //despues cuando lo vas a submitear cambiarlo a string así: event.datetime.toDateString()
+						value={event.datetime.toISOString().slice(0, -8)}
 						onChange={e => {
 							setEvent({ ...event, datetime: new Date(e.target.value) });
 						}}
@@ -118,9 +114,9 @@ export function CreateEvent(): JSX.Element {
 								id="isAsador"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={event.isChef}
+								checked={event.isChef !== undefined ? true : false}
 								onChange={e => {
-									setEvent({ ...event, isChef: e.target.checked });
+									setEvent({ ...event, isChef: e.target.checked ? (user?.id as string) : undefined });
 								}}
 							/>
 							{lang.chef}
@@ -130,9 +126,9 @@ export function CreateEvent(): JSX.Element {
 								id="isEncargadoCompras"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={event.isShoppingDesignee}
+								checked={event.isShoppingDesignee !== undefined ? true : false}
 								onChange={e => {
-									setEvent({ ...event, isShoppingDesignee: e.target.checked });
+									setEvent({ ...event, isShoppingDesignee: e.target.checked ? (user?.id as string) : undefined });
 								}}
 							/>
 							{lang.shoppingDesignee}

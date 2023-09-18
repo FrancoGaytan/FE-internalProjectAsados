@@ -7,10 +7,10 @@ export interface IEvent {
 	description: string;
 	memberLimit: number;
 	state: string;
-	members: string[]; //esto antes era number
-	organizer: string; //esto antes era number
-	isChef?: boolean;
-	isShoppingDesignee?: boolean;
+	members: string[];
+	organizer: string;
+	isChef?: string | undefined;
+	isShoppingDesignee?: string | undefined;
 }
 
 export interface IPublicEvent {
