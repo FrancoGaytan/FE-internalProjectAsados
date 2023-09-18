@@ -124,7 +124,6 @@ export function UserProfile(): JSX.Element {
 
 		return () => abortController.abort();
 	}, [user?.id]);
-	console.log(actualUser);
 	return (
 		<div className={styles.userProfileContainer}>
 			<form onSubmit={e => handleUpdateProfile(e)}>
