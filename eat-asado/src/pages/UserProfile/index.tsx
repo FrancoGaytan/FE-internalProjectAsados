@@ -33,7 +33,6 @@ export function UserProfile(): JSX.Element {
 
 	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		console.log(user);
 	};
 
 	const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
