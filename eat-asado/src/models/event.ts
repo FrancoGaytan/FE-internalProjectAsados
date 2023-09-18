@@ -9,8 +9,8 @@ export interface IEvent {
 	state: string;
 	members: string[];
 	organizer: string;
-	isChef?: boolean;
-	isShoppingDesignee?: boolean;
+	isChef?: string | undefined;
+	isShoppingDesignee?: string | undefined;
 }
 
 export interface IPublicEvent {

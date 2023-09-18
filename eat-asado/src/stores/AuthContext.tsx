@@ -34,9 +34,15 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 
 		_login({ email, password })
 			.then(res => {
+				/**
+				 * @todo: Ver si vale la pena guardar 2 keys. De momento dejalo asi.
+				*/
 				localStorage.setItem(localStorageKeys.user, JSON.stringify(res));
+				localStorage.setItem(localStorageKeys.token, JSON.stringify(res.jwt));
+
 				setUser(res);
 				setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
+
 				navigate('/');
 			})
 			.catch(error => {
@@ -61,7 +67,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 
 	/**
 	 * Checks if user is auth
-	*/
+	 */
 	function isAuthenticated(): boolean {
 		return !!getUserFromLocalStorage();
 	}

@@ -1,7 +1,7 @@
 import { localStorageKeys } from '../utils/localStorageKeys';
 
 const baseURL = process.env.REACT_APP_ENDPOINT;
-const token = window.localStorage.getItem(localStorageKeys.token) as string;
+const token = JSON.parse(window.localStorage.getItem(localStorageKeys.token) as string);
 
 const fetchConfig: RequestInit = {
 	mode: 'cors',
@@ -9,7 +9,7 @@ const fetchConfig: RequestInit = {
 	credentials: 'same-origin',
 	headers: {
 		'Content-Type': 'application/json',
-        'Authorization': token
+		Authorization: token
 	}
 };
 
