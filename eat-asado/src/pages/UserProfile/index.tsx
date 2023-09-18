@@ -155,7 +155,6 @@ export function UserProfile(): JSX.Element {
 							type="text"
 							value={userProfile.userCbu}
 							onChange={e => {
-								//TODO: chequear xq mierda cuando actualizo solo el cbu o el alias el otro se vuelve a actualizar como vacío
 								setUser({ ...userProfile, userCbu: e.target.value });
 							}}
 						/>
@@ -169,7 +168,6 @@ export function UserProfile(): JSX.Element {
 							type="text"
 							value={userProfile.userAlias}
 							onChange={e => {
-								//TODO: chequear xq mierda cuando actualizo solo el cbu o el alias el otro se vuelve a actualizar como vacío
 								setUser({ ...userProfile, userAlias: e.target.value });
 							}}
 						/>
