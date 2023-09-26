@@ -1,11 +1,12 @@
-import { login } from "./login";
-import { navigation } from "./navigation";
-import { register } from "./register";
-import { recoverKey } from "./recoverKey";
-import { settingNewPassword } from "./settingNewPassword";
-import { userProfile } from "./userProfile";
-import { createEvent } from "./createEvent";
-import { eventHome} from "./eventHome"
+import { login } from './login';
+import { navigation } from './navigation';
+import { register } from './register';
+import { recoverKey } from './recoverKey';
+import { settingNewPassword } from './settingNewPassword';
+import { userProfile } from './userProfile';
+import { createEvent } from './createEvent';
+import { eventHome } from './eventHome';
+import { event } from './event';
 
 export const enUS = Object.seal({
 	appName: 'Eat-Meat',
@@ -16,5 +17,6 @@ export const enUS = Object.seal({
 	settingNewPassword,
 	userProfile,
 	createEvent,
-	eventHome
+	eventHome,
+	event
 });

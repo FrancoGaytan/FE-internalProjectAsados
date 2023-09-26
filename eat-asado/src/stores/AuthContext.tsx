@@ -36,7 +36,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 			.then(res => {
 				/**
 				 * @todo: Ver si vale la pena guardar 2 keys. De momento dejalo asi.
-				*/
+				 */
 				localStorage.setItem(localStorageKeys.user, JSON.stringify(res));
 				localStorage.setItem(localStorageKeys.token, JSON.stringify(res.jwt));
 
@@ -57,6 +57,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	 */
 	function logout() {
 		localStorage.removeItem(localStorageKeys.user);
+		localStorage.removeItem(localStorageKeys.token);
 		setUser(null);
 		navigate('/login');
 	}
