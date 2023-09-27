@@ -1,0 +1,49 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.assignContainer {
+	display: flex;
+
+	.btnText {
+		margin-top: 8px;
+		margin-left: 3px;
+		&.assign {
+			color: var(--backgroundNeutral);
+		}
+		&.unAssign {
+			color: var(--btnPrimaryDarker);
+		}
+	}
+
+	img {
+		&.assign {
+			background-image: url('../../../../public/assets/pictures/checkIcon.png');
+		}
+		&.unAssign {
+			background-image: url('../../../../public/assets/pictures/closeIcon.png');
+		}
+	}
+	.button {
+		border: none;
+		background-color: none;
+		font-family: var(--secondaryFont);
+		font-weight: bold;
+		cursor: pointer;
+		margin-top: 0px;
+		width: 25px;
+		height: 25px;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		&.assign {
+			color: var(--backgroundNeutral);
+			background-image: url('../../../../public/assets/pictures/checkIcon.png');
+		}
+		&.unAssign {
+			color: var(--btnPrimaryDarker);
+			background-image: url('../../../../public/assets/pictures/closeIcon.png');
+		}
+	}
+}

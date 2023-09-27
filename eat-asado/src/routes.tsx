@@ -1,6 +1,6 @@
 import { PathRouteProps } from 'react-router-dom';
 import { Translation } from './localization';
-import { CreateEvent, EventHome, Login, RecoverKey, Register, SettingNewPassword, UserProfile } from './pages';
+import { CreateEvent, EventHome, Event, Login, RecoverKey, Register, SettingNewPassword, UserProfile } from './pages';
 
 export interface IRoute extends PathRouteProps {
 	localizationKey?: keyof Translation['navigation'];
@@ -49,6 +49,12 @@ const routes: { [key: string]: IRoute } = {
 		path: '/createEvent',
 		localizationKey: 'createEvent',
 		element: <CreateEvent />,
+		isPublic: true
+	},
+	event: {
+		path: `/event/:eventId`,
+		localizationKey: 'event',
+		element: <Event />,
 		isPublic: true
 	}
 };

@@ -4,6 +4,7 @@ import { className } from '../../../utils/className';
 import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import styles from './styles.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface IEventData {
 	eventTitle: String;
@@ -14,6 +15,7 @@ interface IEventData {
 }
 
 interface IEventCardProps {
+	eventId: String; //esto es nuevo, necesito saber si me la trae o no
 	eventState: TEventState;
 	eventDateTime: Date;
 	eventData: IEventData;
@@ -21,6 +23,8 @@ interface IEventCardProps {
 
 const EventCard = (props: IEventCardProps) => {
 	const lang = useTranslation('eventHome');
+
+	const navigate = useNavigate();
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -37,13 +41,19 @@ const EventCard = (props: IEventCardProps) => {
 	const evParticipants = props.eventData.eventParticipants;
 	const evParticipantsLimit = props.eventData.eventParticipantLimit;
 	const evCook = props.eventData.eventCook;
+	const evId = props.eventId;
 
 	const evDate = evDateTime.getDate().toString() + '. ' + evDateTime.getMonth().toString() + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 
-	const handleInfo = () => {};
+	const handleInfo = () => {
+		navigate(`/event/${evId}`);
+	};
 
-	const handleParticipation = () => {};
+	const handleParticipation = () => {
+		navigate(`/event/${evId}`);
+		//TODO: Agregar la inscripcion del usuario al evento
+	};
 
 	const calculateAvailability = () => {
 		let availability = Number(evParticipantsLimit) - Number(evParticipants);
