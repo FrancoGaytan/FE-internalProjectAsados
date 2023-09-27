@@ -53,5 +53,9 @@ export const eventHome = Object.seal({
 	diners: 'Diners: ',
 	deleteEventBtn: 'Delete Event',
 	closeEventBtn: 'Close Event',
-	reopenEventBtn: 'Re-Open Event'
+	reopenEventBtn: 'Re-Open Event',
+	meOpt: ' Me',
+	emptyOpt: 'Unassigned',
+	payBtn: 'Pay',
+	unassignAtClosing: 'You cant close an event which doesnt have assign cook or shopping designee'
 });

@@ -24,6 +24,7 @@ export function Event(): JSX.Element {
 	const userIdParams = useParams();
 
 	const itemStepsData = useMemo(
+		//TODO: fijate si a esto lo tenes que usar en algun lado, sino volalo
 		() => [
 			{ title: lang.LogInTheApp.title, description: lang.LogInTheApp.description, imagePath: '/assets/pictures/joinAppLogo.png' },
 			{ title: lang.joinToAnBarbecue.title, description: lang.joinToAnBarbecue.description, imagePath: '/assets/pictures/calendarLogo.png' },
@@ -57,9 +58,9 @@ export function Event(): JSX.Element {
 		subscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
 				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
+				setTimeout(() => window.location.reload(), 1000);
 			})
-			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR))
-			.finally(() => window.location.reload());
+			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR));
 	}
 
 	function removeResponsabilitiesAtUnsubscribing(): void {
@@ -71,9 +72,9 @@ export function Event(): JSX.Element {
 		unsubscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
 				setAlert(`${lang.userRemovedSuccessfully}!`, AlertTypes.SUCCESS);
+				setTimeout(() => window.location.reload(), 1000);
 			})
-			.catch(e => setAlert(`${lang.userRemovingFailure}`, AlertTypes.ERROR))
-			.finally(() => window.location.reload());
+			.catch(e => setAlert(`${lang.userRemovingFailure}`, AlertTypes.ERROR));
 
 		removeResponsabilitiesAtUnsubscribing();
 	}
@@ -89,13 +90,13 @@ export function Event(): JSX.Element {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => window.location.reload())
+					.finally(() => setTimeout(() => window.location.reload(), 1000))
 			: editRoles(event?._id, { ...event, chef: null })
 					.then(res => {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => window.location.reload());
+					.finally(() => setTimeout(() => window.location.reload(), 1000));
 	}
 
 	function toogleShopDesignee(): void {
@@ -105,13 +106,13 @@ export function Event(): JSX.Element {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => window.location.reload())
+					.finally(() => setTimeout(() => window.location.reload(), 1000))
 			: editRoles(event?._id, { ...event, shoppingDesignee: null })
 					.then(res => {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => window.location.reload());
+					.finally(() => setTimeout(() => window.location.reload(), 1000));
 	}
 
 	function deleteTheEvent(): void {
@@ -124,24 +125,28 @@ export function Event(): JSX.Element {
 	}
 
 	function closeEvent(): void {
-		console.log(event);
-		editEvent(event?._id, { ...event, state: 'closed' })
-			.then(res => {
-				setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
-			})
-			.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
-			.finally(() => window.location.reload());
+		event.chef && event.shoppingDesignee
+			? editEvent(event?._id, { ...event, state: 'closed' })
+					.then(res => {
+						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
+					})
+					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
+					.finally(() => setTimeout(() => window.location.reload(), 1000))
+			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
 	}
 
 	function reopenEvent(): void {
 		//TODO: deuda tecnica hacer una sola funcion para closeEvent y reopenEvent
-		console.log(event);
 		editEvent(event?._id, { ...event, state: 'available' })
 			.then(res => {
 				setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
-			.finally(() => window.location.reload());
+			.finally(() => setTimeout(() => window.location.reload(), 1000));
+	}
+
+	function payCheck(): void {
+		alert('estas pagando');
 	}
 
 	useEffect(() => {
@@ -171,6 +176,8 @@ export function Event(): JSX.Element {
 	useEffect(() => {
 		setEvent(event);
 	}, [user, actualUser, event]);
+
+	console.log(event);
 
 	return (
 		<PrivateFormLayout>
@@ -218,22 +225,26 @@ export function Event(): JSX.Element {
 										{lang.cook}
 										{event.chef ? (event.chef._id === user?.id ? ' Me' : event.chef.name) : 'Vacante'}
 									</h5>
-									{event.chef && <AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>}
-									{!event.chef && <AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>}
+									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && (
+										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
+									)}
+									{!event.chef && event.state !== 'closed' && (
+										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
+									)}
 								</div>
 								<div className={styles.inChargeOpt}>
 									<h5 className={styles.infoData}>
 										{lang.buyer}{' '}
 										{event.shoppingDesignee
 											? event.shoppingDesignee._id === user?.id
-												? ' Me'
+												? lang.meOpt
 												: event.shoppingDesignee.name
-											: 'Vacante'}
+											: lang.emptyOpt}
 									</h5>
-									{event.shoppingDesignee && (
+									{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state !== 'closed' && (
 										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
 									)}
-									{!event.shoppingDesignee && (
+									{!event.shoppingDesignee && event.state !== 'closed' && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
 									)}
 								</div>
@@ -253,23 +264,42 @@ export function Event(): JSX.Element {
 						</main>
 
 						<section className={styles.btnSection}>
-							<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
-								{isUserIntoEvent() ? 'Bajarse' : 'Sumarse'}
-							</Button>
-							{event.organizer._id === user?.id && (
+							{event.state === 'available' && (
+								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
+									{isUserIntoEvent() ? 'Bajarse' : 'Sumarse'}
+								</Button>
+							)}
+							{event.organizer && event.organizer._id === user?.id && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => deleteTheEvent()}>
 									{lang.deleteEventBtn}
 								</Button>
 							)}
-							{event.organizer._id === user?.id && event.state !== 'closed' ? (
+							{event.organizer && event.organizer._id === user?.id && event.state !== 'closed' && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
 									{lang.closeEventBtn}
 								</Button>
-							) : (
+							)}
+							{event.organizer && event.organizer._id === user?.id && event.state === 'closed' && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
 									{lang.reopenEventBtn}
 								</Button>
 							)}
+							{event.shoppingDesignee &&
+								event.shoppingDesignee._id !== user?.id &&
+								event.state === 'closed' &&
+								(event.purchaseReceipts.length as number) === 0 && (
+									<Button className={styles.btnEvent} kind="tertiary" size="short">
+										{lang.payBtn}
+									</Button>
+								)}
+							{event.shoppingDesignee &&
+								event.shoppingDesignee._id !== user?.id &&
+								event.state === 'closed' &&
+								(event.purchaseReceipts.length as number) > 0 && (
+									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
+										{lang.payBtn}
+									</Button>
+								)}
 						</section>
 					</section>
 				)}
