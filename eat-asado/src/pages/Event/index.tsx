@@ -225,10 +225,10 @@ export function Event(): JSX.Element {
 										{lang.cook}
 										{event.chef ? (event.chef._id === user?.id ? ' Me' : event.chef.name) : 'Vacante'}
 									</h5>
-									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && (
+									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
 									)}
-									{!event.chef && event.state !== 'closed' && (
+									{!event.chef && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
 									)}
 								</div>
@@ -241,10 +241,13 @@ export function Event(): JSX.Element {
 												: event.shoppingDesignee.name
 											: lang.emptyOpt}
 									</h5>
-									{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state !== 'closed' && (
-										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
-									)}
-									{!event.shoppingDesignee && event.state !== 'closed' && (
+									{event.shoppingDesignee &&
+										event.shoppingDesignee._id === user?.id &&
+										event.state !== 'closed' &&
+										isUserIntoEvent() && (
+											<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
+										)}
+									{!event.shoppingDesignee && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
 									)}
 								</div>
