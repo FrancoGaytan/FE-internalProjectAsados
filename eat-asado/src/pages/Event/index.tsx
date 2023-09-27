@@ -225,6 +225,7 @@ export function Event(): JSX.Element {
 										{lang.cook}
 										{event.chef ? (event.chef._id === user?.id ? ' Me' : event.chef.name) : 'Vacante'}
 									</h5>
+
 									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && (
 										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
 									)}
