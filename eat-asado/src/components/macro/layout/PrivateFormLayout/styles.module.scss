@@ -20,6 +20,14 @@
 				align-items: center;
 				color: white;
 			}
+			.profileBtn {
+				width: 26px;
+				height: 26px;
+				margin-bottom: 28px;
+				margin-left: 12px;
+				background-image: url('../../../../../public/assets/pictures/profile.png');
+				background-size: cover;
+			}
 			.logoutBtnSection {
 				display: flex;
 
@@ -46,11 +54,13 @@
 			min-height: 121px;
 		}
 		.logo {
+			background-color: transparent;
 			background-image: url('../../../../../public/assets/pictures/eatAsadoTransparentLogo.png');
 			background-size: contain;
 			height: 150px;
 			width: 150px;
 			margin-left: 10%;
+			margin-bottom: 15px;
 			@media #{variables.media-query(max, lg)} {
 				transform: translateY(-15px);
 				height: 75px;

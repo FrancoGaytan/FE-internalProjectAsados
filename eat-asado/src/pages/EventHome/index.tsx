@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
@@ -7,7 +7,14 @@ import EventCard from '../../components/macro/EventCard/EventCard';
 import { TEventState } from '../../types/eventState';
 import { useEvent } from '../../stores/EventContext';
 import { useNavigate } from 'react-router-dom';
-import { getPublicEvents } from '../../service';
+import { getEventById, getPublicEvents } from '../../service';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { localStorageKeys } from '../../utils/localStorageKeys';
+import { LoginResponse } from '../../models/user';
+import { useAlert } from '../../stores/AlertContext';
+import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
+import { useAuth } from '../../stores/AuthContext';
+import { event } from '../../localization/en-us/event';
 
 interface IStepItem {
 	title: string;
@@ -20,6 +27,10 @@ export function EventHome(): JSX.Element {
 	const { publicEvents } = useEvent();
 	const { setPublicEvents } = useEvent();
 	const navigate = useNavigate();
+	const { setAlert } = useAlert();
+
+	const { user } = useAuth();
+	console.log('user' + user?.id);
 
 	const itemStepsData = useMemo(
 		() => [
@@ -48,6 +59,23 @@ export function EventHome(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	/* 	useEffect(() => {
+		const abortController = new AbortController(); //fijate que sale de aca
+
+		getEventById(user?.id, abortController.signal)
+			.then(res => {
+				setPrivateEvent(res);
+				console.log(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+				setAlert(`${lang.needsLogin}!`, AlertTypes.ERROR);
+			});
+
+		return () => abortController.abort();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user]); */
+
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -69,9 +97,10 @@ export function EventHome(): JSX.Element {
 								key={event._id}
 								eventId={event._id}
 								eventDateTime={event.datetime}
+								userId={user?.id}
 								eventState={event.state as TEventState}
 								eventData={{
-									eventTitle: event.description,
+									eventTitle: event.title,
 									eventCook: event.chef,
 									eventDescription: event.description,
 									eventParticipants: event.members,

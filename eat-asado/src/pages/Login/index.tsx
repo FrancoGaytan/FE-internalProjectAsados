@@ -10,7 +10,7 @@ import { useAuth } from '../../stores/AuthContext';
 export function Login(): JSX.Element {
 	const navigate = useNavigate();
 	const lang = useTranslation('login');
-	
+
 	const { login, isLoading } = useAuth();
 
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({

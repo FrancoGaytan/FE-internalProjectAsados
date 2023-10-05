@@ -11,6 +11,7 @@ interface IAuthContext {
 	user: LoginResponse | null;
 	isLoading: boolean;
 	setIsLoading: React.Dispatch<SetStateAction<boolean>>;
+	getUserFromLocalStorage: () => Object;
 	isAuthenticated: () => boolean;
 	setUser: React.Dispatch<SetStateAction<LoginResponse | null>>;
 	logout: () => void;
@@ -81,7 +82,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ user, isLoading, setIsLoading, isAuthenticated, setUser, logout, login }}>
+		<AuthContext.Provider value={{ user, isLoading, getUserFromLocalStorage, setIsLoading, isAuthenticated, setUser, logout, login }}>
 			{props.children}
 		</AuthContext.Provider>
 	);

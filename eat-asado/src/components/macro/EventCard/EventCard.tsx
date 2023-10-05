@@ -5,6 +5,11 @@ import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import styles from './styles.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getEventById } from '../../../service/eventService';
+import { useAlert } from '../../../stores/AlertContext';
+import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
+import { IEvent } from '../../../models/event';
 
 interface IEventData {
 	eventTitle: String;
@@ -15,16 +20,18 @@ interface IEventData {
 }
 
 interface IEventCardProps {
-	eventId: String; //esto es nuevo, necesito saber si me la trae o no
+	eventId: string; //esto es nuevo, necesito saber si me la trae o no
 	eventState: TEventState;
 	eventDateTime: Date;
 	eventData: IEventData;
+	userId: string | undefined;
 }
 
-const EventCard = (props: IEventCardProps) => {
+const EventCard = (props: IEventCardProps): any => {
 	const lang = useTranslation('eventHome');
-
+	const [privateEvent, setPrivateEvent] = useState<IEvent>();
 	const navigate = useNavigate();
+	const { setAlert } = useAlert();
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -48,10 +55,12 @@ const EventCard = (props: IEventCardProps) => {
 
 	const handleInfo = () => {
 		navigate(`/event/${evId}`);
+		window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
 	};
 
 	const handleParticipation = () => {
 		navigate(`/event/${evId}`);
+		window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
 		//TODO: Agregar la inscripcion del usuario al evento
 	};
 
@@ -60,26 +69,56 @@ const EventCard = (props: IEventCardProps) => {
 		return availability > 0;
 	};
 
-	const verifySubscription = () => {
-		//todo: esta funcion va a chequear en el back si el usuario esta subscripto a un evento o no, esta funcion quizas debería importarse de otro archivo
-		//x ahora le pongo una comparacion muy obvia
-		return false; //esto tiene qe retornar si esta subscripto o no
-	};
+	function verifySubscription(): boolean {
+		console.log(privateEvent?.members);
+		console.log(props.userId);
+		return !!privateEvent?.members.find(member => (member?._id as unknown) === props.userId);
+		//return false; /* privateEvent?.members.find(part: { _id: string }) => part._id === userId  */
+	}
+
+	function parseDateToCompare(date: Date) {
+		return (
+			`${date.getFullYear().toString()}` +
+			`${date.getMonth().toString().length > 1 ? date.getMonth().toString() : `0${date.getMonth().toString()}`}` +
+			`${date.getDate().toString().length > 1 ? date.getDate().toString() : `0${date.getDate().toString()}`}`
+		);
+	}
 
 	let eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
 	let subscribedUser: TSubscribedState = verifySubscription() ? 'subscribed' : 'not-subscribed'; // de aca tiene que obtener con una funcion si el usuario esta anotado o no al evento
 
 	const verifyState = () => {
-		if (subscribedUser === 'subscribed' && evState !== EventStatesEnum.CANCELED) {
+		console.log(parseDateToCompare(evDateTime));
+		console.log(parseDateToCompare(new Date('Nov 02 2023')));
+		console.log(parseDateToCompare(evDateTime) < parseDateToCompare(new Date()));
+		if (parseDateToCompare(evDateTime) < parseDateToCompare(new Date())) {
+			return EventStatesEnum.CLOSED;
+		} else if (subscribedUser === 'subscribed' && evState !== EventStatesEnum.CANCELED) {
 			return 'subscribed';
 		} else if (eventParticipationState === EventStatesEnum.FULL) {
 			return EventStatesEnum.FULL;
-		} else {
-			return evState;
-		}
+		} else return EventStatesEnum.AVAILABLE;
 	};
 
 	let eventDescription = verifyState();
+
+	useEffect(() => {
+		const abortController = new AbortController();
+		getEventById(evId, abortController.signal)
+			.then(res => {
+				setPrivateEvent(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+				setAlert(`${lang.needsLogin}!`, AlertTypes.ERROR);
+			});
+
+		return () => abortController.abort();
+	}, []);
+
+	useEffect(() => {
+		verifySubscription();
+	}, [privateEvent]);
 
 	return (
 		//la clase cardContainer tiene que ir acompañado con una clase que represente al estado del evento que trae por props
@@ -93,8 +132,9 @@ const EventCard = (props: IEventCardProps) => {
 				styles[evState ?? EventStatesEnum.CLOSED] //decidir bien que se va a mostrar si se esta suscripto y el evento se cierra
 			)}>
 			<section className={styles.cardTitleInfo}>
-				<div className={styles.availabilityDesc}>{eventDescription.toUpperCase()}</div>
+				<div className={styles.availabilityDesc}>{eventDescription?.toUpperCase()}</div>
 				{/* todo: buscar la manera de incluir el lang para traducir el estado de evento */}
+
 				<div className={styles.eventCardDate}>{evDate.toString()}</div>
 			</section>
 			<section className={styles.cardMainInfo}>
@@ -112,9 +152,9 @@ const EventCard = (props: IEventCardProps) => {
 				</div>
 				<section className={styles.cardBtn}>
 					<div className={styles.participateBtn}>
-						{evState === EventStatesEnum.AVAILABLE &&
-							eventParticipationState === EventStatesEnum.INCOMPLETED &&
-							subscribedUser !== 'subscribed' && (
+						{!verifySubscription() &&
+							evState === EventStatesEnum.AVAILABLE &&
+							eventParticipationState === EventStatesEnum.INCOMPLETED && (
 								<Button
 									kind="secondary"
 									size="small"

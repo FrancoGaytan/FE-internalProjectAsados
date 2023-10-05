@@ -3,13 +3,22 @@
 @use '/src/styles/custom-properties';
 
 .closeBtn {
-	background-color: var(--backgroundNeutralLighter);
-	height: 25px;
-	width: 2px;
+	background-color: transparent;
 	transform: rotate(45deg);
 	position: absolute;
 	top: 20px;
 	right: 50px;
+
+	&::before {
+		content: '';
+		background-color: var(--backgroundNeutralLighter);
+		height: 25px;
+		width: 2px;
+		transform: rotate(180deg);
+		position: absolute;
+		top: 0px;
+		right: 0px;
+	}
 
 	&::after {
 		content: '';

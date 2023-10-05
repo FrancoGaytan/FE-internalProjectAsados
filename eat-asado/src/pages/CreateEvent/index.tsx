@@ -6,22 +6,27 @@ import styles from './styles.module.scss';
 import { createEvent } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
 import { IEvent } from '../../models/event';
+import { IUser } from '../../models/user';
 import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
+import { getUserById } from '../../service';
+import { useNavigate } from 'react-router-dom';
 
 export function CreateEvent(): JSX.Element {
 	const lang = useTranslation('createEvent');
 	const { user } = useAuth();
 	const { setAlert } = useAlert();
 	const { setIsLoading } = useAuth();
+	const [fullUser, setFullUser] = useState<IUser>();
+	const navigate = useNavigate();
 
 	const initialEvent: IEvent = {
 		title: '',
 		datetime: new Date(),
 		description: '',
 		memberLimit: 0,
-		members: [user?.id as string],
+		members: [],
 		state: EventStatesEnum.AVAILABLE,
 		organizer: user?.id as string,
 		isChef: undefined,
@@ -41,27 +46,48 @@ export function CreateEvent(): JSX.Element {
 		}
 	};
 
+	const handleGoBack = (): void => {
+		navigate('/');
+	};
+
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
 		setIsLoading(true);
 
-		setEvent({ ...event, members: [user?.id as string], organizer: user?.id as string });
+		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
 
 		createEvent(event)
 			.then(res => {
 				setAlert(`${lang.eventRegisteredConfirmation}!`, AlertTypes.SUCCESS);
+				handleGoBack();
 			})
 			.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
 			.finally(() => setIsLoading(false));
 	};
 
 	useEffect(() => {
-		setEvent({ ...event, members: [user?.id as string], organizer: user?.id as string });
+		const abortController = new AbortController(); //fijate que sale de aca
+
+		getUserById(user?.id, abortController.signal)
+			.then(res => {
+				setFullUser(res);
+				console.log(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+				setAlert(`${e}`, AlertTypes.ERROR);
+			});
+
+		return () => abortController.abort();
+	}, []);
+
+	useEffect(() => {
+		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
 	}, [user]);
 
 	return (
 		<FormLayout>
-			<div className={styles.closeBtn}></div>
+			<button className={styles.closeBtn} onClick={handleGoBack}></button>
 			<label className={styles.title}>{lang.createEventTitle}</label>
 			<div className={styles.inputSection}>
 				<section className={styles.firstColumn}>
