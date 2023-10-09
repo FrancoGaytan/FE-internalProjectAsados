@@ -66,7 +66,7 @@ export function CreateEvent(): JSX.Element {
 	};
 
 	useEffect(() => {
-		const abortController = new AbortController(); //fijate que sale de aca
+		const abortController = new AbortController();
 
 		getUserById(user?.id, abortController.signal)
 			.then(res => {
