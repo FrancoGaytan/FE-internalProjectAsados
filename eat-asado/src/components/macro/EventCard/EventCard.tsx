@@ -10,6 +10,7 @@ import { getEventById } from '../../../service/eventService';
 import { useAlert } from '../../../stores/AlertContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { IEvent } from '../../../models/event';
+import EventHeader from './EventHeader/EventHeader';
 
 interface IEventData {
 	eventTitle: String;
@@ -50,7 +51,7 @@ const EventCard = (props: IEventCardProps): any => {
 	const evCook = props.eventData.eventCook;
 	const evId = props.eventId;
 
-	const evDate = evDateTime.getDate().toString() + '. ' + evDateTime.getMonth().toString() + '. ' + evDateTime.getFullYear().toString() + '.';
+	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 
 	const handleInfo = () => {
@@ -70,37 +71,10 @@ const EventCard = (props: IEventCardProps): any => {
 	};
 
 	function verifySubscription(): boolean {
-		console.log(privateEvent?.members);
-		console.log(props.userId);
 		return !!privateEvent?.members.find(member => (member?._id as unknown) === props.userId);
-		//return false; /* privateEvent?.members.find(part: { _id: string }) => part._id === userId  */
-	}
-
-	function parseDateToCompare(date: Date) {
-		return (
-			`${date.getFullYear().toString()}` +
-			`${date.getMonth().toString().length > 1 ? date.getMonth().toString() : `0${date.getMonth().toString()}`}` +
-			`${date.getDate().toString().length > 1 ? date.getDate().toString() : `0${date.getDate().toString()}`}`
-		);
 	}
 
 	let eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
-	let subscribedUser: TSubscribedState = verifySubscription() ? 'subscribed' : 'not-subscribed'; // de aca tiene que obtener con una funcion si el usuario esta anotado o no al evento
-
-	const verifyState = () => {
-		console.log(parseDateToCompare(evDateTime));
-		console.log(parseDateToCompare(new Date('Nov 02 2023')));
-		console.log(parseDateToCompare(evDateTime) < parseDateToCompare(new Date()));
-		if (parseDateToCompare(evDateTime) < parseDateToCompare(new Date())) {
-			return EventStatesEnum.CLOSED;
-		} else if (subscribedUser === 'subscribed' && evState !== EventStatesEnum.CANCELED) {
-			return 'subscribed';
-		} else if (eventParticipationState === EventStatesEnum.FULL) {
-			return EventStatesEnum.FULL;
-		} else return EventStatesEnum.AVAILABLE;
-	};
-
-	let eventDescription = verifyState();
 
 	useEffect(() => {
 		const abortController = new AbortController();
@@ -110,7 +84,7 @@ const EventCard = (props: IEventCardProps): any => {
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
-				setAlert(`${lang.needsLogin}!`, AlertTypes.ERROR);
+				//setAlert(`${lang.needsLogin}!`, AlertTypes.ERROR);
 			});
 
 		return () => abortController.abort();
@@ -122,21 +96,14 @@ const EventCard = (props: IEventCardProps): any => {
 
 	return (
 		//la clase cardContainer tiene que ir acompañado con una clase que represente al estado del evento que trae por props
-		<div
-			{...className(
-				styles.cardContainer, //aca es importante el orden, si es que no condiciono las clases
-				styles[evState ?? EventStatesEnum.AVAILABLE],
-				styles[evState ?? EventStatesEnum.CANCELED],
-				styles[eventParticipationState ?? EventStatesEnum.FULL],
-				styles[subscribedUser ?? 'subscribed'],
-				styles[evState ?? EventStatesEnum.CLOSED] //decidir bien que se va a mostrar si se esta suscripto y el evento se cierra
-			)}>
-			<section className={styles.cardTitleInfo}>
-				<div className={styles.availabilityDesc}>{eventDescription?.toUpperCase()}</div>
-				{/* todo: buscar la manera de incluir el lang para traducir el estado de evento */}
+		<div {...className(styles.cardContainer)}>
+			<EventHeader
+				evState={evState}
+				evParticipants={evParticipants}
+				evParticipantsLimit={evParticipantsLimit}
+				evDate={evDate}
+				subscribedUser={verifySubscription()}></EventHeader>
 
-				<div className={styles.eventCardDate}>{evDate.toString()}</div>
-			</section>
 			<section className={styles.cardMainInfo}>
 				<div className={styles.eventTime}>{evTime} hrs</div>
 				<div className={styles.eventTitle}>{evTitle}</div>

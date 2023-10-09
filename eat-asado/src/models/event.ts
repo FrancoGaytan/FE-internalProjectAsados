@@ -18,6 +18,7 @@ export interface IPublicEvent {
 	datetime: Date;
 	description: string;
 	members: number;
+	memberLimit: number;
 	state: EventStatesEnum;
 	title: string;
 	_id: string;

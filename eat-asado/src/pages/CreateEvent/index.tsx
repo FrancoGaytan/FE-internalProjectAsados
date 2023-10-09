@@ -59,6 +59,7 @@ export function CreateEvent(): JSX.Element {
 		createEvent(event)
 			.then(res => {
 				setAlert(`${lang.eventRegisteredConfirmation}!`, AlertTypes.SUCCESS);
+				console.log(event);
 				handleGoBack();
 			})
 			.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
@@ -71,11 +72,10 @@ export function CreateEvent(): JSX.Element {
 		getUserById(user?.id, abortController.signal)
 			.then(res => {
 				setFullUser(res);
-				console.log(res);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
-				setAlert(`${e}`, AlertTypes.ERROR);
+				//setAlert(`${e}`, AlertTypes.ERROR);
 			});
 
 		return () => abortController.abort();
@@ -83,7 +83,7 @@ export function CreateEvent(): JSX.Element {
 
 	useEffect(() => {
 		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
-	}, [user]);
+	}, [user, event]);
 
 	return (
 		<FormLayout>

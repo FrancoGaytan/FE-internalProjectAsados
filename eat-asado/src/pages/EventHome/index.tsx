@@ -7,14 +7,8 @@ import EventCard from '../../components/macro/EventCard/EventCard';
 import { TEventState } from '../../types/eventState';
 import { useEvent } from '../../stores/EventContext';
 import { useNavigate } from 'react-router-dom';
-import { getEventById, getPublicEvents } from '../../service';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import { localStorageKeys } from '../../utils/localStorageKeys';
-import { LoginResponse } from '../../models/user';
-import { useAlert } from '../../stores/AlertContext';
-import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
+import { getPublicEvents } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
-import { event } from '../../localization/en-us/event';
 
 interface IStepItem {
 	title: string;
@@ -27,10 +21,8 @@ export function EventHome(): JSX.Element {
 	const { publicEvents } = useEvent();
 	const { setPublicEvents } = useEvent();
 	const navigate = useNavigate();
-	const { setAlert } = useAlert();
 
 	const { user } = useAuth();
-	console.log('user' + user?.id);
 
 	const itemStepsData = useMemo(
 		() => [
@@ -56,25 +48,7 @@ export function EventHome(): JSX.Element {
 			});
 
 		return () => abortController.abort();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	/* 	useEffect(() => {
-		const abortController = new AbortController(); //fijate que sale de aca
-
-		getEventById(user?.id, abortController.signal)
-			.then(res => {
-				setPrivateEvent(res);
-				console.log(res);
-			})
-			.catch(e => {
-				console.error('Catch in context: ', e);
-				setAlert(`${lang.needsLogin}!`, AlertTypes.ERROR);
-			});
-
-		return () => abortController.abort();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user]); */
 
 	return (
 		<PrivateFormLayout>
@@ -91,7 +65,6 @@ export function EventHome(): JSX.Element {
 				</section>
 				<section className={styles.eventsContainer}>
 					{publicEvents.map(event => {
-						//TODO: hay que ordenar los eventos por fecha de realizacion
 						return (
 							<EventCard
 								key={event._id}
@@ -104,8 +77,8 @@ export function EventHome(): JSX.Element {
 									eventCook: event.chef,
 									eventDescription: event.description,
 									eventParticipants: event.members,
-									eventParticipantLimit: 10
-								}} //FIXME: hay que crear eventos con todos los datos para que esto reconozca todos
+									eventParticipantLimit: event.memberLimit
+								}}
 							/>
 						);
 					})}

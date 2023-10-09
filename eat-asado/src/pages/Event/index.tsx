@@ -23,16 +23,6 @@ export function Event(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
 
-	const itemStepsData = useMemo(
-		//TODO: fijate si a esto lo tenes que usar en algun lado, sino volalo
-		() => [
-			{ title: lang.LogInTheApp.title, description: lang.LogInTheApp.description, imagePath: '/assets/pictures/joinAppLogo.png' },
-			{ title: lang.joinToAnBarbecue.title, description: lang.joinToAnBarbecue.description, imagePath: '/assets/pictures/calendarLogo.png' },
-			{ title: lang.letsEat.title, description: lang.letsEat.description, imagePath: '/assets/pictures/chickenLeg.png' }
-		],
-		[lang]
-	);
-
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
 		if (Number(minutes) < 10) {
@@ -176,8 +166,6 @@ export function Event(): JSX.Element {
 	useEffect(() => {
 		setEvent(event);
 	}, [user, actualUser, event]);
-
-	console.log(event);
 
 	return (
 		<PrivateFormLayout>
