@@ -59,7 +59,6 @@ export function CreateEvent(): JSX.Element {
 		createEvent(event)
 			.then(res => {
 				setAlert(`${lang.eventRegisteredConfirmation}!`, AlertTypes.SUCCESS);
-				console.log(event);
 				handleGoBack();
 			})
 			.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
