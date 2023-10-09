@@ -57,5 +57,6 @@ export const eventHome = Object.seal({
 	meOpt: 'Yo',
 	emptyOpt: 'Sin Asignar',
 	payBtn: 'Pagar',
-	unassignAtClosing: 'No puede cerrar un evento si aun no tiene asignados los responsables'
+	unassignAtClosing: 'No puede cerrar un evento si aun no tiene asignados los responsables',
+	needsLogin: 'Necesita logearse para acceder a esta funcionalidad'
 });

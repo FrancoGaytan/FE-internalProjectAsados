@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
@@ -8,6 +8,7 @@ import { TEventState } from '../../types/eventState';
 import { useEvent } from '../../stores/EventContext';
 import { useNavigate } from 'react-router-dom';
 import { getPublicEvents } from '../../service';
+import { useAuth } from '../../stores/AuthContext';
 
 interface IStepItem {
 	title: string;
@@ -20,6 +21,8 @@ export function EventHome(): JSX.Element {
 	const { publicEvents } = useEvent();
 	const { setPublicEvents } = useEvent();
 	const navigate = useNavigate();
+
+	const { user } = useAuth();
 
 	const itemStepsData = useMemo(
 		() => [
@@ -45,7 +48,6 @@ export function EventHome(): JSX.Element {
 			});
 
 		return () => abortController.abort();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -63,20 +65,20 @@ export function EventHome(): JSX.Element {
 				</section>
 				<section className={styles.eventsContainer}>
 					{publicEvents.map(event => {
-						//TODO: hay que ordenar los eventos por fecha de realizacion
 						return (
 							<EventCard
 								key={event._id}
 								eventId={event._id}
 								eventDateTime={event.datetime}
+								userId={user?.id}
 								eventState={event.state as TEventState}
 								eventData={{
-									eventTitle: event.description,
+									eventTitle: event.title,
 									eventCook: event.chef,
 									eventDescription: event.description,
 									eventParticipants: event.members,
-									eventParticipantLimit: 10
-								}} //FIXME: hay que crear eventos con todos los datos para que esto reconozca todos
+									eventParticipantLimit: event.memberLimit
+								}}
 							/>
 						);
 					})}

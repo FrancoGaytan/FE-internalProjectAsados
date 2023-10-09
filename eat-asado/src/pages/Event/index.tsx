@@ -23,16 +23,6 @@ export function Event(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
 
-	const itemStepsData = useMemo(
-		//TODO: fijate si a esto lo tenes que usar en algun lado, sino volalo
-		() => [
-			{ title: lang.LogInTheApp.title, description: lang.LogInTheApp.description, imagePath: '/assets/pictures/joinAppLogo.png' },
-			{ title: lang.joinToAnBarbecue.title, description: lang.joinToAnBarbecue.description, imagePath: '/assets/pictures/calendarLogo.png' },
-			{ title: lang.letsEat.title, description: lang.letsEat.description, imagePath: '/assets/pictures/chickenLeg.png' }
-		],
-		[lang]
-	);
-
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
 		if (Number(minutes) < 10) {
@@ -136,7 +126,7 @@ export function Event(): JSX.Element {
 	}
 
 	function reopenEvent(): void {
-		//TODO: deuda tecnica hacer una sola funcion para closeEvent y reopenEvent
+		//TODO: deuda tecnica hacer una sola funcion para closeEvent y reopenEvent --> algo como: toogleEvent
 		editEvent(event?._id, { ...event, state: 'available' })
 			.then(res => {
 				setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
@@ -176,8 +166,6 @@ export function Event(): JSX.Element {
 	useEffect(() => {
 		setEvent(event);
 	}, [user, actualUser, event]);
-
-	console.log(event);
 
 	return (
 		<PrivateFormLayout>
@@ -226,10 +214,10 @@ export function Event(): JSX.Element {
 										{event.chef ? (event.chef._id === user?.id ? ' Me' : event.chef.name) : 'Vacante'}
 									</h5>
 
-									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && (
+									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
 									)}
-									{!event.chef && event.state !== 'closed' && (
+									{!event.chef && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
 									)}
 								</div>
@@ -242,10 +230,13 @@ export function Event(): JSX.Element {
 												: event.shoppingDesignee.name
 											: lang.emptyOpt}
 									</h5>
-									{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state !== 'closed' && (
-										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
-									)}
-									{!event.shoppingDesignee && event.state !== 'closed' && (
+									{event.shoppingDesignee &&
+										event.shoppingDesignee._id === user?.id &&
+										event.state !== 'closed' &&
+										isUserIntoEvent() && (
+											<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
+										)}
+									{!event.shoppingDesignee && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
 									)}
 								</div>

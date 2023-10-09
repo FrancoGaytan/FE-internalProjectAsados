@@ -57,5 +57,6 @@ export const eventHome = Object.seal({
 	meOpt: ' Me',
 	emptyOpt: 'Unassigned',
 	payBtn: 'Pay',
-	unassignAtClosing: 'You cant close an event which doesnt have assign cook or shopping designee'
+	unassignAtClosing: 'You cant close an event which doesnt have assign cook or shopping designee',
+	needsLogin: 'Needs Login to access to this functionality'
 });

@@ -5,6 +5,12 @@ import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import styles from './styles.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getEventById } from '../../../service/eventService';
+import { useAlert } from '../../../stores/AlertContext';
+import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
+import { IEvent } from '../../../models/event';
+import EventHeader from './EventHeader/EventHeader';
 
 interface IEventData {
 	eventTitle: String;
@@ -15,16 +21,18 @@ interface IEventData {
 }
 
 interface IEventCardProps {
-	eventId: String; //esto es nuevo, necesito saber si me la trae o no
+	eventId: string; //esto es nuevo, necesito saber si me la trae o no
 	eventState: TEventState;
 	eventDateTime: Date;
 	eventData: IEventData;
+	userId: string | undefined;
 }
 
-const EventCard = (props: IEventCardProps) => {
+const EventCard = (props: IEventCardProps): any => {
 	const lang = useTranslation('eventHome');
-
+	const [privateEvent, setPrivateEvent] = useState<IEvent>();
 	const navigate = useNavigate();
+	const { setAlert } = useAlert();
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -43,15 +51,17 @@ const EventCard = (props: IEventCardProps) => {
 	const evCook = props.eventData.eventCook;
 	const evId = props.eventId;
 
-	const evDate = evDateTime.getDate().toString() + '. ' + evDateTime.getMonth().toString() + '. ' + evDateTime.getFullYear().toString() + '.';
+	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 
 	const handleInfo = () => {
 		navigate(`/event/${evId}`);
+		window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
 	};
 
 	const handleParticipation = () => {
 		navigate(`/event/${evId}`);
+		window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
 		//TODO: Agregar la inscripcion del usuario al evento
 	};
 
@@ -60,43 +70,40 @@ const EventCard = (props: IEventCardProps) => {
 		return availability > 0;
 	};
 
-	const verifySubscription = () => {
-		//todo: esta funcion va a chequear en el back si el usuario esta subscripto a un evento o no, esta funcion quizas debería importarse de otro archivo
-		//x ahora le pongo una comparacion muy obvia
-		return false; //esto tiene qe retornar si esta subscripto o no
-	};
+	function verifySubscription(): boolean {
+		return !!privateEvent?.members.find(member => (member?._id as unknown) === props.userId);
+	}
 
 	let eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
-	let subscribedUser: TSubscribedState = verifySubscription() ? 'subscribed' : 'not-subscribed'; // de aca tiene que obtener con una funcion si el usuario esta anotado o no al evento
 
-	const verifyState = () => {
-		if (subscribedUser === 'subscribed' && evState !== EventStatesEnum.CANCELED) {
-			return 'subscribed';
-		} else if (eventParticipationState === EventStatesEnum.FULL) {
-			return EventStatesEnum.FULL;
-		} else {
-			return evState;
-		}
-	};
+	useEffect(() => {
+		const abortController = new AbortController();
+		getEventById(evId, abortController.signal)
+			.then(res => {
+				setPrivateEvent(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+				//setAlert(`${lang.needsLogin}!`, AlertTypes.ERROR);
+			});
 
-	let eventDescription = verifyState();
+		return () => abortController.abort();
+	}, []);
+
+	useEffect(() => {
+		verifySubscription();
+	}, [privateEvent]);
 
 	return (
 		//la clase cardContainer tiene que ir acompañado con una clase que represente al estado del evento que trae por props
-		<div
-			{...className(
-				styles.cardContainer, //aca es importante el orden, si es que no condiciono las clases
-				styles[evState ?? EventStatesEnum.AVAILABLE],
-				styles[evState ?? EventStatesEnum.CANCELED],
-				styles[eventParticipationState ?? EventStatesEnum.FULL],
-				styles[subscribedUser ?? 'subscribed'],
-				styles[evState ?? EventStatesEnum.CLOSED] //decidir bien que se va a mostrar si se esta suscripto y el evento se cierra
-			)}>
-			<section className={styles.cardTitleInfo}>
-				<div className={styles.availabilityDesc}>{eventDescription.toUpperCase()}</div>
-				{/* todo: buscar la manera de incluir el lang para traducir el estado de evento */}
-				<div className={styles.eventCardDate}>{evDate.toString()}</div>
-			</section>
+		<div {...className(styles.cardContainer)}>
+			<EventHeader
+				evState={evState}
+				evParticipants={evParticipants}
+				evParticipantsLimit={evParticipantsLimit}
+				evDate={evDate}
+				subscribedUser={verifySubscription()}></EventHeader>
+
 			<section className={styles.cardMainInfo}>
 				<div className={styles.eventTime}>{evTime} hrs</div>
 				<div className={styles.eventTitle}>{evTitle}</div>
@@ -112,9 +119,9 @@ const EventCard = (props: IEventCardProps) => {
 				</div>
 				<section className={styles.cardBtn}>
 					<div className={styles.participateBtn}>
-						{evState === EventStatesEnum.AVAILABLE &&
-							eventParticipationState === EventStatesEnum.INCOMPLETED &&
-							subscribedUser !== 'subscribed' && (
+						{!verifySubscription() &&
+							evState === EventStatesEnum.AVAILABLE &&
+							eventParticipationState === EventStatesEnum.INCOMPLETED && (
 								<Button
 									kind="secondary"
 									size="small"

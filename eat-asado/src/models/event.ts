@@ -7,7 +7,7 @@ export interface IEvent {
 	description: string;
 	memberLimit: number;
 	state: string;
-	members: string[];
+	members: IUser[];
 	organizer: string;
 	isChef?: string | undefined;
 	isShoppingDesignee?: string | undefined;
@@ -18,7 +18,9 @@ export interface IPublicEvent {
 	datetime: Date;
 	description: string;
 	members: number;
+	memberLimit: number;
 	state: EventStatesEnum;
+	title: string;
 	_id: string;
 }
 
