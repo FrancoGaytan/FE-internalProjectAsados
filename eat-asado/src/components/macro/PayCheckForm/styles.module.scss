@@ -1,0 +1,11 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.paycheck {
+	background-color: red;
+}
+
+.paycheckContent {
+	margin-left: 15px;
+}

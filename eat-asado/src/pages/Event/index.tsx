@@ -13,6 +13,9 @@ import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { getUserById, editRoles, deleteEvent, editEvent } from '../../service';
+import Modal from '../../components/macro/Modal/Modal';
+import PayCheckForm from '../../components/macro/PayCheckForm/PayCheckForm';
+import { EventResponse, IEvent } from '../../models/event';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -22,6 +25,7 @@ export function Event(): JSX.Element {
 	const [event, setEvent] = useState<any>(); //TODO: Sacar o typear este any
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
+	const [modalState, setModalState] = useState(false);
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -136,7 +140,11 @@ export function Event(): JSX.Element {
 	}
 
 	function payCheck(): void {
-		alert('estas pagando');
+		setModalState(true);
+	}
+
+	function closeModal() {
+		setModalState(false);
 	}
 
 	useEffect(() => {
@@ -279,7 +287,7 @@ export function Event(): JSX.Element {
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === 'closed' &&
-								(event.purchaseReceipts.length as number) === 0 && (
+								(event.purchaseReceipts.length as number) === 0 && ( //esto esta bien, x ahora quedan los dos, pero el de abajo tiene que cambiar para que haya uno solo a la vez
 									<Button className={styles.btnEvent} kind="tertiary" size="short">
 										{lang.payBtn}
 									</Button>
@@ -287,7 +295,7 @@ export function Event(): JSX.Element {
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === 'closed' &&
-								(event.purchaseReceipts.length as number) > 0 && (
+								(event.purchaseReceipts.length as number) === 0 && ( //por ahora para verlo lo dejo en === esto tiene que ser !==
 									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
 										{lang.payBtn}
 									</Button>
@@ -296,6 +304,9 @@ export function Event(): JSX.Element {
 					</section>
 				)}
 			</div>
+			<Modal isOpen={modalState} closeModal={() => closeModal}>
+				<PayCheckForm event={event} shoppingDesignee={event?.shoppingDesignee}></PayCheckForm>
+			</Modal>
 		</PrivateFormLayout>
 	);
 }

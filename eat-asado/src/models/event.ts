@@ -35,14 +35,15 @@ export interface createRequest {
 	shoppingDesignee?: number;
 }
 
-export interface createResponse {
+export interface EventResponse {
 	title: string;
 	datetime: Date;
 	description: string;
 	memberLimit: number;
 	state: string;
 	members: string[];
-	organizer: string;
+	organizer: IUser;
+	shoppingDesignee: IUser;
 	transferReceipts: [];
 	purchaseReceipts: [];
 	_id: string;

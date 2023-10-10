@@ -1,0 +1,40 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	display: none; //aca tiene que ir en none, así cuando se le pasa la clase is-open se cambia a flex
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(#000000, 0.5);
+	z-index: 999; //despues crear una variable para esto
+	animation: reveal ease forwards 250ms;
+	color: white;
+	&.isOpen {
+		display: flex;
+	}
+}
+
+.modalContainer {
+	position: relative;
+	width: 100%;
+	max-height: 75vh;
+	max-width: 500px;
+	padding: 50px;
+	border-radius: 5px;
+	background-color: var(--backgroundMain);
+	transition: background-color ease 250ms;
+	margin: auto;
+	z-index: 900;
+}
+
+.closeModalBtn {
+	position: absolute;
+	top: 0rem;
+	right: 1.5rem;
+}
