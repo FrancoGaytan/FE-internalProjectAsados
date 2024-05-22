@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
 import { useAuth } from '../../stores/AuthContext';
 import { editUser, getUserById } from '../../service';
-import FormLayout from '../../components/macro/layout/FormLayout';
 import { useAlert } from '../../stores/AlertContext';
 import { useNavigate } from 'react-router-dom';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
@@ -13,6 +12,7 @@ import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 export interface UserProfileInterface {
 	userImage?: File;
 	userName?: string;
+	userLastName?: string;
 	userCbu?: string;
 	userAlias?: string;
 	userVegan?: boolean;
@@ -24,6 +24,7 @@ export interface UserProfileInterface {
 export interface IUserByIdResponse {
 	email?: string;
 	name?: string;
+	lastName?: string;
 	password?: string;
 	cbu?: string;
 	alias?: string;
@@ -35,6 +36,7 @@ export function UserProfile(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUserByIdResponse>({
 		email: '',
 		name: '',
+		lastName: '',
 		alias: '',
 		cbu: '',
 		password: '',
@@ -49,6 +51,7 @@ export function UserProfile(): JSX.Element {
 	const initialUser = {
 		userImage: emptyFile,
 		userName: '',
+		lastName: '',
 		userCbu: '',
 		userAlias: '',
 		userVegan: chekingSpecialDiet('vegan'),
@@ -79,6 +82,7 @@ export function UserProfile(): JSX.Element {
 		const provisionalSendingUser = {
 			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
 			name: userProfile.userName,
+			lastName: userProfile.userLastName,
 			cbu: userProfile.userCbu ? userProfile.userCbu : actualUser.cbu,
 			alias: userProfile.userAlias ? userProfile.userAlias : actualUser.alias,
 			specialDiet: checkSpecialDiet()
@@ -182,6 +186,19 @@ export function UserProfile(): JSX.Element {
 							value={userProfile.userName}
 							onChange={e => {
 								setUser({ ...userProfile, userName: e.target.value });
+							}}
+						/>
+						<label htmlFor="lastName" className={styles.cbuLabel}>
+							{lang.lastName}
+						</label>
+						<input
+							className={styles.input}
+							id="lastName"
+							placeholder={actualUser.lastName}
+							type="text"
+							value={userProfile.userLastName}
+							onChange={e => {
+								setUser({ ...userProfile, userLastName: e.target.value });
 							}}
 						/>
 					</div>

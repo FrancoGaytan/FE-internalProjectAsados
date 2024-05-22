@@ -65,6 +65,16 @@
 		}
 	}
 
+	&.finished {
+		border-top: 5px solid var(--btnPrimaryDarker);
+		.availabilityDesc {
+			background-color: var(--btnPrimaryDarker);
+		}
+		.eventCardDate {
+			color: var(--btnPrimaryDarker);
+		}
+	}
+
 	.cardTitleInfo {
 		display: flex;
 		margin-top: 20px;
@@ -131,11 +141,15 @@
 				width: 100px;
 				position: relative;
 				left: 0px;
+				margin-left: 10px;
+				margin-right: 10px;
 			}
 			.infoBtn {
 				width: 100px;
 				position: relative;
 				right: 0px;
+				margin-left: 10px;
+				margin-right: 10px;
 			}
 		}
 	}

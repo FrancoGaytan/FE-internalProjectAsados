@@ -5,6 +5,7 @@ export const userProfile = Object.seal({
 	cbu: 'CBU',
 	alias: 'Alias',
 	name: 'Nombre',
+	lastName: 'Apellido',
 	specialDietTitle: 'Dieta Especial',
 	veganDiet: '¿Sos Vegano?',
 	vegetarianDiet: '¿Sos Vegetariano?',

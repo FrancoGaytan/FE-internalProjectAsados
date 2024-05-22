@@ -41,6 +41,9 @@ const EventHeader = (props: IEventCardProps) => {
 		if (evState === EventStatesEnum.CANCELED) {
 			return EventStatesEnum.CANCELED;
 		}
+		if (evState === EventStatesEnum.FINISHED) {
+			return EventStatesEnum.FINISHED;
+		}
 	}
 
 	return (

@@ -57,6 +57,9 @@ export const eventHome = Object.seal({
 	meOpt: 'Yo',
 	emptyOpt: 'Sin Asignar',
 	payBtn: 'Pagar',
+	uploadPay: 'Actualizar Pago',
 	unassignAtClosing: 'No puede cerrar un evento si aun no tiene asignados los responsables',
-	needsLogin: 'Necesita logearse para acceder a esta funcionalidad'
+	needsLogin: 'Necesita logearse para acceder a esta funcionalidad',
+	noLoggedMsg: 'Necesita estar logeado para acceder al evento',
+	noLoggedMsgParticipate: 'Necesita estar logeado para participar del evento'
 });

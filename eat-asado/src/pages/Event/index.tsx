@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 import { useEvent } from '../../stores/EventContext';
 import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { getEventById, subscribeToAnEvent, unsubscribeToAnEvent } from '../../service';
+import { getEventById, hasUploadedTransferReceipt, subscribeToAnEvent, unsubscribeToAnEvent } from '../../service';
 import { useParams } from 'react-router-dom';
 import { IUser } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
@@ -26,6 +26,7 @@ export function Event(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
 	const [modalState, setModalState] = useState(false);
+	const [userHasPaid, setUserHasPaid] = useState(false);
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -147,6 +148,10 @@ export function Event(): JSX.Element {
 		setModalState(false);
 	}
 
+	function openModal() {
+		setModalState(true);
+	}
+
 	useEffect(() => {
 		const abortController = new AbortController();
 		getEventById(userIdParams.eventId, abortController.signal)
@@ -162,18 +167,32 @@ export function Event(): JSX.Element {
 
 	useEffect(() => {
 		const abortController = new AbortController();
-		getUserById(user?.id, abortController.signal)
-			.then(res => {
-				setActualUser(res);
-			})
-			.catch(e => {
-				console.error('Catch in context: ', e);
-			});
+		if (user) {
+			getUserById(user?.id, abortController.signal)
+				.then(res => {
+					setActualUser(res);
+				})
+				.catch(e => {
+					console.error('Catch in context: ', e);
+				});
+		}
 	}, [user]);
 
 	useEffect(() => {
 		setEvent(event);
 	}, [user, actualUser, event]);
+
+	useEffect(() => {
+		const abortController = new AbortController();
+		hasUploadedTransferReceipt(actualUser?._id as string, event?._id, abortController.signal) //TODO: Ver como puedo sacar ese as string
+			.then(res => {
+				setUserHasPaid(res.hasUploaded);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+		console.log();
+	}, [actualUser, event]);
 
 	return (
 		<PrivateFormLayout>
@@ -287,25 +306,32 @@ export function Event(): JSX.Element {
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === 'closed' &&
-								(event.purchaseReceipts.length as number) === 0 && ( //esto esta bien, x ahora quedan los dos, pero el de abajo tiene que cambiar para que haya uno solo a la vez
+								(event.purchaseReceipts.length as number) === 0 && (
 									<Button className={styles.btnEvent} kind="tertiary" size="short">
 										{lang.payBtn}
 									</Button>
 								)}
-							{event.shoppingDesignee &&
-								event.shoppingDesignee._id !== user?.id &&
-								event.state === 'closed' &&
-								(event.purchaseReceipts.length as number) === 0 && ( //por ahora para verlo lo dejo en === esto tiene que ser !==
-									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
-										{lang.payBtn}
-									</Button>
-								)}
+							{event.shoppingDesignee && event.shoppingDesignee._id !== user?.id && event.state === 'closed' && !userHasPaid
+								? (event.purchaseReceipts.length as number) !== 0 && (
+										<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
+											{lang.payBtn}
+										</Button>
+								  )
+								: (event.purchaseReceipts.length as number) !== 0 && (
+										<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
+											{lang.uploadPay}
+										</Button>
+								  )}
 						</section>
 					</section>
 				)}
 			</div>
 			<Modal isOpen={modalState} closeModal={() => closeModal}>
-				<PayCheckForm event={event} shoppingDesignee={event?.shoppingDesignee}></PayCheckForm>
+				<PayCheckForm
+					event={event}
+					shoppingDesignee={event?.shoppingDesignee}
+					openModal={() => openModal}
+					closeModal={() => closeModal}></PayCheckForm>
 			</Modal>
 		</PrivateFormLayout>
 	);

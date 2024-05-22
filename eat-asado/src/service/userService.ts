@@ -48,3 +48,8 @@ export async function deleteUser(id: unknown, signal?: AbortSignal): Promise<any
 	const url = `/users/deleteUser/${id}`;
 	return await _delete(url, signal);
 }
+
+export async function hasUploadedTransferReceipt(idUser: string, idEvent: string, signal?: AbortSignal): Promise<any> {
+	const url = `/users/hasUploaded/${idUser}/${idEvent}`;
+	return await _get(url, signal);
+}

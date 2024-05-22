@@ -1,3 +1,4 @@
+import { ITransferReceiptImage } from '../models/transfer';
 import { localStorageKeys } from '../utils/localStorageKeys';
 
 const baseURL = process.env.REACT_APP_ENDPOINT;
@@ -50,6 +51,34 @@ export async function _post<T, P = any>(path: string, payload?: P, signal?: Abor
 		const data = await response.json();
 
 		return data;
+	} catch (error) {
+		console.error(error);
+		throw new Error(`${error}`);
+	}
+}
+
+export async function _postFiles(formFile: any, path: string, signal?: AbortSignal): Promise<ITransferReceiptImage> {
+	try {
+		const formData = new FormData();
+		formData.append('file', formFile);
+
+		const response = await fetch(`${baseURL}${path}`, {
+			mode: 'cors',
+			cache: 'no-cache',
+			credentials: 'same-origin',
+			headers: {
+				Authorization: token
+			},
+			method: 'POST',
+			signal,
+			body: formData
+		});
+
+		if (!response.ok) {
+			throw new Error('login failed');
+		}
+
+		return response as any;
 	} catch (error) {
 		console.error(error);
 		throw new Error(`${error}`);

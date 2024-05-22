@@ -11,6 +11,7 @@ import { useAlert } from '../../../stores/AlertContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { IEvent } from '../../../models/event';
 import EventHeader from './EventHeader/EventHeader';
+import { useAuth } from '../../../stores/AuthContext';
 
 interface IEventData {
 	eventTitle: String;
@@ -33,6 +34,7 @@ const EventCard = (props: IEventCardProps): any => {
 	const [privateEvent, setPrivateEvent] = useState<IEvent>();
 	const navigate = useNavigate();
 	const { setAlert } = useAlert();
+	const { isAuthenticated, user } = useAuth();
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -55,14 +57,24 @@ const EventCard = (props: IEventCardProps): any => {
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 
 	const handleInfo = () => {
-		navigate(`/event/${evId}`);
-		window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
+		if (!!user?.name) {
+			//TODO: arreglar el isAuthenticated xq no esta andando, esto lo hago así provisoriamente
+			navigate(`/event/${evId}`);
+			window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
+		} else {
+			setAlert(lang.noLoggedMsg, AlertTypes.ERROR);
+		}
 	};
 
 	const handleParticipation = () => {
-		navigate(`/event/${evId}`);
-		window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
-		//TODO: Agregar la inscripcion del usuario al evento
+		if (!!user?.name) {
+			//TODO: arreglar el isAuthenticated xq no esta andando, esto lo hago así provisoriamente
+			navigate(`/event/${evId}`);
+			window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
+			//TODO: Agregar la inscripcion del usuario al evento
+		} else {
+			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
+		}
 	};
 
 	const calculateAvailability = () => {
