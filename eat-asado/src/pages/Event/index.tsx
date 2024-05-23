@@ -184,14 +184,14 @@ export function Event(): JSX.Element {
 
 	useEffect(() => {
 		const abortController = new AbortController();
-		hasUploadedTransferReceipt(actualUser?._id as string, event?._id, abortController.signal) //TODO: Ver como puedo sacar ese as string
-			.then(res => {
-				setUserHasPaid(res.hasUploaded);
-			})
-			.catch(e => {
-				console.error('Catch in context: ', e);
-			});
-		console.log();
+		actualUser &&
+			hasUploadedTransferReceipt(actualUser._id, event?._id, abortController.signal)
+				.then(res => {
+					setUserHasPaid(res.hasUploaded);
+				})
+				.catch(e => {
+					console.error('Catch in context: ', e);
+				});
 	}, [actualUser, event]);
 
 	return (

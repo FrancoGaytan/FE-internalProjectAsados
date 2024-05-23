@@ -8,7 +8,7 @@ export interface transferReceipt {
 	image: string;
 	paymentMethod: string;
 	userId: string;
-	isShoppingDesignee?: string | undefined;
+	isShoppingDesignee?: string;
 	_id: string;
 }
 

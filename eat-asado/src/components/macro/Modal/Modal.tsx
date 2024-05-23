@@ -2,7 +2,7 @@ import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
 
 interface ModalProps {
-	children?: any; // x ahora lo soluciono así, despues cambialo
+	children?: JSX.Element; // x ahora lo soluciono así, despues cambialo
 	isOpen: boolean;
 	closeModal: any;
 }

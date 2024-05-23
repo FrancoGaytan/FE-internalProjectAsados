@@ -23,6 +23,7 @@ const EventHeader = (props: IEventCardProps) => {
 	}
 
 	function getEventState(): string | undefined {
+		//Deuda Tecnica, hacer un elseif para esta funcion
 		if (evState === EventStatesEnum.AVAILABLE) {
 			if (subscribedUser) {
 				return 'subscribed';

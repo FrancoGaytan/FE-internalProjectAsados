@@ -6,29 +6,29 @@ import { ITransferReceiptRequest, purchaseReceipt } from '../../../models/transf
 import Button from '../../micro/Button/Button';
 import { useState, useEffect, useRef } from 'react';
 import DragAndDrop from '../../micro/DragAndDrop/DragAndDrop';
-import { createTransferReceipt, uploadFile, hasUploadedTransferReceipt } from '../../../service';
+import { createTransferReceipt, uploadFile } from '../../../service';
 import { useAuth } from '../../../stores/AuthContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useAlert } from '../../../stores/AlertContext';
+import { PaymentOptsEnum } from '../../../enums/PaymentsMethods.enum';
 
 interface PayCheckProps {
 	event: EventResponse;
 	shoppingDesignee: IUser;
 	openModal: any;
-	closeModal: any;
+	closeModal: () => void;
 }
 
-type PaymentOpts = 'cash' | 'transfer';
-
-const PayCheckForm = ({ event, shoppingDesignee, openModal, closeModal }: PayCheckProps) => {
+const PayCheckForm = (props: PayCheckProps) => {
 	const [priceToPay, setPriceToPay] = useState(0);
-	const [payOpt, setPayOpt] = useState<PaymentOpts>('transfer');
+	const [payOpt, setPayOpt] = useState<PaymentOptsEnum>(PaymentOptsEnum.TRANSFER);
 	const [paymentDesc, setPaymentDesc] = useState<string>('');
 	const inputRef = useRef<HTMLInputElement>(null);
 	const { user } = useAuth();
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
+	const { event, /* shoppingDesignee ,*/ openModal /* closeModal */ } = props;
 
 	const initialPayForm: ITransferReceiptRequest = {
 		paymentMethod: 'transfer',
@@ -62,9 +62,9 @@ const PayCheckForm = ({ event, shoppingDesignee, openModal, closeModal }: PayChe
 				setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
 
 				try {
-					const respFileId = await uploadFile(payForm.file, resp._id);
+					await uploadFile(payForm.file, resp._id);
 					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-					//closeModal(); TODO: lograr que se cierre el popup una vez que se confirme el updateFile
+					//closeModal(); // Mejora: lograr que se cierre el popup una vez que se confirme el updateFile
 				} catch (e) {
 					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
 				}
@@ -94,6 +94,7 @@ const PayCheckForm = ({ event, shoppingDesignee, openModal, closeModal }: PayChe
 
 	useEffect(() => {
 		setPriceToPay(gettingPriceToPay());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [event, payForm]);
 
 	useEffect(() => {
