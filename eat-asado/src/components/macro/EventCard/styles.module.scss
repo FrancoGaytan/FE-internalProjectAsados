@@ -8,8 +8,6 @@
 	max-height: 320px;
 	background-color: #f6faf9;
 	border-top: 5px solid var(availabilityPrimary);
-	//padding: 0 20px;
-	//padding-top: 30px;
 
 	@media #{variables.media-query(max, md)} {
 		width: 80vw;
@@ -56,6 +54,16 @@
 	}
 
 	&.full {
+		border-top: 5px solid var(--btnPrimaryDarker);
+		.availabilityDesc {
+			background-color: var(--btnPrimaryDarker);
+		}
+		.eventCardDate {
+			color: var(--btnPrimaryDarker);
+		}
+	}
+
+	&.finished {
 		border-top: 5px solid var(--btnPrimaryDarker);
 		.availabilityDesc {
 			background-color: var(--btnPrimaryDarker);
@@ -131,11 +139,15 @@
 				width: 100px;
 				position: relative;
 				left: 0px;
+				margin-left: 10px;
+				margin-right: 10px;
 			}
 			.infoBtn {
 				width: 100px;
 				position: relative;
 				right: 0px;
+				margin-left: 10px;
+				margin-right: 10px;
 			}
 		}
 	}

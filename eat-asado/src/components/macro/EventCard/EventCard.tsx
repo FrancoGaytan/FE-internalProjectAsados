@@ -11,6 +11,8 @@ import { useAlert } from '../../../stores/AlertContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { IEvent } from '../../../models/event';
 import EventHeader from './EventHeader/EventHeader';
+import { useAuth } from '../../../stores/AuthContext';
+import { parseMinutes } from '../../../utils/utilities';
 
 interface IEventData {
 	eventTitle: String;
@@ -33,14 +35,7 @@ const EventCard = (props: IEventCardProps): any => {
 	const [privateEvent, setPrivateEvent] = useState<IEvent>();
 	const navigate = useNavigate();
 	const { setAlert } = useAlert();
-
-	function parseMinutes(minutes: string) {
-		let newMinutes = minutes;
-		if (Number(minutes) < 10) {
-			newMinutes = '0' + minutes;
-		}
-		return newMinutes;
-	}
+	const { isAuthenticated, user } = useAuth();
 
 	const evState = props.eventState; //esta prop va a ser para darle el estilo a la card
 	const evDateTime = new Date(props.eventDateTime); //esto va a haber que pasarlo x una funcion que seccione la fecha y la hora y despues separarlos en dos variables diferentes
@@ -55,14 +50,21 @@ const EventCard = (props: IEventCardProps): any => {
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 
 	const handleInfo = () => {
-		navigate(`/event/${evId}`);
-		window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
+		if (!!user?.name) {
+			navigate(`/event/${evId}`);
+			//window.location.reload(); //si no te carga la data del evento agregar esta linea
+		} else {
+			setAlert(lang.noLoggedMsg, AlertTypes.ERROR);
+		}
 	};
 
 	const handleParticipation = () => {
-		navigate(`/event/${evId}`);
-		window.location.reload(); //TODO esto lo estoy poniendo solo para que actualize el jwt, fijate con maxi como se puede actualizar tan pronto te logeas, o al menos saber xq esta pasando eso en las request
-		//TODO: Agregar la inscripcion del usuario al evento
+		if (!!user?.name) {
+			navigate(`/event/${evId}`);
+			//window.location.reload(); //
+		} else {
+			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
+		}
 	};
 
 	const calculateAvailability = () => {
@@ -121,7 +123,8 @@ const EventCard = (props: IEventCardProps): any => {
 					<div className={styles.participateBtn}>
 						{!verifySubscription() &&
 							evState === EventStatesEnum.AVAILABLE &&
-							eventParticipationState === EventStatesEnum.INCOMPLETED && (
+							eventParticipationState === EventStatesEnum.INCOMPLETED &&
+							!!user?.name && (
 								<Button
 									kind="secondary"
 									size="small"
