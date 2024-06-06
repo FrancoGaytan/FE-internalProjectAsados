@@ -17,7 +17,7 @@ interface PayCheckProps {
 	event: EventResponse;
 	shoppingDesignee: IUser;
 	openModal: any;
-	closeModal: () => void;
+	closeModal: any;
 }
 
 const PayCheckForm = (props: PayCheckProps) => {
@@ -28,7 +28,7 @@ const PayCheckForm = (props: PayCheckProps) => {
 	const { user } = useAuth();
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
-	const { event, /* shoppingDesignee ,*/ openModal /* closeModal */ } = props;
+	const { event, /* shoppingDesignee ,*/ openModal /* closeModal */, closeModal } = props;
 
 	const initialPayForm: ITransferReceiptRequest = {
 		paymentMethod: 'transfer',

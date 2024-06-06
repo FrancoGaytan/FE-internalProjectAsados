@@ -125,6 +125,20 @@
 				.infoData {
 					margin: 10px 15px;
 					display: flex;
+					align-items: center;
+
+					.infoDataUsername {
+						margin: 0;
+						margin-right: 10px;
+					}
+					.infoDataUsernamePayed {
+						margin: 0;
+						color: green;
+					}
+					.infoDataUsernameDidntPay {
+						margin: 0;
+						color: red;
+					}
 				}
 
 				.participantsLogo {

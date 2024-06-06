@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 import { useEvent } from '../../stores/EventContext';
 import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { getEventById, hasUploadedTransferReceipt, subscribeToAnEvent, unsubscribeToAnEvent } from '../../service';
+import { getEventById, hasUploadedTransferReceipt, subscribeToAnEvent, unsubscribeToAnEvent, isUserDebtor } from '../../service';
 import { useParams } from 'react-router-dom';
 import { IUser } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
@@ -16,6 +16,7 @@ import { getUserById, editRoles, deleteEvent, editEvent } from '../../service';
 import Modal from '../../components/macro/Modal/Modal';
 import PayCheckForm from '../../components/macro/PayCheckForm/PayCheckForm';
 import { EventResponse, IEvent } from '../../models/event';
+import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfirmationPayForm';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -26,7 +27,11 @@ export function Event(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
 	const [modalState, setModalState] = useState(false);
-	const [userHasPaid, setUserHasPaid] = useState(false);
+	const [modalValidationState, setModalValidationState] = useState(false);
+	const [userHasUploaded, setUserHasUploaded] = useState(false);
+	const [userToApprove, setUserToApprove] = useState('');
+	const [transferReceiptId, setTransferReceiptId] = useState('');
+	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -140,6 +145,14 @@ export function Event(): JSX.Element {
 			.finally(() => setTimeout(() => window.location.reload(), 1000));
 	}
 
+	function openValidationPopup(): void {
+		setModalValidationState(true);
+	}
+
+	function closeValidationPopup() {
+		setModalValidationState(false);
+	}
+
 	function payCheck(): void {
 		setModalState(true);
 	}
@@ -150,6 +163,37 @@ export function Event(): JSX.Element {
 
 	function openModal() {
 		setModalState(true);
+	}
+
+	function showPaymentData() {
+		return (
+			(event.state === 'closed' && event.organizer && event.organizer._id === user?.id) ||
+			(event.state === 'closed' && event.shoppingDesignee && event.shoppingDesignee === user?.id)
+		);
+	}
+
+	function checkIfUserUploaded(member: IUser): boolean {
+		const abortController = new AbortController();
+		hasUploadedTransferReceipt(member._id, event?._id, abortController.signal)
+			.then(res => {
+				return res.hasUploaded;
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+		return false; //chequear que esto si el hasReceiptApproved es true devuelva true y no salga con este false
+	}
+
+	function checkIfUserHasPaid(member: IUser): boolean {
+		const abortController = new AbortController();
+		hasUploadedTransferReceipt(member._id, event?._id, abortController.signal)
+			.then(res => {
+				return res.hasReceiptApproved;
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+		return false; //chequear que esto si el hasReceiptApproved es true devuelva true y no salga con este false
 	}
 
 	useEffect(() => {
@@ -187,7 +231,8 @@ export function Event(): JSX.Element {
 		actualUser &&
 			hasUploadedTransferReceipt(actualUser._id, event?._id, abortController.signal)
 				.then(res => {
-					setUserHasPaid(res.hasUploaded);
+					setTransferReceiptId(res.transferReceipt);
+					setUserHasUploaded(res.hasUploaded);
 				})
 				.catch(e => {
 					console.error('Catch in context: ', e);
@@ -276,7 +321,26 @@ export function Event(): JSX.Element {
 										</h3>
 									</div>
 									{event.members.map((member: IUser) => (
-										<h5 className={styles.infoData}>{member.name}</h5>
+										<div className={styles.infoData}>
+											<h5 className={styles.infoDataUsername}>{member.name}</h5>
+											{!showPaymentData() && //este !  volarlo, es solo para probar el boton
+												(!checkIfUserUploaded(member) ? ( //de aca toca para testear el boton // tengo que setearlo a false cuando el organizador confirma el pago
+													<Button
+														className={styles.btnEvent}
+														kind="validation"
+														size="micro"
+														onClick={() => {
+															openValidationPopup();
+															setUserToApprove(member._id);
+														}}>
+														{lang.validateBtn}
+													</Button>
+												) : checkIfUserHasPaid(member) ? ( //hacer una funcion userHasPaid para cada member que va recorriendo
+													<h5 className={styles.infoDataUsernamePayed}>{lang.paidNoti}</h5>
+												) : (
+													<h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
+												))}
+										</div>
 									))}
 								</div>
 							</div>
@@ -311,7 +375,7 @@ export function Event(): JSX.Element {
 										{lang.payBtn}
 									</Button>
 								)}
-							{event.shoppingDesignee && event.shoppingDesignee._id !== user?.id && event.state === 'closed' && !userHasPaid
+							{event.shoppingDesignee && event.shoppingDesignee._id !== user?.id && event.state === 'closed' && !userHasUploaded
 								? (event.purchaseReceipts.length as number) !== 0 && (
 										<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
 											{lang.payBtn}
@@ -331,7 +395,14 @@ export function Event(): JSX.Element {
 					event={event}
 					shoppingDesignee={event?.shoppingDesignee}
 					openModal={() => openModal}
-					closeModal={() => closeModal}></PayCheckForm>
+					closeModal={closeModal}></PayCheckForm>
+			</Modal>
+			<Modal isOpen={modalValidationState} closeModal={() => closeValidationPopup}>
+				<ConfirmationPayForm
+					event={event}
+					transferReceiptId={transferReceiptId}
+					openModal={() => openValidationPopup}
+					closeModal={() => closeValidationPopup}></ConfirmationPayForm>
 			</Modal>
 		</PrivateFormLayout>
 	);

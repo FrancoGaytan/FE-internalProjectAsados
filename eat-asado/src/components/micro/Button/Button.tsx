@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-	kind?: 'primary' | 'secondary' | 'tertiary';
+	kind?: 'primary' | 'secondary' | 'tertiary' | 'validation' | 'whitePrimary' | 'whiteSecondary';
 	size?: TSize;
 }
 
@@ -17,6 +17,9 @@ const Button = (props: PropsWithChildren<IButtonProps>): JSX.Element => {
 				styles[props.kind ?? 'primary'],
 				styles[props.kind ?? 'secondary'],
 				styles[props.kind ?? 'tertiary'],
+				styles[props.kind ?? 'validation'],
+				styles[props.kind ?? 'whitePrimary'],
+				styles[props.kind ?? 'whiteSecondary'],
 				props.className,
 				styles[`size-${props.size ?? 'auto'}`]
 			)}
