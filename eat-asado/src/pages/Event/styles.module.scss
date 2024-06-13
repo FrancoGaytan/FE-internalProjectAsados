@@ -107,6 +107,12 @@
 					height: 40px;
 					background-image: url('../../../public/assets/pictures/restaurantLogo.png');
 				}
+				.cartLogo {
+					width: 40px;
+					height: 40px;
+					background-size: cover;
+					background-image: url('../../../public/assets/pictures/carritodecompras.png');
+				}
 
 				@media #{variables.media-query(max, sm)} {
 					align-items: center;

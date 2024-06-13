@@ -16,6 +16,7 @@ import { getUserById, editRoles, deleteEvent, editEvent } from '../../service';
 import Modal from '../../components/macro/Modal/Modal';
 import PayCheckForm from '../../components/macro/PayCheckForm/PayCheckForm';
 import { EventResponse, IEvent } from '../../models/event';
+import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/PurchaseReceiptForm';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -26,6 +27,7 @@ export function Event(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
 	const [modalState, setModalState] = useState(false);
+	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [userHasPaid, setUserHasPaid] = useState(false);
 
 	function parseMinutes(minutes: string) {
@@ -144,12 +146,20 @@ export function Event(): JSX.Element {
 		setModalState(true);
 	}
 
-	function closeModal() {
+	function closeModal(): void {
 		setModalState(false);
 	}
 
-	function openModal() {
+	function closeModalPurchaseRecipt(): void {
+		setModalPurchaseRecipt(false);
+	}
+
+	function openModal(): void {
 		setModalState(true);
+	}
+
+	function openModalPurchaseRecipt(): void {
+		setModalPurchaseRecipt(true);
 	}
 
 	useEffect(() => {
@@ -228,6 +238,14 @@ export function Event(): JSX.Element {
 										<h3 className={styles.logoTitle}>{lang.menu}</h3>
 									</div>
 									<h5 className={styles.infoData}>{event.description}</h5>
+								</div>
+
+								<div className={styles.secondRow}>
+									<div className={styles.sectionTitle}>
+										<div className={styles.cartLogo}></div>
+										<h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
+									</div>
+									{/* <h5 className={styles.infoData}>{event.description}</h5> */}
 								</div>
 							</div>
 							<div className={styles.eventParticipants}>
@@ -322,6 +340,11 @@ export function Event(): JSX.Element {
 											{lang.uploadPay}
 										</Button>
 								  )}
+							{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state === 'closed' && (
+								<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
+									{lang.loadPurchase}
+								</Button>
+							)}
 						</section>
 					</section>
 				)}
@@ -332,6 +355,12 @@ export function Event(): JSX.Element {
 					shoppingDesignee={event?.shoppingDesignee}
 					openModal={() => openModal}
 					closeModal={() => closeModal}></PayCheckForm>
+			</Modal>
+			<Modal isOpen={modalPurchaseRecipt} closeModal={() => closeModalPurchaseRecipt}>
+				<PurchaseReceiptForm
+					event={event}
+					openModal={() => openModalPurchaseRecipt}
+					closeModal={() => closeModalPurchaseRecipt}></PurchaseReceiptForm>
 			</Modal>
 		</PrivateFormLayout>
 	);
