@@ -22,6 +22,25 @@
 .inputFile {
 	display: flex;
 }
+.inputs {
+	background: none;
+	border: 1px solid white;
+	color: var(--backgroundNeutralLighter);
+	font-family: var(--secondaryFont);
+	min-width: 300px;
+	min-height: 40px;
+	padding-left: 15px;
+	margin-bottom: 15px;
+	border-radius: 6px;
+
+	&::placeholder {
+		color: var(--placeholderColor);
+	}
+
+	&:focus {
+		box-shadow: var(--inputShadow);
+	}
+}
 
 .uploadBtn {
 	width: 25px;

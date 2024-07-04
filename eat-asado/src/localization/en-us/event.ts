@@ -11,5 +11,6 @@ export const event = Object.seal({
 	cbu: 'CBU: ',
 	totalPrice: 'Amount to pay: ',
 	description: 'Description',
-	uploadTransferReceipt: 'Upload Transfer Receipt'
+	uploadTransferReceipt: 'Upload Transfer Receipt',
+	amountLabel: 'Amount'
 });

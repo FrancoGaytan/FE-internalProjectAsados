@@ -11,5 +11,6 @@ export const event = Object.seal({
 	cbu: 'CBU: ',
 	totalPrice: 'Monto a abonar: ',
 	description: 'Descripcion',
-	uploadTransferReceipt: 'Cargar comprobante de pago'
+	uploadTransferReceipt: 'Cargar comprobante de pago',
+	amountLabel: 'Monto'
 });

@@ -1,4 +1,4 @@
-export interface purchaseReceipt {
+export interface IPurchaseReceipt {
 	amount: number;
 	description: string;
 	image: string;

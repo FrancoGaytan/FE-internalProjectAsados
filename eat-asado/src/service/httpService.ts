@@ -35,6 +35,30 @@ export async function _get<T>(path: string, signal?: AbortSignal): Promise<T> {
 	}
 }
 
+export async function __getFiles(path: string, signal?: AbortSignal): Promise<any> {
+	try {
+		const response = await fetch(`${baseURL}${path}`, {
+			mode: 'cors',
+			cache: 'no-cache',
+			credentials: 'same-origin',
+			headers: {
+				Authorization: token
+			},
+			method: 'GET',
+			signal
+		});
+
+		if (!response.ok) {
+			throw new Error('login failed');
+		}
+
+		return await response.blob();
+	} catch (error) {
+		console.error(error);
+		throw new Error(`${error}`);
+	}
+}
+
 export async function _post<T, P = any>(path: string, payload?: P, signal?: AbortSignal): Promise<T> {
 	try {
 		const response = await fetch(`${baseURL}${path}`, {

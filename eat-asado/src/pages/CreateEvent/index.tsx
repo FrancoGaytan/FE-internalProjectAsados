@@ -82,7 +82,7 @@ export function CreateEvent(): JSX.Element {
 
 	useEffect(() => {
 		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
-	}, [user, event]);
+	}, [user]);
 
 	return (
 		<FormLayout>

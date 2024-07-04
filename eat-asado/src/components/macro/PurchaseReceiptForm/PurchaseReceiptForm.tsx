@@ -2,7 +2,7 @@ import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
 import { EventResponse } from '../../../models/event';
 import { IUser } from '../../../models/user';
-import { IPurchaseReceiptRequest, purchaseReceipt } from '../../../models/purchases';
+import { IPurchaseReceiptRequest, IPurchaseReceipt } from '../../../models/purchases';
 import Button from '../../micro/Button/Button';
 import { useState, useEffect, useRef } from 'react';
 import DragAndDrop from '../../micro/DragAndDrop/DragAndDrop';
@@ -36,26 +36,28 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 	const [purchaseForm, setPurchaseForm] = useState<IPurchaseReceiptRequest>(initialPurchaseForm);
 
 	function checkForInputsToBeCompleted(): boolean {
-		return true;
+		console.log(purchaseForm.amount, purchaseForm.description, purchaseForm.file);
+		return purchaseForm.amount !== 0 && purchaseForm.description !== '' && purchaseForm.file !== undefined;
 	}
 
-	async function confirmPay(e: any) {
+	async function confirmNewPurchase(e: any) {
 		e.preventDefault();
+		console.log(checkForInputsToBeCompleted());
 		if (checkForInputsToBeCompleted()) {
 			const data = new FormData();
 			data.append('file', purchaseForm.file as File);
 			try {
 				const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
 				setAlert(`Purchase Receipt loaded!`, AlertTypes.SUCCESS);
-
 				try {
-					await uploadPurchaseFile(purchaseForm.file, resp._id, event?._id);
-					setAlert(`Purchase Receipt loaded!`, AlertTypes.SUCCESS);
+					await uploadPurchaseFile(purchaseForm.file, resp._id);
+					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
 				} catch (e) {
 					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
 				}
+				setTimeout(() => window.location.reload(), 1000);
 			} catch (e) {
-				setAlert(`${lang.transferReceiptFailure}`, AlertTypes.ERROR);
+				setAlert(`There's been a failure loading the purchase receipt`, AlertTypes.ERROR);
 			}
 		}
 	}
@@ -77,13 +79,31 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 		<div {...className(styles.paycheck)}>
 			<h4>{lang.payTitle}</h4>
 			<div className={styles.paycheckContent}>
-				<h5>
-					{lang.cbu}
-					{event?.shoppingDesignee?.cbu}
-				</h5>
-
-				<form onSubmit={e => confirmPay(e)} className={styles.purchaseForm}>
-					<h4>Pago</h4>
+				<form onSubmit={e => confirmNewPurchase(e)} className={styles.purchaseForm}>
+					<div className={styles.descInput}>
+						<label className={styles.descLabel}>{lang.description}</label>
+						<input
+							type="text"
+							className={styles.inputs}
+							name="descriptionInput"
+							value={purchaseForm.description}
+							onChange={e => {
+								setPurchaseForm({ ...purchaseForm, description: e.target.value });
+							}}
+						/>
+					</div>
+					<div className={styles.descInput}>
+						<label className={styles.descLabel}>{lang.amountLabel}</label>
+						<input
+							type="text"
+							className={styles.inputs}
+							name="amountInput"
+							value={purchaseForm.amount}
+							onChange={e => {
+								setPurchaseForm({ ...purchaseForm, amount: Number(e.target.value) });
+							}}
+						/>
+					</div>
 
 					<DragAndDrop setState={setVoucherInput}>
 						<div className={styles.inputFile}>
@@ -100,7 +120,7 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 					</DragAndDrop>
 					<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
 					<section className={styles.btnSection}>
-						<Button className={styles.confirmPayBtn} kind="primary" size="large" onClick={e => confirmPay(e)}>
+						<Button className={styles.confirmPayBtn} kind="primary" size="large" onClick={e => confirmNewPurchase(e)}>
 							{lang.confirmPayBtn}
 						</Button>
 					</section>

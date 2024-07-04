@@ -97,6 +97,27 @@
 				.infoData {
 					margin: 10px 15px;
 				}
+				.deleteBtn {
+					background-image: url('../../../public/assets/pictures/deleteIcon.png');
+					width: 15px;
+					height: 15px;
+					background-size: cover;
+					background-color: white;
+					margin-top: auto;
+					margin-bottom: auto;
+					margin-left: 10px;
+				}
+
+				.downloadBtn {
+					background-image: url('../../../public/assets/pictures/downloadBtn.png');
+					width: 30px;
+					height: 30px;
+					background-size: cover;
+					background-color: white;
+					margin: auto;
+					margin-left: 10px;
+				}
+
 				.calendarLogo {
 					width: 36px;
 					height: 40px;
@@ -160,6 +181,10 @@
 				flex-direction: column;
 			}
 		}
+	}
+
+	.purchasesData {
+		display: flex;
 	}
 	.btnSection {
 		display: flex;
