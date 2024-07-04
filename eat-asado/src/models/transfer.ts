@@ -12,13 +12,6 @@ export interface transferReceipt {
 	_id: string;
 }
 
-export interface purchaseReceipt {
-	amount: number;
-	description: string;
-	image: string;
-	_id: string;
-}
-
 export interface ITransferReceiptRequest {
 	amount: number;
 	description: string;

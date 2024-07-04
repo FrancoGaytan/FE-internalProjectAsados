@@ -61,5 +61,10 @@ export const eventHome = Object.seal({
 	unassignAtClosing: 'You cant close an event which doesnt have assign cook or shopping designee',
 	needsLogin: 'Needs Login to access to this functionality',
 	noLoggedMsg: 'You need to be logged in to access to the event´s info',
-	noLoggedMsgParticipate: 'You need to be logged in to access to be part of the event'
+	noLoggedMsgParticipate: 'You need to be logged in to access to be part of the event',
+	purchasesMade: 'Purchases Made',
+	loadPurchase: 'New Purchase Receipt',
+	purchaseDeleted: 'Purchase Receipt deleted successfully',
+	purchaseDeletedError: 'There was an error deleting the purchase',
+	downloadingImageError: 'There was an error downloading the image'
 });

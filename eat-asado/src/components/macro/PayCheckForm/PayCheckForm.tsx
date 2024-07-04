@@ -2,7 +2,8 @@ import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
 import { EventResponse } from '../../../models/event';
 import { IUser } from '../../../models/user';
-import { ITransferReceiptRequest, purchaseReceipt } from '../../../models/transfer';
+import { ITransferReceiptRequest } from '../../../models/transfer';
+import { IPurchaseReceipt, IPurchaseReceiptRequest } from '../../../models/purchases';
 import Button from '../../micro/Button/Button';
 import { useState, useEffect, useRef } from 'react';
 import DragAndDrop from '../../micro/DragAndDrop/DragAndDrop';
@@ -42,10 +43,13 @@ const PayCheckForm = (props: PayCheckProps) => {
 
 	function gettingPriceToPay(): number {
 		let price = 0;
-		event?.purchaseReceipts?.forEach((tr: purchaseReceipt) => {
+		if (!event) {
+			return price;
+		}
+		event?.purchaseReceipts?.forEach((tr: IPurchaseReceipt) => {
 			price = price + tr.amount;
 		});
-		return price;
+		return Math.round(price / event.members.length);
 	}
 
 	function checkForReceiptAndTransfer() {

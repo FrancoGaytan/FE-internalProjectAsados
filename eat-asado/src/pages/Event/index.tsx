@@ -16,6 +16,10 @@ import { getUserById, editRoles, deleteEvent, editEvent } from '../../service';
 import Modal from '../../components/macro/Modal/Modal';
 import PayCheckForm from '../../components/macro/PayCheckForm/PayCheckForm';
 import { EventResponse, IEvent } from '../../models/event';
+import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/PurchaseReceiptForm';
+import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
+import { IPurchaseReceipt } from '../../models/purchases';
+import { downloadFile } from '../../utils/utilities';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -26,7 +30,9 @@ export function Event(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
 	const [modalState, setModalState] = useState(false);
+	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [userHasPaid, setUserHasPaid] = useState(false);
+	const [purchasesMade, setPurchasesMade] = useState([]);
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -144,12 +150,38 @@ export function Event(): JSX.Element {
 		setModalState(true);
 	}
 
-	function closeModal() {
+	function closeModal(): void {
 		setModalState(false);
 	}
 
-	function openModal() {
+	function closeModalPurchaseRecipt(): void {
+		setModalPurchaseRecipt(false);
+	}
+
+	function openModal(): void {
 		setModalState(true);
+	}
+
+	function openModalPurchaseRecipt(): void {
+		setModalPurchaseRecipt(true);
+	}
+
+	function deletePurchase(purchase: IPurchaseReceipt): any {
+		deleteEventPurchase(purchase._id, event._id)
+			.then(res => {
+				setAlert(lang.purchaseDeleted, AlertTypes.SUCCESS);
+				setTimeout(() => window.location.reload(), 1000);
+			})
+			.catch(e => setAlert(lang.purchaseDeletedError, AlertTypes.ERROR));
+	}
+
+	async function downloadPurchase(purchase: IPurchaseReceipt) {
+		try {
+			const purchaseImage = await getImage(purchase.image);
+			downloadFile({ file: purchaseImage, fileName: purchase.description });
+		} catch (e) {
+			setAlert(lang.downloadingImageError, AlertTypes.ERROR);
+		}
 	}
 
 	useEffect(() => {
@@ -164,6 +196,19 @@ export function Event(): JSX.Element {
 
 		return () => abortController.abort();
 	}, []);
+
+	useEffect(() => {
+		const abortController = new AbortController();
+		if (event?._id) {
+			getPurchaseReceipts(event?._id, abortController.signal)
+				.then(res => {
+					setPurchasesMade(res);
+				})
+				.catch(e => {
+					console.error('Catch in context: ', e);
+				});
+		}
+	}, [event]);
 
 	useEffect(() => {
 		const abortController = new AbortController();
@@ -228,6 +273,33 @@ export function Event(): JSX.Element {
 										<h3 className={styles.logoTitle}>{lang.menu}</h3>
 									</div>
 									<h5 className={styles.infoData}>{event.description}</h5>
+								</div>
+
+								<div className={styles.secondRow}>
+									<div className={styles.sectionTitle}>
+										<div className={styles.cartLogo}></div>
+										<h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
+									</div>
+									{purchasesMade.map((purchase: IPurchaseReceipt) => (
+										<div className={styles.purchasesData}>
+											<h5 className={styles.infoData}>{purchase.description}</h5>
+											<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
+											{event?.shoppingDesignee._id === user?.id && (
+												<button
+													className={styles.deleteBtn}
+													onClick={e => {
+														e.preventDefault();
+														deletePurchase(purchase);
+													}}></button>
+											)}
+											<button
+												className={styles.downloadBtn}
+												onClick={e => {
+													e.preventDefault();
+													downloadPurchase(purchase);
+												}}></button>
+										</div>
+									))}
 								</div>
 							</div>
 							<div className={styles.eventParticipants}>
@@ -306,22 +378,32 @@ export function Event(): JSX.Element {
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === 'closed' &&
+								!userHasPaid &&
 								(event.purchaseReceipts.length as number) === 0 && (
 									<Button className={styles.btnEvent} kind="tertiary" size="short">
 										{lang.payBtn}
 									</Button>
 								)}
-							{event.shoppingDesignee && event.shoppingDesignee._id !== user?.id && event.state === 'closed' && !userHasPaid
-								? (event.purchaseReceipts.length as number) !== 0 && (
-										<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
-											{lang.payBtn}
-										</Button>
-								  )
-								: (event.purchaseReceipts.length as number) !== 0 && (
-										<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
-											{lang.uploadPay}
-										</Button>
-								  )}
+
+							{event.shoppingDesignee &&
+								event.shoppingDesignee._id !== user?.id &&
+								event.state === 'closed' &&
+								(event.purchaseReceipts.length as number) !== 0 &&
+								(!userHasPaid ? (
+									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
+										{lang.payBtn}
+									</Button>
+								) : (
+									//testear que esto funcione bien
+									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
+										{lang.uploadPay}
+									</Button>
+								))}
+							{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state === 'closed' && (
+								<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
+									{lang.loadPurchase}
+								</Button>
+							)}
 						</section>
 					</section>
 				)}
@@ -332,6 +414,12 @@ export function Event(): JSX.Element {
 					shoppingDesignee={event?.shoppingDesignee}
 					openModal={() => openModal}
 					closeModal={() => closeModal}></PayCheckForm>
+			</Modal>
+			<Modal isOpen={modalPurchaseRecipt} closeModal={() => closeModalPurchaseRecipt}>
+				<PurchaseReceiptForm
+					event={event}
+					openModal={() => openModalPurchaseRecipt}
+					closeModal={() => closeModalPurchaseRecipt}></PurchaseReceiptForm>
 			</Modal>
 		</PrivateFormLayout>
 	);

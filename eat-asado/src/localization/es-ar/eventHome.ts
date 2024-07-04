@@ -61,5 +61,10 @@ export const eventHome = Object.seal({
 	unassignAtClosing: 'No puede cerrar un evento si aun no tiene asignados los responsables',
 	needsLogin: 'Necesita logearse para acceder a esta funcionalidad',
 	noLoggedMsg: 'Necesita estar logeado para acceder al evento',
-	noLoggedMsgParticipate: 'Necesita estar logeado para participar del evento'
+	noLoggedMsgParticipate: 'Necesita estar logeado para participar del evento',
+	purchasesMade: 'Compras Realizadas',
+	loadPurchase: 'Cargar Compra',
+	purchaseDeleted: 'Recivo eliminado con exito',
+	purchaseDeletedError: 'Error al eliminar el recivo',
+	downloadingImageError: 'Error al descargar la imagen'
 });
