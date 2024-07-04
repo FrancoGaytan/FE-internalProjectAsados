@@ -43,6 +43,9 @@ const PayCheckForm = (props: PayCheckProps) => {
 
 	function gettingPriceToPay(): number {
 		let price = 0;
+		if (!event) {
+			return price;
+		}
 		event?.purchaseReceipts?.forEach((tr: IPurchaseReceipt) => {
 			price = price + tr.amount;
 		});

@@ -36,7 +36,6 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 	const [purchaseForm, setPurchaseForm] = useState<IPurchaseReceiptRequest>(initialPurchaseForm);
 
 	function checkForInputsToBeCompleted(): boolean {
-		console.log(purchaseForm.amount, purchaseForm.description, purchaseForm.file);
 		return purchaseForm.amount !== 0 && purchaseForm.description !== '' && purchaseForm.file !== undefined;
 	}
 
@@ -61,7 +60,7 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 			}
 		}
 	}
-	const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+	function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
 		e.preventDefault();
 		e.stopPropagation();
 		const target = e.target;
@@ -69,11 +68,11 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 		if (target.files?.length && target.files.length > 0) {
 			setPurchaseForm({ ...purchaseForm, file: target.files[0] });
 		}
-	};
+	}
 
-	const setVoucherInput = (file: File) => {
+	function setVoucherInput(file: File) {
 		setPurchaseForm(prev => ({ ...prev, file: file }));
-	};
+	}
 
 	return (
 		<div {...className(styles.paycheck)}>
