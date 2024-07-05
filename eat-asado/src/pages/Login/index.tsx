@@ -1,18 +1,16 @@
 import { useTranslation } from '../../stores/LocalizationContext';
-import styles from './styles.module.scss';
 import Button from '../../components/micro/Button/Button';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginRequest } from '../../models/user';
 import { useAuth } from '../../stores/AuthContext';
+import styles from './styles.module.scss';
 
 export function Login(): JSX.Element {
 	const navigate = useNavigate();
 	const lang = useTranslation('login');
-
 	const { login, isLoading } = useAuth();
-
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
 		email: 'prueba@endava.com',
 		password: 'contraseña'
@@ -40,6 +38,7 @@ export function Login(): JSX.Element {
 			<label htmlFor="email" className={styles.loginLabel}>
 				{lang.email}
 			</label>
+
 			<input
 				id="email"
 				className={styles.loginInput}
@@ -52,6 +51,7 @@ export function Login(): JSX.Element {
 			<label htmlFor="password" className={styles.loginLabel}>
 				{lang.password}
 			</label>
+
 			<input
 				id="password"
 				className={styles.loginInput}
@@ -75,6 +75,7 @@ export function Login(): JSX.Element {
 
 			<a href="/register" className={styles.register} id="register">
 				<span>{lang.alreadyRegistered} </span>
+
 				<span className={styles.registerHighlighted}>{lang.registerHere}</span>
 			</a>
 		</FormLayout>

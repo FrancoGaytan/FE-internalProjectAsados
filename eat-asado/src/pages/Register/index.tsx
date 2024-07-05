@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { RegisterRequest } from '../../models/user';
@@ -9,19 +9,15 @@ import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { localStorageKeys } from '../../utils/localStorageKeys';
-import styles from './styles.module.scss';
 import { useAuth } from '../../stores/AuthContext';
-
-interface ISpecialDiet {
-	name: string;
-	value: boolean;
-}
+import styles from './styles.module.scss';
 
 export function Register(): JSX.Element {
 	const { setIsLoading } = useAuth();
 	const { setAlert } = useAlert();
 	const navigate = useNavigate();
 	const lang = useTranslation('register');
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_, setJWT] = useLocalStorage<string | null>(localStorageKeys.token, null);
 
 	const [registerCredentials, setRegisterCredentials] = useState<RegisterRequest>({
@@ -40,38 +36,32 @@ export function Register(): JSX.Element {
 		isCeliac: false
 	});
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		setRegisterCredentials({
 			...registerCredentials,
 			[e.target.id]: e.target.value
 		});
-	};
+	}
 
-	const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+	function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
 		setspecialDietOptions({
 			...specialDietOptions,
 			[e.target.id]: e.target.checked
 		});
-	};
+	}
 
-	const checkSpecialDiet = (): string[] => {
+	function checkSpecialDiet(): string[] {
 		let speDiet = [];
+
 		specialDietOptions.isVegan && speDiet.push('vegan');
 		specialDietOptions.isVegetarian && speDiet.push('vegetarian');
 		specialDietOptions.isHypertensive && speDiet.push('hypertensive');
 		specialDietOptions.isCeliac && speDiet.push('celiac');
 
 		return speDiet;
-	};
+	}
 
-	useEffect(() => {
-		setRegisterCredentials({
-			...registerCredentials,
-			specialDiet: checkSpecialDiet()
-		});
-	}, [specialDietOptions]);
-
-	function handleRegister(e: React.FormEvent<HTMLButtonElement>): void {
+	function handleRegister(e: React.FormEvent<HTMLFormElement>): void {
 		e.preventDefault();
 		setIsLoading(true);
 
@@ -91,7 +81,14 @@ export function Register(): JSX.Element {
 			.finally(() => setIsLoading(false));
 	}
 
-	console.log(lang);
+	useEffect(() => {
+		setRegisterCredentials({
+			...registerCredentials,
+			specialDiet: checkSpecialDiet()
+		});
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [specialDietOptions]);
 
 	return (
 		//TODO: meter todos los inputs y label adentro de un contenedor para manipular mejor el ancho y luego aplicar grid en desk

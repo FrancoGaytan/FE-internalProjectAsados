@@ -9,8 +9,8 @@ export interface IEvent {
 	state: string;
 	members: IUser[];
 	organizer: string;
-	isChef?: string | undefined;
-	isShoppingDesignee?: string;
+	isChef?: string | undefined; // TODO: No debería ser boolean esto?
+	isShoppingDesignee?: string; // TODO: No debería ser boolean esto?
 }
 
 export interface IPublicEvent {

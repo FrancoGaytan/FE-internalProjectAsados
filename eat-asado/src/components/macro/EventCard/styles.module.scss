@@ -104,31 +104,38 @@
 			margin-top: 25px;
 			font-size: 13px;
 		}
+		
 		.eventTitle {
 			font-size: 23px;
 			margin-top: 5px;
 			font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		}
+
 		.eventDescription {
 			margin-top: 15px;
 			font-size: 12px;
 		}
+
 		.eventParticipants {
 			margin-top: 5px;
 			font-size: 12px;
+
 			p {
 				font-weight: bold;
 				display: inline;
 			}
 		}
+
 		.eventCook {
 			margin-top: 10px;
 			font-size: 13px;
+
 			p {
 				font-weight: bold;
 				display: inline;
 			}
 		}
+
 		.cardBtn {
 			display: flex;
 			justify-content: space-between;
@@ -142,6 +149,7 @@
 				margin-left: 10px;
 				margin-right: 10px;
 			}
+
 			.infoBtn {
 				width: 100px;
 				position: relative;

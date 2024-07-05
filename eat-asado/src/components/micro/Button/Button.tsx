@@ -8,9 +8,10 @@ interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	size?: TSize;
 }
 
-const Button = (props: PropsWithChildren<IButtonProps>): JSX.Element => {
+export default function Button(props: PropsWithChildren<IButtonProps>): JSX.Element {
 	return (
 		<button
+			type={props.type || 'button'}
 			onClick={props.onClick}
 			{...className(
 				styles.button,
@@ -25,6 +26,4 @@ const Button = (props: PropsWithChildren<IButtonProps>): JSX.Element => {
 			{props.children}
 		</button>
 	);
-};
-
-export default Button;
+}

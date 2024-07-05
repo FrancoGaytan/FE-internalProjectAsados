@@ -78,8 +78,10 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	 * Looks for a logged user when app initialize
 	 */
 	useEffect(() => {
-		setUser(getUserFromLocalStorage());
-	}, []);
+		if (!user) {
+			setUser(getUserFromLocalStorage());
+		}
+	}, [user]);
 
 	return (
 		<AuthContext.Provider value={{ user, isLoading, getUserFromLocalStorage, setIsLoading, isAuthenticated, setUser, logout, login }}>

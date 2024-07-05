@@ -1,34 +1,23 @@
-import { Dispatch, ReactElement, SetStateAction, useEffect, useRef } from 'react';
-import { UserProfileInterface } from '../../../pages';
+import { useEffect, useRef } from 'react';
 
 interface IDragAndDrop {
-	children: ReactElement;
+	children: JSX.Element;
 	setState: Function;
 }
 
-const DragAndDrop = (props: IDragAndDrop) => {
+export default function DragAndDrop(props: IDragAndDrop) {
 	const dropRef = useRef<HTMLDivElement>(null);
 
-	const onUpload = (files: FileList) => {
+	function onUpload(files: FileList) {
 		props.setState(files[0]);
-	};
+	}
 
-	useEffect(() => {
-		dropRef.current?.addEventListener('dragover', handleDragOver);
-		dropRef.current?.addEventListener('drop', handleDrop);
-
-		return () => {
-			dropRef.current?.removeEventListener('dragover', handleDragOver);
-			dropRef.current?.removeEventListener('drop', handleDrop);
-		};
-	}, []);
-
-	const handleDragOver = (e: DragEvent) => {
+	function handleDragOver(e: DragEvent) {
 		e.preventDefault();
 		e.stopPropagation();
-	};
+	}
 
-	const handleDrop = (e: DragEvent) => {
+	function handleDrop(e: DragEvent) {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -38,9 +27,21 @@ const DragAndDrop = (props: IDragAndDrop) => {
 		if (files && files.length) {
 			onUpload(files);
 		}
-	};
+	}
+
+	useEffect(() => {
+		dropRef.current?.addEventListener('dragover', handleDragOver);
+		dropRef.current?.addEventListener('drop', handleDrop);
+
+		return () => {
+			dropRef.current?.removeEventListener('dragover', handleDragOver);
+
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			dropRef.current?.removeEventListener('drop', handleDrop);
+		};
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return <div ref={dropRef}>{props.children}</div>;
-};
-
-export default DragAndDrop;
+}

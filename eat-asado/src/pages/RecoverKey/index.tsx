@@ -25,11 +25,15 @@ export function RecoverKey(): JSX.Element {
 			<PrivateFormLayout>
 				<div className={styles.recoverKeyContainer}>
 					<h1>{lang.newPassword}</h1>
+
 					<p className={styles.mainDesc}>{lang.changeDescription}</p>
+
 					<label htmlFor="Email" className={styles.emailLabel}>
 						{lang.email}
 					</label>
+
 					<input className={styles.input} id="email" placeholder={lang.email} type="text" value={userEmail} onChange={handleChange} />
+
 					<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleSubmit}>
 						{lang.sendEmail}
 					</Button>

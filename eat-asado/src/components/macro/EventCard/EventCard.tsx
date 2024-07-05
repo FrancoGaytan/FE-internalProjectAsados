@@ -1,9 +1,8 @@
-import { TEventState, TSubscribedState, TEventParticipationState } from '../../../types/eventState';
+import { TEventState, TEventParticipationState } from '../../../types/eventState';
 import Button from '../../micro/Button/Button';
 import { className } from '../../../utils/className';
 import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
-import styles from './styles.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getEventById } from '../../../service/eventService';
@@ -13,6 +12,7 @@ import { IEvent } from '../../../models/event';
 import EventHeader from './EventHeader/EventHeader';
 import { useAuth } from '../../../stores/AuthContext';
 import { parseMinutes } from '../../../utils/utilities';
+import styles from './styles.module.scss';
 
 interface IEventData {
 	eventTitle: String;
@@ -30,12 +30,12 @@ interface IEventCardProps {
 	userId: string | undefined;
 }
 
-const EventCard = (props: IEventCardProps): any => {
+export default function EventCard(props: IEventCardProps): JSX.Element {
 	const lang = useTranslation('eventHome');
 	const [privateEvent, setPrivateEvent] = useState<IEvent>();
 	const navigate = useNavigate();
 	const { setAlert } = useAlert();
-	const { isAuthenticated, user } = useAuth();
+	const { user } = useAuth();
 
 	const evState = props.eventState; //esta prop va a ser para darle el estilo a la card
 	const evDateTime = new Date(props.eventDateTime); //esto va a haber que pasarlo x una funcion que seccione la fecha y la hora y despues separarlos en dos variables diferentes
@@ -48,39 +48,37 @@ const EventCard = (props: IEventCardProps): any => {
 
 	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
+	const eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
 
-	const handleInfo = () => {
+	function handleInfo() {
 		if (!!user?.name) {
 			navigate(`/event/${evId}`);
 			//window.location.reload(); //si no te carga la data del evento agregar esta linea
 		} else {
 			setAlert(lang.noLoggedMsg, AlertTypes.ERROR);
 		}
-	};
+	}
 
-	const handleParticipation = () => {
+	function handleParticipation() {
 		if (!!user?.name) {
 			navigate(`/event/${evId}`);
 			//window.location.reload(); //
 		} else {
 			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
 		}
-	};
+	}
 
-	const calculateAvailability = () => {
+	function calculateAvailability() {
 		let availability = Number(evParticipantsLimit) - Number(evParticipants);
 		return availability > 0;
-	};
+	}
 
 	function verifySubscription(): boolean {
 		return !!privateEvent?.members.find(member => (member?._id as unknown) === props.userId);
 	}
 
-	let eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
-
 	useEffect(() => {
-		const abortController = new AbortController();
-		getEventById(evId, abortController.signal)
+		getEventById(evId)
 			.then(res => {
 				setPrivateEvent(res);
 			})
@@ -89,11 +87,13 @@ const EventCard = (props: IEventCardProps): any => {
 				//setAlert(`${lang.needsLogin}!`, AlertTypes.ERROR);
 			});
 
-		return () => abortController.abort();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
 		verifySubscription();
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [privateEvent]);
 
 	return (
@@ -104,21 +104,28 @@ const EventCard = (props: IEventCardProps): any => {
 				evParticipants={evParticipants}
 				evParticipantsLimit={evParticipantsLimit}
 				evDate={evDate}
-				subscribedUser={verifySubscription()}></EventHeader>
+				subscribedUser={verifySubscription()}
+			/>
 
 			<section className={styles.cardMainInfo}>
 				<div className={styles.eventTime}>{evTime} hrs</div>
+
 				<div className={styles.eventTitle}>{evTitle}</div>
+
 				<div className={styles.eventDescription}>{evDescription}</div>
+
 				<div className={styles.eventParticipants}>
 					{lang.actualParticipants}
+
 					<p>
 						{evParticipants.toString()}/{evParticipantsLimit.toString()}
 					</p>
 				</div>
+
 				<div className={styles.eventCook}>
 					{lang.cook} <p>{evCook}</p>
 				</div>
+
 				<section className={styles.cardBtn}>
 					<div className={styles.participateBtn}>
 						{!verifySubscription() &&
@@ -138,6 +145,7 @@ const EventCard = (props: IEventCardProps): any => {
 								</Button>
 							)}
 					</div>
+
 					<div className={styles.infoBtn}>
 						<Button
 							kind="secondary"
@@ -155,6 +163,4 @@ const EventCard = (props: IEventCardProps): any => {
 			</section>
 		</div>
 	);
-};
-
-export default EventCard;
+}

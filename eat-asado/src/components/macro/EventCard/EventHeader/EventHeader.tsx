@@ -11,12 +11,8 @@ interface IEventCardProps {
 	evDate: String;
 }
 
-const EventHeader = (props: IEventCardProps) => {
-	const evState = props.evState;
-	const evParticipants = props.evParticipants;
-	const evParticipantsLimit = props.evParticipantsLimit;
-	const subscribedUser = props.subscribedUser;
-	const evDate = props.evDate;
+export default function EventHeader(props: IEventCardProps) {
+	const { evDate, evParticipants, evParticipantsLimit, evState, subscribedUser } = props;
 
 	function isEventFull(): boolean {
 		return evParticipants >= evParticipantsLimit;
@@ -30,19 +26,18 @@ const EventHeader = (props: IEventCardProps) => {
 			} else {
 				if (isEventFull()) return EventStatesEnum.FULL;
 			}
+
+			//TODO: Chech this logic. This code is unreachable.
 			return EventStatesEnum.AVAILABLE;
-		}
-		if (evState === EventStatesEnum.CLOSED) {
-			if (subscribedUser) {
-				return 'subscribed';
-			} else {
+		} else if (evState === EventStatesEnum.CLOSED) {
+			if (!subscribedUser) {
 				return EventStatesEnum.CLOSED;
 			}
-		}
-		if (evState === EventStatesEnum.CANCELED) {
+
+			return 'subscribed';
+		} else if (evState === EventStatesEnum.CANCELED) {
 			return EventStatesEnum.CANCELED;
-		}
-		if (evState === EventStatesEnum.FINISHED) {
+		} else {
 			return EventStatesEnum.FINISHED;
 		}
 	}
@@ -55,10 +50,9 @@ const EventHeader = (props: IEventCardProps) => {
 			)}>
 			<section className={styles.cardTitleInfo}>
 				<div className={styles.availabilityDesc}>{getEventState()?.toUpperCase()}</div>
+
 				<div className={styles.eventCardDate}>{evDate.toString()}</div>
 			</section>
 		</div>
 	);
-};
-
-export default EventHeader;
+}

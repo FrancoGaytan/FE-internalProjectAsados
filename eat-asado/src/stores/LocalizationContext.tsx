@@ -18,6 +18,8 @@ export function LocalizationProvider(props: PropsWithChildren<{}>): JSX.Element 
 
 	useEffect(() => {
 		storeLocale(locale.id);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [locale]);
 
 	return <LocalizationContext.Provider value={{ locale, setLocale }}>{props.children}</LocalizationContext.Provider>;

@@ -1,9 +1,8 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import styles from './styles.module.scss';
-import { useEvent } from '../../stores/EventContext';
 import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { getEventById, hasUploadedTransferReceipt, subscribeToAnEvent, unsubscribeToAnEvent } from '../../service';
@@ -15,7 +14,6 @@ import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { getUserById, editRoles, deleteEvent, editEvent } from '../../service';
 import Modal from '../../components/macro/Modal/Modal';
 import PayCheckForm from '../../components/macro/PayCheckForm/PayCheckForm';
-import { EventResponse, IEvent } from '../../models/event';
 import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/PurchaseReceiptForm';
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
 import { IPurchaseReceipt } from '../../models/purchases';
@@ -185,42 +183,39 @@ export function Event(): JSX.Element {
 	}
 
 	useEffect(() => {
-		const abortController = new AbortController();
-		getEventById(userIdParams.eventId, abortController.signal)
+		if (!userIdParams) return;
+
+		getEventById(userIdParams.eventId)
 			.then(res => {
 				setEvent(res);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
-
-		return () => abortController.abort();
-	}, []);
+	}, [userIdParams]);
 
 	useEffect(() => {
-		const abortController = new AbortController();
-		if (event?._id) {
-			getPurchaseReceipts(event?._id, abortController.signal)
-				.then(res => {
-					setPurchasesMade(res);
-				})
-				.catch(e => {
-					console.error('Catch in context: ', e);
-				});
-		}
+		if (!event) return;
+
+		getPurchaseReceipts(event?._id)
+			.then(res => {
+				setPurchasesMade(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
 	}, [event]);
 
 	useEffect(() => {
-		const abortController = new AbortController();
-		if (user) {
-			getUserById(user?.id, abortController.signal)
-				.then(res => {
-					setActualUser(res);
-				})
-				.catch(e => {
-					console.error('Catch in context: ', e);
-				});
-		}
+		if (!user) return;
+
+		getUserById(user?.id)
+			.then(res => {
+				setActualUser(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
 	}, [user]);
 
 	useEffect(() => {
@@ -228,15 +223,15 @@ export function Event(): JSX.Element {
 	}, [user, actualUser, event]);
 
 	useEffect(() => {
-		const abortController = new AbortController();
-		actualUser &&
-			hasUploadedTransferReceipt(actualUser._id, event?._id, abortController.signal)
-				.then(res => {
-					setUserHasPaid(res.hasUploaded);
-				})
-				.catch(e => {
-					console.error('Catch in context: ', e);
-				});
+		if (!actualUser || !event) return;
+
+		hasUploadedTransferReceipt(actualUser._id, event?._id)
+			.then(res => {
+				setUserHasPaid(res.hasUploaded);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
 	}, [actualUser, event]);
 
 	return (
@@ -244,32 +239,41 @@ export function Event(): JSX.Element {
 			<div className={styles.content}>
 				<section className={styles.header}>
 					<h1>{lang.messageBanner}</h1>
+
 					<Button kind="primary" size="large" onClick={() => navigate('/createEvent')}>
 						{lang.newEventButton}
 					</Button>
 				</section>
+
 				{!!event && (
 					<section className={styles.event}>
+						{/* TODO: NO deberían haber dos h1 en la misma página */}
 						<h1>{event.title}</h1>
+
 						<main className={styles.eventData}>
 							<div className={styles.eventOrganization}>
 								<div className={styles.sectionTitle}>
 									<div className={styles.calendarLogo}></div>
+
 									<h3 className={styles.logoTitle}>{lang.organizationTitle}</h3>
 								</div>
+
 								<h5 className={styles.infoData}>
 									{lang.date} {getOnlyDate(new Date(event.datetime))}
 								</h5>
+
 								<h5 className={styles.infoData}>
 									{lang.time} {getOnlyHour(new Date(event.datetime))}
 								</h5>
+
 								<h5 className={styles.infoData}>
 									{lang.organizer} {event.organizer.name}
 								</h5>
 
 								<div className={styles.secondRow}>
 									<div className={styles.sectionTitle}>
-										<div className={styles.restaurantLogo}></div>
+										<div className={styles.restaurantLogo} />
+
 										<h3 className={styles.logoTitle}>{lang.menu}</h3>
 									</div>
 									<h5 className={styles.infoData}>{event.description}</h5>
@@ -280,10 +284,13 @@ export function Event(): JSX.Element {
 										<div className={styles.cartLogo}></div>
 										<h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
 									</div>
+
 									{purchasesMade.map((purchase: IPurchaseReceipt) => (
 										<div className={styles.purchasesData}>
 											<h5 className={styles.infoData}>{purchase.description}</h5>
+
 											<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
+
 											{event?.shoppingDesignee._id === user?.id && (
 												<button
 													className={styles.deleteBtn}
@@ -292,6 +299,7 @@ export function Event(): JSX.Element {
 														deletePurchase(purchase);
 													}}></button>
 											)}
+
 											<button
 												className={styles.downloadBtn}
 												onClick={e => {
@@ -305,8 +313,10 @@ export function Event(): JSX.Element {
 							<div className={styles.eventParticipants}>
 								<div className={styles.sectionTitle}>
 									<div className={styles.inChargeLogo}></div>
+
 									<h3 className={styles.logoTitle}>{lang.inchargeTitle}</h3>
 								</div>
+
 								<div className={styles.inChargeOpt}>
 									<h5 className={styles.infoData}>
 										{lang.cook}
@@ -316,6 +326,7 @@ export function Event(): JSX.Element {
 									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
 									)}
+
 									{!event.chef && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
 									)}
@@ -329,26 +340,34 @@ export function Event(): JSX.Element {
 												: event.shoppingDesignee.name
 											: lang.emptyOpt}
 									</h5>
+
 									{event.shoppingDesignee &&
 										event.shoppingDesignee._id === user?.id &&
 										event.state !== 'closed' &&
 										isUserIntoEvent() && (
 											<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
 										)}
+
 									{!event.shoppingDesignee && event.state !== 'closed' && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
 									)}
 								</div>
+
 								<div className={styles.secondRow}>
 									<div className={styles.participantsTitle}></div>
+
 									<div className={styles.sectionTitle}>
-										<div className={styles.participantsLogo}></div>
+										<div className={styles.participantsLogo} />
+
 										<h3 className={styles.logoTitle}>
 											{lang.diners} {event.members.length}/{event.memberLimit}
 										</h3>
 									</div>
+
 									{event.members.map((member: IUser) => (
-										<h5 className={styles.infoData}>{member.name}</h5>
+										<h5 className={styles.infoData} key={member._id}>
+											{member.name}
+										</h5>
 									))}
 								</div>
 							</div>
@@ -360,21 +379,25 @@ export function Event(): JSX.Element {
 									{isUserIntoEvent() ? 'Bajarse' : 'Sumarse'}
 								</Button>
 							)}
+
 							{event.organizer && event.organizer._id === user?.id && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => deleteTheEvent()}>
 									{lang.deleteEventBtn}
 								</Button>
 							)}
+
 							{event.organizer && event.organizer._id === user?.id && event.state !== 'closed' && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
 									{lang.closeEventBtn}
 								</Button>
 							)}
+
 							{event.organizer && event.organizer._id === user?.id && event.state === 'closed' && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
 									{lang.reopenEventBtn}
 								</Button>
 							)}
+
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === 'closed' &&
@@ -399,6 +422,7 @@ export function Event(): JSX.Element {
 										{lang.uploadPay}
 									</Button>
 								))}
+
 							{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state === 'closed' && (
 								<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
 									{lang.loadPurchase}
@@ -408,18 +432,13 @@ export function Event(): JSX.Element {
 					</section>
 				)}
 			</div>
-			<Modal isOpen={modalState} closeModal={() => closeModal}>
-				<PayCheckForm
-					event={event}
-					shoppingDesignee={event?.shoppingDesignee}
-					openModal={() => openModal}
-					closeModal={() => closeModal}></PayCheckForm>
+
+			<Modal isOpen={modalState} closeModal={closeModal}>
+				<PayCheckForm event={event} shoppingDesignee={event?.shoppingDesignee} openModal={openModal} closeModal={closeModal}></PayCheckForm>
 			</Modal>
-			<Modal isOpen={modalPurchaseRecipt} closeModal={() => closeModalPurchaseRecipt}>
-				<PurchaseReceiptForm
-					event={event}
-					openModal={() => openModalPurchaseRecipt}
-					closeModal={() => closeModalPurchaseRecipt}></PurchaseReceiptForm>
+
+			<Modal isOpen={modalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}>
+				<PurchaseReceiptForm event={event} openModal={openModalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}></PurchaseReceiptForm>
 			</Modal>
 		</PrivateFormLayout>
 	);
