@@ -1,65 +1,42 @@
-import styles from './styles.module.scss';
+import { useState, useRef } from 'react';
 import { className } from '../../../utils/className';
 import { EventResponse } from '../../../models/event';
-import { IUser } from '../../../models/user';
-import { IPurchaseReceiptRequest, IPurchaseReceipt } from '../../../models/purchases';
+import { IPurchaseReceiptRequest } from '../../../models/purchases';
 import Button from '../../micro/Button/Button';
-import { useState, useEffect, useRef } from 'react';
 import DragAndDrop from '../../micro/DragAndDrop/DragAndDrop';
-import { createTransferReceipt, uploadFile } from '../../../service';
-import { useAuth } from '../../../stores/AuthContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useAlert } from '../../../stores/AlertContext';
-import { PaymentOptsEnum } from '../../../enums/PaymentsMethods.enum';
 import { createPurchaseReceipt, uploadPurchaseFile } from '../../../service/purchaseReceipts';
+import styles from './styles.module.scss';
 
 interface PurchaseReceiptProps {
 	event: EventResponse;
-	openModal: any;
+	openModal: () => void;
 	closeModal: () => void;
 }
 
-const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
-	const inputRef = useRef<HTMLInputElement>(null);
-	const { user } = useAuth();
+const initialPurchaseForm: IPurchaseReceiptRequest = {
+	amount: 0,
+	file: undefined,
+	description: ''
+};
+
+export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
+	const { event, openModal } = props;
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
-	const { event, openModal } = props;
-
-	const initialPurchaseForm: IPurchaseReceiptRequest = {
-		amount: 0,
-		file: undefined,
-		description: ''
-	};
-
+	const inputRef = useRef<HTMLInputElement>(null);
 	const [purchaseForm, setPurchaseForm] = useState<IPurchaseReceiptRequest>(initialPurchaseForm);
 
 	function checkForInputsToBeCompleted(): boolean {
 		return purchaseForm.amount !== 0 && purchaseForm.description !== '' && purchaseForm.file !== undefined;
 	}
 
-	async function confirmNewPurchase(e: any) {
-		e.preventDefault();
-		console.log(checkForInputsToBeCompleted());
-		if (checkForInputsToBeCompleted()) {
-			const data = new FormData();
-			data.append('file', purchaseForm.file as File);
-			try {
-				const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
-				setAlert(`Purchase Receipt loaded!`, AlertTypes.SUCCESS);
-				try {
-					await uploadPurchaseFile(purchaseForm.file, resp._id);
-					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-				} catch (e) {
-					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
-				}
-				setTimeout(() => window.location.reload(), 1000);
-			} catch (e) {
-				setAlert(`There's been a failure loading the purchase receipt`, AlertTypes.ERROR);
-			}
-		}
+	function setVoucherInput(file: File) {
+		setPurchaseForm(prev => ({ ...prev, file: file }));
 	}
+
 	function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -70,13 +47,39 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 		}
 	}
 
-	function setVoucherInput(file: File) {
-		setPurchaseForm(prev => ({ ...prev, file: file }));
+	async function confirmNewPurchase(e: any) {
+		e.preventDefault();
+
+		if (checkForInputsToBeCompleted()) {
+			const data = new FormData();
+			data.append('file', purchaseForm.file as File);
+
+			try {
+				const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
+
+				setAlert(`Purchase Receipt loaded!`, AlertTypes.SUCCESS);
+
+				try {
+					await uploadPurchaseFile(purchaseForm.file, resp._id);
+					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+				} catch (e) {
+					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
+				}
+
+				setTimeout(() => window.location.reload(), 1000);
+			} catch (e) {
+				/* TODO: Acá hay un alert en inglés y en el otro hay uno en español
+				Deberían estar en el mismo idioma y localizados */
+
+				setAlert(`There's been a failure loading the purchase receipt`, AlertTypes.ERROR);
+			}
+		}
 	}
 
 	return (
 		<div {...className(styles.paycheck)}>
 			<h4>{lang.payTitle}</h4>
+
 			<div className={styles.paycheckContent}>
 				<form onSubmit={e => confirmNewPurchase(e)} className={styles.purchaseForm}>
 					<div className={styles.descInput}>
@@ -91,6 +94,7 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 							}}
 						/>
 					</div>
+
 					<div className={styles.descInput}>
 						<label className={styles.descLabel}>{lang.amountLabel}</label>
 						<input
@@ -117,7 +121,9 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 							{purchaseForm?.file ? <p>{purchaseForm.file.name}</p> : <p>{lang.uploadTransferReceipt}</p>}
 						</div>
 					</DragAndDrop>
+
 					<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
+
 					<section className={styles.btnSection}>
 						<Button className={styles.confirmPayBtn} kind="primary" size="large" onClick={e => confirmNewPurchase(e)}>
 							{lang.confirmPayBtn}
@@ -127,5 +133,4 @@ const PurchaseReceiptForm = (props: PurchaseReceiptProps) => {
 			</div>
 		</div>
 	);
-};
-export default PurchaseReceiptForm;
+}

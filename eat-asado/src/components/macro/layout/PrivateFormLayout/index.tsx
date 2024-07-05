@@ -1,9 +1,9 @@
 import { PropsWithChildren } from 'react';
 import { useTranslation } from '../../../../stores/LocalizationContext';
 import AlertPopup from '../../../micro/AlertPopup/AlertPopup';
-import styles from './styles.module.scss';
 import { useAuth } from '../../../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import styles from './styles.module.scss';
 
 export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element {
 	const lang = useTranslation('userProfile');
@@ -11,18 +11,18 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 
 	const { user, logout } = useAuth();
 
-	const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+	function handleLogout(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		logout();
-	};
-	const handleGoToProfile = (e: React.MouseEvent<HTMLButtonElement>) => {
+	}
+	function handleGoToProfile(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		navigate('/userProfile');
-	};
-	const handleGoToMain = (e: React.MouseEvent<HTMLButtonElement>) => {
+	}
+	function handleGoToMain(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		navigate('/');
-	};
+	}
 
 	return (
 		<div className={styles.privateContainer}>
@@ -35,6 +35,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 							<button className={styles.profileBtn} onClick={handleGoToProfile}></button>
 						</div>
 					)}
+
 					<div className={styles.logoutBtnSection}>
 						{!!user?.name ? (
 							<button className={styles.logoutBtn} onClick={handleLogout}>
@@ -48,12 +49,16 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 					</div>
 				</nav>
 			</header>
+
 			<section className={styles.secondHeader}>
 				<button className={styles.logo} onClick={handleGoToMain}></button>
+
 				<div className={styles.fire}></div>
 			</section>
+
 			<section className={styles.containerLayout}>{props.children}</section>
-			<footer className={styles.footerFire}>{/* <img src="/assets/pictures/fire.png" alt="" /> */}</footer>
+
+			<footer className={styles.footerFire}></footer>
 		</div>
 	);
 }

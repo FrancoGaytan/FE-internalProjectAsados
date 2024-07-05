@@ -2,22 +2,21 @@ import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
 
 interface ModalProps {
-	children?: JSX.Element; // x ahora lo soluciono así, despues cambialo
+	children: JSX.Element;
 	isOpen: boolean;
-	closeModal: any;
+	closeModal: () => void;
 }
 
-const Modal = ({ children, isOpen, closeModal }: ModalProps) => {
+export default function Modal({ children, isOpen, closeModal }: ModalProps) {
 	return (
 		<article {...className(styles.modal, styles[isOpen ? 'isOpen' : ''])}>
 			<div className={styles.modalContainer}>
-				<button className={styles.closeModalBtn} onClick={closeModal()}>
+				<button className={styles.closeModalBtn} onClick={closeModal}>
 					X
 				</button>
+
 				{children}
 			</div>
 		</article>
 	);
-};
-
-export default Modal;
+}

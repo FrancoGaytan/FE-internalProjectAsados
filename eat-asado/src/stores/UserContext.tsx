@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
-import { getUsers } from '../service';
+import { createContext, useContext, useState, PropsWithChildren } from 'react';
 import { IUser } from '../models/user'; //TODO: hay que corregir esta interfaz ahora es la posta fijate de rehacer los ultimos cambios
 
 interface IUserContext {
@@ -9,12 +8,13 @@ interface IUserContext {
 const UserContext = createContext<IUserContext>({} as IUserContext);
 
 export function UserProvider(props: PropsWithChildren<{}>): JSX.Element {
-	const [users, setUsers] = useState<IUser[]>([]);
+	const [users] = useState<IUser[]>([]);
 
 	/**
 	 * Fetches the users.
 	 */
 	//FIXME: Check this.
+
 	/* useEffect(() => {
 		const abortController = new AbortController();
 
@@ -27,6 +27,9 @@ export function UserProvider(props: PropsWithChildren<{}>): JSX.Element {
 				console.error('Catch in context: ', e);
 			});
 
+			TODO: Es redundante que los context que están montados a nivel global en la app hagan abort de fetchs porque nunca se desmontan.
+			Nunca se ejecuta la función return del useEffect.
+			
 		return () => abortController.abort();
 	}, []); */
 

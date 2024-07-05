@@ -23,7 +23,7 @@ export async function _get<T>(path: string, signal?: AbortSignal): Promise<T> {
 		});
 
 		if (!response.ok) {
-			throw new Error('login failed');
+			throw new Error('GET request failed');
 		}
 
 		const data = await response.json();
@@ -49,7 +49,7 @@ export async function __getFiles(path: string, signal?: AbortSignal): Promise<an
 		});
 
 		if (!response.ok) {
-			throw new Error('login failed');
+			throw new Error('GET Files request failed');
 		}
 
 		return await response.blob();
@@ -69,7 +69,7 @@ export async function _post<T, P = any>(path: string, payload?: P, signal?: Abor
 		});
 
 		if (!response.ok) {
-			throw new Error('login failed');
+			throw new Error('POST request failed');
 		}
 
 		const data = await response.json();
@@ -99,7 +99,7 @@ export async function _postFiles(formFile: any, path: string, signal?: AbortSign
 		});
 
 		if (!response.ok) {
-			throw new Error('login failed');
+			throw new Error('POST Files request failed');
 		}
 
 		return response as any;
@@ -119,7 +119,7 @@ export async function _put<T, P = any>(path: string, payload: P, signal?: AbortS
 		});
 
 		if (!response.ok) {
-			throw new Error('login failed');
+			throw new Error('PUT request failed');
 		}
 
 		const data = await response.json();
@@ -140,7 +140,7 @@ export async function _delete<T = any>(path: string, signal?: AbortSignal): Prom
 		});
 
 		if (!response.ok) {
-			throw new Error('login failed');
+			throw new Error('DELETE request failed');
 		}
 
 		const data = await response.json();

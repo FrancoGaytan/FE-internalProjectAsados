@@ -12,25 +12,26 @@ interface InitialNewPasswordInterface {
 
 export function SettingNewPassword(): JSX.Element {
 	const lang = useTranslation('settingNewPassword');
-	const initialNewPassword = {
+	const [newPassword, setNewPassword] = useState<InitialNewPasswordInterface>({
 		userVerificationCode: '',
 		userPassword: '',
 		userConfirmedPassword: ''
-	};
-	const [newPassword, setNewPassword] = useState<InitialNewPasswordInterface>(initialNewPassword);
+	});
 
-	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+	function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
 		console.log(newPassword);
-	};
+	}
 
 	return (
 		<div>
 			<PrivateFormLayout>
 				<div className={styles.settingNewPasswordContainer}>
 					<h1>{lang.setNewPasswordTitle}</h1>
+
 					<label htmlFor="verificationCode" className={styles.passwordLabel}>
 						{lang.verificationCode}
 					</label>
+
 					<input
 						className={styles.input}
 						id="verificationCode"
@@ -41,9 +42,11 @@ export function SettingNewPassword(): JSX.Element {
 							setNewPassword({ ...newPassword, userVerificationCode: e.target.value });
 						}}
 					/>
+
 					<label htmlFor="Password" className={styles.passwordLabel}>
 						{lang.password}
 					</label>
+
 					<input
 						className={styles.input}
 						id="password"
@@ -54,10 +57,13 @@ export function SettingNewPassword(): JSX.Element {
 							setNewPassword({ ...newPassword, userPassword: e.target.value });
 						}}
 					/>
+
 					<p className={styles.mainDesc}>{lang.passwordDescription}</p>
+
 					<label htmlFor="Password" className={styles.passwordLabel}>
 						{lang.confirmPassword}
 					</label>
+
 					<input
 						className={styles.input}
 						id="confirmPassword"
@@ -68,6 +74,7 @@ export function SettingNewPassword(): JSX.Element {
 							setNewPassword({ ...newPassword, userConfirmedPassword: e.target.value });
 						}}
 					/>
+
 					<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleSubmit}>
 						{lang.setKeyBtn}
 					</Button>

@@ -1,4 +1,3 @@
-import styles from './styles.module.scss';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
 import React, { useEffect, useRef, useState } from 'react';
@@ -6,8 +5,8 @@ import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
 import { useAuth } from '../../stores/AuthContext';
 import { editUser, getUserById } from '../../service';
 import { useAlert } from '../../stores/AlertContext';
-import { useNavigate } from 'react-router-dom';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
+import styles from './styles.module.scss';
 
 export interface UserProfileInterface {
 	userImage?: File;
@@ -31,8 +30,13 @@ export interface IUserByIdResponse {
 	specialDiet?: string[];
 }
 
+// En un futuro esto debería estar en estado, para poder cambiarle el valor.
+const emptyFile = undefined as unknown as File;
+
 export function UserProfile(): JSX.Element {
 	const lang = useTranslation('userProfile');
+	const { user, setIsLoading } = useAuth(); // usuario que llega primero desde el useAuth
+	const { setAlert } = useAlert();
 	const [actualUser, setActualUser] = useState<IUserByIdResponse>({
 		email: '',
 		name: '',
@@ -42,11 +46,7 @@ export function UserProfile(): JSX.Element {
 		password: '',
 		specialDiet: []
 	}); //este es el user que se utiliza para comparar la response del getUserById y despues actualizar el userProfile
-	const { user } = useAuth(); // usuario que llega primero desde el useAuth
 	const inputRef = useRef<HTMLInputElement>(null);
-
-	// En un futuro esto debería estar en estado, para poder cambiarle el valor.
-	let emptyFile = undefined as unknown as File;
 
 	const initialUser = {
 		userImage: emptyFile,
@@ -61,11 +61,8 @@ export function UserProfile(): JSX.Element {
 	};
 
 	const [userProfile, setUser] = useState<UserProfileInterface>(initialUser); //este es el usuario que despues se va a submitear al form, el que se ve en los inputs
-	const { setIsLoading } = useAuth();
-	const { setAlert } = useAlert();
-	const navigate = useNavigate();
 
-	const checkSpecialDiet = (): string[] => {
+	function checkSpecialDiet(): string[] {
 		let speDiet = [];
 		userProfile.userVegan && speDiet.push('vegan');
 		userProfile.userVegetarian && speDiet.push('vegetarian');
@@ -73,9 +70,9 @@ export function UserProfile(): JSX.Element {
 		userProfile.userCeliac && speDiet.push('celiac');
 
 		return speDiet;
-	};
+	}
 
-	function handleUpdateProfile(e: any): void {
+	function handleUpdateProfile(e: React.FormEvent<HTMLFormElement>): void {
 		e.preventDefault();
 		setIsLoading(true);
 
@@ -100,7 +97,7 @@ export function UserProfile(): JSX.Element {
 		return actualUser?.specialDiet?.includes(diet) && diet.toString();
 	}
 
-	const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+	function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
 		e.preventDefault();
 		e.stopPropagation();
 		const target = e.target;
@@ -109,15 +106,17 @@ export function UserProfile(): JSX.Element {
 		if (target.files?.length && target.files.length > 0) {
 			setUser({ ...userProfile, userImage: target.files[0] });
 		}
-	};
+	}
 
-	const setProfileImage = (file: File) => {
+	function setProfileImage(file: File) {
 		setUser(prev => ({ ...prev, userImage: file }));
 		// setUser({userImage: file})
-	};
+	}
 
 	useEffect(() => {
 		setUser(initialUser);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [actualUser]);
 
 	useEffect(() => {
@@ -128,13 +127,16 @@ export function UserProfile(): JSX.Element {
 
 		return () => abortController.abort();
 	}, [user?.id]);
+
 	return (
 		<div className={styles.userProfileContainer}>
 			<form onSubmit={e => handleUpdateProfile(e)}>
 				<h1>{lang.profileTitle}</h1>
+
 				<section className={styles.dataSection}>
 					<div className={styles.firstColumnProfile}>
 						<h3>{lang.personalData}</h3>
+
 						<div className={styles.pictureRow}>
 							<DragAndDrop setState={setProfileImage}>
 								{userProfile.userImage !== undefined ? (
@@ -143,11 +145,14 @@ export function UserProfile(): JSX.Element {
 									<img src="/assets/pictures/profile.png" className={styles.userPicture} alt="placeholder" />
 								)}
 							</DragAndDrop>
+
 							<p onClick={() => inputRef.current?.click()} style={{ cursor: 'pointer' }}>
 								{lang.editImg}
 							</p>
+
 							<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
 						</div>
+
 						<label htmlFor="cbu" className={styles.cbuLabel}>
 							{lang.cbu}
 						</label>
@@ -161,6 +166,7 @@ export function UserProfile(): JSX.Element {
 								setUser({ ...userProfile, userCbu: e.target.value });
 							}}
 						/>
+
 						<label htmlFor="alias" className={styles.cbuLabel}>
 							{lang.alias}
 						</label>
@@ -202,6 +208,7 @@ export function UserProfile(): JSX.Element {
 							}}
 						/>
 					</div>
+
 					<div className={styles.secondColumnProfile}>
 						<h3>{lang.specialDietTitle}</h3>
 						<section className={styles.checkboxesContainer}>
