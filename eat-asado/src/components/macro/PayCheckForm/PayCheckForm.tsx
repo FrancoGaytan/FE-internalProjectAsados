@@ -80,13 +80,11 @@ export default function PayCheckForm(props: PayCheckProps) {
 		}
 	}
 
-	async function handleConfirmPay(e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+	async function confirmPay(e: any) {
 		e.preventDefault();
-
-		if (!checkForReceiptAndTransfer()) {
+		if (checkForReceiptAndTransfer()) {
 			const data = new FormData();
 			data.append('file', payForm.file as File);
-
 			try {
 				const resp = await createTransferReceipt(event?._id, { ...payForm });
 				setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
@@ -94,8 +92,8 @@ export default function PayCheckForm(props: PayCheckProps) {
 				try {
 					await uploadFile(payForm.file, resp._id);
 					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+					setTimeout(() => window.location.reload(), 1000);
 					//closeModal(); // Mejora: lograr que se cierre el popup una vez que se confirme el updateFile
-					// Podrías agregar el closeModal() en un finally, para que se cierre el modal sin importar si la petición fue exitosa o no.
 				} catch (e) {
 					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
 				}
@@ -146,7 +144,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 					{lang.totalPrice}${priceToPay}
 				</h5>
 
-				<form onSubmit={e => handleConfirmPay(e)} className={styles.payForm}>
+				<form onSubmit={e => confirmPay(e)} className={styles.payForm}>
 					<h4>{lang.payOptTitle}</h4>
 					<input type="radio" name="cashOption" value="cash" checked={payOpt === 'cash'} onChange={tooglePaymentOp} />
 					<label>{lang.cashRadioBtn}</label>
@@ -176,11 +174,11 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 					<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
 
-					<footer className={styles.btnSection}>
-						<Button type="submit" className={styles.confirmPayBtn} kind="primary" size="large">
+					<section className={styles.btnSection}>
+						<Button type="submit" className={styles.confirmPayBtn} kind="primary" size="large" onClick={e => confirmPay(e)}>
 							{lang.confirmPayBtn}
 						</Button>
-					</footer>
+					</section>
 				</form>
 			</div>
 		</div>

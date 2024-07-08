@@ -18,6 +18,7 @@ import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/Purc
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
 import { IPurchaseReceipt } from '../../models/purchases';
 import { downloadFile } from '../../utils/utilities';
+import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -28,9 +29,14 @@ export function Event(): JSX.Element {
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
 	const [modalState, setModalState] = useState(false);
+	const [modalValidationState, setModalValidationState] = useState(false);
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [userHasPaid, setUserHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState([]);
+	const [transferReceiptId, setTransferReceiptId] = useState('');
+	const [userToApprove, setUserToApprove] = useState('');
+	const [userHasUploaded, setUserHasUploaded] = useState(false);
+	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -164,6 +170,14 @@ export function Event(): JSX.Element {
 		setModalPurchaseRecipt(true);
 	}
 
+	function openValidationPopup(): void {
+		setModalValidationState(true);
+	}
+
+	function closeValidationPopup() {
+		setModalValidationState(false);
+	}
+
 	function deletePurchase(purchase: IPurchaseReceipt): any {
 		deleteEventPurchase(purchase._id, event._id)
 			.then(res => {
@@ -180,6 +194,37 @@ export function Event(): JSX.Element {
 		} catch (e) {
 			setAlert(lang.downloadingImageError, AlertTypes.ERROR);
 		}
+	}
+
+	function showPaymentData() {
+		return (
+			(event.state === 'closed' && event.organizer && event.organizer._id === user?.id) ||
+			(event.state === 'closed' && event.shoppingDesignee && event.shoppingDesignee === user?.id)
+		);
+	}
+
+	function checkIfUserUploaded(member: IUser): boolean {
+		const abortController = new AbortController();
+		hasUploadedTransferReceipt(member._id, event?._id, abortController.signal)
+			.then(res => {
+				return res.hasUploaded;
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+		return false; //chequear que esto si el hasReceiptApproved es true devuelva true y no salga con este false
+	}
+
+	function checkIfUserHasPaid(member: IUser): boolean {
+		const abortController = new AbortController();
+		hasUploadedTransferReceipt(member._id, event?._id, abortController.signal)
+			.then(res => {
+				return res.hasReceiptApproved;
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+		return false; //chequear que esto si el hasReceiptApproved es true devuelva true y no salga con este false
 	}
 
 	useEffect(() => {
@@ -232,6 +277,19 @@ export function Event(): JSX.Element {
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
+	}, [actualUser, event]);
+
+	useEffect(() => {
+		const abortController = new AbortController();
+		actualUser &&
+			hasUploadedTransferReceipt(actualUser._id, event?._id, abortController.signal)
+				.then(res => {
+					setTransferReceiptId(res.transferReceipt);
+					setUserHasUploaded(res.hasUploaded);
+				})
+				.catch(e => {
+					console.error('Catch in context: ', e);
+				});
 	}, [actualUser, event]);
 
 	return (
@@ -365,9 +423,26 @@ export function Event(): JSX.Element {
 									</div>
 
 									{event.members.map((member: IUser) => (
-										<h5 className={styles.infoData} key={member._id}>
-											{member.name}
-										</h5>
+										<div className={styles.infoData}>
+											<h5 className={styles.infoDataUsername}>{member.name}</h5>
+											{showPaymentData() && //este !  volarlo, es solo para probar el boton
+												(!checkIfUserUploaded(member) ? ( //de aca toca para testear el boton // tengo que setearlo a false cuando el organizador confirma el pago
+													<Button
+														className={styles.btnEvent}
+														kind="validation"
+														size="micro"
+														onClick={() => {
+															openValidationPopup();
+															setUserToApprove(member._id);
+														}}>
+														{lang.validateBtn}
+													</Button>
+												) : checkIfUserHasPaid(member) ? ( //hacer una funcion userHasPaid para cada member que va recorriendo
+													<h5 className={styles.infoDataUsernamePayed}>{lang.paidNoti}</h5>
+												) : (
+													<h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
+												))}
+										</div>
 									))}
 								</div>
 							</div>
@@ -439,6 +514,14 @@ export function Event(): JSX.Element {
 
 			<Modal isOpen={modalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}>
 				<PurchaseReceiptForm event={event} openModal={openModalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}></PurchaseReceiptForm>
+			</Modal>
+
+			<Modal isOpen={modalValidationState} closeModal={() => closeValidationPopup}>
+				<ConfirmationPayForm
+					event={event}
+					transferReceiptId={transferReceiptId}
+					openModal={() => openValidationPopup}
+					closeModal={() => closeValidationPopup}></ConfirmationPayForm>
 			</Modal>
 		</PrivateFormLayout>
 	);

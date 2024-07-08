@@ -24,6 +24,19 @@ button {
 		color: var(--btnPrimary);
 		border: 3px solid var(--btnPrimary);
 	}
+	&.validation {
+		background-color: rgb(61, 61, 233);
+		color: white;
+		border: 0px;
+	}
+	&.whitePrimary {
+		background-color: #dce0d2;
+		color: var(--messageSuccessPrimary);
+	}
+	&.whiteSecondary {
+		background-color: #dce0d2;
+		color: var(--btnPrimaryDarker);
+	}
 
 	//size
 
@@ -46,6 +59,10 @@ button {
 		max-height: 40px;
 	}
 
-	&.full {
+	&.size-full {
+	}
+	&.size-micro {
+		width: 80px;
+		height: 20px;
 	}
 }
