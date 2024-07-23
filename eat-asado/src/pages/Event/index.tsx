@@ -13,6 +13,7 @@ import {
 	subscribeToAnEvent,
 	unsubscribeToAnEvent
 } from '../../service';
+import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useParams } from 'react-router-dom';
 import { EventUserResponse, IUser } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
@@ -143,7 +144,7 @@ export function Event(): JSX.Element {
 
 	function closeEvent(): void {
 		event.chef && event.shoppingDesignee
-			? editEvent(event?._id, { ...event, state: 'closed' })
+			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
 					.then(res => {
 						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
 					})
@@ -154,7 +155,7 @@ export function Event(): JSX.Element {
 
 	function reopenEvent(): void {
 		//TODO: deuda tecnica hacer una sola funcion para closeEvent y reopenEvent --> algo como: toogleEvent
-		editEvent(event?._id, { ...event, state: 'available' })
+		editEvent(event?._id, { ...event, state: EventStatesEnum.AVAILABLE })
 			.then(res => {
 				setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
 			})
@@ -210,8 +211,8 @@ export function Event(): JSX.Element {
 
 	function showPaymentData() {
 		return (
-			(event.state === 'closed' && event.organizer && event.organizer._id === user?.id) ||
-			(event.state === 'closed' && event.shoppingDesignee && event.shoppingDesignee === user?.id)
+			(event.state === EventStatesEnum.CLOSED && event.organizer && event.organizer._id === user?.id) ||
+			(event.state === EventStatesEnum.CLOSED && event.shoppingDesignee && event.shoppingDesignee === user?.id)
 		);
 	}
 
@@ -380,11 +381,11 @@ export function Event(): JSX.Element {
 										{event.chef ? (event.chef._id === user?.id ? ' Me' : event.chef.name) : 'Vacante'}
 									</h5>
 
-									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && isUserIntoEvent() && (
+									{event.chef && event.chef._id === user?.id && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
 									)}
 
-									{!event.chef && event.state !== 'closed' && isUserIntoEvent() && (
+									{!event.chef && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
 									)}
 								</div>
@@ -400,12 +401,12 @@ export function Event(): JSX.Element {
 
 									{event.shoppingDesignee &&
 										event.shoppingDesignee._id === user?.id &&
-										event.state !== 'closed' &&
+										event.state !== EventStatesEnum.CLOSED &&
 										isUserIntoEvent() && (
 											<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
 										)}
 
-									{!event.shoppingDesignee && event.state !== 'closed' && isUserIntoEvent() && (
+									{!event.shoppingDesignee && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
 									)}
 								</div>
@@ -450,7 +451,7 @@ export function Event(): JSX.Element {
 						</main>
 
 						<section className={styles.btnSection}>
-							{event.state === 'available' && !isLoading && (
+							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
 									{isUserIntoEvent() ? 'Bajarse' : 'Sumarse'}
 								</Button>
@@ -462,13 +463,16 @@ export function Event(): JSX.Element {
 								</Button>
 							)}
 
-							{event.organizer && event.organizer._id === user?.id && event.state !== 'finished' && event.state !== 'closed' && (
-								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
-									{lang.closeEventBtn}
-								</Button>
-							)}
+							{event.organizer &&
+								event.organizer._id === user?.id &&
+								event.state !== 'finished' &&
+								event.state !== EventStatesEnum.CLOSED && (
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
+										{lang.closeEventBtn}
+									</Button>
+								)}
 
-							{event.organizer && event.organizer._id === user?.id && event.state === 'closed' && (
+							{event.organizer && event.organizer._id === user?.id && event.state === EventStatesEnum.CLOSED && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
 									{lang.reopenEventBtn}
 								</Button>
@@ -476,7 +480,7 @@ export function Event(): JSX.Element {
 
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
-								event.state === 'closed' &&
+								event.state === EventStatesEnum.CLOSED &&
 								!userHasPaid &&
 								(event.purchaseReceipts.length as number) === 0 && (
 									<Button className={styles.btnEvent} kind="tertiary" size="short">
@@ -486,7 +490,7 @@ export function Event(): JSX.Element {
 
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
-								event.state === 'closed' &&
+								event.state === EventStatesEnum.CLOSED &&
 								(event.purchaseReceipts.length as number) !== 0 &&
 								(!checkIfUserHasUploaded() ? (
 									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
@@ -498,7 +502,7 @@ export function Event(): JSX.Element {
 									</Button>
 								))}
 
-							{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state === 'closed' && (
+							{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state === EventStatesEnum.CLOSED && (
 								<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
 									{lang.loadPurchase}
 								</Button>

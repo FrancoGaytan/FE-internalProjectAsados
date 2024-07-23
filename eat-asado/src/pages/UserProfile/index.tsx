@@ -127,8 +127,7 @@ export function UserProfile(): JSX.Element {
 
 		return () => abortController.abort();
 	}, [user?.id]);
-	//console.log(userProfile);
-	console.log(actualUser); //ver con maxi que pasa aca
+
 	return (
 		<div className={styles.userProfileContainer}>
 			<form onSubmit={e => handleUpdateProfile(e)}>

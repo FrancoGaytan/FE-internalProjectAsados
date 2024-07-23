@@ -15,12 +15,12 @@ import { transferReceipt } from '../../../models/transfer';
 
 interface ConfirmationPayProps {
 	event: EventResponse;
-	openModal: any;
-	transferReceiptId: string | undefined;
+	openModal: () => void;
+	transferReceiptId?: string;
 	closeModal: () => void;
 }
 
-const ConfirmationPayForm = (props: ConfirmationPayProps) => {
+function ConfirmationPayForm(props: ConfirmationPayProps) {
 	const { user } = useAuth();
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
@@ -41,7 +41,7 @@ const ConfirmationPayForm = (props: ConfirmationPayProps) => {
 		try {
 			await approveTransferReceipts(receiptId, event._id, abortController.signal);
 			setAlert(lang.payApprovedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000);
+			setTimeout(() => window.location.reload(), 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
 		} catch (error) {
 			setAlert(lang.payApproveFailed, AlertTypes.ERROR);
 		}
@@ -96,6 +96,6 @@ const ConfirmationPayForm = (props: ConfirmationPayProps) => {
 			</div>
 		</div>
 	);
-};
+}
 
 export default ConfirmationPayForm;
