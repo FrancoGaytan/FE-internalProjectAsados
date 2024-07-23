@@ -10,3 +10,18 @@ export async function uploadFile(formFile: ITransferReceiptImage, idPurchaseRece
 	const url = `/transferReceipts/uploadFile/${idPurchaseReceipt}`;
 	return await _postFiles(formFile, url, signal);
 }
+
+export async function approveTransferReceipts(idTransferReceipt: string | undefined, idEvent: string, signal?: AbortSignal): Promise<any> {
+	const url = `/transferReceipts/approveTransferReceipt/${idTransferReceipt}/${idEvent}`;
+	return await _put<any>(url, signal);
+}
+
+export async function deleteTransferReceipt(idTransferReceipt: string | undefined, signal?: AbortSignal): Promise<any> {
+	const url = `/transferReceipts/deleteTransferReceipt/${idTransferReceipt}`;
+	return await _delete<any>(url, signal);
+}
+
+export async function getTransferReceipt(idTransferReceipt: string | undefined, signal?: AbortSignal): Promise<any> {
+	const url = `/transferReceipts/getTransferReceiptsById/${idTransferReceipt}`;
+	return await _get(url, signal);
+}

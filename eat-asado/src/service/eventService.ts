@@ -71,3 +71,8 @@ export async function deleteEvent(id: number, signal?: AbortSignal): Promise<any
 	const url = `/events/deleteEvent/${id}`;
 	return await _delete(url, signal);
 }
+
+export async function getMembersAndReceiptsInfo(eventId: string, signal?: AbortSignal): Promise<any> {
+	const url = `/events/getMembersAndReceiptsInfo/${eventId}`;
+	return await _get(url, signal);
+}
