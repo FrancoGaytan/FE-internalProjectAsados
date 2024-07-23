@@ -1,0 +1,39 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.paycheckContent {
+	margin-left: 15px;
+}
+
+.popupTitle {
+	color: white;
+	font-size: 25px;
+	font-family: var(--primaryFont);
+}
+
+.downloadContent {
+	display: flex;
+	justify-content: center;
+	margin-top: 60px;
+}
+
+.uploadBtn {
+	width: 25px;
+	height: 21px;
+	background-color: transparent;
+	background-image: url('../../../../public/assets/pictures/uploadIcon.png');
+	background-size: contain;
+	border-radius: 0;
+	margin-top: 16px;
+	margin-right: 8px;
+	margin-bottom: 5px;
+}
+
+.btnSection {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}

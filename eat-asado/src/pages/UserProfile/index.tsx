@@ -11,7 +11,7 @@ import styles from './styles.module.scss';
 export interface UserProfileInterface {
 	userImage?: File;
 	userName?: string;
-	userLastName?: string;
+	lastName?: string;
 	userCbu?: string;
 	userAlias?: string;
 	userVegan?: boolean;
@@ -50,10 +50,10 @@ export function UserProfile(): JSX.Element {
 
 	const initialUser = {
 		userImage: emptyFile,
-		userName: '',
-		lastName: '',
-		userCbu: '',
-		userAlias: '',
+		userName: actualUser.name,
+		lastName: actualUser.lastName,
+		userCbu: actualUser.cbu,
+		userAlias: actualUser.alias,
 		userVegan: chekingSpecialDiet('vegan'),
 		userVegetarian: chekingSpecialDiet('vegetarian'),
 		userHypertensive: chekingSpecialDiet('hypertensive'),
@@ -79,7 +79,7 @@ export function UserProfile(): JSX.Element {
 		const provisionalSendingUser = {
 			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
 			name: userProfile.userName,
-			lastName: userProfile.userLastName,
+			lastName: userProfile.lastName,
 			cbu: userProfile.userCbu ? userProfile.userCbu : actualUser.cbu,
 			alias: userProfile.userAlias ? userProfile.userAlias : actualUser.alias,
 			specialDiet: checkSpecialDiet()
@@ -159,7 +159,6 @@ export function UserProfile(): JSX.Element {
 						<input
 							className={styles.input}
 							id="cbu"
-							placeholder={actualUser.cbu}
 							type="text"
 							value={userProfile.userCbu}
 							onChange={e => {
@@ -173,7 +172,6 @@ export function UserProfile(): JSX.Element {
 						<input
 							className={styles.input}
 							id="alias"
-							placeholder={actualUser.alias}
 							type="text"
 							value={userProfile.userAlias}
 							onChange={e => {
@@ -187,7 +185,6 @@ export function UserProfile(): JSX.Element {
 						<input
 							className={styles.input}
 							id="name"
-							placeholder={actualUser.name}
 							type="text"
 							value={userProfile.userName}
 							onChange={e => {
@@ -200,11 +197,10 @@ export function UserProfile(): JSX.Element {
 						<input
 							className={styles.input}
 							id="lastName"
-							placeholder={actualUser.lastName}
 							type="text"
-							value={userProfile.userLastName}
+							value={userProfile.lastName}
 							onChange={e => {
-								setUser({ ...userProfile, userLastName: e.target.value });
+								setUser({ ...userProfile, lastName: e.target.value });
 							}}
 						/>
 					</div>

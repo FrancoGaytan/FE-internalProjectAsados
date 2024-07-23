@@ -35,4 +35,10 @@ export interface RegisterRequest {
 	specialDiet: string[]; // TODO: estos strings solo pueden ser celiac, hypertensive, vegan, vegetarian
 }
 
-//TODO: chequear si nani termino los endpoints de update y delete de usuario y completar las interfaces si es necesario
+export interface EventUserResponse {
+	userId: string;
+	userName: string;
+	transferReceipt: string | undefined;
+	hasReceiptApproved: boolean | null;
+	hasUploaded: boolean;
+}

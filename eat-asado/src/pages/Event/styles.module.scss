@@ -150,7 +150,7 @@
 				}
 
 				.infoData {
-					margin: 10px 15px;
+					margin: 15px 5px;
 					display: flex;
 				}
 
@@ -162,6 +162,17 @@
 
 				.secondRow {
 					margin-top: 40px;
+
+					.infoDataUsernamePayed {
+						margin: 0 0 0 10px;
+						color: green;
+						align-self: center;
+					}
+					.infoDataUsernameDidntPay {
+						margin: 0 0 0 10px;
+						color: red;
+						align-self: center;
+					}
 				}
 
 				.inChargeLogo {
@@ -202,4 +213,9 @@
 			margin-top: 15px;
 		}
 	}
+}
+
+.infoDataUsername {
+	margin: 5px;
+	align-self: center;
 }

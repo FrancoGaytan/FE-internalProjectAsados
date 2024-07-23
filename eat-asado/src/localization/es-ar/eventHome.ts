@@ -57,7 +57,7 @@ export const eventHome = Object.seal({
 	meOpt: 'Yo',
 	emptyOpt: 'Sin Asignar',
 	payBtn: 'Pagar',
-	uploadPay: 'Actualizar Pago',
+	modifyPay: 'Modificar Pago',
 	unassignAtClosing: 'No puede cerrar un evento si aun no tiene asignados los responsables',
 	needsLogin: 'Necesita logearse para acceder a esta funcionalidad',
 	noLoggedMsg: 'Necesita estar logeado para acceder al evento',
@@ -66,5 +66,8 @@ export const eventHome = Object.seal({
 	loadPurchase: 'Cargar Compra',
 	purchaseDeleted: 'Recivo eliminado con exito',
 	purchaseDeletedError: 'Error al eliminar el recivo',
-	downloadingImageError: 'Error al descargar la imagen'
+	downloadingImageError: 'Error al descargar la imagen',
+	validateBtn: 'Validar',
+	paidNoti: 'PAGO',
+	pendingNoti: 'PENDIENTE'
 });

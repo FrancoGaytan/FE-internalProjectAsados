@@ -42,6 +42,7 @@ Edits just the chef or shopping designee by its ID
  */
 
 export async function editRoles(id: number, payload: IEvent, signal?: AbortSignal): Promise<any> {
+	//TODO: tipar any
 	const url = `/events/editRoles/${id}`;
 	return await _put<any, IEvent>(url, payload, signal);
 }
@@ -51,6 +52,7 @@ export async function editRoles(id: number, payload: IEvent, signal?: AbortSigna
 Subscribes a user by id for a certain event providing the event's id (12 byte Object ID)
  */
 export async function subscribeToAnEvent(userId: string, eventId: string, signal?: AbortSignal): Promise<any> {
+	//TODO: tipar any
 	const url = `/events/subscribeToAnEvent/${userId}/${eventId}`;
 	return await _put<any>(url, signal); //a esto le falta autorizacion payload?
 }
@@ -60,6 +62,7 @@ export async function subscribeToAnEvent(userId: string, eventId: string, signal
 Removes a user by id for a certain event providing the event's id (12 byte Object ID)
  */
 export async function unsubscribeToAnEvent(userId: string, eventId: string, signal?: AbortSignal): Promise<any> {
+	//TODO: tipar any
 	const url = `/events/unsubscribeFromEvent/${userId}/${eventId}`;
 	return await _put<any>(url, signal); //a esto le falta autorizacion payload?
 }
@@ -68,6 +71,13 @@ export async function unsubscribeToAnEvent(userId: string, eventId: string, sign
  * Deletes an event by its ID
  */
 export async function deleteEvent(id: number, signal?: AbortSignal): Promise<any> {
+	//TODO: tipar any
 	const url = `/events/deleteEvent/${id}`;
 	return await _delete(url, signal);
+}
+
+export async function getMembersAndReceiptsInfo(eventId: string, signal?: AbortSignal): Promise<any> {
+	//TODO: tipar any
+	const url = `/events/getMembersAndReceiptsInfo/${eventId}`;
+	return await _get(url, signal);
 }

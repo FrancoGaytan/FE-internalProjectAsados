@@ -3,6 +3,7 @@ export const event = Object.seal({
 	transferReceiptFailure: 'Ha sucedido un error cargando su recibo de transferencia',
 	confirmPayBtn: 'Confirmar Pago',
 	transferRadioBtn: 'Transferencia',
+	rejectPayBtn: 'Rechazar Pago',
 	cashRadioBtn: 'Efectivo',
 	payOptTitle: 'Opciones de Pago',
 	payTitle: 'Pago',
@@ -12,5 +13,11 @@ export const event = Object.seal({
 	totalPrice: 'Monto a abonar: ',
 	description: 'Descripcion',
 	uploadTransferReceipt: 'Cargar comprobante de pago',
-	amountLabel: 'Monto'
+	amountLabel: 'Monto',
+	validatePaymentTitle: 'Validar Pago',
+	downloadText: 'Descargar Recibo',
+	payApprovedSuccessfully: 'Se ha aprobado el pago con exito!',
+	payApproveFailed: 'Ha ocurrido un error al aprovar el pago',
+	payRejectedSuccessfully: 'Se ha rechazado el pago!',
+	payRejectionFailed: 'Ha ocurrido un error rechazando el pago'
 });

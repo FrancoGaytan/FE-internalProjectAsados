@@ -5,9 +5,17 @@ import { useTranslation } from '../../stores/LocalizationContext';
 import styles from './styles.module.scss';
 import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { getEventById, hasUploadedTransferReceipt, subscribeToAnEvent, unsubscribeToAnEvent } from '../../service';
+import {
+	getEventById,
+	getMembersAndReceiptsInfo,
+	getTransferReceipt,
+	hasUploadedTransferReceipt,
+	subscribeToAnEvent,
+	unsubscribeToAnEvent
+} from '../../service';
+import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useParams } from 'react-router-dom';
-import { IUser } from '../../models/user';
+import { EventUserResponse, IUser } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
@@ -18,6 +26,8 @@ import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/Purc
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
 import { IPurchaseReceipt } from '../../models/purchases';
 import { downloadFile } from '../../utils/utilities';
+import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
+import { transferReceipt } from '../../models/transfer';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -27,10 +37,17 @@ export function Event(): JSX.Element {
 	const [event, setEvent] = useState<any>(); //TODO: Sacar o typear este any
 	const [actualUser, setActualUser] = useState<IUser>();
 	const userIdParams = useParams();
-	const [modalState, setModalState] = useState(false);
+	const [modalPaycheckState, setModalPaycheckState] = useState(false);
+	const [modalValidationState, setModalValidationState] = useState(false);
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [userHasPaid, setUserHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState([]);
+	const [transferReceiptId, setTransferReceiptId] = useState<string | undefined>(undefined);
+	const [eventParticipants, setEventParticipants] = useState<EventUserResponse[]>([]);
+	const [userToApprove, setUserToApprove] = useState('');
+	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -54,12 +71,14 @@ export function Event(): JSX.Element {
 	}
 
 	function subscribeUserToEvent(): void {
+		setIsLoading(true);
 		subscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
 				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
 				setTimeout(() => window.location.reload(), 1000);
 			})
-			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR));
+			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR))
+			.finally(() => setIsLoading(false));
 	}
 
 	function removeResponsabilitiesAtUnsubscribing(): void {
@@ -125,7 +144,7 @@ export function Event(): JSX.Element {
 
 	function closeEvent(): void {
 		event.chef && event.shoppingDesignee
-			? editEvent(event?._id, { ...event, state: 'closed' })
+			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
 					.then(res => {
 						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
 					})
@@ -136,7 +155,7 @@ export function Event(): JSX.Element {
 
 	function reopenEvent(): void {
 		//TODO: deuda tecnica hacer una sola funcion para closeEvent y reopenEvent --> algo como: toogleEvent
-		editEvent(event?._id, { ...event, state: 'available' })
+		editEvent(event?._id, { ...event, state: EventStatesEnum.AVAILABLE })
 			.then(res => {
 				setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
 			})
@@ -145,11 +164,11 @@ export function Event(): JSX.Element {
 	}
 
 	function payCheck(): void {
-		setModalState(true);
+		setModalPaycheckState(true);
 	}
 
 	function closeModal(): void {
-		setModalState(false);
+		setModalPaycheckState(false);
 	}
 
 	function closeModalPurchaseRecipt(): void {
@@ -157,11 +176,19 @@ export function Event(): JSX.Element {
 	}
 
 	function openModal(): void {
-		setModalState(true);
+		setModalPaycheckState(true);
 	}
 
 	function openModalPurchaseRecipt(): void {
 		setModalPurchaseRecipt(true);
+	}
+
+	function openValidationPopup(): void {
+		setModalValidationState(true);
+	}
+
+	function closeValidationPopup() {
+		setModalValidationState(false);
 	}
 
 	function deletePurchase(purchase: IPurchaseReceipt): any {
@@ -180,6 +207,22 @@ export function Event(): JSX.Element {
 		} catch (e) {
 			setAlert(lang.downloadingImageError, AlertTypes.ERROR);
 		}
+	}
+
+	function showPaymentData() {
+		return (
+			(event.state === EventStatesEnum.CLOSED && event.organizer && event.organizer._id === user?.id) ||
+			(event.state === EventStatesEnum.CLOSED && event.shoppingDesignee && event.shoppingDesignee === user?.id)
+		);
+	}
+
+	function userIsShoppingDesignee(member: EventUserResponse) {
+		return !(member.userId === user?.id);
+	}
+
+	function checkIfUserHasUploaded() {
+		const myReceipt = eventParticipants.find(member => member.userId === user?.id);
+		return myReceipt?.hasUploaded;
 	}
 
 	useEffect(() => {
@@ -223,16 +266,31 @@ export function Event(): JSX.Element {
 	}, [user, actualUser, event]);
 
 	useEffect(() => {
-		if (!actualUser || !event) return;
-
-		hasUploadedTransferReceipt(actualUser._id, event?._id)
+		if (!event?._id) {
+			return;
+		}
+		const abortController = new AbortController();
+		getMembersAndReceiptsInfo(event?._id, abortController.signal)
 			.then(res => {
-				setUserHasPaid(res.hasUploaded);
+				setEventParticipants(res);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
-	}, [actualUser, event]);
+	}, [event]);
+
+	useEffect(() => {
+		if (!transferReceiptId) {
+			return;
+		}
+		getTransferReceipt(transferReceiptId)
+			.then(res => {
+				setTransferReceipt(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+	}, [transferReceiptId]);
 
 	return (
 		<PrivateFormLayout>
@@ -286,7 +344,7 @@ export function Event(): JSX.Element {
 									</div>
 
 									{purchasesMade.map((purchase: IPurchaseReceipt) => (
-										<div className={styles.purchasesData}>
+										<div key={purchase._id} className={styles.purchasesData}>
 											<h5 className={styles.infoData}>{purchase.description}</h5>
 
 											<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
@@ -323,11 +381,11 @@ export function Event(): JSX.Element {
 										{event.chef ? (event.chef._id === user?.id ? ' Me' : event.chef.name) : 'Vacante'}
 									</h5>
 
-									{event.chef && event.chef._id === user?.id && event.state !== 'closed' && isUserIntoEvent() && (
+									{event.chef && event.chef._id === user?.id && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
 									)}
 
-									{!event.chef && event.state !== 'closed' && isUserIntoEvent() && (
+									{!event.chef && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
 									)}
 								</div>
@@ -343,12 +401,12 @@ export function Event(): JSX.Element {
 
 									{event.shoppingDesignee &&
 										event.shoppingDesignee._id === user?.id &&
-										event.state !== 'closed' &&
+										event.state !== EventStatesEnum.CLOSED &&
 										isUserIntoEvent() && (
 											<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
 										)}
 
-									{!event.shoppingDesignee && event.state !== 'closed' && isUserIntoEvent() && (
+									{!event.shoppingDesignee && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
 										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
 									)}
 								</div>
@@ -364,17 +422,36 @@ export function Event(): JSX.Element {
 										</h3>
 									</div>
 
-									{event.members.map((member: IUser) => (
-										<h5 className={styles.infoData} key={member._id}>
-											{member.name}
-										</h5>
+									{eventParticipants.map((member: EventUserResponse, i: number) => (
+										<div key={`participants-key-${i}`} className={styles.infoData}>
+											<h5 className={styles.infoDataUsername}>{member.userName}</h5>
+											{showPaymentData() &&
+												userIsShoppingDesignee(member) &&
+												(member.hasReceiptApproved ? (
+													<h5 className={styles.infoDataUsernamePayed}>{lang.paidNoti}</h5>
+												) : member.hasUploaded ? (
+													<Button
+														className={styles.btnEvent}
+														kind="validation"
+														size="micro"
+														onClick={() => {
+															setTransferReceiptId(member.transferReceipt);
+															openValidationPopup();
+															setUserToApprove(member.userId);
+														}}>
+														{lang.validateBtn}
+													</Button>
+												) : (
+													<h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
+												))}
+										</div>
 									))}
 								</div>
 							</div>
 						</main>
 
 						<section className={styles.btnSection}>
-							{event.state === 'available' && (
+							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
 									{isUserIntoEvent() ? 'Bajarse' : 'Sumarse'}
 								</Button>
@@ -386,13 +463,16 @@ export function Event(): JSX.Element {
 								</Button>
 							)}
 
-							{event.organizer && event.organizer._id === user?.id && event.state !== 'closed' && (
-								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
-									{lang.closeEventBtn}
-								</Button>
-							)}
+							{event.organizer &&
+								event.organizer._id === user?.id &&
+								event.state !== 'finished' &&
+								event.state !== EventStatesEnum.CLOSED && (
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
+										{lang.closeEventBtn}
+									</Button>
+								)}
 
-							{event.organizer && event.organizer._id === user?.id && event.state === 'closed' && (
+							{event.organizer && event.organizer._id === user?.id && event.state === EventStatesEnum.CLOSED && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
 									{lang.reopenEventBtn}
 								</Button>
@@ -400,7 +480,7 @@ export function Event(): JSX.Element {
 
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
-								event.state === 'closed' &&
+								event.state === EventStatesEnum.CLOSED &&
 								!userHasPaid &&
 								(event.purchaseReceipts.length as number) === 0 && (
 									<Button className={styles.btnEvent} kind="tertiary" size="short">
@@ -410,20 +490,19 @@ export function Event(): JSX.Element {
 
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
-								event.state === 'closed' &&
+								event.state === EventStatesEnum.CLOSED &&
 								(event.purchaseReceipts.length as number) !== 0 &&
-								(!userHasPaid ? (
+								(!checkIfUserHasUploaded() ? (
 									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
 										{lang.payBtn}
 									</Button>
 								) : (
-									//testear que esto funcione bien
-									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
-										{lang.uploadPay}
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => payCheck()}>
+										{lang.modifyPay}
 									</Button>
 								))}
 
-							{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state === 'closed' && (
+							{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state === EventStatesEnum.CLOSED && (
 								<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
 									{lang.loadPurchase}
 								</Button>
@@ -433,12 +512,20 @@ export function Event(): JSX.Element {
 				)}
 			</div>
 
-			<Modal isOpen={modalState} closeModal={closeModal}>
+			<Modal isOpen={modalPaycheckState} closeModal={closeModal}>
 				<PayCheckForm event={event} shoppingDesignee={event?.shoppingDesignee} openModal={openModal} closeModal={closeModal}></PayCheckForm>
 			</Modal>
 
 			<Modal isOpen={modalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}>
 				<PurchaseReceiptForm event={event} openModal={openModalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}></PurchaseReceiptForm>
+			</Modal>
+
+			<Modal isOpen={modalValidationState} closeModal={closeValidationPopup}>
+				<ConfirmationPayForm
+					event={event}
+					transferReceiptId={transferReceiptId}
+					openModal={() => openValidationPopup}
+					closeModal={() => closeValidationPopup}></ConfirmationPayForm>
 			</Modal>
 		</PrivateFormLayout>
 	);
