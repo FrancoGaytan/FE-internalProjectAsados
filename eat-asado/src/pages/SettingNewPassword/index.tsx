@@ -26,16 +26,16 @@ export function SettingNewPassword(): JSX.Element {
 		userConfirmedPassword: ''
 	});
 
-	function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+	async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
 		if (newPassword.userPassword !== newPassword.userConfirmedPassword) {
 			setAlert(lang.passwordsDontMatch, AlertTypes.ERROR);
 			return;
 		}
 		try {
-			verifyCode({ email: newPassword.userEmail, verificationCode: newPassword.userVerificationCode });
+			await verifyCode({ email: newPassword.userEmail, verificationCode: newPassword.userVerificationCode });
 
 			try {
-				recoverPassword({
+				await recoverPassword({
 					email: newPassword.userEmail,
 					verificationCode: newPassword.userVerificationCode,
 					password: newPassword.userPassword
