@@ -62,7 +62,7 @@ export function Login(): JSX.Element {
 			/>
 
 			{isLoading ? (
-				<span style={{ color: '#fff' }}>Cargando... (⌐■_■)</span> //FIXME: Acá va un spinner para cuando esté cargando el login.
+				<span style={{ color: '#fff' }}>Cargando... (⌐■_■)</span> //TODO: Acá va un spinner para cuando esté cargando el login.
 			) : (
 				<Button kind="primary" size="large" type="submit" onClick={e => handleLogin(e)}>
 					{lang.loginBtn}

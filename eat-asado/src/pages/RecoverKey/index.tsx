@@ -4,21 +4,29 @@ import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { useAlert } from '../../stores/AlertContext';
+import { forgotPassword } from '../../service/password';
 import styles from './styles.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 export function RecoverKey(): JSX.Element {
 	const lang = useTranslation('recoverKey');
 	const [userEmail, setUserEmail] = useState('');
 	const { setAlert } = useAlert();
+	const navigate = useNavigate();
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		setUserEmail(e.target.value);
-	};
+	}
 
-	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-		console.log(userEmail);
-		setAlert(`${lang.emailSentConfirmation}`, AlertTypes.INFO);
-	};
+	async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+		try {
+			await forgotPassword({ email: userEmail });
+			setAlert(`${lang.emailSentConfirmation}`, AlertTypes.INFO);
+			navigate('/settingNewPassword');
+		} catch (e) {
+			setAlert('error', AlertTypes.ERROR);
+		}
+	}
 
 	return (
 		<div>
