@@ -3,6 +3,8 @@
 @use '/src/styles/custom-properties';
 
 .recoverKeyContainer {
+	margin-top: 70px;
+	margin-bottom: 250px;
 	font-family: var(--secondaryFont);
 	.mainDesc {
 		margin-bottom: 30px;

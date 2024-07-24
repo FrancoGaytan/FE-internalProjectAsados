@@ -3,8 +3,13 @@ import styles from './styles.module.scss';
 import Button from '../../components/micro/Button/Button';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import { useTranslation } from '../../stores/LocalizationContext';
+import { recoverPassword, verifyCode } from '../../service/password';
+import { useNavigate } from 'react-router-dom';
+import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
+import { useAlert } from '../../stores/AlertContext';
 
 interface InitialNewPasswordInterface {
+	userEmail: string;
 	userVerificationCode: string;
 	userPassword: string;
 	userConfirmedPassword: string;
@@ -12,14 +17,37 @@ interface InitialNewPasswordInterface {
 
 export function SettingNewPassword(): JSX.Element {
 	const lang = useTranslation('settingNewPassword');
+	const navigate = useNavigate();
+	const { setAlert } = useAlert();
 	const [newPassword, setNewPassword] = useState<InitialNewPasswordInterface>({
+		userEmail: '',
 		userVerificationCode: '',
 		userPassword: '',
 		userConfirmedPassword: ''
 	});
 
 	function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
-		console.log(newPassword);
+		if (newPassword.userPassword !== newPassword.userConfirmedPassword) {
+			setAlert(lang.passwordsDontMatch, AlertTypes.ERROR);
+			return;
+		}
+		try {
+			verifyCode({ email: newPassword.userEmail, verificationCode: newPassword.userVerificationCode });
+
+			try {
+				recoverPassword({
+					email: newPassword.userEmail,
+					verificationCode: newPassword.userVerificationCode,
+					password: newPassword.userPassword
+				});
+				setAlert(lang.emailChangedSuccessfully, AlertTypes.INFO);
+				setTimeout(() => navigate('/login'), 1000);
+			} catch (e) {
+				setAlert(lang.couldntUpdatePassword, AlertTypes.ERROR);
+			}
+		} catch (e) {
+			setAlert(lang.couldntUpdatePassword, AlertTypes.ERROR);
+		}
 	}
 
 	return (
@@ -27,6 +55,21 @@ export function SettingNewPassword(): JSX.Element {
 			<PrivateFormLayout>
 				<div className={styles.settingNewPasswordContainer}>
 					<h1>{lang.setNewPasswordTitle}</h1>
+
+					<label htmlFor="email" className={styles.passwordLabel}>
+						{lang.email}
+					</label>
+
+					<input
+						className={styles.input}
+						id="email"
+						placeholder={lang.email}
+						type="text"
+						value={newPassword.userEmail}
+						onChange={e => {
+							setNewPassword({ ...newPassword, userEmail: e.target.value });
+						}}
+					/>
 
 					<label htmlFor="verificationCode" className={styles.passwordLabel}>
 						{lang.verificationCode}
