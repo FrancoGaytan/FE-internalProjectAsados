@@ -14,19 +14,19 @@ export function RecoverKey(): JSX.Element {
 	const { setAlert } = useAlert();
 	const navigate = useNavigate();
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 		setUserEmail(e.target.value);
-	};
+	}
 
-	const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+	async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
 		try {
-			forgotPassword({ email: userEmail });
+			await forgotPassword({ email: userEmail });
 			setAlert(`${lang.emailSentConfirmation}`, AlertTypes.INFO);
 			navigate('/settingNewPassword');
 		} catch (e) {
 			setAlert('error', AlertTypes.ERROR);
 		}
-	};
+	}
 
 	return (
 		<div>
