@@ -1,0 +1,68 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+button {
+	border: none;
+	border-radius: 45px;
+	color: white;
+	font-family: var(--secondaryFont);
+	font-weight: bold;
+	cursor: pointer;
+	margin-top: 30px; //revisar esto
+
+	//kind
+
+	&.primary {
+		background-color: var(--btnPrimary);
+		&:hover {
+			background-color: var(--btnPrimaryDarker);
+		}
+	}
+	&.secondary {
+		background-color: white;
+		color: var(--btnPrimary);
+		border: 3px solid var(--btnPrimary);
+	}
+	&.validation {
+		background-color: rgb(61, 61, 233);
+		color: white;
+		border: 0px;
+	}
+	&.whitePrimary {
+		background-color: #dce0d2;
+		color: var(--messageSuccessPrimary);
+	}
+	&.whiteSecondary {
+		background-color: #dce0d2;
+		color: var(--btnPrimaryDarker);
+	}
+
+	//size
+
+	&.size-small {
+		width: 100px;
+		height: 40px;
+	}
+
+	&.size-short {
+		width: 140px;
+		height: 40px;
+	}
+
+	&.size-medium {
+	}
+
+	&.size-large {
+		width: 300px;
+		min-height: 40px;
+		max-height: 40px;
+	}
+
+	&.size-full {
+	}
+	&.size-micro {
+		width: 80px;
+		height: 20px;
+	}
+}

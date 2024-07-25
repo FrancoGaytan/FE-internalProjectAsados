@@ -1,0 +1,43 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.recoverKeyContainer {
+	margin-top: 70px;
+	margin-bottom: 250px;
+	font-family: var(--secondaryFont);
+	.mainDesc {
+		margin-bottom: 30px;
+		max-width: 350px;
+	}
+	.emailLabel {
+	}
+
+	input {
+		margin-top: 5px;
+		border: 1px solid black;
+		background: none;
+		color: var(--backgroundNeutralDarker);
+		font-family: var(--secondaryFont);
+		min-width: 300px;
+		max-width: 100%;
+		min-height: 40px;
+		padding-left: 15px;
+		margin-bottom: 0px;
+		border-radius: 6px;
+		display: block;
+
+		@media #{variables.media-query(max, lg)} {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		&::placeholder {
+			color: var(--placeholderColor);
+		}
+
+		&:focus {
+			box-shadow: var(--inputShadow);
+		}
+	}
+}

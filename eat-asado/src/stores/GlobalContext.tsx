@@ -9,7 +9,6 @@ const GlobalContext = createContext<IGlobalContext>({} as IGlobalContext);
 
 export function GlobalProvider(props: PropsWithChildren<{}>): JSX.Element {
 	const [isSomethingLoading, setIsSomethingLoading] = useState<boolean>(false);
-
 	return <GlobalContext.Provider value={{ isSomethingLoading, setIsSomethingLoading }}>{props.children}</GlobalContext.Provider>;
 }
 

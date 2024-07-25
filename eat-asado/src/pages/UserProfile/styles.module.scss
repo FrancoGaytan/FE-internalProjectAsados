@@ -1,0 +1,95 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.userProfileContainer {
+	font-family: var(--secondaryFont);
+
+	h1 {
+		text-align: center;
+	}
+
+	.dataSection {
+		display: flex;
+
+		@media #{variables.media-query(max, lg)} {
+			flex-direction: column;
+		}
+
+		.firstColumnProfile {
+			margin-right: 50px;
+			@media #{variables.media-query(max, lg)} {
+				margin-right: 0px;
+			}
+			.userPicture {
+				// background-image: url('../../../public/assets/pictures/profile.png');
+				background-size: contain;
+				width: 100px;
+				height: 100px;
+			}
+		}
+		.secondColumnProfile {
+			margin-left: 50px;
+			@media #{variables.media-query(max, lg)} {
+				margin-left: 0px;
+			}
+			.profileLabel {
+				color: var(--backgroundNeutralDarker);
+				font-family: var(--secondaryFont);
+				align-self: flex-start;
+				margin-bottom: 5px;
+				margin-top: 5px;
+				display: block;
+
+				@media #{variables.media-query(max, lg)} {
+					font-weight: variables.font-weight(bold);
+					font-size: 16px;
+				}
+			}
+			.checkbox {
+				min-width: 15px;
+				min-height: 15px;
+				margin-left: 0px;
+				align-self: flex-start;
+				margin-right: 14px;
+				border-radius: 25%;
+				cursor: pointer;
+				display: inline;
+			}
+		}
+	}
+
+	.btnSection {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+	}
+
+	input {
+		margin-top: 5px;
+		border: 1px solid black;
+		background: none;
+		color: var(--backgroundNeutralDarker);
+		font-family: var(--secondaryFont);
+		min-width: 300px;
+		max-width: 100%;
+		min-height: 40px;
+		padding-left: 15px;
+		margin-bottom: 20px;
+		border-radius: 6px;
+		display: block;
+
+		@media #{variables.media-query(max, lg)} {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		&::placeholder {
+			color: var(--placeholderColor);
+		}
+
+		&:focus {
+			box-shadow: var(--inputShadow);
+		}
+	}
+}

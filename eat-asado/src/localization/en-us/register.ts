@@ -9,10 +9,14 @@ export const register = Object.seal({
 	passwordDescription: 'At least 8 characters including: 1 lowercase, 1 uppercase, 1 special character and 1 number',
 	specialDiet: 'Special Diet',
 	specialDietOptional: '(optional)',
-	veganDiet: 'Are you Vegan?',
-	vegetarianDiet: 'Are you Vegetarian?',
-	hypertensiveDiet: 'Are you Hypertensive?',
-	celiacDiet: 'Are you Celiac?',
+	specialDietOptions: {
+		vegan: 'Are you Vegan?',
+		vegetarian: 'Are you Vegetarian?',
+		hypertensive: 'Are you Hypertensive?',
+		celiac: 'Are you Celiac?'
+	},
 	registerTitle: 'Register',
-	registerBtn: 'REGISTER'
+	registerBtn: 'REGISTER',
+	successMsg: 'You have registered successfully',
+	failureMsg: 'You coudn´t register successfully'
 });

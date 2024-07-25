@@ -1,0 +1,65 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.paycheckContent {
+	margin-left: 15px;
+}
+
+.payForm {
+	margin-top: 30px;
+}
+.descInput {
+	display: flex;
+	flex-direction: column;
+	margin-top: 15px;
+
+	.descLabel {
+		margin-bottom: 10px;
+	}
+}
+
+.inputFile {
+	display: flex;
+}
+.inputs {
+	background: none;
+	border: 1px solid white;
+	color: var(--backgroundNeutralLighter);
+	font-family: var(--secondaryFont);
+	min-width: 300px;
+	min-height: 40px;
+	padding-left: 15px;
+	margin-bottom: 15px;
+	border-radius: 6px;
+
+	&::placeholder {
+		color: var(--placeholderColor);
+	}
+
+	&:focus {
+		box-shadow: var(--inputShadow);
+	}
+}
+
+.uploadBtn {
+	width: 25px;
+	height: 21px;
+	background-color: transparent;
+	background-image: url('../../../../public/assets/pictures/uploadIcon.png');
+	background-size: contain;
+	border-radius: 0;
+	margin-top: 16px;
+	margin-right: 8px;
+	margin-bottom: 5px;
+}
+
+.btnSection {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+}
+
+.confirmPayBtn {
+	align-self: center;
+}

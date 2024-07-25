@@ -1,0 +1,221 @@
+@use '/src/styles/variables' as variables;
+
+.content {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 0;
+	* {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.icons {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		@media #{variables.media-query(max, lg)} {
+			flex-direction: column;
+			padding: 0;
+		}
+	}
+	.header {
+		width: 100vw;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		font-family: 'Raleway';
+		font-style: normal;
+		* {
+			margin-left: auto;
+			margin-right: auto;
+		}
+		h1 {
+			background: var(--iconsSecondary);
+			opacity: 0.9;
+			border-radius: 50px 4px;
+			width: 30%;
+			font-weight: 600;
+			font-size: 56px;
+			line-height: 66px;
+			text-align: center;
+			color: #f6faf9;
+			@media #{variables.media-query(max, xl)} {
+				font-size: 4vw;
+			}
+		}
+		Button {
+			font-weight: 700;
+			font-size: 20px;
+			line-height: 27px;
+			max-width: 314px;
+		}
+	}
+	.event {
+		width: 90%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		h1 {
+			width: fit-content;
+			font-family: 'Raleway';
+			font-style: normal;
+			font-weight: 700;
+			font-size: 56px;
+			line-height: 66px;
+			@media #{variables.media-query(max, xl)} {
+				font-size: 4vw;
+			}
+			border-bottom: solid 4px var(--btnPrimaryDarker);
+		}
+
+		.eventData {
+			display: flex;
+			width: 100%;
+
+			.sectionTitle {
+				display: flex;
+				gap: 15px;
+			}
+
+			.eventOrganization {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+
+				.secondRow {
+					margin-top: 40px;
+				}
+
+				.logoTitle {
+					margin-bottom: 20px;
+					color: black;
+				}
+
+				.infoData {
+					margin: 10px 15px;
+				}
+				.deleteBtn {
+					background-image: url('../../../public/assets/pictures/deleteIcon.png');
+					width: 15px;
+					height: 15px;
+					background-size: cover;
+					background-color: white;
+					margin-top: auto;
+					margin-bottom: auto;
+					margin-left: 10px;
+				}
+
+				.downloadBtn {
+					background-image: url('../../../public/assets/pictures/downloadBtn.png');
+					width: 30px;
+					height: 30px;
+					background-size: cover;
+					background-color: white;
+					margin: auto;
+					margin-left: 10px;
+				}
+
+				.calendarLogo {
+					width: 36px;
+					height: 40px;
+					background-image: url('../../../public/assets/pictures/calendarLogo2.png');
+				}
+				.restaurantLogo {
+					width: 39px;
+					height: 40px;
+					background-image: url('../../../public/assets/pictures/restaurantLogo.png');
+				}
+				.cartLogo {
+					width: 40px;
+					height: 40px;
+					background-size: cover;
+					background-image: url('../../../public/assets/pictures/carritodecompras.png');
+				}
+
+				@media #{variables.media-query(max, sm)} {
+					align-items: center;
+				}
+			}
+			.eventParticipants {
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+
+				.logoTitle {
+					margin-bottom: 20px;
+					color: black;
+				}
+
+				.infoData {
+					margin: 15px 5px;
+					display: flex;
+				}
+
+				.participantsLogo {
+					width: 40px;
+					height: 40px;
+					background-image: url('../../../public/assets/pictures/peopleLogo.png');
+				}
+
+				.secondRow {
+					margin-top: 40px;
+
+					.infoDataUsernamePayed {
+						margin: 0 0 0 10px;
+						color: green;
+						align-self: center;
+					}
+					.infoDataUsernameDidntPay {
+						margin: 0 0 0 10px;
+						color: red;
+						align-self: center;
+					}
+				}
+
+				.inChargeLogo {
+					width: 40px;
+					height: 43px;
+					background-image: url('../../../public/assets/pictures/inChargeLogo.png');
+				}
+				.inChargeOpt {
+					display: flex;
+				}
+				@media #{variables.media-query(max, sm)} {
+					align-items: center;
+					margin-top: 30px;
+				}
+			}
+			@media #{variables.media-query(max, sm)} {
+				flex-direction: column;
+			}
+		}
+	}
+
+	.purchasesData {
+		display: flex;
+	}
+	.btnSection {
+		display: flex;
+		margin-top: 40px;
+
+		@media #{variables.media-query(max, sm)} {
+			flex-direction: column;
+			margin-top: 20px;
+		}
+	}
+
+	.btnEvent {
+		margin: 5px;
+		@media #{variables.media-query(max, sm)} {
+			margin-top: 15px;
+		}
+	}
+}
+
+.infoDataUsername {
+	margin: 5px;
+	align-self: center;
+}

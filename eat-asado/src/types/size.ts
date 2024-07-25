@@ -1,1 +1,1 @@
-export type TSize = 'short' | 'medium' | 'large' | 'full';
+export type TSize = 'micro' | 'small' | 'short' | 'medium' | 'large' | 'full';

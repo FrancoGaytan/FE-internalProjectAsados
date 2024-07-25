@@ -1,12 +1,6 @@
-import { Navigate, PathRouteProps } from 'react-router-dom';
+import { PathRouteProps } from 'react-router-dom';
 import { Translation } from './localization';
-import { settingNewPassword } from './localization/en-us/settingNewPassword';
-import CreateEvent from './Pages/CreateEvent/CreateEvent';
-import Login from './Pages/Login/Login';
-import RecoverKey from './Pages/RecoverKey/RecoverKey';
-import Register from './Pages/Register/Register';
-import SettingNewPassword from './Pages/SettingNewPassword/SettingNewPassword';
-import UserProfile from './Pages/UserProfile/UserProfile';
+import { CreateEvent, EventHome, Event, Login, RecoverKey, Register, SettingNewPassword, UserProfile } from './pages';
 
 export interface IRoute extends PathRouteProps {
 	localizationKey?: keyof Translation['navigation'];
@@ -15,8 +9,14 @@ export interface IRoute extends PathRouteProps {
 }
 
 const routes: { [key: string]: IRoute } = {
-	login: {
+	eventHome: {
 		path: '/',
+		localizationKey: 'eventHome',
+		element: <EventHome />,
+		isPublic: true
+	},
+	login: {
+		path: '/login',
 		localizationKey: 'login',
 		element: <Login />,
 		isPublic: true
@@ -49,6 +49,12 @@ const routes: { [key: string]: IRoute } = {
 		path: '/createEvent',
 		localizationKey: 'createEvent',
 		element: <CreateEvent />,
+		isPublic: true
+	},
+	event: {
+		path: `/event/:eventId`,
+		localizationKey: 'event',
+		element: <Event />,
 		isPublic: true
 	}
 };
