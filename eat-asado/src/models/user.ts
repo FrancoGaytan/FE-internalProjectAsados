@@ -38,6 +38,7 @@ export interface RegisterRequest {
 export interface EventUserResponse {
 	userId: string;
 	userName: string;
+	userLastName: string;
 	transferReceipt: string | undefined;
 	hasReceiptApproved: boolean | null;
 	hasUploaded: boolean;
