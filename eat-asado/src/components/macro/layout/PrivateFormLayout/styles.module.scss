@@ -21,8 +21,8 @@
 				color: white;
 			}
 			.profileBtn {
-				width: 26px;
-				height: 26px;
+				width: 30px;
+				height: 30px;
 				margin-bottom: 28px;
 				margin-left: 12px;
 				background-image: url('../../../../../public/assets/pictures/profile.png');
@@ -33,9 +33,16 @@
 
 				.logoutBtn {
 					margin: 0 auto;
-					background-color: var(--backgroundMain);
+					margin-top: 10px;
+					min-width: 100px;
+					background-color: grey;
 					color: white;
 					cursor: pointer;
+					height: 40px;
+
+					&:hover {
+						background-color: rgb(94, 93, 93);
+					}
 				}
 			}
 		}

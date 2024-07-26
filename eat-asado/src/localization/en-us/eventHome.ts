@@ -24,7 +24,7 @@ export const eventHome = Object.seal({
 		description: 'Lorem ipsum dolor sit ame'
 	},
 	participateButton: 'I WANNA BE INTO',
-	actualParticipants: 'Actual Participants: ',
+	currentParticipants: 'Current Participants: ',
 	cook: 'Cook: ',
 	participateBtn: 'PARTICIPATE',
 	infoBtn: 'INFO',
@@ -69,5 +69,6 @@ export const eventHome = Object.seal({
 	downloadingImageError: 'There was an error downloading the image',
 	validateBtn: 'Validate',
 	paidNoti: 'PAID',
-	pendingNoti: 'PENDING'
+	pendingNoti: 'PENDING',
+	paymentDataIsNecessary: 'Yoy need to add your alias or cbu in your profile'
 });

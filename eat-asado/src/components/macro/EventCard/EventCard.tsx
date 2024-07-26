@@ -5,7 +5,7 @@ import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getEventById } from '../../../service/eventService';
+import { getEventById, subscribeToAnEvent } from '../../../service/eventService';
 import { useAlert } from '../../../stores/AlertContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { IEvent } from '../../../models/event';
@@ -53,16 +53,27 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	function handleInfo() {
 		if (!!user?.name) {
 			navigate(`/event/${evId}`);
-			//window.location.reload(); //si no te carga la data del evento agregar esta linea
 		} else {
 			setAlert(lang.noLoggedMsg, AlertTypes.ERROR);
 		}
 	}
 
+	function subscribeUserToEvent(): void {
+		if (!user) {
+			return;
+		}
+		subscribeToAnEvent(user?.id as string, evId)
+			.then(res => {
+				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
+				setTimeout(() => window.location.reload(), 1000);
+			})
+			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR));
+	}
+
 	function handleParticipation() {
 		if (!!user?.name) {
+			subscribeUserToEvent();
 			navigate(`/event/${evId}`);
-			//window.location.reload(); //
 		} else {
 			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
 		}
@@ -115,7 +126,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 				<div className={styles.eventDescription}>{evDescription}</div>
 
 				<div className={styles.eventParticipants}>
-					{lang.actualParticipants}
+					{lang.currentParticipants}
 
 					<p>
 						{evParticipants.toString()}/{evParticipantsLimit.toString()}
