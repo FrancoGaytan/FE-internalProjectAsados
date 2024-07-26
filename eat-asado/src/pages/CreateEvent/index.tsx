@@ -80,13 +80,13 @@ export function CreateEvent(): JSX.Element {
 		return () => abortController.abort();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [user]);
 
 	useEffect(() => {
 		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user]);
+	}, [user, fullUser]);
 
 	return (
 		<FormLayout>

@@ -24,7 +24,7 @@ export const eventHome = Object.seal({
 		description: 'Lorem ipsum dolor sit ame'
 	},
 	participateButton: 'QUIERO PARTICIPAR',
-	actualParticipants: 'Participantes actuales: ',
+	currentParticipants: 'Participantes actuales: ',
 	cook: 'Asador: ',
 	participateBtn: 'PARTICIPAR',
 	infoBtn: 'INFO',
@@ -69,5 +69,6 @@ export const eventHome = Object.seal({
 	downloadingImageError: 'Error al descargar la imagen',
 	validateBtn: 'Validar',
 	paidNoti: 'PAGO',
-	pendingNoti: 'PENDIENTE'
+	pendingNoti: 'PENDIENTE',
+	paymentDataIsNecessary: 'Necesitas cargar tu cbu o tu alias en tu perfil'
 });

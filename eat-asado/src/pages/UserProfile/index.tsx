@@ -80,8 +80,8 @@ export function UserProfile(): JSX.Element {
 			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
 			name: userProfile.userName,
 			lastName: userProfile.lastName,
-			cbu: userProfile.userCbu ? userProfile.userCbu : actualUser.cbu,
-			alias: userProfile.userAlias ? userProfile.userAlias : actualUser.alias,
+			cbu: userProfile.userCbu,
+			alias: userProfile.userAlias,
 			specialDiet: checkSpecialDiet()
 		};
 
@@ -175,6 +175,7 @@ export function UserProfile(): JSX.Element {
 							type="text"
 							value={userProfile.userAlias}
 							onChange={e => {
+								console.log(e.target.value);
 								setUser({ ...userProfile, userAlias: e.target.value });
 							}}
 						/>

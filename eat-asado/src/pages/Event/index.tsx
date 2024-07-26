@@ -71,6 +71,10 @@ export function Event(): JSX.Element {
 	}
 
 	function subscribeUserToEvent(): void {
+		// pasarla a eventhome para que ande el boton de participate
+		if (!user) {
+			return;
+		}
 		setIsLoading(true);
 		subscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
@@ -87,6 +91,9 @@ export function Event(): JSX.Element {
 	}
 
 	function unsubscribeUserToEvent(): void {
+		if (!user) {
+			return;
+		}
 		unsubscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
 				setAlert(`${lang.userRemovedSuccessfully}!`, AlertTypes.SUCCESS);
@@ -118,6 +125,10 @@ export function Event(): JSX.Element {
 	}
 
 	function toogleShopDesignee(): void {
+		if (!(actualUser?.cbu || actualUser?.alias)) {
+			setAlert(`${lang.paymentDataIsNecessary}`, AlertTypes.INFO);
+			return;
+		}
 		!event?.shoppingDesignee
 			? editRoles(event?._id, { ...event, shoppingDesignee: actualUser })
 					.then(res => {
