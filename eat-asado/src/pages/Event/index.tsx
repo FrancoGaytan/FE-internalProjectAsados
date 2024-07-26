@@ -435,7 +435,9 @@ export function Event(): JSX.Element {
 
 									{eventParticipants.map((member: EventUserResponse, i: number) => (
 										<div key={`participants-key-${i}`} className={styles.infoData}>
-											<h5 className={styles.infoDataUsername}>{member.userName}</h5>
+											<h5 className={styles.infoDataUsername}>
+												{member.userName} {member.userLastName}
+											</h5>
 											{showPaymentData() &&
 												userIsShoppingDesignee(member) &&
 												(member.hasReceiptApproved ? (
@@ -492,6 +494,7 @@ export function Event(): JSX.Element {
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === EventStatesEnum.CLOSED &&
+								isUserIntoEvent() &&
 								!userHasPaid &&
 								(event.purchaseReceipts.length as number) === 0 && (
 									<Button className={styles.btnEvent} kind="tertiary" size="short">
@@ -502,6 +505,7 @@ export function Event(): JSX.Element {
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === EventStatesEnum.CLOSED &&
+								isUserIntoEvent() &&
 								(event.purchaseReceipts.length as number) !== 0 &&
 								(!checkIfUserHasUploaded() ? (
 									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
