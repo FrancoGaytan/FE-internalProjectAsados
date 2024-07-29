@@ -1,10 +1,10 @@
 import { EventStatesEnum } from '../../../../enums/EventState.enum';
-import { TEventState } from '../../../../types/eventState';
+import { TEventParticipationState, TEventState, TSubscribedState } from '../../../../types/eventState';
 import { className } from '../../../../utils/className';
 import styles from '../styles.module.scss';
 
 interface IEventCardProps {
-	evState: TEventState;
+	evState: TEventState | TSubscribedState | TEventParticipationState;
 	evParticipants: Number;
 	evParticipantsLimit: Number;
 	subscribedUser: Boolean;
@@ -37,6 +37,8 @@ export default function EventHeader(props: IEventCardProps) {
 			return 'subscribed';
 		} else if (evState === EventStatesEnum.CANCELED) {
 			return EventStatesEnum.CANCELED;
+		} else if (evState === EventStatesEnum.FULL) {
+			return EventStatesEnum.FULL;
 		} else {
 			return EventStatesEnum.FINISHED;
 		}
