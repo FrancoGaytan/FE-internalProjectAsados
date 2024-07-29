@@ -48,6 +48,7 @@ export function EventHome(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	console.log(publicEvents);
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>

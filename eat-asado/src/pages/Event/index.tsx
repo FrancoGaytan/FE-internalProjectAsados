@@ -302,7 +302,6 @@ export function Event(): JSX.Element {
 				console.error('Catch in context: ', e);
 			});
 	}, [transferReceiptId]);
-
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -464,7 +463,7 @@ export function Event(): JSX.Element {
 						</main>
 
 						<section className={styles.btnSection}>
-							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
+							{(event.state === EventStatesEnum.AVAILABLE || event.state === EventStatesEnum.FULL) && !isLoading && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
 									{isUserIntoEvent() ? 'Bajarse' : 'Sumarse'}
 								</Button>

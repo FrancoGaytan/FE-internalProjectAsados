@@ -65,7 +65,6 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		subscribeToAnEvent(user?.id as string, evId)
 			.then(res => {
 				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
-				setTimeout(() => window.location.reload(), 1000);
 			})
 			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR));
 	}
