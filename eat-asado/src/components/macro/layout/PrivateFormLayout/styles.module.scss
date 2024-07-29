@@ -77,7 +77,8 @@
 		.fire {
 			position: absolute;
 			width: 100%;
-			height: 70px;
+			height: 40px;
+			transform: translateY(8px);
 			background-image: url('../../../../../public/assets/pictures/fire.png');
 			background-size: contain;
 			z-index: 1;
@@ -92,6 +93,7 @@
 	.containerLayout {
 		// scroll-behavior: auto;
 		border-radius: 4px;
+		min-height: 900px;
 		background-color: white;
 		display: flex;
 		justify-content: flex-start;
@@ -106,10 +108,13 @@
 	}
 
 	.footerFire {
-		//position: absolute;
-		width: 100%; //esto estaba en 400% chequear xq era
-		height: 70px;
-		background-image: url('../../../../../public/assets/pictures/fire.png');
+		width: 100%;
+		height: 40px;
+		position: relative;
+		bottom: 0;
+		transform: translateY(8px);
+		margin-top: 25px;
+		background-image: url('../../../../../public/assets/pictures/fireBlack.png');
 		background-size: contain;
 		z-index: 1;
 		bottom: 0;

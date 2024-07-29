@@ -158,9 +158,9 @@ export function Event(): JSX.Element {
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
 					.then(res => {
 						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
+						setTimeout(() => window.location.reload(), 1000);
 					})
 					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
-					.finally(() => setTimeout(() => window.location.reload(), 1000))
 			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
 	}
 
