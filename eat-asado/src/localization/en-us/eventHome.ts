@@ -1,5 +1,5 @@
 export const eventHome = Object.seal({
-	messageBanner: 'Barbecue',
+	messageBanner: 'Welcome!',
 	newEventButton: 'Create new event',
 	incomingEvents: 'Incoming events',
 	participationInfoTitle: 'How to be into.',
