@@ -121,7 +121,21 @@ export function CreateEvent(): JSX.Element {
 						type="datetime-local"
 						value={event.datetime.toISOString().slice(0, -8)}
 						onChange={e => {
-							setEvent({ ...event, datetime: new Date(e.target.value) });
+							const inputValue = e.target.value;
+							if (inputValue) {
+								const localDate = new Date(inputValue);
+
+								// Verifica si el valor se ha convertido en una fecha válida
+								if (!isNaN(localDate.getTime())) {
+									// Comprobar si localDate es válido
+									const utcOffset = localDate.getTimezoneOffset();
+									const adjustedDate = new Date(localDate.getTime() - utcOffset * 60000);
+									setEvent({ ...event, datetime: adjustedDate });
+								} else {
+									// Manejo de errores opcional
+									console.error('Fecha no válida:', inputValue);
+								}
+							}
 						}}
 					/>
 
