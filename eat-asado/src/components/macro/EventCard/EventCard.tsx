@@ -13,6 +13,7 @@ import EventHeader from './EventHeader/EventHeader';
 import { useAuth } from '../../../stores/AuthContext';
 import { parseMinutes } from '../../../utils/utilities';
 import styles from './styles.module.scss';
+import { event } from '../../../localization/en-us/event';
 
 interface IEventData {
 	eventTitle: String;
@@ -25,6 +26,7 @@ interface IEventData {
 interface IEventCardProps {
 	eventId: string; //esto es nuevo, necesito saber si me la trae o no
 	eventState: TEventState;
+	eventUserIsDebtor: string;
 	eventDateTime: Date;
 	eventData: IEventData;
 	userId: string | undefined;
@@ -45,6 +47,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const evParticipantsLimit = props.eventData.eventParticipantLimit;
 	const evCook = props.eventData.eventCook;
 	const evId = props.eventId;
+	const evUserIsDebtor = props.eventUserIsDebtor;
 
 	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
@@ -87,6 +90,33 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		return !!privateEvent?.members.find(member => (member?._id as unknown) === props.userId);
 	}
 
+	function isAnotherEventBlocking(): boolean {
+		if (!user?.id) {
+			return false;
+		}
+		if (evUserIsDebtor !== null) {
+			if (evUserIsDebtor === evId) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	function isThisEventBlocking(): boolean {
+		if (evUserIsDebtor !== null) {
+			if (evUserIsDebtor === evId) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 	useEffect(() => {
 		getEventById(evId)
 			.then(res => {
@@ -111,6 +141,8 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		<div {...className(styles.cardContainer)}>
 			<EventHeader
 				evState={evState}
+				isEventBlocking={isThisEventBlocking()}
+				isAnotherEventBlocking={isAnotherEventBlocking()}
 				evParticipants={evParticipants}
 				evParticipantsLimit={evParticipantsLimit}
 				evDate={evDate}
@@ -139,6 +171,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 				<section className={styles.cardBtn}>
 					<div className={styles.participateBtn}>
 						{!verifySubscription() &&
+							!isAnotherEventBlocking() &&
 							evState === EventStatesEnum.AVAILABLE &&
 							eventParticipationState === EventStatesEnum.INCOMPLETED &&
 							!!user?.name && (
@@ -158,13 +191,15 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 
 					<div className={styles.infoBtn}>
 						<Button
-							kind="secondary"
+							kind={isAnotherEventBlocking() ? 'tertiary' : 'secondary'}
 							size="small"
 							id="infoBtn"
 							style={{ marginBottom: '10vh' }}
 							onClick={e => {
-								e.preventDefault();
-								handleInfo();
+								if (!isAnotherEventBlocking()) {
+									e.preventDefault();
+									handleInfo();
+								}
 							}}>
 							{lang.infoBtn}
 						</Button>
