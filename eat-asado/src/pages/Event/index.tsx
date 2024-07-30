@@ -469,7 +469,7 @@ export function Event(): JSX.Element {
 						<section className={styles.btnSection}>
 							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
-									{isUserIntoEvent() ? 'Bajarse' : !isEventFull() && 'Sumarse'}
+									{isUserIntoEvent() ? lang.getOff : !isEventFull() && lang.getInto}
 								</Button> //Testear que ande bien
 							)}
 

@@ -68,6 +68,8 @@ export const eventHome = Object.seal({
 	purchaseDeletedError: 'There was an error deleting the purchase',
 	downloadingImageError: 'There was an error downloading the image',
 	validateBtn: 'Validate',
+	getInto: 'Get Into',
+	getOff: 'Get off',
 	paidNoti: 'PAID',
 	pendingNoti: 'PENDING',
 	paymentDataIsNecessary: 'Yoy need to add your alias or cbu in your profile'
