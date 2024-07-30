@@ -1,6 +1,7 @@
 @use '/src/styles/variables' as variables;
 
 .content {
+	font-family: 'Raleway';
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -175,6 +176,27 @@
 				.secondRow {
 					margin-top: 40px;
 
+					.infoDataUsername {
+						margin: 5px;
+						align-self: center;
+					}
+					::-webkit-scrollbar {
+						width: 4px;
+					}
+					::-webkit-scrollbar-track {
+						background-color: transparent;
+					}
+
+					::-webkit-scrollbar-thumb {
+						background-color: rgba(0, 0, 0, 0.554);
+						border-radius: 1px;
+					}
+
+					.infoParticipants {
+						max-height: auto;
+						overflow-y: scroll;
+					}
+
 					.infoDataUsernamePayed {
 						margin: 0 0 0 10px;
 						color: green;
@@ -207,6 +229,23 @@
 		}
 	}
 
+	::-webkit-scrollbar {
+		width: 4px;
+	}
+	::-webkit-scrollbar-track {
+		background-color: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: rgba(0, 0, 0, 0.554);
+		border-radius: 1px;
+	}
+
+	.purchasesList {
+		max-height: 110px;
+		overflow-y: scroll;
+	}
+
 	.purchasesData {
 		display: flex;
 	}
@@ -226,9 +265,4 @@
 			margin-top: 15px;
 		}
 	}
-}
-
-.infoDataUsername {
-	margin: 5px;
-	align-self: center;
 }

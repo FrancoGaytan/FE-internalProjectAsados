@@ -353,29 +353,31 @@ export function Event(): JSX.Element {
 										<h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
 									</div>
 
-									{purchasesMade.map((purchase: IPurchaseReceipt) => (
-										<div key={purchase._id} className={styles.purchasesData}>
-											<h5 className={styles.infoData}>{purchase.description}</h5>
+									<section className={styles.purchasesList}>
+										{purchasesMade.map((purchase: IPurchaseReceipt) => (
+											<div key={purchase._id} className={styles.purchasesData}>
+												<h5 className={styles.infoData}>{purchase.description}</h5>
 
-											<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
+												<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
 
-											{event?.shoppingDesignee._id === user?.id && (
+												{event?.shoppingDesignee._id === user?.id && (
+													<button
+														className={styles.deleteBtn}
+														onClick={e => {
+															e.preventDefault();
+															deletePurchase(purchase);
+														}}></button>
+												)}
+
 												<button
-													className={styles.deleteBtn}
+													className={styles.downloadBtn}
 													onClick={e => {
 														e.preventDefault();
-														deletePurchase(purchase);
+														downloadPurchase(purchase);
 													}}></button>
-											)}
-
-											<button
-												className={styles.downloadBtn}
-												onClick={e => {
-													e.preventDefault();
-													downloadPurchase(purchase);
-												}}></button>
-										</div>
-									))}
+											</div>
+										))}
+									</section>
 								</div>
 							</div>
 							<div className={styles.eventParticipants}>
@@ -432,32 +434,34 @@ export function Event(): JSX.Element {
 										</h3>
 									</div>
 
-									{eventParticipants.map((member: EventUserResponse, i: number) => (
-										<div key={`participants-key-${i}`} className={styles.infoData}>
-											<h5 className={styles.infoDataUsername}>
-												{member.userName} {member.userLastName}
-											</h5>
-											{showPaymentData() &&
-												userIsShoppingDesignee(member) &&
-												(member.hasReceiptApproved ? (
-													<h5 className={styles.infoDataUsernamePayed}>{lang.paidNoti}</h5>
-												) : member.hasUploaded ? (
-													<Button
-														className={styles.btnEvent}
-														kind="validation"
-														size="micro"
-														onClick={() => {
-															setTransferReceiptId(member.transferReceipt);
-															openValidationPopup();
-															setUserToApprove(member.userId);
-														}}>
-														{lang.validateBtn}
-													</Button>
-												) : (
-													<h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
-												))}
-										</div>
-									))}
+									<section className={styles.infoParticipants}>
+										{eventParticipants.map((member: EventUserResponse, i: number) => (
+											<div key={`participants-key-${i}`} className={styles.infoData}>
+												<h5 className={styles.infoDataUsername}>
+													{member.userName} {member.userLastName}
+												</h5>
+												{showPaymentData() &&
+													userIsShoppingDesignee(member) &&
+													(member.hasReceiptApproved ? (
+														<h5 className={styles.infoDataUsernamePayed}>{lang.paidNoti}</h5>
+													) : member.hasUploaded ? (
+														<Button
+															className={styles.btnEvent}
+															kind="validation"
+															size="micro"
+															onClick={() => {
+																setTransferReceiptId(member.transferReceipt);
+																openValidationPopup();
+																setUserToApprove(member.userId);
+															}}>
+															{lang.validateBtn}
+														</Button>
+													) : (
+														<h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
+													))}
+											</div>
+										))}
+									</section>
 								</div>
 							</div>
 						</main>
