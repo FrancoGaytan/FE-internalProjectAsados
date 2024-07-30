@@ -236,6 +236,10 @@ export function Event(): JSX.Element {
 		return myReceipt?.hasUploaded;
 	}
 
+	function isEventFull(): boolean {
+		return event.members.length >= event.memberLimit;
+	}
+
 	useEffect(() => {
 		if (!userIdParams) return;
 
@@ -463,10 +467,10 @@ export function Event(): JSX.Element {
 						</main>
 
 						<section className={styles.btnSection}>
-							{(event.state === EventStatesEnum.AVAILABLE || event.state === EventStatesEnum.FULL) && !isLoading && (
+							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
-									{isUserIntoEvent() ? 'Bajarse' : 'Sumarse'}
-								</Button>
+									{isUserIntoEvent() ? 'Bajarse' : !isEventFull() && 'Sumarse'}
+								</Button> //Testear que ande bien
 							)}
 
 							{event.organizer && event.organizer._id === user?.id && (

@@ -57,7 +57,7 @@ export const eventHome = Object.seal({
 	meOpt: 'Yo',
 	emptyOpt: 'Sin Asignar',
 	payBtn: 'Pagar',
-	modifyPay: 'Modificar Pago',
+	modifyPay: 'Aprovación Pendiente Modificar Pago',
 	unassignAtClosing: 'No puede cerrar un evento si aun no tiene asignados los responsables',
 	needsLogin: 'Necesita logearse para acceder a esta funcionalidad',
 	noLoggedMsg: 'Necesita estar logeado para acceder al evento',

@@ -57,7 +57,7 @@ export const eventHome = Object.seal({
 	meOpt: ' Me',
 	emptyOpt: 'Unassigned',
 	payBtn: 'Pay',
-	modifyPay: 'Modify Pay',
+	modifyPay: 'Pending Aproval Modify Pay',
 	unassignAtClosing: 'You cant close an event which doesnt have assign cook or shopping designee',
 	needsLogin: 'Needs Login to access to this functionality',
 	noLoggedMsg: 'You need to be logged in to access to the event´s info',
