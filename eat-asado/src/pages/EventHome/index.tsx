@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
@@ -6,7 +6,7 @@ import EventCard from '../../components/macro/EventCard/EventCard';
 import { TEventState } from '../../types/eventState';
 import { useEvent } from '../../stores/EventContext';
 import { useNavigate } from 'react-router-dom';
-import { getPublicEvents } from '../../service';
+import { getPublicEvents, isUserDebtor } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
 import styles from './styles.module.scss';
 
@@ -21,6 +21,7 @@ export function EventHome(): JSX.Element {
 	const { publicEvents } = useEvent();
 	const { setPublicEvents } = useEvent();
 	const navigate = useNavigate();
+	const [userDebtor, setUserDebtor] = useState('null');
 
 	const { user } = useAuth();
 
@@ -48,7 +49,21 @@ export function EventHome(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	console.log(publicEvents);
+	useEffect(() => {
+		if (!user) {
+			return;
+		}
+		isUserDebtor(user?.id as string)
+			.then(res => {
+				setUserDebtor(res.eventId);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user]);
+
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -74,6 +89,7 @@ export function EventHome(): JSX.Element {
 								key={event._id}
 								eventId={event._id}
 								eventDateTime={event.datetime}
+								eventUserIsDebtor={userDebtor}
 								userId={user?.id}
 								eventState={event.state as TEventState}
 								eventData={{
