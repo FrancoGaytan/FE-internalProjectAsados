@@ -1,11 +1,14 @@
 import { EventStatesEnum } from '../../../../enums/EventState.enum';
-import { TEventState } from '../../../../types/eventState';
+import { TEventParticipationState, TEventState, TSubscribedState } from '../../../../types/eventState';
+
 import { className } from '../../../../utils/className';
 import styles from '../styles.module.scss';
 
 interface IEventCardProps {
-	evState: TEventState;
+	evState: TEventState | TSubscribedState | TEventParticipationState;
 	evParticipants: Number;
+	isEventBlocking: Boolean;
+	isAnotherEventBlocking: Boolean;
 	evParticipantsLimit: Number;
 	subscribedUser: Boolean;
 	evDate: String;
@@ -20,14 +23,19 @@ export default function EventHeader(props: IEventCardProps) {
 
 	function getEventState(): string | undefined {
 		//Deuda Tecnica, hacer un elseif para esta funcion
+		if (props.isEventBlocking) {
+			return 'Debtor';
+		}
+		if (props.isAnotherEventBlocking) {
+			return 'blocked';
+		}
+
 		if (evState === EventStatesEnum.AVAILABLE) {
 			if (subscribedUser) {
 				return 'subscribed';
 			} else {
 				if (isEventFull()) return EventStatesEnum.FULL;
 			}
-
-			//TODO: Chech this logic. This code is unreachable.
 			return EventStatesEnum.AVAILABLE;
 		} else if (evState === EventStatesEnum.CLOSED) {
 			if (!subscribedUser) {
@@ -37,6 +45,9 @@ export default function EventHeader(props: IEventCardProps) {
 			return 'subscribed';
 		} else if (evState === EventStatesEnum.CANCELED) {
 			return EventStatesEnum.CANCELED;
+		} else if (isEventFull()) {
+			return EventStatesEnum.FULL;
+
 		} else {
 			return EventStatesEnum.FINISHED;
 		}

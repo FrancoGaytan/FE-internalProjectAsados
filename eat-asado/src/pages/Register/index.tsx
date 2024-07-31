@@ -93,7 +93,7 @@ export function Register(): JSX.Element {
 	return (
 		//TODO: meter todos los inputs y label adentro de un contenedor para manipular mejor el ancho y luego aplicar grid en desk
 		<FormLayout onSubmit={e => handleRegister(e)}>
-			<div className={styles.closeBtn}></div>
+			<div className={styles.closeBtn} onClick={() => navigate('/')}></div>
 			<label className={styles.title}>{lang.registerTitle}</label>
 
 			<div className={styles.inputSection}>

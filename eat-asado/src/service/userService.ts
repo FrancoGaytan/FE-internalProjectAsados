@@ -53,3 +53,9 @@ export async function hasUploadedTransferReceipt(idUser: string, idEvent: string
 	const url = `/users/hasUploaded/${idUser}/${idEvent}`;
 	return await _get(url, signal);
 }
+
+export async function isUserDebtor(idUser: string, signal?: AbortSignal): Promise<any> {
+	const url = `/users/isDebtor/${idUser}`;
+	return await _get(url, signal);
+}
+

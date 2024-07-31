@@ -1,5 +1,5 @@
 export const eventHome = Object.seal({
-	messageBanner: 'Barbecue',
+	messageBanner: 'Welcome!',
 	newEventButton: 'Create new event',
 	incomingEvents: 'Incoming events',
 	participationInfoTitle: 'How to be into.',
@@ -24,7 +24,7 @@ export const eventHome = Object.seal({
 		description: 'Lorem ipsum dolor sit ame'
 	},
 	participateButton: 'I WANNA BE INTO',
-	actualParticipants: 'Actual Participants: ',
+	currentParticipants: 'Current Participants: ',
 	cook: 'Cook: ',
 	participateBtn: 'PARTICIPATE',
 	infoBtn: 'INFO',
@@ -57,7 +57,7 @@ export const eventHome = Object.seal({
 	meOpt: ' Me',
 	emptyOpt: 'Unassigned',
 	payBtn: 'Pay',
-	modifyPay: 'Modify Pay',
+	modifyPay: 'Pending Aproval Modify Pay',
 	unassignAtClosing: 'You cant close an event which doesnt have assign cook or shopping designee',
 	needsLogin: 'Needs Login to access to this functionality',
 	noLoggedMsg: 'You need to be logged in to access to the event´s info',
@@ -68,6 +68,9 @@ export const eventHome = Object.seal({
 	purchaseDeletedError: 'There was an error deleting the purchase',
 	downloadingImageError: 'There was an error downloading the image',
 	validateBtn: 'Validate',
+	getInto: 'Get Into',
+	getOff: 'Get off',
 	paidNoti: 'PAID',
-	pendingNoti: 'PENDING'
+	pendingNoti: 'PENDING',
+	paymentDataIsNecessary: 'Yoy need to add your alias or cbu in your profile'
 });

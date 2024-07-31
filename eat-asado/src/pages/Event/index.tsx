@@ -71,6 +71,10 @@ export function Event(): JSX.Element {
 	}
 
 	function subscribeUserToEvent(): void {
+		// pasarla a eventhome para que ande el boton de participate
+		if (!user) {
+			return;
+		}
 		setIsLoading(true);
 		subscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
@@ -87,6 +91,10 @@ export function Event(): JSX.Element {
 	}
 
 	function unsubscribeUserToEvent(): void {
+		if (!user) {
+			return;
+		}
+
 		unsubscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
 				setAlert(`${lang.userRemovedSuccessfully}!`, AlertTypes.SUCCESS);
@@ -118,6 +126,11 @@ export function Event(): JSX.Element {
 	}
 
 	function toogleShopDesignee(): void {
+		if (!(actualUser?.cbu || actualUser?.alias)) {
+			setAlert(`${lang.paymentDataIsNecessary}`, AlertTypes.INFO);
+			return;
+		}
+
 		!event?.shoppingDesignee
 			? editRoles(event?._id, { ...event, shoppingDesignee: actualUser })
 					.then(res => {
@@ -147,9 +160,9 @@ export function Event(): JSX.Element {
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
 					.then(res => {
 						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
+						setTimeout(() => window.location.reload(), 1000);
 					})
 					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
-					.finally(() => setTimeout(() => window.location.reload(), 1000))
 			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
 	}
 
@@ -223,6 +236,10 @@ export function Event(): JSX.Element {
 	function checkIfUserHasUploaded() {
 		const myReceipt = eventParticipants.find(member => member.userId === user?.id);
 		return myReceipt?.hasUploaded;
+	}
+
+	function isEventFull(): boolean {
+		return event.members.length >= event.memberLimit;
 	}
 
 	useEffect(() => {
@@ -424,7 +441,10 @@ export function Event(): JSX.Element {
 
 									{eventParticipants.map((member: EventUserResponse, i: number) => (
 										<div key={`participants-key-${i}`} className={styles.infoData}>
-											<h5 className={styles.infoDataUsername}>{member.userName}</h5>
+											<h5 className={styles.infoDataUsername}>
+												{member.userName} {member.userLastName}
+											</h5>
+
 											{showPaymentData() &&
 												userIsShoppingDesignee(member) &&
 												(member.hasReceiptApproved ? (
@@ -453,8 +473,8 @@ export function Event(): JSX.Element {
 						<section className={styles.btnSection}>
 							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
-									{isUserIntoEvent() ? 'Bajarse' : 'Sumarse'}
-								</Button>
+									{isUserIntoEvent() ? lang.getOff : !isEventFull() && lang.getInto}
+								</Button> //Testear que ande bien
 							)}
 
 							{event.organizer && event.organizer._id === user?.id && (
@@ -481,6 +501,7 @@ export function Event(): JSX.Element {
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === EventStatesEnum.CLOSED &&
+								isUserIntoEvent() &&
 								!userHasPaid &&
 								(event.purchaseReceipts.length as number) === 0 && (
 									<Button className={styles.btnEvent} kind="tertiary" size="short">
@@ -491,6 +512,7 @@ export function Event(): JSX.Element {
 							{event.shoppingDesignee &&
 								event.shoppingDesignee._id !== user?.id &&
 								event.state === EventStatesEnum.CLOSED &&
+								isUserIntoEvent() &&
 								(event.purchaseReceipts.length as number) !== 0 &&
 								(!checkIfUserHasUploaded() ? (
 									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>

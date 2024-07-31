@@ -80,13 +80,14 @@ export function CreateEvent(): JSX.Element {
 		return () => abortController.abort();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [user]);
 
 	useEffect(() => {
 		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user]);
+	}, [user, fullUser]);
+
 
 	return (
 		<FormLayout>
@@ -121,7 +122,21 @@ export function CreateEvent(): JSX.Element {
 						type="datetime-local"
 						value={event.datetime.toISOString().slice(0, -8)}
 						onChange={e => {
-							setEvent({ ...event, datetime: new Date(e.target.value) });
+							const inputValue = e.target.value;
+							if (inputValue) {
+								const localDate = new Date(inputValue);
+
+								// Verifica si el valor se ha convertido en una fecha válida
+								if (!isNaN(localDate.getTime())) {
+									// Comprobar si localDate es válido
+									const utcOffset = localDate.getTimezoneOffset();
+									const adjustedDate = new Date(localDate.getTime() - utcOffset * 60000);
+									setEvent({ ...event, datetime: adjustedDate });
+								} else {
+									// Manejo de errores opcional
+									console.error('Fecha no válida:', inputValue);
+								}
+							}
 						}}
 					/>
 

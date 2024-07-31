@@ -73,6 +73,26 @@
 		}
 	}
 
+	&.Debtor {
+		border-top: 5px solid black;
+		.availabilityDesc {
+			background-color: black;
+		}
+		.eventCardDate {
+			color: black;
+		}
+	}
+
+	&.blocked {
+		border-top: 5px solid rgb(135, 126, 126);
+		.availabilityDesc {
+			background-color: rgb(135, 126, 126);
+		}
+		.eventCardDate {
+			color: rgb(135, 126, 126);
+		}
+	}
+
 	.cardTitleInfo {
 		display: flex;
 		margin-top: 20px;
@@ -104,7 +124,7 @@
 			margin-top: 25px;
 			font-size: 13px;
 		}
-		
+    
 		.eventTitle {
 			font-size: 23px;
 			margin-top: 5px;
