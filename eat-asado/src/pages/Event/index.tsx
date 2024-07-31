@@ -95,6 +95,7 @@ export function Event(): JSX.Element {
 		if (!user) {
 			return;
 		}
+
 		unsubscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
 				setAlert(`${lang.userRemovedSuccessfully}!`, AlertTypes.SUCCESS);
@@ -130,6 +131,7 @@ export function Event(): JSX.Element {
 			setAlert(`${lang.paymentDataIsNecessary}`, AlertTypes.INFO);
 			return;
 		}
+
 		!event?.shoppingDesignee
 			? editRoles(event?._id, { ...event, shoppingDesignee: actualUser })
 					.then(res => {
@@ -311,6 +313,7 @@ export function Event(): JSX.Element {
 				console.error('Catch in context: ', e);
 			});
 	}, [transferReceiptId]);
+
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>

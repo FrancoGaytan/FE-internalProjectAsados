@@ -28,6 +28,7 @@
 			.profileBtn {
 				min-width: 30px;
 				height: 30px;
+
 				margin-bottom: 28px;
 				margin-left: 12px;
 				background-image: url('../../../../../public/assets/pictures/profile.png');
@@ -48,6 +49,7 @@
 					&:hover {
 						background-color: rgb(94, 93, 93);
 					}
+
 				}
 			}
 		}
@@ -121,6 +123,7 @@
 		transform: translateY(8px);
 		margin-top: 25px;
 		background-image: url('../../../../../public/assets/pictures/fireBlack.png');
+
 		background-size: contain;
 		z-index: 1;
 		bottom: 0;
