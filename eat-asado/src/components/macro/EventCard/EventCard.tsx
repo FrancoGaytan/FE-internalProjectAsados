@@ -15,6 +15,7 @@ import { parseMinutes } from '../../../utils/utilities';
 import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
 
+
 interface IEventData {
 	eventTitle: String;
 	eventDescription: String;
@@ -49,6 +50,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const evId = props.eventId;
 	const evUserIsDebtor = props.eventUserIsDebtor;
 
+
 	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = evDateTime.getHours().toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 	const eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
@@ -76,6 +78,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		if (!!user?.name) {
 			subscribeUserToEvent();
 			navigate(`/event/${evId}`);
+
 		} else {
 			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
 		}
@@ -143,6 +146,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 				evState={evState}
 				isEventBlocking={isThisEventBlocking()}
 				isAnotherEventBlocking={isAnotherEventBlocking()}
+
 				evParticipants={evParticipants}
 				evParticipantsLimit={evParticipantsLimit}
 				evDate={evDate}
@@ -158,6 +162,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 
 				<div className={styles.eventParticipants}>
 					{lang.currentParticipants}
+
 
 					<p>
 						{evParticipants.toString()}/{evParticipantsLimit.toString()}
@@ -200,6 +205,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 									e.preventDefault();
 									handleInfo();
 								}
+
 							}}>
 							{lang.infoBtn}
 						</Button>

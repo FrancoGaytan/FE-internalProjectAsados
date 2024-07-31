@@ -58,3 +58,4 @@ export async function isUserDebtor(idUser: string, signal?: AbortSignal): Promis
 	const url = `/users/isDebtor/${idUser}`;
 	return await _get(url, signal);
 }
+

@@ -88,6 +88,7 @@ export function CreateEvent(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, fullUser]);
 
+
 	return (
 		<FormLayout>
 			<button className={styles.closeBtn} onClick={handleGoBack}></button>

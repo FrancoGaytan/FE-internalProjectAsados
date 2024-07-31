@@ -1,5 +1,6 @@
 import { EventStatesEnum } from '../../../../enums/EventState.enum';
 import { TEventParticipationState, TEventState, TSubscribedState } from '../../../../types/eventState';
+
 import { className } from '../../../../utils/className';
 import styles from '../styles.module.scss';
 
@@ -28,6 +29,7 @@ export default function EventHeader(props: IEventCardProps) {
 		if (props.isAnotherEventBlocking) {
 			return 'blocked';
 		}
+
 		if (evState === EventStatesEnum.AVAILABLE) {
 			if (subscribedUser) {
 				return 'subscribed';
@@ -45,6 +47,7 @@ export default function EventHeader(props: IEventCardProps) {
 			return EventStatesEnum.CANCELED;
 		} else if (isEventFull()) {
 			return EventStatesEnum.FULL;
+
 		} else {
 			return EventStatesEnum.FINISHED;
 		}

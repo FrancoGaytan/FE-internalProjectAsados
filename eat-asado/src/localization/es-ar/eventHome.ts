@@ -73,4 +73,5 @@ export const eventHome = Object.seal({
 	paidNoti: 'PAGO',
 	pendingNoti: 'PENDIENTE',
 	paymentDataIsNecessary: 'Necesitas cargar tu cbu o tu alias en tu perfil'
+
 });
