@@ -124,10 +124,11 @@
 			margin-top: 25px;
 			font-size: 13px;
 		}
-    
+
 		.eventTitle {
 			font-size: 23px;
 			margin-top: 5px;
+			min-height: 52px;
 			font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		}
 
@@ -160,7 +161,7 @@
 			display: flex;
 			justify-content: space-between;
 			position: relative;
-			margin-top: 40px;
+			margin-top: 10px;
 
 			.participateBtn {
 				width: 100px;
