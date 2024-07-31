@@ -162,6 +162,10 @@
 			position: relative;
 			margin-top: 40px;
 
+			@media #{variables.media-query(max, sm)} {
+				bottom: 15px;
+			}
+
 			.participateBtn {
 				width: 100px;
 				position: relative;
