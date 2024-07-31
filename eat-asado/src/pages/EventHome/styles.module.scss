@@ -1,6 +1,7 @@
 @use '/src/styles/variables' as variables;
 
 .content {
+	font-family: 'Raleway';
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;

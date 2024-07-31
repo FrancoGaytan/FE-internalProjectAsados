@@ -1,6 +1,7 @@
 @use '/src/styles/variables' as variables;
 
 .content {
+	font-family: 'Raleway';
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -78,11 +79,13 @@
 			.sectionTitle {
 				display: flex;
 				gap: 15px;
+				background-color: transparent;
+				height: fit-content;
 			}
 
 			.eventOrganization {
 				display: flex;
-				background-color: rgba(226, 231, 232, 0.608);
+				background-color: rgba(211, 237, 243, 0.608);
 				border-radius: 10px;
 				margin: 10px;
 				padding-top: 15px;
@@ -147,18 +150,23 @@
 
 				@media #{variables.media-query(max, sm)} {
 					align-items: center;
+					margin: 0;
 				}
 			}
 			.eventParticipants {
 				width: 100%;
 				display: flex;
 				flex-direction: column;
-				background-color: rgba(226, 231, 232, 0.608);
+				background-color: rgba(211, 237, 243, 0.608);
 				margin: 10px;
 				padding-top: 15px;
 				border-radius: 10px;
+
+				.responsibilitiesSection {
+					margin-top: 20px;
+				}
 				.logoTitle {
-					margin-bottom: 20px;
+					margin-bottom: 0px;
 					color: black;
 				}
 
@@ -177,6 +185,28 @@
 
 				.secondRow {
 					margin-top: 40px;
+
+					.infoDataUsername {
+						margin: 5px;
+						align-self: center;
+					}
+					::-webkit-scrollbar {
+						width: 4px;
+					}
+					::-webkit-scrollbar-track {
+						background-color: transparent;
+					}
+
+					::-webkit-scrollbar-thumb {
+						background-color: rgba(0, 0, 0, 0.554);
+						border-radius: 1px;
+					}
+
+					.infoParticipants {
+						max-height: auto;
+						overflow-y: scroll;
+						padding-top: 25px;
+					}
 
 					.infoDataUsernamePayed {
 						margin: 0 0 0 10px;
@@ -201,6 +231,7 @@
 				}
 				@media #{variables.media-query(max, sm)} {
 					align-items: center;
+					margin: 0;
 					margin-top: 30px;
 				}
 			}
@@ -208,6 +239,23 @@
 				flex-direction: column;
 			}
 		}
+	}
+
+	::-webkit-scrollbar {
+		width: 4px;
+	}
+	::-webkit-scrollbar-track {
+		background-color: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: rgba(0, 0, 0, 0.554);
+		border-radius: 1px;
+	}
+
+	.purchasesList {
+		max-height: 110px;
+		overflow-y: scroll;
 	}
 
 	.purchasesData {
@@ -229,9 +277,4 @@
 			margin-top: 15px;
 		}
 	}
-}
-
-.infoDataUsername {
-	margin: 5px;
-	align-self: center;
 }

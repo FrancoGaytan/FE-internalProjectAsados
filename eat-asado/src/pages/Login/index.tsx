@@ -12,8 +12,8 @@ export function Login(): JSX.Element {
 	const lang = useTranslation('login');
 	const { login, isLoading } = useAuth();
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
-		email: 'prueba@endava.com',
-		password: 'contraseña'
+		email: '',
+		password: ''
 	});
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {

@@ -9,7 +9,7 @@ import { eventHome } from './eventHome';
 import { event } from './event';
 
 export const esAr = Object.seal({
-	appName: 'Eat-Asado',
+	appName: 'FoodSpot',
 	login,
 	navigation,
 	register,
