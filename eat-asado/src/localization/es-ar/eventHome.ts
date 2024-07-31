@@ -76,4 +76,5 @@ export const eventHome = Object.seal({
 	me: ' Yo',
 	empty: 'Sin Asignar',
 	noSpecialDiet: 'No tiene dieta especial'
+
 });
