@@ -68,9 +68,12 @@ export const eventHome = Object.seal({
 	purchaseDeletedError: 'Error al eliminar el recivo',
 	downloadingImageError: 'Error al descargar la imagen',
 	validateBtn: 'Validar',
-	getInto: 'Sumarse',
-	getOff: 'Bajarse',
+	getInto: 'SUMARSE',
+	getOff: 'BAJARSE',
 	paidNoti: 'PAGO',
 	pendingNoti: 'PENDIENTE',
-	paymentDataIsNecessary: 'Necesitas cargar tu cbu o tu alias en tu perfil'
+	paymentDataIsNecessary: 'Necesitas cargar tu cbu o tu alias en tu perfil',
+	me: ' Yo',
+	empty: 'Sin Asignar',
+	noSpecialDiet: 'No tiene dieta especial'
 });

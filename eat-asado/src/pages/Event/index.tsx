@@ -28,6 +28,7 @@ import { IPurchaseReceipt } from '../../models/purchases';
 import { downloadFile } from '../../utils/utilities';
 import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
 import { transferReceipt } from '../../models/transfer';
+import Tooltip from '../../components/micro/Tooltip/Tooltip';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -240,6 +241,10 @@ export function Event(): JSX.Element {
 		return event.members.length >= event.memberLimit;
 	}
 
+	function showDiets(): boolean {
+		return event.shoppingDesignee._id === user?.id || event.chef._id === user?.id || event.organizer._id === user?.id;
+	}
+
 	useEffect(() => {
 		if (!userIdParams) return;
 
@@ -391,40 +396,42 @@ export function Event(): JSX.Element {
 									<h3 className={styles.logoTitle}>{lang.inchargeTitle}</h3>
 								</div>
 
-								<div className={styles.inChargeOpt}>
-									<h5 className={styles.infoData}>
-										{lang.cook}
-										{event.chef ? (event.chef._id === user?.id ? ' Me' : event.chef.name) : 'Vacante'}
-									</h5>
+								<div className={styles.responsibilitiesSection}>
+									<div className={styles.inChargeOpt}>
+										<h5 className={styles.infoData}>
+											{lang.cook}
+											{event.chef ? (event.chef._id === user?.id ? lang.me : event.chef.name) : lang.empty}
+										</h5>
 
-									{event.chef && event.chef._id === user?.id && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
-										<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
-									)}
-
-									{!event.chef && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
-										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
-									)}
-								</div>
-								<div className={styles.inChargeOpt}>
-									<h5 className={styles.infoData}>
-										{lang.buyer}{' '}
-										{event.shoppingDesignee
-											? event.shoppingDesignee._id === user?.id
-												? lang.meOpt
-												: event.shoppingDesignee.name
-											: lang.emptyOpt}
-									</h5>
-
-									{event.shoppingDesignee &&
-										event.shoppingDesignee._id === user?.id &&
-										event.state !== EventStatesEnum.CLOSED &&
-										isUserIntoEvent() && (
-											<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
+										{event.chef && event.chef._id === user?.id && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
+											<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
 										)}
 
-									{!event.shoppingDesignee && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
-										<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
-									)}
+										{!event.chef && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
+											<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
+										)}
+									</div>
+									<div className={styles.inChargeOpt}>
+										<h5 className={styles.infoData}>
+											{lang.buyer}{' '}
+											{event.shoppingDesignee
+												? event.shoppingDesignee._id === user?.id
+													? lang.meOpt
+													: event.shoppingDesignee.name
+												: lang.emptyOpt}
+										</h5>
+
+										{event.shoppingDesignee &&
+											event.shoppingDesignee._id === user?.id &&
+											event.state !== EventStatesEnum.CLOSED &&
+											isUserIntoEvent() && (
+												<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
+											)}
+
+										{!event.shoppingDesignee && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
+											<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
+										)}
+									</div>
 								</div>
 
 								<div className={styles.secondRow}>
@@ -441,9 +448,19 @@ export function Event(): JSX.Element {
 									<section className={styles.infoParticipants}>
 										{eventParticipants.map((member: EventUserResponse, i: number) => (
 											<div key={`participants-key-${i}`} className={styles.infoData}>
-												<h5 className={styles.infoDataUsername}>
-													{member.userName} {member.userLastName}
-												</h5>
+												{showDiets() ? (
+													<Tooltip
+														infoText={!!member.specialDiet.length ? member.specialDiet.join(', ') : lang.noSpecialDiet}>
+														<h5 className={styles.infoDataUsername}>
+															{member.userName} {member.userLastName}
+														</h5>
+													</Tooltip>
+												) : (
+													<h5 className={styles.infoDataUsername}>
+														{member.userName} {member.userLastName}
+													</h5>
+												)}
+
 												{showPaymentData() &&
 													userIsShoppingDesignee(member) &&
 													(member.hasReceiptApproved ? (

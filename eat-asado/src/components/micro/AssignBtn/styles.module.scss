@@ -4,9 +4,11 @@
 
 .assignContainer {
 	display: flex;
+	align-items: center;
 
 	.btnText {
-		margin-top: 8px;
+		align-items: center;
+		margin: 0 auto;
 		margin-left: 3px;
 		&.assign {
 			color: var(--backgroundNeutral);

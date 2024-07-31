@@ -5,7 +5,7 @@ export const createEvent = Object.seal({
 	eventDescription: 'Descripción',
 	rolesTitle: 'Roles',
 	optionalDescription: '(opcional)',
-	chef: 'Asador',
+	chef: 'Cocinero',
 	shoppingDesignee: 'Encargado de Compras',
 	createEventBtn: 'CREAR EVENTO',
 	memberLimit: 'Member Limit',

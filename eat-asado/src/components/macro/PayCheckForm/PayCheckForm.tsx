@@ -100,6 +100,10 @@ export default function PayCheckForm(props: PayCheckProps) {
 			} catch (e) {
 				setAlert(`${lang.transferReceiptFailure}`, AlertTypes.ERROR);
 			}
+		} else {
+			await createTransferReceipt(event?._id, { ...payForm });
+			setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+			setTimeout(() => window.location.reload(), 1000);
 		}
 	}
 

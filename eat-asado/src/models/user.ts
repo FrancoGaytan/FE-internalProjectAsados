@@ -42,4 +42,5 @@ export interface EventUserResponse {
 	transferReceipt: string | undefined;
 	hasReceiptApproved: boolean | null;
 	hasUploaded: boolean;
+	specialDiet: [string];
 }
