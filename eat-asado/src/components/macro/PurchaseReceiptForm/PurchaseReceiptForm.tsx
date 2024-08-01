@@ -61,8 +61,8 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 
 				try {
 					const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
-
 					setAlert(lang.purchaseReceiptLoaded, AlertTypes.SUCCESS);
+
 
 					try {
 						await uploadPurchaseFile(purchaseForm.file, resp._id);
