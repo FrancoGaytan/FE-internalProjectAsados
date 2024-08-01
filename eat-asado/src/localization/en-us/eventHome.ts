@@ -2,28 +2,28 @@ export const eventHome = Object.seal({
 	messageBanner: 'Welcome!',
 	newEventButton: 'Create new event',
 	incomingEvents: 'Incoming events',
-	participationInfoTitle: 'How to be into.',
+	participationInfoTitle: 'What is FoodSpot?',
 	participationInfoDescription:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. Excepteur on proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-	moreAbout: 'MORE ABOUT',
+		'FoodSpot is here to help you better organize your office meals. You can create events for your colleagues to join, choose the chef and the person in charge of the shopping, upload transfer receipts and split the expenses. The organizer will be able to upload purchase receipts and will be able to view and approve payments received. Members will be able to join the event and, once the tickets are uploaded, they will see the total amount to be paid. No matter what your dietary restrictions are, you can clarify them in your profile for the chef to take them into consideration.',
+	moreAbout: 'MORE INFO',
 	participationStepsTitle: 'Come on, join us to the barbecue',
 	participationStepsDescriptionPart1:
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. unt in culpa qui officia deserunt mollit anim id est laborum',
 	participationStepsDescriptionPart2:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. unt in culpa qui officia deserunt mollit anim id est laborum',
+		'Joining is super easy! Once logged in you will be able to view the registered events and sign up for one of them. You will also be able to create a new one and assign the roles to carry it out. Remember to always pay your debts, otherwise you will not be able to continue attending.',
 	LogInTheApp: {
 		title: 'ENTER THE APP',
-		description: 'Lorem ipsum dolor sit ame'
+		description: 'Register and Log in'
 	},
 	joinToAnBarbecue: {
-		title: 'JOIN IN A BARBECUE',
-		description: 'Lorem ipsum dolor sit ame'
+		title: 'JOIN IN AN EVENT',
+		description: 'Inscribe to an event'
 	},
 	letsEat: {
-		title: "LETS' EAT",
-		description: 'Lorem ipsum dolor sit ame'
+		title: "LET'S EAT",
+		description: 'Enjoy your meal'
 	},
-	participateButton: 'I WANNA BE INTO',
+	participateButton: 'I WANT TO JOIN',
 	currentParticipants: 'Current Participants: ',
 	cook: 'Chef: ',
 	participateBtn: 'PARTICIPATE',

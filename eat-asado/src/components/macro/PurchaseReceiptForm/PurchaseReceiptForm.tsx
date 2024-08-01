@@ -61,14 +61,14 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 
 				try {
 					const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
+					setAlert(lang.purchaseReceiptLoaded, AlertTypes.SUCCESS);
 
-					setAlert(`Purchase Receipt loaded!`, AlertTypes.SUCCESS);
 
 					try {
 						await uploadPurchaseFile(purchaseForm.file, resp._id);
 						setAlert(`${lang.purchaseReceiptLoaded}!`, AlertTypes.SUCCESS);
 					} catch (e) {
-						setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
+						setAlert(lang.fileSendingError, AlertTypes.ERROR);
 					}
 
 					setTimeout(() => window.location.reload(), 1000);
@@ -76,8 +76,7 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 				} catch (e) {
 					/* TODO: Acá hay un alert en inglés y en el otro hay uno en español
 				Deberían estar en el mismo idioma y localizados */
-
-					setAlert(`There's been a failure loading the purchase receipt`, AlertTypes.ERROR);
+					setAlert(lang.loadingPurchaseError, AlertTypes.ERROR);
 				}
 			}
 		} else {
