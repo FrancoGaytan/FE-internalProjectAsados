@@ -72,6 +72,7 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 					}
 
 					setTimeout(() => window.location.reload(), 1000);
+
 				} catch (e) {
 					/* TODO: Acá hay un alert en inglés y en el otro hay uno en español
 				Deberían estar en el mismo idioma y localizados */
