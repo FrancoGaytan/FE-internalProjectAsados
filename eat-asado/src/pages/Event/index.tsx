@@ -59,7 +59,7 @@ export function Event(): JSX.Element {
 	}
 
 	function getOnlyDate(evDateTime: Date) {
-		return evDateTime.getDate().toString() + '. ' + evDateTime.getMonth().toString() + '. ' + evDateTime.getFullYear().toString() + '.';
+		return evDateTime.getDate().toString() + '. ' + (evDateTime.getMonth() + 1).toString() + '. ' + evDateTime.getFullYear().toString() + '.';
 	}
 
 	function getOnlyHour(evDateTime: Date) {
