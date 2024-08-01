@@ -61,7 +61,7 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 
 				try {
 					await uploadPurchaseFile(purchaseForm.file, resp._id);
-					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+					setAlert(`${lang.purchaseReceiptLoaded}!`, AlertTypes.SUCCESS);
 				} catch (e) {
 					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
 				}
@@ -118,7 +118,7 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 									inputRef.current?.click();
 								}}
 								style={{ cursor: 'pointer' }}></button>
-							{purchaseForm?.file ? <p>{purchaseForm.file.name}</p> : <p>{lang.uploadTransferReceipt}</p>}
+							{purchaseForm?.file ? <p>{purchaseForm.file.name}</p> : <p>{lang.uploadPurchaseReceipt}</p>}
 						</div>
 					</DragAndDrop>
 

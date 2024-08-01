@@ -26,9 +26,18 @@ export function SettingNewPassword(): JSX.Element {
 		userConfirmedPassword: ''
 	});
 
+	function validatePassword(password: string): boolean {
+		const expReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$/;
+		return expReg.test(password);
+	}
+
 	async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
 		if (newPassword.userPassword !== newPassword.userConfirmedPassword) {
 			setAlert(lang.passwordsDontMatch, AlertTypes.ERROR);
+			return;
+		}
+		if (!validatePassword(newPassword.userPassword)) {
+			setAlert(`${lang.wrongPassword}`, AlertTypes.ERROR);
 			return;
 		}
 		try {

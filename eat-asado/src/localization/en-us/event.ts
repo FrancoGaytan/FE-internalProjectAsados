@@ -1,5 +1,6 @@
 export const event = Object.seal({
 	transferReceiptLoaded: 'Transfer receipt successfully loaded',
+	purchaseReceiptLoaded: 'Purchase receipt successfully loaded',
 	transferReceiptFailure: 'Transfer receipt couldn´t be uploaded',
 	confirmPayBtn: 'Confirm Pay',
 	transferRadioBtn: 'Transfer',
@@ -13,6 +14,7 @@ export const event = Object.seal({
 	totalPrice: 'Amount to pay: ',
 	description: 'Description',
 	uploadTransferReceipt: 'Upload Transfer Receipt',
+	uploadPurchaseReceipt: 'Upload Purchase Receipt',
 	amountLabel: 'Amount',
 	validatePaymentTitle: 'Validate Payment',
 	downloadText: 'Download Transfer Receipt',

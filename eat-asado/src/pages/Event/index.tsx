@@ -171,7 +171,7 @@ export function Event(): JSX.Element {
 		//TODO: deuda tecnica hacer una sola funcion para closeEvent y reopenEvent --> algo como: toogleEvent
 		editEvent(event?._id, { ...event, state: EventStatesEnum.AVAILABLE })
 			.then(res => {
-				setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
+				setAlert(`${lang.eventOpen}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
 			.finally(() => setTimeout(() => window.location.reload(), 1000));
