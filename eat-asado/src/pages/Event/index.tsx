@@ -245,6 +245,7 @@ export function Event(): JSX.Element {
 
 	function showDiets(): boolean {
 		return event.shoppingDesignee?._id === user?.id || event.chef?._id === user?.id || event.organizer?._id === user?.id;
+
 	}
 
 	useEffect(() => {
