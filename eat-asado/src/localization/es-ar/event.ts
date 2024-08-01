@@ -24,5 +24,7 @@ export const event = Object.seal({
 	payRejectionFailed: 'Ha ocurrido un error rechazando el pago',
 	paidByCashText: 'Este usuario ha pagado en efectivo',
 	uploadReceiptFirst: 'Debes cargar el archivo antes de enviar',
-	errorSubmittingFile: 'Ha habido un error al cargar el archivo'
+	errorSubmittingFile: 'Ha habido un error al cargar el archivo',
+	loadingPurchaseError: 'Ha habido un error cargando el recibo de compra',
+	fileSendingError: 'Ha habido un error enviando el archivo'
 });
