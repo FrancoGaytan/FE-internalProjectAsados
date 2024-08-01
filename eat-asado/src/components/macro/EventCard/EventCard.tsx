@@ -15,6 +15,7 @@ import { parseMinutes } from '../../../utils/utilities';
 import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
 
+
 interface IEventData {
 	eventTitle: String;
 	eventDescription: String;
@@ -38,7 +39,6 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const navigate = useNavigate();
 	const { setAlert } = useAlert();
 	const { user } = useAuth();
-
 	const evState = props.eventState; //esta prop va a ser para darle el estilo a la card
 	const evDateTime = new Date(props.eventDateTime); //esto va a haber que pasarlo x una funcion que seccione la fecha y la hora y despues separarlos en dos variables diferentes
 	const evTitle = props.eventData.eventTitle;
@@ -48,7 +48,6 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const evCook = props.eventData.eventCook;
 	const evId = props.eventId;
 	const evUserIsDebtor = props.eventUserIsDebtor;
-
 	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = (evDateTime.getHours() + 3).toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 	const eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
@@ -158,7 +157,6 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 
 				<div className={styles.eventParticipants}>
 					{lang.currentParticipants}
-
 					<p>
 						{evParticipants.toString()}/{evParticipantsLimit.toString()}
 					</p>
