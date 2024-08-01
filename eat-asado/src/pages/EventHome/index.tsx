@@ -105,7 +105,7 @@ export function EventHome(): JSX.Element {
 				</section>
 
 				<section className={styles.participationInfo}>
-					<img alt="sausages" src="/assets/pictures/sausages.png" />
+					<img alt="sausages" src="/assets/pictures/pictureEvent.jpg" />
 
 					<div className={styles.description}>
 						<h1>{lang.participationInfoTitle}</h1>
