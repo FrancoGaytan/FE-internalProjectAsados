@@ -42,6 +42,7 @@ export const eventHome = Object.seal({
 	eventDeleted: 'the event has been deleted successfully',
 	eventDeletingFailure: 'there´s been a failure deleting the event',
 	eventClosed: 'the event has been closed successfully',
+	eventOpen: 'the event has been opened successfully',
 	eventClosingFailure: 'there´s been a failure closing the event',
 	organizationTitle: 'Event Organization',
 	date: 'Date: ',

@@ -27,7 +27,7 @@ export function CreateEvent(): JSX.Element {
 		title: '',
 		datetime: new Date(),
 		description: '',
-		memberLimit: 0,
+		memberLimit: 1,
 		members: [],
 		state: EventStatesEnum.AVAILABLE,
 		organizer: user ? user.id : '',
@@ -39,8 +39,8 @@ export function CreateEvent(): JSX.Element {
 		let value = parseInt(e.target.value);
 		if (value >= 100) {
 			setEvent({ ...event, memberLimit: 100 });
-		} else if (value <= 0) {
-			setEvent({ ...event, memberLimit: 0 });
+		} else if (value <= 1) {
+			setEvent({ ...event, memberLimit: 1 });
 		} else {
 			setEvent({ ...event, memberLimit: value });
 		}
@@ -87,7 +87,6 @@ export function CreateEvent(): JSX.Element {
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, fullUser]);
-
 
 	return (
 		<FormLayout>
@@ -198,7 +197,7 @@ export function CreateEvent(): JSX.Element {
 						<input
 							id="dinersRange"
 							type="range"
-							min={0}
+							min={1}
 							max={100}
 							list="dinersMarkers"
 							step={1}

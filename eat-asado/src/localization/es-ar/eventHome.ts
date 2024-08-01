@@ -42,6 +42,7 @@ export const eventHome = Object.seal({
 	eventDeleted: 'el evento ha sido eliminado con exito',
 	eventDeletingFailure: 'ha habido un error eliminando el evento',
 	eventClosed: 'el evento ha sido cerrado con exito',
+	eventOpen: 'el evento ha sido abierto con exito',
 	eventClosingFailure: 'ha habido un error cerrando el evento',
 	organizationTitle: 'Organización',
 	date: 'Fecha: ',
@@ -76,5 +77,4 @@ export const eventHome = Object.seal({
 	me: ' Yo',
 	empty: 'Sin Asignar',
 	noSpecialDiet: 'No tiene dieta especial'
-
 });

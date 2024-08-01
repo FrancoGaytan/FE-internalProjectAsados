@@ -1,5 +1,6 @@
 export const event = Object.seal({
 	transferReceiptLoaded: 'El recibo de transferencia fue cargado exitosamente',
+	purchaseReceiptLoaded: 'El recibo de pago fue cargado exitosamente',
 	transferReceiptFailure: 'Ha sucedido un error cargando su recibo de transferencia',
 	confirmPayBtn: 'Confirmar Pago',
 	transferRadioBtn: 'Transferencia',
@@ -13,6 +14,7 @@ export const event = Object.seal({
 	totalPrice: 'Monto a abonar: ',
 	description: 'Descripcion',
 	uploadTransferReceipt: 'Cargar comprobante de pago',
+	uploadPurchaseReceipt: 'Cargar comprobante de compra',
 	amountLabel: 'Monto',
 	validatePaymentTitle: 'Validar Pago',
 	downloadText: 'Descargar Recibo',
