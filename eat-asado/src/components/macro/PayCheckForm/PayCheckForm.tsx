@@ -61,6 +61,11 @@ export default function PayCheckForm(props: PayCheckProps) {
 		return payOpt === 'transfer' && payForm.file;
 	}
 
+	function discardTransferWithoutFiles(): boolean {
+		//aca me esta faltando validar que pasa si selecciono transferencia y no lo estoy cargando
+		return !(payOpt === 'transfer' && !payForm.file);
+	}
+
 	function tooglePaymentOp(e: React.ChangeEvent<HTMLInputElement>) {
 		setPayOpt(e.target.value as PaymentOpts);
 	}
@@ -82,28 +87,33 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 	async function confirmPay(e: any) {
 		e.preventDefault();
-		if (checkForReceiptAndTransfer()) {
-			const data = new FormData();
-			data.append('file', payForm.file as File);
-			try {
-				const resp = await createTransferReceipt(event?._id, { ...payForm });
-				setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-
+		console.log(payForm.file);
+		if (discardTransferWithoutFiles()) {
+			if (checkForReceiptAndTransfer()) {
+				const data = new FormData();
+				data.append('file', payForm.file as File);
 				try {
-					await uploadFile(payForm.file, resp._id);
+					const resp = await createTransferReceipt(event?._id, { ...payForm });
 					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-					setTimeout(() => window.location.reload(), 1000);
-					//closeModal(); // Mejora: lograr que se cierre el popup una vez que se confirme el updateFile
+
+					try {
+						await uploadFile(payForm.file, resp._id);
+						setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+						setTimeout(() => window.location.reload(), 1000);
+						//closeModal(); // Mejora: lograr que se cierre el popup una vez que se confirme el updateFile
+					} catch (e) {
+						setAlert(lang.errorSubmittingFile, AlertTypes.ERROR);
+					}
 				} catch (e) {
-					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
+					setAlert(`${lang.transferReceiptFailure}`, AlertTypes.ERROR);
 				}
-			} catch (e) {
-				setAlert(`${lang.transferReceiptFailure}`, AlertTypes.ERROR);
+			} else {
+				await createTransferReceipt(event?._id, { ...payForm });
+				setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+				setTimeout(() => window.location.reload(), 1000);
 			}
 		} else {
-			await createTransferReceipt(event?._id, { ...payForm });
-			setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000);
+			setAlert(lang.uploadReceiptFirst, AlertTypes.ERROR);
 		}
 	}
 

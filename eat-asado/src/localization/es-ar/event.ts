@@ -22,5 +22,7 @@ export const event = Object.seal({
 	payApproveFailed: 'Ha ocurrido un error al aprovar el pago',
 	payRejectedSuccessfully: 'Se ha rechazado el pago!',
 	payRejectionFailed: 'Ha ocurrido un error rechazando el pago',
-	paidByCashText: 'Este usuario ha pagado en efectivo'
+	paidByCashText: 'Este usuario ha pagado en efectivo',
+	uploadReceiptFirst: 'Debes cargar el archivo antes de enviar',
+	errorSubmittingFile: 'Ha habido un error al cargar el archivo'
 });

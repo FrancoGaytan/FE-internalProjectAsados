@@ -37,6 +37,11 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 		setPurchaseForm(prev => ({ ...prev, file: file }));
 	}
 
+	function discardPurchaseWithoutFiles(): boolean {
+		//aca me esta faltando validar que pasa si selecciono transferencia y no lo estoy cargando
+		return purchaseForm.file;
+	}
+
 	function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -49,30 +54,33 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 
 	async function confirmNewPurchase(e: any) {
 		e.preventDefault();
-
-		if (checkForInputsToBeCompleted()) {
-			const data = new FormData();
-			data.append('file', purchaseForm.file as File);
-
-			try {
-				const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
-
-				setAlert(`Purchase Receipt loaded!`, AlertTypes.SUCCESS);
+		if (discardPurchaseWithoutFiles()) {
+			if (checkForInputsToBeCompleted()) {
+				const data = new FormData();
+				data.append('file', purchaseForm.file as File);
 
 				try {
-					await uploadPurchaseFile(purchaseForm.file, resp._id);
-					setAlert(`${lang.purchaseReceiptLoaded}!`, AlertTypes.SUCCESS);
-				} catch (e) {
-					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
-				}
+					const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
 
-				setTimeout(() => window.location.reload(), 1000);
-			} catch (e) {
-				/* TODO: Acá hay un alert en inglés y en el otro hay uno en español
+					setAlert(`Purchase Receipt loaded!`, AlertTypes.SUCCESS);
+
+					try {
+						await uploadPurchaseFile(purchaseForm.file, resp._id);
+						setAlert(`${lang.purchaseReceiptLoaded}!`, AlertTypes.SUCCESS);
+					} catch (e) {
+						setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
+					}
+
+					setTimeout(() => window.location.reload(), 1000);
+				} catch (e) {
+					/* TODO: Acá hay un alert en inglés y en el otro hay uno en español
 				Deberían estar en el mismo idioma y localizados */
 
-				setAlert(`There's been a failure loading the purchase receipt`, AlertTypes.ERROR);
+					setAlert(`There's been a failure loading the purchase receipt`, AlertTypes.ERROR);
+				}
 			}
+		} else {
+			setAlert(lang.uploadReceiptFirst, AlertTypes.ERROR);
 		}
 	}
 
