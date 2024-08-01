@@ -44,7 +44,7 @@ export function Register(): JSX.Element {
 	}
 
 	function validatePassword(password: string): boolean {
-		const expReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$/;
+		const expReg = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$');
 		return expReg.test(password);
 	}
 
