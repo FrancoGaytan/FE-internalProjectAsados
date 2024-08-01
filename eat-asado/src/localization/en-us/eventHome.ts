@@ -16,8 +16,8 @@ export const eventHome = Object.seal({
 		description: 'Register and Log in'
 	},
 	joinToAnBarbecue: {
-		title: 'JOIN IN AN EVENT',
-		description: 'Inscribe to an event'
+		title: 'JOIN AN EVENT',
+		description: 'Subscribe to an event'
 	},
 	letsEat: {
 		title: "LET'S EAT",

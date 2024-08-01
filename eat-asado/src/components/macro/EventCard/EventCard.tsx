@@ -15,7 +15,6 @@ import { parseMinutes } from '../../../utils/utilities';
 import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
 
-
 interface IEventData {
 	eventTitle: String;
 	eventDescription: String;
@@ -75,6 +74,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		if (!!user?.name) {
 			subscribeUserToEvent();
 			navigate(`/event/${evId}`);
+			setTimeout(() => window.location.reload(), 1000);
 		} else {
 			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
 		}
