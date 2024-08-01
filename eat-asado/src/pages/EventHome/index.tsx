@@ -87,7 +87,7 @@ export function EventHome(): JSX.Element {
 				<section className={styles.header}>
 					<h1>{lang.messageBanner}</h1>
 
-					<Button kind="primary" size="large" onClick={() => navigate('/createEvent')}>
+					<Button kind="primary" size="large" onClick={!!user?.id ? () => navigate('/createEvent') : () => navigate('/login')}>
 						{lang.newEventButton}
 					</Button>
 				</section>
