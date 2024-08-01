@@ -22,5 +22,7 @@ export const event = Object.seal({
 	payApproveFailed: 'There has been an error aproving',
 	payRejectedSuccessfully: 'Payment rejected Successfully',
 	payRejectionFailed: 'There has been an error rejecting',
-	paidByCashText: 'This User has paid by cash'
+	paidByCashText: 'This User has paid by cash',
+	uploadReceiptFirst: 'You have to upload the receipt first',
+	errorSubmittingFile: 'There has been an error submitting the file'
 });
