@@ -2,26 +2,26 @@ export const eventHome = Object.seal({
 	messageBanner: 'Bienvenido!',
 	newEventButton: 'Crear nuevo evento',
 	incomingEvents: 'Proximos eventos',
-	participationInfoTitle: 'Como participar.',
+	participationInfoTitle: '¿Qué es FoodSpot?',
 	participationInfoDescription:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. Excepteur on proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-	moreAbout: 'MAS SOBRE',
+		'FoodSpot llegó para ayudar organizar mejor tus comidas en la oficina. Podés crear eventos para que tus compañeros se sumen, elegir al cocinero y el encargado de las compras, subir comprobantes de transferencias y dividir los gastos. El organizador podrá subir los tickets de compra y podrá ver y aprobar los pagos recibidos. Los miembros podrán sumarse al evento y, una vez cargados los tickets, verán el total a pagar. No importan tus restricciones alimentarias, podés aclararlas en tu perfil para que el cocinero las tenga en consideración.',
+	moreAbout: 'MÁS INFORMACIÓN',
 	participationStepsTitle: 'Copate, prendete al asado',
 	participationStepsDescriptionPart1:
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. unt in culpa qui officia deserunt mollit anim id est laborum',
 	participationStepsDescriptionPart2:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. unt in culpa qui officia deserunt mollit anim id est laborum',
+		'Sumarte es super sencillo! Una vez logueado serás capaz de ver los eventos registrados e inscribirte a alguno de estos. También serás capaz de crear uno nuevo y asignar los roles para llevarlo a cabo. Recuerda siempre pagar tus deudas, de lo contrario no podrás seguir asistiendo',
 	LogInTheApp: {
 		title: 'ENTRA A LA APP',
-		description: 'Lorem ipsum dolor sit ame'
+		description: 'Crea un usuario y loggeate'
 	},
 	joinToAnBarbecue: {
 		title: 'ANOTATE A UN ASADO',
-		description: 'Lorem ipsum dolor sit ame'
+		description: 'Inscríbete a un evento'
 	},
 	letsEat: {
 		title: 'Y A COMER',
-		description: 'Lorem ipsum dolor sit ame'
+		description: 'Disfruta de la comida'
 	},
 	participateButton: 'QUIERO PARTICIPAR',
 	currentParticipants: 'Participantes actuales: ',
@@ -42,6 +42,7 @@ export const eventHome = Object.seal({
 	eventDeleted: 'el evento ha sido eliminado con exito',
 	eventDeletingFailure: 'ha habido un error eliminando el evento',
 	eventClosed: 'el evento ha sido cerrado con exito',
+	eventOpen: 'el evento ha sido abierto con exito',
 	eventClosingFailure: 'ha habido un error cerrando el evento',
 	organizationTitle: 'Organización',
 	date: 'Fecha: ',
@@ -68,10 +69,12 @@ export const eventHome = Object.seal({
 	purchaseDeletedError: 'Error al eliminar el recivo',
 	downloadingImageError: 'Error al descargar la imagen',
 	validateBtn: 'Validar',
-	getInto: 'Sumarse',
-	getOff: 'Bajarse',
+	getInto: 'SUMARSE',
+	getOff: 'BAJARSE',
 	paidNoti: 'PAGO',
 	pendingNoti: 'PENDIENTE',
-	paymentDataIsNecessary: 'Necesitas cargar tu cbu o tu alias en tu perfil'
-
+	paymentDataIsNecessary: 'Necesitas cargar tu cbu o tu alias en tu perfil',
+	me: ' Yo',
+	empty: 'Sin Asignar',
+	noSpecialDiet: 'No tiene dieta especial'
 });

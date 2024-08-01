@@ -1,5 +1,6 @@
 export const event = Object.seal({
 	transferReceiptLoaded: 'Transfer receipt successfully loaded',
+	purchaseReceiptLoaded: 'Purchase receipt successfully loaded',
 	transferReceiptFailure: 'Transfer receipt couldn´t be uploaded',
 	confirmPayBtn: 'Confirm Pay',
 	transferRadioBtn: 'Transfer',
@@ -13,11 +14,17 @@ export const event = Object.seal({
 	totalPrice: 'Amount to pay: ',
 	description: 'Description',
 	uploadTransferReceipt: 'Upload Transfer Receipt',
+	uploadPurchaseReceipt: 'Upload Purchase Receipt',
 	amountLabel: 'Amount',
 	validatePaymentTitle: 'Validate Payment',
 	downloadText: 'Download Transfer Receipt',
 	payApprovedSuccessfully: 'Payment Aproved Successfully',
 	payApproveFailed: 'There has been an error aproving',
 	payRejectedSuccessfully: 'Payment rejected Successfully',
-	payRejectionFailed: 'There has been an error rejecting'
+	payRejectionFailed: 'There has been an error rejecting',
+	paidByCashText: 'This User has paid by cash',
+	uploadReceiptFirst: 'You have to upload the receipt first',
+	errorSubmittingFile: 'There has been an error submitting the file',
+	loadingPurchaseError: 'There has been a failure loading the purchase receipt',
+	fileSendingError: 'There has been an error sending the file'
 });

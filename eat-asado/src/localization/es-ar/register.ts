@@ -18,5 +18,6 @@ export const register = Object.seal({
 	registerTitle: 'Registro',
 	registerBtn: 'REGISTRO',
 	successMsg: 'Se ha registrado con exito',
-	failureMsg: 'You coudn´t register successfully'
+	failureMsg: 'You coudn´t register successfully',
+	wrongPassword: 'Formato de contraseña incorrecto'
 });

@@ -6,14 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { LoginRequest } from '../../models/user';
 import { useAuth } from '../../stores/AuthContext';
 import styles from './styles.module.scss';
+import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 
 export function Login(): JSX.Element {
 	const navigate = useNavigate();
 	const lang = useTranslation('login');
 	const { login, isLoading } = useAuth();
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
-		email: 'prueba@endava.com',
-		password: 'contraseña'
+		email: '',
+		password: ''
 	});
 
 	function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -23,10 +24,9 @@ export function Login(): JSX.Element {
 		});
 	}
 
-	function handleLogin(e: React.MouseEvent): void {
+	async function handleLogin(e: React.MouseEvent): Promise<void> {
 		e.preventDefault();
-
-		login(loginCredentials.email, loginCredentials.password);
+		await login(loginCredentials.email, loginCredentials.password);
 	}
 
 	return (
@@ -80,4 +80,7 @@ export function Login(): JSX.Element {
 			</a>
 		</FormLayout>
 	);
+}
+function setAlert(arg0: string, ERROR: any) {
+	throw new Error('Function not implemented.');
 }

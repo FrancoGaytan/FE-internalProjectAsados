@@ -37,6 +37,11 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 		setPurchaseForm(prev => ({ ...prev, file: file }));
 	}
 
+	function discardPurchaseWithoutFiles(): boolean {
+		//aca me esta faltando validar que pasa si selecciono transferencia y no lo estoy cargando
+		return purchaseForm.file;
+	}
+
 	function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -49,30 +54,33 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 
 	async function confirmNewPurchase(e: any) {
 		e.preventDefault();
-
-		if (checkForInputsToBeCompleted()) {
-			const data = new FormData();
-			data.append('file', purchaseForm.file as File);
-
-			try {
-				const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
-
-				setAlert(`Purchase Receipt loaded!`, AlertTypes.SUCCESS);
+		if (discardPurchaseWithoutFiles()) {
+			if (checkForInputsToBeCompleted()) {
+				const data = new FormData();
+				data.append('file', purchaseForm.file as File);
 
 				try {
-					await uploadPurchaseFile(purchaseForm.file, resp._id);
-					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+					const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
+					setAlert(lang.purchaseReceiptLoaded, AlertTypes.SUCCESS);
+
+
+					try {
+						await uploadPurchaseFile(purchaseForm.file, resp._id);
+						setAlert(`${lang.purchaseReceiptLoaded}!`, AlertTypes.SUCCESS);
+					} catch (e) {
+						setAlert(lang.fileSendingError, AlertTypes.ERROR);
+					}
+
+					setTimeout(() => window.location.reload(), 1000);
+
 				} catch (e) {
-					setAlert(`Error en el envío del archivo`, AlertTypes.ERROR);
-				}
-
-				setTimeout(() => window.location.reload(), 1000);
-			} catch (e) {
-				/* TODO: Acá hay un alert en inglés y en el otro hay uno en español
+					/* TODO: Acá hay un alert en inglés y en el otro hay uno en español
 				Deberían estar en el mismo idioma y localizados */
-
-				setAlert(`There's been a failure loading the purchase receipt`, AlertTypes.ERROR);
+					setAlert(lang.loadingPurchaseError, AlertTypes.ERROR);
+				}
 			}
+		} else {
+			setAlert(lang.uploadReceiptFirst, AlertTypes.ERROR);
 		}
 	}
 
@@ -118,7 +126,7 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 									inputRef.current?.click();
 								}}
 								style={{ cursor: 'pointer' }}></button>
-							{purchaseForm?.file ? <p>{purchaseForm.file.name}</p> : <p>{lang.uploadTransferReceipt}</p>}
+							{purchaseForm?.file ? <p>{purchaseForm.file.name}</p> : <p>{lang.uploadPurchaseReceipt}</p>}
 						</div>
 					</DragAndDrop>
 

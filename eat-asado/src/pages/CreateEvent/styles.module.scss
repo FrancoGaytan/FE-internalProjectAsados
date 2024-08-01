@@ -34,7 +34,7 @@
 
 .title {
 	color: white;
-	font-family: var(--secondaryFont);
+	font-family: 'Raleway';
 	font-weight: bold;
 	align-self: flex-start;
 	margin-top: 2rem;
@@ -46,11 +46,13 @@
 }
 
 .inputSection {
+	font-family: 'Raleway';
 	display: grid;
 	grid-template-rows: 450px 150px;
 	grid-template-columns: 50% 50%;
 
 	.buttonContainer {
+		font-family: 'Raleway';
 		display: grid;
 		grid-column-start: 1;
 		grid-column-end: 3;

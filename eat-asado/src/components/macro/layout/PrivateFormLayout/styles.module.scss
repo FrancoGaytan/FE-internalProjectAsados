@@ -4,6 +4,7 @@
 
 .privateContainer {
 	overflow: hidden;
+	font-family: 'Raleway';
 	.privateHeader {
 		background-color: var(--backgroundMain);
 		display: flex;
@@ -19,11 +20,14 @@
 				display: flex;
 				align-items: center;
 				color: white;
+
+				@media #{variables.media-query(max, lg)} {
+					margin-left: 10px;
+				}
 			}
 			.profileBtn {
-				width: 30px;
+				min-width: 30px;
 				height: 30px;
-
 				margin-bottom: 28px;
 				margin-left: 12px;
 				background-image: url('../../../../../public/assets/pictures/profile.png');

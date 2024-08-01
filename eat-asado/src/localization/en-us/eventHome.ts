@@ -2,30 +2,30 @@ export const eventHome = Object.seal({
 	messageBanner: 'Welcome!',
 	newEventButton: 'Create new event',
 	incomingEvents: 'Incoming events',
-	participationInfoTitle: 'How to be into.',
+	participationInfoTitle: 'What is FoodSpot?',
 	participationInfoDescription:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. Excepteur on proident, sunt in culpa qui officia deserunt mollit anim id est laborum',
-	moreAbout: 'MORE ABOUT',
+		'FoodSpot is here to help you better organize your office meals. You can create events for your colleagues to join, choose the chef and the person in charge of the shopping, upload transfer receipts and split the expenses. The organizer will be able to upload purchase receipts and will be able to view and approve payments received. Members will be able to join the event and, once the tickets are uploaded, they will see the total amount to be paid. No matter what your dietary restrictions are, you can clarify them in your profile for the chef to take them into consideration.',
+	moreAbout: 'MORE INFO',
 	participationStepsTitle: 'Come on, join us to the barbecue',
 	participationStepsDescriptionPart1:
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. unt in culpa qui officia deserunt mollit anim id est laborum',
 	participationStepsDescriptionPart2:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis. unt in culpa qui officia deserunt mollit anim id est laborum',
+		'Joining is super easy! Once logged in you will be able to view the registered events and sign up for one of them. You will also be able to create a new one and assign the roles to carry it out. Remember to always pay your debts, otherwise you will not be able to continue attending.',
 	LogInTheApp: {
 		title: 'ENTER THE APP',
-		description: 'Lorem ipsum dolor sit ame'
+		description: 'Register and Log in'
 	},
 	joinToAnBarbecue: {
-		title: 'JOIN IN A BARBECUE',
-		description: 'Lorem ipsum dolor sit ame'
+		title: 'JOIN IN AN EVENT',
+		description: 'Inscribe to an event'
 	},
 	letsEat: {
-		title: "LETS' EAT",
-		description: 'Lorem ipsum dolor sit ame'
+		title: "LET'S EAT",
+		description: 'Enjoy your meal'
 	},
-	participateButton: 'I WANNA BE INTO',
+	participateButton: 'I WANT TO JOIN',
 	currentParticipants: 'Current Participants: ',
-	cook: 'Cook: ',
+	cook: 'Chef: ',
 	participateBtn: 'PARTICIPATE',
 	infoBtn: 'INFO',
 	available: 'available',
@@ -42,6 +42,7 @@ export const eventHome = Object.seal({
 	eventDeleted: 'the event has been deleted successfully',
 	eventDeletingFailure: 'there´s been a failure deleting the event',
 	eventClosed: 'the event has been closed successfully',
+	eventOpen: 'the event has been opened successfully',
 	eventClosingFailure: 'there´s been a failure closing the event',
 	organizationTitle: 'Event Organization',
 	date: 'Date: ',
@@ -49,7 +50,7 @@ export const eventHome = Object.seal({
 	organizer: 'Organizer: ',
 	menu: 'Menu/Description',
 	inchargeTitle: 'In Charge',
-	buyer: 'Buyer: ',
+	buyer: 'Shopping Designee: ',
 	diners: 'Diners: ',
 	deleteEventBtn: 'Delete Event',
 	closeEventBtn: 'Close Event',
@@ -57,7 +58,7 @@ export const eventHome = Object.seal({
 	meOpt: ' Me',
 	emptyOpt: 'Unassigned',
 	payBtn: 'Pay',
-	modifyPay: 'Pending Aproval Modify Pay',
+	modifyPay: 'Pending Aproval Modify Payment',
 	unassignAtClosing: 'You cant close an event which doesnt have assign cook or shopping designee',
 	needsLogin: 'Needs Login to access to this functionality',
 	noLoggedMsg: 'You need to be logged in to access to the event´s info',
@@ -68,9 +69,12 @@ export const eventHome = Object.seal({
 	purchaseDeletedError: 'There was an error deleting the purchase',
 	downloadingImageError: 'There was an error downloading the image',
 	validateBtn: 'Validate',
-	getInto: 'Get Into',
-	getOff: 'Get off',
+	getInto: 'PARTICIPATE',
+	getOff: 'QUIT EVENT',
 	paidNoti: 'PAID',
 	pendingNoti: 'PENDING',
-	paymentDataIsNecessary: 'Yoy need to add your alias or cbu in your profile'
+	paymentDataIsNecessary: 'You need to add your alias or cbu in your profile',
+	me: ' Me',
+	empty: 'Unassigned',
+	noSpecialDiet: 'No special diet'
 });

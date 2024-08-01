@@ -1,5 +1,6 @@
 export const event = Object.seal({
 	transferReceiptLoaded: 'El recibo de transferencia fue cargado exitosamente',
+	purchaseReceiptLoaded: 'El recibo de pago fue cargado exitosamente',
 	transferReceiptFailure: 'Ha sucedido un error cargando su recibo de transferencia',
 	confirmPayBtn: 'Confirmar Pago',
 	transferRadioBtn: 'Transferencia',
@@ -13,11 +14,17 @@ export const event = Object.seal({
 	totalPrice: 'Monto a abonar: ',
 	description: 'Descripcion',
 	uploadTransferReceipt: 'Cargar comprobante de pago',
+	uploadPurchaseReceipt: 'Cargar comprobante de compra',
 	amountLabel: 'Monto',
 	validatePaymentTitle: 'Validar Pago',
 	downloadText: 'Descargar Recibo',
 	payApprovedSuccessfully: 'Se ha aprobado el pago con exito!',
 	payApproveFailed: 'Ha ocurrido un error al aprovar el pago',
 	payRejectedSuccessfully: 'Se ha rechazado el pago!',
-	payRejectionFailed: 'Ha ocurrido un error rechazando el pago'
+	payRejectionFailed: 'Ha ocurrido un error rechazando el pago',
+	paidByCashText: 'Este usuario ha pagado en efectivo',
+	uploadReceiptFirst: 'Debes cargar el archivo antes de enviar',
+	errorSubmittingFile: 'Ha habido un error al cargar el archivo',
+	loadingPurchaseError: 'Ha habido un error cargando el recibo de compra',
+	fileSendingError: 'Ha habido un error enviando el archivo'
 });

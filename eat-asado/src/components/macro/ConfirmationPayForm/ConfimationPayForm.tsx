@@ -75,14 +75,20 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 			<p className={styles.popupTitle}>{lang.validatePaymentTitle}</p>
 			<div className={styles.paycheckContent}>
 				<section className={styles.downloadContent}>
-					<button
-						className={styles.uploadBtn}
-						onClick={e => {
-							e.preventDefault();
-							downloadTransfer(transferReceipt?.image as string);
-						}}
-						style={{ cursor: 'pointer' }}></button>
-					<p className={styles.downloadText}>{lang.downloadText}</p>
+					{transferReceipt?.paymentMethod === 'cash' ? (
+						<p className={styles.downloadText}>{lang.paidByCashText}</p>
+					) : (
+						<div className={styles.downloadTransferArea}>
+							<button
+								className={styles.uploadBtn}
+								onClick={e => {
+									e.preventDefault();
+									downloadTransfer(transferReceipt?.image as string);
+								}}
+								style={{ cursor: 'pointer' }}></button>
+							<p className={styles.downloadText}>{lang.downloadText}</p>
+						</div>
+					)}
 				</section>
 
 				<section className={styles.btnSection}>

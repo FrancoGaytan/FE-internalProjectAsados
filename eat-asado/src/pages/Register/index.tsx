@@ -43,6 +43,11 @@ export function Register(): JSX.Element {
 		});
 	}
 
+	function validatePassword(password: string): boolean {
+		const expReg = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$');
+		return expReg.test(password);
+	}
+
 	function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
 		setspecialDietOptions({
 			...specialDietOptions,
@@ -63,6 +68,10 @@ export function Register(): JSX.Element {
 
 	function handleRegister(e: React.FormEvent<HTMLFormElement>): void {
 		e.preventDefault();
+		if (!validatePassword(registerCredentials.password)) {
+			setAlert(`${lang.wrongPassword}`, AlertTypes.ERROR);
+			return;
+		}
 		setIsLoading(true);
 
 		registering({

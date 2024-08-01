@@ -22,6 +22,7 @@ export function EventHome(): JSX.Element {
 	const { setPublicEvents } = useEvent();
 	const navigate = useNavigate();
 	const [userDebtor, setUserDebtor] = useState('null');
+	const [isScrolling, setIsScrolling] = useState(false);
 
 	const { user } = useAuth();
 
@@ -33,6 +34,22 @@ export function EventHome(): JSX.Element {
 		],
 		[lang]
 	);
+
+	const handleScrollToEnd = () => {
+		window.scrollTo({
+			top: document.body.scrollHeight,
+			behavior: 'smooth'
+		});
+		setIsScrolling(true);
+	};
+
+	const handleScrollToStart = () => {
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth'
+		});
+		setIsScrolling(true);
+	};
 
 	/**
 	 * Fetches the public events when page initialize.
@@ -70,7 +87,7 @@ export function EventHome(): JSX.Element {
 				<section className={styles.header}>
 					<h1>{lang.messageBanner}</h1>
 
-					<Button kind="primary" size="large" onClick={() => navigate('/createEvent')}>
+					<Button kind="primary" size="large" onClick={!!user?.id ? () => navigate('/createEvent') : () => navigate('/login')}>
 						{lang.newEventButton}
 					</Button>
 				</section>
@@ -105,14 +122,14 @@ export function EventHome(): JSX.Element {
 				</section>
 
 				<section className={styles.participationInfo}>
-					<img alt="sausages" src="/assets/pictures/sausages.png" />
+					<img alt="sausages" src="/assets/pictures/pictureEvent.jpg" />
 
 					<div className={styles.description}>
 						<h1>{lang.participationInfoTitle}</h1>
 
 						<p>{lang.participationInfoDescription}</p>
 
-						<Button kind="primary" size="large">
+						<Button kind="primary" size="large" onClick={handleScrollToEnd}>
 							{' '}
 							{lang.moreAbout}{' '}
 						</Button>
@@ -123,8 +140,6 @@ export function EventHome(): JSX.Element {
 					<div className={styles.container}>
 						<h2 className={styles.title}>{lang.participationStepsTitle}</h2>
 
-						<p>{lang.participationStepsDescriptionPart1}</p>
-
 						<ul className={styles.icons}>
 							{itemStepsData.map((item, index) => (
 								<StepItem key={`step-item-${index}`} title={item.title} description={item.description} imagePath={item.imagePath} />
@@ -134,7 +149,7 @@ export function EventHome(): JSX.Element {
 						<p>{lang.participationStepsDescriptionPart2}</p>
 
 						<div className={styles.participateButton}>
-							<Button kind="primary" size="large">
+							<Button kind="primary" size="large" onClick={handleScrollToStart}>
 								{lang.participateButton}
 							</Button>
 						</div>

@@ -49,7 +49,6 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 			})
 			.catch(error => {
 				setAlert(lang.loginErrorMessage, AlertTypes.ERROR);
-				throw new Error(error);
 			})
 			.finally(() => setIsLoading(false));
 	}
