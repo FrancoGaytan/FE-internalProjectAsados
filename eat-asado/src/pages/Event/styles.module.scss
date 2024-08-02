@@ -104,7 +104,6 @@
 
 				.infoData {
 					margin: 10px 25px;
-
 				}
 				.deleteBtn {
 					background-image: url('../../../public/assets/pictures/deleteIcon.png');
@@ -203,7 +202,7 @@
 					}
 
 					.infoParticipants {
-						max-height: auto;
+						max-height: 200px;
 						overflow-y: scroll;
 						padding-top: 25px;
 					}
