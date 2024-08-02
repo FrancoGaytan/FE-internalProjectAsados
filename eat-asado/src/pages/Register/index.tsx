@@ -48,6 +48,9 @@ export function Register(): JSX.Element {
 		return expReg.test(password);
 	}
 
+	function passwordsMatchingChecking(password: string, confirmedPassword: string): boolean {
+		return password === confirmedPassword;
+	}
 	function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
 		setspecialDietOptions({
 			...specialDietOptions,
@@ -70,6 +73,10 @@ export function Register(): JSX.Element {
 		e.preventDefault();
 		if (!validatePassword(registerCredentials.password)) {
 			setAlert(`${lang.wrongPassword}`, AlertTypes.ERROR);
+			return;
+		}
+		if (!passwordsMatchingChecking(registerCredentials.password, registerCredentials.repeatedPassword as string)) {
+			setAlert(`${lang.passwordArentMatching}`, AlertTypes.ERROR);
 			return;
 		}
 		setIsLoading(true);

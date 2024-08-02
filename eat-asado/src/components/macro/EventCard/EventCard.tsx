@@ -15,7 +15,6 @@ import { parseMinutes } from '../../../utils/utilities';
 import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
 
-
 interface IEventData {
 	eventTitle: String;
 	eventDescription: String;
@@ -75,6 +74,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		if (!!user?.name) {
 			subscribeUserToEvent();
 			navigate(`/event/${evId}`);
+			setTimeout(() => window.location.reload(), 1000);
 		} else {
 			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
 		}
@@ -149,22 +149,24 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 			/>
 
 			<section className={styles.cardMainInfo}>
-				<div className={styles.eventTime}>{evTime} hrs</div>
+				<section className={styles.cardMainData}>
+					<div className={styles.eventTime}>{evTime} hrs</div>
 
-				<div className={styles.eventTitle}>{evTitle}</div>
+					<div className={styles.eventTitle}>{evTitle}</div>
 
-				<div className={styles.eventDescription}>{evDescription}</div>
+					<div className={styles.eventDescription}>{evDescription}</div>
 
-				<div className={styles.eventParticipants}>
-					{lang.currentParticipants}
-					<p>
-						{evParticipants.toString()}/{evParticipantsLimit.toString()}
-					</p>
-				</div>
+					<div className={styles.eventParticipants}>
+						{lang.currentParticipants}
+						<p>
+							{evParticipants.toString()}/{evParticipantsLimit.toString()}
+						</p>
+					</div>
 
-				<div className={styles.eventCook}>
-					{lang.cook} <p>{evCook}</p>
-				</div>
+					<div className={styles.eventCook}>
+						{lang.cook} <p>{evCook}</p>
+					</div>
+				</section>
 
 				<section className={styles.cardBtn}>
 					<div className={styles.participateBtn}>

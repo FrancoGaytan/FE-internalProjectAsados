@@ -59,7 +59,7 @@ export function Event(): JSX.Element {
 	}
 
 	function getOnlyDate(evDateTime: Date) {
-		return evDateTime.getDate().toString() + '. ' + evDateTime.getMonth().toString() + '. ' + evDateTime.getFullYear().toString() + '.';
+		return evDateTime.getDate().toString() + '. ' + (evDateTime.getMonth() + 1).toString() + '. ' + evDateTime.getFullYear().toString() + '.';
 	}
 
 	function getOnlyHour(evDateTime: Date) {
@@ -87,14 +87,15 @@ export function Event(): JSX.Element {
 	}
 
 	function removeResponsabilitiesAtUnsubscribing(): void {
-		event?.chef && event?.chef._id === user?.id && toogleChef();
-		event?.shoppingDesignee && event?.shoppingDesignee._id === user?.id && toogleShopDesignee();
+		event?.shoppingDesignee && event?.shoppingDesignee?._id === user?.id && toogleShopDesignee();
+		event?.chef && event?.chef?._id === user?.id && toogleChef();
 	}
 
 	function unsubscribeUserToEvent(): void {
 		if (!user) {
 			return;
 		}
+		removeResponsabilitiesAtUnsubscribing();
 
 		unsubscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
@@ -102,8 +103,6 @@ export function Event(): JSX.Element {
 				setTimeout(() => window.location.reload(), 1000);
 			})
 			.catch(e => setAlert(`${lang.userRemovingFailure}`, AlertTypes.ERROR));
-
-		removeResponsabilitiesAtUnsubscribing();
 	}
 
 	function toogleParticipation(): void {
@@ -206,7 +205,7 @@ export function Event(): JSX.Element {
 	}
 
 	function deletePurchase(purchase: IPurchaseReceipt): any {
-		deleteEventPurchase(purchase._id, event._id)
+		deleteEventPurchase(purchase?._id, event?._id)
 			.then(res => {
 				setAlert(lang.purchaseDeleted, AlertTypes.SUCCESS);
 				setTimeout(() => window.location.reload(), 1000);
@@ -224,13 +223,10 @@ export function Event(): JSX.Element {
 	}
 
 	function showPaymentData() {
-		return (
-			(event.state === EventStatesEnum.CLOSED && event.organizer && event.organizer._id === user?.id) ||
-			(event.state === EventStatesEnum.CLOSED && event.shoppingDesignee && event.shoppingDesignee === user?.id)
-		);
+		return event.state === EventStatesEnum.CLOSED && event.shoppingDesignee && event.shoppingDesignee?._id === user?.id;
 	}
 
-	function userIsShoppingDesignee(member: EventUserResponse) {
+	function actualUserIsShoppingDesignee(member: EventUserResponse) {
 		return !(member.userId === user?.id);
 	}
 
@@ -367,12 +363,12 @@ export function Event(): JSX.Element {
 
 									<section className={styles.purchasesList}>
 										{purchasesMade.map((purchase: IPurchaseReceipt) => (
-											<div key={purchase._id} className={styles.purchasesData}>
+											<div key={purchase?._id} className={styles.purchasesData}>
 												<h5 className={styles.infoData}>{purchase.description}</h5>
 
 												<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
 
-												{event?.shoppingDesignee._id === user?.id && (
+												{event?.shoppingDesignee?._id === user?.id && (
 													<button
 														className={styles.deleteBtn}
 														onClick={e => {
@@ -403,12 +399,13 @@ export function Event(): JSX.Element {
 									<div className={styles.inChargeOpt}>
 										<h5 className={styles.infoData}>
 											{lang.cook}
-											{event.chef ? (event.chef._id === user?.id ? lang.me : event.chef.name) : lang.empty}
+											{event.chef ? (event.chef?._id === user?.id ? lang.me : event.chef.name) : lang.empty}
 										</h5>
 
-										{event.chef && event.chef._id === user?.id && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
-											<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
-										)}
+										{event.chef &&
+											event.chef?._id === user?.id &&
+											event.state !== EventStatesEnum.CLOSED &&
+											isUserIntoEvent() && <AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>}
 
 										{!event.chef && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
 											<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
@@ -418,14 +415,14 @@ export function Event(): JSX.Element {
 										<h5 className={styles.infoData}>
 											{lang.buyer}{' '}
 											{event.shoppingDesignee
-												? event.shoppingDesignee._id === user?.id
+												? event.shoppingDesignee?._id === user?.id
 													? lang.meOpt
 													: event.shoppingDesignee.name
 												: lang.emptyOpt}
 										</h5>
 
 										{event.shoppingDesignee &&
-											event.shoppingDesignee._id === user?.id &&
+											event.shoppingDesignee?._id === user?.id &&
 											event.state !== EventStatesEnum.CLOSED &&
 											isUserIntoEvent() && (
 												<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
@@ -465,7 +462,7 @@ export function Event(): JSX.Element {
 												)}
 
 												{showPaymentData() &&
-													userIsShoppingDesignee(member) &&
+													actualUserIsShoppingDesignee(member) &&
 													(member.hasReceiptApproved ? (
 														<h5 className={styles.infoDataUsernamePayed}>{lang.paidNoti}</h5>
 													) : member.hasUploaded ? (
@@ -497,14 +494,14 @@ export function Event(): JSX.Element {
 								</Button> //Testear que ande bien
 							)}
 
-							{event.organizer && event.organizer._id === user?.id && (
+							{event.organizer && event.organizer?._id === user?.id && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => deleteTheEvent()}>
 									{lang.deleteEventBtn}
 								</Button>
 							)}
 
 							{event.organizer &&
-								event.organizer._id === user?.id &&
+								event.organizer?._id === user?.id &&
 								event.state !== 'finished' &&
 								event.state !== EventStatesEnum.CLOSED && (
 									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
@@ -512,14 +509,14 @@ export function Event(): JSX.Element {
 									</Button>
 								)}
 
-							{event.organizer && event.organizer._id === user?.id && event.state === EventStatesEnum.CLOSED && (
+							{event.organizer && event.organizer?._id === user?.id && event.state === EventStatesEnum.CLOSED && (
 								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
 									{lang.reopenEventBtn}
 								</Button>
 							)}
 
 							{event.shoppingDesignee &&
-								event.shoppingDesignee._id !== user?.id &&
+								event.shoppingDesignee?._id !== user?.id &&
 								event.state === EventStatesEnum.CLOSED &&
 								isUserIntoEvent() &&
 								!userHasPaid &&
@@ -530,7 +527,7 @@ export function Event(): JSX.Element {
 								)}
 
 							{event.shoppingDesignee &&
-								event.shoppingDesignee._id !== user?.id &&
+								event.shoppingDesignee?._id !== user?.id &&
 								event.state === EventStatesEnum.CLOSED &&
 								isUserIntoEvent() &&
 								(event.purchaseReceipts.length as number) !== 0 &&
@@ -544,7 +541,7 @@ export function Event(): JSX.Element {
 									</Button>
 								))}
 
-							{event.shoppingDesignee && event.shoppingDesignee._id === user?.id && event.state === EventStatesEnum.CLOSED && (
+							{event.shoppingDesignee && event.shoppingDesignee?._id === user?.id && event.state === EventStatesEnum.CLOSED && (
 								<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
 									{lang.loadPurchase}
 								</Button>

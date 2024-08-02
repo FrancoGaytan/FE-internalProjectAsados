@@ -52,6 +52,14 @@ export function CreateEvent(): JSX.Element {
 
 	function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 		e.preventDefault();
+		if (!event.description || !event.title) {
+			setAlert(lang.completeAllInputs, AlertTypes.ERROR);
+			return;
+		}
+		if (!fullUser?.alias && !fullUser?.cbu && !!event.isShoppingDesignee) {
+			setAlert(lang.needToHaveCbu, AlertTypes.ERROR);
+			return;
+		}
 		setIsLoading(true);
 
 		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });

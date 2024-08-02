@@ -5,9 +5,13 @@
 .cardContainer {
 	border-radius: 3px;
 	max-width: 325px;
-	max-height: 320px;
+	max-height: 340px;
 	background-color: #f6faf9;
 	border-top: 5px solid var(availabilityPrimary);
+
+	.cardMainData {
+		min-height: 160px;
+	}
 
 	@media #{variables.media-query(max, md)} {
 		width: 80vw;
