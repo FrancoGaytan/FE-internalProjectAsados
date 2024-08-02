@@ -21,4 +21,5 @@ export const register = Object.seal({
 	failureMsg: 'You coudn´t register successfully',
 	wrongPassword: 'Invalid password format',
 	passwordArentMatching: 'Passwords are not matching'
+
 });
