@@ -149,22 +149,24 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 			/>
 
 			<section className={styles.cardMainInfo}>
-				<div className={styles.eventTime}>{evTime} hrs</div>
+				<section className={styles.cardMainData}>
+					<div className={styles.eventTime}>{evTime} hrs</div>
 
-				<div className={styles.eventTitle}>{evTitle}</div>
+					<div className={styles.eventTitle}>{evTitle}</div>
 
-				<div className={styles.eventDescription}>{evDescription}</div>
+					<div className={styles.eventDescription}>{evDescription}</div>
 
-				<div className={styles.eventParticipants}>
-					{lang.currentParticipants}
-					<p>
-						{evParticipants.toString()}/{evParticipantsLimit.toString()}
-					</p>
-				</div>
+					<div className={styles.eventParticipants}>
+						{lang.currentParticipants}
+						<p>
+							{evParticipants.toString()}/{evParticipantsLimit.toString()}
+						</p>
+					</div>
 
-				<div className={styles.eventCook}>
-					{lang.cook} <p>{evCook}</p>
-				</div>
+					<div className={styles.eventCook}>
+						{lang.cook} <p>{evCook}</p>
+					</div>
+				</section>
 
 				<section className={styles.cardBtn}>
 					<div className={styles.participateBtn}>
