@@ -51,7 +51,6 @@ export function Register(): JSX.Element {
 	function passwordsMatchingChecking(password: string, confirmedPassword: string): boolean {
 		return password === confirmedPassword;
 	}
-
 	function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
 		setspecialDietOptions({
 			...specialDietOptions,
