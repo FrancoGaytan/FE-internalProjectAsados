@@ -489,9 +489,17 @@ export function Event(): JSX.Element {
 
 						<section className={styles.btnSection}>
 							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
-								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
-									{isUserIntoEvent() ? lang.getOff : !isEventFull() && lang.getInto}
-								</Button> //Testear que ande bien
+								<div>
+									{!isUserIntoEvent() && isEventFull() ? (
+										<Button className={styles.btnEvent} kind="tertiary" size="short">
+											{EventStatesEnum.FULL}
+										</Button>
+									) : (
+										<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
+											{isUserIntoEvent() ? lang.getOff : !isEventFull() && lang.getInto}
+										</Button>
+									)}
+								</div>
 							)}
 
 							{event.organizer && event.organizer?._id === user?.id && (
