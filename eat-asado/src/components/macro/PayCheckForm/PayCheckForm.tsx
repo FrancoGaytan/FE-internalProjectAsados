@@ -87,7 +87,10 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 	async function confirmPay(e: any) {
 		e.preventDefault();
-		console.log(payForm.file);
+		if (!payForm.description) {
+			setAlert(`${lang.descriptionMissing}`, AlertTypes.INFO);
+			return;
+		}
 		if (discardTransferWithoutFiles()) {
 			if (checkForReceiptAndTransfer()) {
 				const data = new FormData();
