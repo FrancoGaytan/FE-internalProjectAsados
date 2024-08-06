@@ -24,6 +24,23 @@
 				@media #{variables.media-query(max, lg)} {
 					margin-left: 10px;
 				}
+
+				.spanishFlag {
+					width: 30px;
+					height: 20px;
+					border-radius: 0;
+					margin: auto 8px;
+					background-size: cover;
+					background-image: url('../../../../../public/assets/pictures/spainFlag.png');
+				}
+				.englishFlag {
+					width: 30px;
+					height: 20px;
+					margin: auto;
+					border-radius: 0;
+					background-size: cover;
+					background-image: url('../../../../../public/assets/pictures/usaFlag.jpg');
+				}
 			}
 			.profileBtn {
 				min-width: 30px;
@@ -48,7 +65,6 @@
 					&:hover {
 						background-color: rgb(94, 93, 93);
 					}
-
 				}
 			}
 		}
