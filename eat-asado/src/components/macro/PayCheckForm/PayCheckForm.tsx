@@ -87,10 +87,6 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 	async function confirmPay(e: any) {
 		e.preventDefault();
-		if (!payForm.description) {
-			setAlert(`${lang.descriptionMissing}`, AlertTypes.INFO);
-			return;
-		}
 		if (discardTransferWithoutFiles()) {
 			if (checkForReceiptAndTransfer()) {
 				const data = new FormData();
@@ -170,8 +166,10 @@ export default function PayCheckForm(props: PayCheckProps) {
 					<label>{lang.transferRadioBtn}</label>
 
 					<div className={styles.descInput}>
-						<label className={styles.descLabel}>{lang.description}</label>
-
+						<div>
+							<label className={styles.descLabel}>{lang.description}</label>
+							<label className={styles.optionalLabel}>{lang.optional}</label>
+						</div>
 						<input type="text" name="descriptionInput" value={paymentDesc} onChange={e => setPaymentDesc(e.target.value)} />
 					</div>
 
