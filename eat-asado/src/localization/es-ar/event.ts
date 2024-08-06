@@ -26,5 +26,6 @@ export const event = Object.seal({
 	uploadReceiptFirst: 'Debes cargar el archivo antes de enviar',
 	errorSubmittingFile: 'Ha habido un error al cargar el archivo',
 	loadingPurchaseError: 'Ha habido un error cargando el recibo de compra',
-	fileSendingError: 'Ha habido un error enviando el archivo'
+	fileSendingError: 'Ha habido un error enviando el archivo',
+	descriptionMissing: 'Es necesario ingresar una descripción de pago'
 });
