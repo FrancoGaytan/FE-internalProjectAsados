@@ -26,5 +26,7 @@ export const event = Object.seal({
 	uploadReceiptFirst: 'You have to upload the receipt first',
 	errorSubmittingFile: 'There has been an error submitting the file',
 	loadingPurchaseError: 'There has been a failure loading the purchase receipt',
-	fileSendingError: 'There has been an error sending the file'
+	fileSendingError: 'There has been an error sending the file',
+	optional: '*Optional',
+	descriptionMissing: 'Transfer description is missing'
 });

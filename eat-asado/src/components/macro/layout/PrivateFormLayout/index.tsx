@@ -1,14 +1,15 @@
 import { PropsWithChildren } from 'react';
-import { useTranslation } from '../../../../stores/LocalizationContext';
+import { useLocalizationContext, useTranslation } from '../../../../stores/LocalizationContext';
 import AlertPopup from '../../../micro/AlertPopup/AlertPopup';
 import { useAuth } from '../../../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
+import { locales } from '../../../../localization';
 
 export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element {
 	const lang = useTranslation('userProfile');
 	const navigate = useNavigate();
-
+	const { setLocale } = useLocalizationContext();
 	const { user, logout } = useAuth();
 
 	function handleLogout(e: React.MouseEvent<HTMLButtonElement>) {
@@ -33,6 +34,18 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 						<div className={styles.welcomeMsg}>
 							{lang.headerWelcome} {user.name}
 							<button className={styles.profileBtn} onClick={handleGoToProfile}></button>
+							<button
+								className={styles.spanishFlag}
+								onClick={(e): void => {
+									e.preventDefault();
+									setLocale(locales[1]);
+								}}></button>
+							<button
+								className={styles.englishFlag}
+								onClick={(e): void => {
+									e.preventDefault();
+									setLocale(locales[0]);
+								}}></button>
 						</div>
 					)}
 
