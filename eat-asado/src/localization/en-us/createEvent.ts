@@ -1,7 +1,7 @@
 export const createEvent = Object.seal({
 	createEventTitle: 'Create Event',
 	eventName: 'Event Name',
-	dateTime: 'Fecha y Hora',
+	dateTime: 'Date and Time',
 	eventDescription: 'Description',
 	rolesTitle: 'Roles',
 	optionalDescription: '(optional)',

@@ -1,4 +1,5 @@
 import { EventStatesEnum } from '../../../../enums/EventState.enum';
+import { useTranslation } from '../../../../stores/LocalizationContext';
 import { TEventParticipationState, TEventState, TSubscribedState } from '../../../../types/eventState';
 
 import { className } from '../../../../utils/className';
@@ -16,6 +17,7 @@ interface IEventCardProps {
 
 export default function EventHeader(props: IEventCardProps) {
 	const { evDate, evParticipants, evParticipantsLimit, evState, subscribedUser } = props;
+	const lang = useTranslation('eventHome'); //TODO: aplicarlo a los nombres de los estados
 
 	function isEventFull(): boolean {
 		return evParticipants >= evParticipantsLimit;
@@ -47,7 +49,6 @@ export default function EventHeader(props: IEventCardProps) {
 			return EventStatesEnum.CANCELED;
 		} else if (isEventFull()) {
 			return EventStatesEnum.FULL;
-
 		} else {
 			return EventStatesEnum.FINISHED;
 		}
