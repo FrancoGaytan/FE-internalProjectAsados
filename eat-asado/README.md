@@ -112,5 +112,4 @@ Pages (select language en todas las páginas)
 
 * Evento
 
-* FAQ.
-  
+* FAQ
