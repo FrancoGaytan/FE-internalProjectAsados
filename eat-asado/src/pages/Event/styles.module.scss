@@ -273,6 +273,7 @@
 	.btnEvent {
 		margin: 5px;
 		@media #{variables.media-query(max, sm)} {
+			min-width: fit-content;
 			margin-top: 15px;
 		}
 	}
