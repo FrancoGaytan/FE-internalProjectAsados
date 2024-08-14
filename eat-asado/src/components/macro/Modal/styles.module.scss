@@ -37,4 +37,7 @@
 	position: absolute;
 	top: 0rem;
 	right: 1.5rem;
+	@media #{variables.media-query(max, sm)} {
+		right: 2.5rem;
+	}
 }

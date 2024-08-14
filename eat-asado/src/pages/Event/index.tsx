@@ -235,6 +235,11 @@ export function Event(): JSX.Element {
 		return myReceipt?.hasUploaded;
 	}
 
+	function checkIfUserHasPaid() {
+		const myReceipt = eventParticipants.find(member => member.userId === user?.id);
+		return myReceipt?.hasReceiptApproved;
+	}
+
 	function isEventFull(): boolean {
 		return event.members.length >= event.memberLimit;
 	}
@@ -544,9 +549,11 @@ export function Event(): JSX.Element {
 										{lang.payBtn}
 									</Button>
 								) : (
-									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => payCheck()}>
-										{lang.modifyPay}
-									</Button>
+									!checkIfUserHasPaid() && (
+										<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => payCheck()}>
+											{lang.modifyPay}
+										</Button>
+									)
 								))}
 
 							{event.shoppingDesignee && event.shoppingDesignee?._id === user?.id && event.state === EventStatesEnum.CLOSED && (
