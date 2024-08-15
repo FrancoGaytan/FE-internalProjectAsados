@@ -32,6 +32,10 @@ export default function EventHeader(props: IEventCardProps) {
 			return 'blocked';
 		}
 
+		if (evState === EventStatesEnum.FINISHED) {
+			return EventStatesEnum.FINISHED;
+		} //dejar este if para chequear
+
 		if (evState === EventStatesEnum.AVAILABLE) {
 			if (subscribedUser) {
 				return 'subscribed';
@@ -40,11 +44,7 @@ export default function EventHeader(props: IEventCardProps) {
 			}
 			return EventStatesEnum.AVAILABLE;
 		} else if (evState === EventStatesEnum.CLOSED) {
-			if (!subscribedUser) {
-				return EventStatesEnum.CLOSED;
-			}
-
-			return 'subscribed';
+			return EventStatesEnum.CLOSED;
 		} else if (evState === EventStatesEnum.CANCELED) {
 			return EventStatesEnum.CANCELED;
 		} else if (isEventFull()) {
