@@ -73,6 +73,9 @@
 		box-shadow: var(--inputShadow);
 	}
 }
+::-ms-reveal {
+	filter: invert(100%);
+}
 
 .forgotPassword {
 	font-size: 16px;
