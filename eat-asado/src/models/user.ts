@@ -35,6 +35,10 @@ export interface RegisterRequest {
 	specialDiet: string[]; // TODO: estos strings solo pueden ser celiac, hypertensive, vegan, vegetarian
 }
 
+export interface profilePicture {
+	file?: any;
+}
+
 export interface EventUserResponse {
 	userId: string;
 	userName: string;
