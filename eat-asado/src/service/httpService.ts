@@ -131,6 +131,33 @@ export async function _put<T, P = any>(path: string, payload: P, signal?: AbortS
 	}
 }
 
+export async function _putFiles<T>(formFile: any, path: string, signal?: AbortSignal): Promise<T> {
+	try {
+		const formData = new FormData();
+		formData.append('file', formFile);
+		const response = await fetch(`${baseURL}${path}`, {
+			mode: 'cors',
+			cache: 'no-cache',
+			credentials: 'same-origin',
+			headers: {
+				Authorization: token
+			},
+			method: 'PUT',
+			signal,
+			body: formData
+		});
+
+		if (!response.ok) {
+			throw new Error('PUT request failed');
+		}
+
+		return response as any;
+	} catch (error) {
+		console.error(error);
+		throw new Error(`${error}`);
+	}
+}
+
 export async function _delete<T = any>(path: string, signal?: AbortSignal): Promise<T> {
 	try {
 		const response = await fetch(`${baseURL}${path}`, {

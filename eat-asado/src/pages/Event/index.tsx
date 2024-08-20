@@ -87,8 +87,8 @@ export function Event(): JSX.Element {
 	}
 
 	function removeResponsabilitiesAtUnsubscribing(): void {
-		event?.shoppingDesignee && event?.shoppingDesignee?._id === user?.id && toogleShopDesignee();
 		event?.chef && event?.chef?._id === user?.id && toogleChef();
+		event?.shoppingDesignee && event?.shoppingDesignee?._id === user?.id && toogleShopDesignee();
 	}
 
 	function unsubscribeUserToEvent(): void {

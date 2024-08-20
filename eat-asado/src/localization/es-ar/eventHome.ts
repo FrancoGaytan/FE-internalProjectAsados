@@ -25,7 +25,7 @@ export const eventHome = Object.seal({
 	},
 	participateButton: 'QUIERO PARTICIPAR',
 	currentParticipants: 'Participantes actuales: ',
-	cook: 'Asador: ',
+	cook: 'cocinero: ',
 	participateBtn: 'PARTICIPAR',
 	infoBtn: 'INFO',
 	available: 'disponible',
