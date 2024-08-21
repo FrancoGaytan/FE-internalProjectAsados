@@ -107,7 +107,10 @@ export function UserProfile(): JSX.Element {
 						.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR));
 			})
 			.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR))
-			.finally(() => setIsLoading(false));
+			.finally(() => {
+				setIsLoading(false);
+				setTimeout(() => window.location.reload(), 1000);
+			});
 	}
 
 	function chekingSpecialDiet(diet: any) {
