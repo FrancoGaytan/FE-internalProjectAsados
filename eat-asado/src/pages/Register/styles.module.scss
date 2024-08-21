@@ -54,7 +54,6 @@
 			grid-column-start: auto;
 			grid-column-end: auto;
 		}
-
 	}
 
 	@media #{variables.media-query(max, lg)} {
@@ -174,5 +173,28 @@
 		border-radius: 25%;
 		cursor: pointer;
 		display: inline;
+	}
+}
+
+.inputPasswordSection {
+	position: relative;
+
+	.passwordEye {
+		position: absolute;
+		right: 7px;
+		top: 13px;
+		height: 18px;
+		width: 18px;
+		background-size: contain;
+		background-image: url('../../../public/assets/pictures/icons-eye.png');
+	}
+	.passwordEyeCrossedLine {
+		position: absolute;
+		background-color: rgb(255, 255, 255);
+		transform: rotate(135deg);
+		right: 16px;
+		top: 9px;
+		height: 25px;
+		width: 1px;
 	}
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { RegisterRequest } from '../../models/user';
@@ -11,12 +11,17 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import { localStorageKeys } from '../../utils/localStorageKeys';
 import { useAuth } from '../../stores/AuthContext';
 import styles from './styles.module.scss';
+import { browserName } from '../../utils/utilities';
 
 export function Register(): JSX.Element {
 	const { setIsLoading } = useAuth();
 	const { setAlert } = useAlert();
 	const navigate = useNavigate();
 	const lang = useTranslation('register');
+	const [showPassword, setShowPassword] = useState<boolean>(true);
+	const [showConfirmedPassword, setShowConfirmedPassword] = useState<boolean>(true);
+	const inputPassword = useRef<HTMLInputElement | null>(null);
+	const inputConfirmedPassword = useRef<HTMLInputElement | null>(null);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [_, setJWT] = useLocalStorage<string | null>(localStorageKeys.token, null);
 
@@ -154,26 +159,62 @@ export function Register(): JSX.Element {
 					<label htmlFor="password" className={styles.registerLabel}>
 						{lang.password}
 					</label>
-					<input
-						id="password"
-						className={styles.registerInput}
-						placeholder={lang.password}
-						type="password"
-						onChange={handleChange}
-						value={registerCredentials.password}
-					/>
+					<section className={styles.inputPasswordSection}>
+						<input
+							id="password"
+							ref={inputPassword}
+							className={styles.registerInput}
+							placeholder={lang.password}
+							type={browserName === 'Edge' ? 'password' : showPassword ? 'password' : 'text'}
+							onChange={handleChange}
+							value={registerCredentials.password}
+						/>
+						{browserName !== 'Edge' && (
+							<div
+								className={styles.passwordEye}
+								onClick={() => {
+									setShowPassword(!showPassword);
+									setTimeout(() => {
+										if (inputPassword.current) {
+											inputPassword.current.focus();
+											const length = inputPassword.current.value.length;
+											inputPassword.current.setSelectionRange(length, length);
+										}
+									}, 0);
+								}}></div>
+						)}
+						{browserName !== 'Edge' && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+					</section>
 					<span className={styles.inputDescription}>{lang.passwordDescription}</span>
 					<label htmlFor="repeatedPassword" className={styles.registerLabel}>
 						{lang.confirmPassword}
 					</label>
-					<input
-						id="repeatedPassword"
-						className={styles.registerInput}
-						placeholder={lang.password}
-						type="password"
-						onChange={handleChange}
-						value={registerCredentials.repeatedPassword}
-					/>
+					<section className={styles.inputPasswordSection}>
+						<input
+							id="repeatedPassword"
+							ref={inputConfirmedPassword}
+							className={styles.registerInput}
+							placeholder={lang.password}
+							type={browserName === 'Edge' ? 'password' : showConfirmedPassword ? 'password' : 'text'}
+							onChange={handleChange}
+							value={registerCredentials.repeatedPassword}
+						/>
+						{browserName !== 'Edge' && (
+							<div
+								className={styles.passwordEye}
+								onClick={() => {
+									setShowConfirmedPassword(!showConfirmedPassword);
+									setTimeout(() => {
+										if (inputConfirmedPassword.current) {
+											inputConfirmedPassword.current.focus();
+											const length = inputConfirmedPassword.current.value.length;
+											inputConfirmedPassword.current.setSelectionRange(length, length);
+										}
+									}, 0);
+								}}></div>
+						)}
+						{browserName !== 'Edge' && !showConfirmedPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+					</section>
 
 					<section className={styles.checkboxesContainer}>
 						<div className={styles.internalTitle}>

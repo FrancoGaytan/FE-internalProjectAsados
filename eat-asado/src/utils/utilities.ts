@@ -19,3 +19,20 @@ export const downloadFile = ({ file, fileName }: any): any => {
 	URL.revokeObjectURL(url);
 	document.body.removeChild(link);
 };
+
+export const browserName = (function (agent) {
+	switch (true) {
+		case agent.indexOf('edge') > -1:
+			return 'Edge';
+		case agent.indexOf('edg/') > -1:
+			return 'Edge';
+		case agent.indexOf('trident') > -1:
+			return 'MS IE';
+		case agent.indexOf('firefox') > -1:
+			return 'Mozilla Firefox';
+		case agent.indexOf('safari') > -1:
+			return 'Safari';
+		default:
+			return 'other';
+	}
+})(window.navigator.userAgent.toLowerCase());
