@@ -3,10 +3,11 @@ import { useTranslation } from '../../stores/LocalizationContext';
 import React, { useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
 import { useAuth } from '../../stores/AuthContext';
-import { editUser, getUserById } from '../../service';
+import { editProfilePicture, editUser, getUserById } from '../../service';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import styles from './styles.module.scss';
+import { getImage } from '../../service/purchaseReceipts';
 
 export interface UserProfileInterface {
 	userImage?: File;
@@ -28,6 +29,7 @@ export interface IUserByIdResponse {
 	cbu?: string;
 	alias?: string;
 	specialDiet?: string[];
+	image?: any;
 }
 
 // En un futuro esto debería estar en estado, para poder cambiarle el valor.
@@ -44,12 +46,13 @@ export function UserProfile(): JSX.Element {
 		alias: '',
 		cbu: '',
 		password: '',
-		specialDiet: []
+		specialDiet: [],
+		image: emptyFile
 	}); //este es el user que se utiliza para comparar la response del getUserById y despues actualizar el userProfile
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const initialUser = {
-		userImage: emptyFile,
+		userImage: actualUser.image,
 		userName: actualUser.name,
 		lastName: actualUser.lastName,
 		userCbu: actualUser.cbu,
@@ -72,6 +75,10 @@ export function UserProfile(): JSX.Element {
 		return speDiet;
 	}
 
+	function checkForWrongFileType(file: File): Boolean {
+		return file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg';
+	}
+
 	function handleUpdateProfile(e: React.FormEvent<HTMLFormElement>): void {
 		e.preventDefault();
 		setIsLoading(true);
@@ -88,9 +95,22 @@ export function UserProfile(): JSX.Element {
 		editUser(user?.id, provisionalSendingUser)
 			.then(res => {
 				setAlert(`${lang.successMsg}!`, AlertTypes.SUCCESS);
+				if (userProfile.userImage !== emptyFile && !checkForWrongFileType(userProfile?.userImage as File)) {
+					setAlert(lang.errorTypeFile, AlertTypes.ERROR);
+					return;
+				}
+				userProfile.userImage !== emptyFile &&
+					editProfilePicture(user?.id, userProfile?.userImage)
+						.then(res => {
+							setAlert(`${lang.successMsg}!`, AlertTypes.SUCCESS);
+						})
+						.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR));
 			})
 			.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR))
-			.finally(() => setIsLoading(false));
+			.finally(() => {
+				setIsLoading(false);
+				setTimeout(() => window.location.reload(), 2000);
+			});
 	}
 
 	function chekingSpecialDiet(diet: any) {
@@ -102,15 +122,18 @@ export function UserProfile(): JSX.Element {
 		e.stopPropagation();
 		const target = e.target;
 
-		//Prevents deleting current image when user press Cancel in the dialog window
 		if (target.files?.length && target.files.length > 0) {
-			setUser({ ...userProfile, userImage: target.files[0] });
+			if (!checkForWrongFileType(target.files[0])) {
+				setAlert(lang.errorTypeFile, AlertTypes.ERROR);
+				return;
+			} else {
+				setUser({ ...userProfile, userImage: target.files[0] });
+			}
 		}
 	}
 
 	function setProfileImage(file: File) {
 		setUser(prev => ({ ...prev, userImage: file }));
-		// setUser({userImage: file})
 	}
 
 	useEffect(() => {
@@ -123,7 +146,12 @@ export function UserProfile(): JSX.Element {
 		if (!user?.id) return;
 		const abortController = new AbortController();
 
-		getUserById(user.id).then(res => setActualUser(res));
+		getUserById(user.id).then(res => {
+			setActualUser(res);
+			getImage(res.profilePicture).then(res2 => {
+				setActualUser(prev => ({ ...prev, image: res2 }));
+			});
+		});
 
 		return () => abortController.abort();
 	}, [user?.id]);
@@ -145,10 +173,10 @@ export function UserProfile(): JSX.Element {
 									<img src="/assets/pictures/profile.png" className={styles.userPicture} alt="placeholder" />
 								)}
 							</DragAndDrop>
-
-							<p onClick={() => inputRef.current?.click()} style={{ cursor: 'pointer' }}>
-								{lang.editImg}
-							</p>
+							<section className={styles.editImgSection} onClick={() => inputRef.current?.click()} style={{ cursor: 'pointer' }}>
+								<div className={styles.editLogo}></div>
+								<p>{lang.editImg}</p>
+							</section>
 
 							<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
 						</div>

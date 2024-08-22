@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import Button from '../../components/micro/Button/Button';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
@@ -7,6 +7,7 @@ import { recoverPassword, verifyCode } from '../../service/password';
 import { useNavigate } from 'react-router-dom';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { useAlert } from '../../stores/AlertContext';
+import { browserName } from '../../utils/utilities';
 
 interface InitialNewPasswordInterface {
 	userEmail: string;
@@ -19,6 +20,10 @@ export function SettingNewPassword(): JSX.Element {
 	const lang = useTranslation('settingNewPassword');
 	const navigate = useNavigate();
 	const { setAlert } = useAlert();
+	const [showPassword, setShowPassword] = useState<boolean>(true); //TODO: componentizar el input tipo password, ahí no repetimos esto en las 3 páginas
+	const [showConfirmedPassword, setShowConfirmedPassword] = useState<boolean>(true);
+	const inputPassword = useRef<HTMLInputElement | null>(null);
+	const inputConfirmedPassword = useRef<HTMLInputElement | null>(null);
 	const [newPassword, setNewPassword] = useState<InitialNewPasswordInterface>({
 		userEmail: '',
 		userVerificationCode: '',
@@ -98,17 +103,34 @@ export function SettingNewPassword(): JSX.Element {
 					<label htmlFor="Password" className={styles.passwordLabel}>
 						{lang.password}
 					</label>
-
-					<input
-						className={styles.input}
-						id="password"
-						placeholder={lang.password}
-						type="password"
-						value={newPassword.userPassword}
-						onChange={e => {
-							setNewPassword({ ...newPassword, userPassword: e.target.value });
-						}}
-					/>
+					<section className={styles.inputPasswordSection}>
+						<input
+							className={styles.input}
+							id="password"
+							ref={inputPassword}
+							placeholder={lang.password}
+							type={browserName === 'Edge' ? 'password' : showPassword ? 'password' : 'text'}
+							value={newPassword.userPassword}
+							onChange={e => {
+								setNewPassword({ ...newPassword, userPassword: e.target.value });
+							}}
+						/>
+						{browserName !== 'Edge' && (
+							<div
+								className={styles.passwordEye}
+								onClick={() => {
+									setShowPassword(!showPassword);
+									setTimeout(() => {
+										if (inputPassword.current) {
+											inputPassword.current.focus();
+											const length = inputPassword.current.value.length;
+											inputPassword.current.setSelectionRange(length, length);
+										}
+									}, 0);
+								}}></div>
+						)}
+						{browserName !== 'Edge' && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+					</section>
 
 					<p className={styles.mainDesc}>{lang.passwordDescription}</p>
 
@@ -116,16 +138,34 @@ export function SettingNewPassword(): JSX.Element {
 						{lang.confirmPassword}
 					</label>
 
-					<input
-						className={styles.input}
-						id="confirmPassword"
-						placeholder={lang.confirmPassword}
-						type="password"
-						value={newPassword.userConfirmedPassword}
-						onChange={e => {
-							setNewPassword({ ...newPassword, userConfirmedPassword: e.target.value });
-						}}
-					/>
+					<section className={styles.inputPasswordSection}>
+						<input
+							className={styles.input}
+							id="confirmPassword"
+							ref={inputConfirmedPassword}
+							placeholder={lang.confirmPassword}
+							type={browserName === 'Edge' ? 'password' : showConfirmedPassword ? 'password' : 'text'}
+							value={newPassword.userConfirmedPassword}
+							onChange={e => {
+								setNewPassword({ ...newPassword, userConfirmedPassword: e.target.value });
+							}}
+						/>
+						{browserName !== 'Edge' && (
+							<div
+								className={styles.passwordEye}
+								onClick={() => {
+									setShowConfirmedPassword(!showConfirmedPassword);
+									setTimeout(() => {
+										if (inputConfirmedPassword.current) {
+											inputConfirmedPassword.current.focus();
+											const length = inputConfirmedPassword.current.value.length;
+											inputConfirmedPassword.current.setSelectionRange(length, length);
+										}
+									}, 0);
+								}}></div>
+						)}
+						{browserName !== 'Edge' && !showConfirmedPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+					</section>
 
 					<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleSubmit}>
 						{lang.setKeyBtn}

@@ -16,5 +16,6 @@ export const userProfile = Object.seal({
 	logoutBtn: 'LOGOUT',
 	loginBtn: 'LOGIN',
 	successMsg: 'Information successfully changed',
-	failureMsg: 'You couldn´t update successfully your information'
+	failureMsg: 'You couldn´t update successfully your information',
+	errorTypeFile: 'Profile image must be .png .jpeg or .jpg type'
 });

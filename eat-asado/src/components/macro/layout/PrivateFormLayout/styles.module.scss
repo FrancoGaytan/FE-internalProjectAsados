@@ -43,12 +43,15 @@
 				}
 			}
 			.profileBtn {
-				min-width: 30px;
+				width: 30px;
 				height: 30px;
 				margin-bottom: 28px;
 				margin-left: 12px;
-				background-image: url('../../../../../public/assets/pictures/profile.png');
-				background-size: cover;
+				background-color: white;
+				border-radius: 50%;
+				background-size: contain;
+				margin: auto;
+				margin-left: 10px;
 			}
 			.logoutBtnSection {
 				display: flex;

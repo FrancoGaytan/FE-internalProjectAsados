@@ -1,5 +1,5 @@
-import { IUser, RegisterRequest, RegisterResponse } from '../models/user';
-import { _delete, _get, _post, _put } from './httpService';
+import { IUser, profilePicture, RegisterRequest, RegisterResponse } from '../models/user';
+import { _delete, _get, _post, _put, _putFiles } from './httpService';
 
 /**
  * Creates a user
@@ -41,6 +41,11 @@ export async function editUser(id: unknown, payload: any, signal?: AbortSignal):
 	return await _put(url, payload, signal);
 }
 
+export async function editProfilePicture(id: unknown, formFile: any, signal?: AbortSignal): Promise<any> {
+	const url = `/users/editProfilePicture/${id}`;
+	return await _putFiles(formFile, url, signal);
+}
+
 /**
  * Deletes an event by its id (12 byte Object ID)
  */
@@ -58,4 +63,3 @@ export async function isUserDebtor(idUser: string, signal?: AbortSignal): Promis
 	const url = `/users/isDebtor/${idUser}`;
 	return await _get(url, signal);
 }
-
