@@ -67,7 +67,12 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 									onClick={e => handleGoToProfile(e)}
 								/>
 							) : (
-								<img src="/assets/pictures/profile.png" className={styles.profileBtn} alt="placeholder" />
+								<img
+									src="/assets/pictures/profile.png"
+									className={styles.profileBtn}
+									alt="placeholder"
+									onClick={e => handleGoToProfile(e)}
+								/>
 							)}
 							<button
 								className={styles.spanishFlag}
