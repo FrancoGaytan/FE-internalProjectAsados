@@ -47,6 +47,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 				})
 				.catch(e => {
 					console.error('Catch in context:', e);
+
 				});
 		}
 	}, [user]);
