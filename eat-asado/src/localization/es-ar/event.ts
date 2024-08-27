@@ -28,5 +28,6 @@ export const event = Object.seal({
 	loadingPurchaseError: 'Ha habido un error cargando el recibo de compra',
 	fileSendingError: 'Ha habido un error enviando el archivo',
 	optional: '*Opcional',
-	descriptionMissing: 'Es necesario ingresar una descripción de pago'
+	descriptionMissing: 'Es necesario ingresar una descripción de pago',
+	privateEvent: 'Evento Privado'
 });

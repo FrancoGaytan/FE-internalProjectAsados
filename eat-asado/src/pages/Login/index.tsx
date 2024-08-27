@@ -12,7 +12,7 @@ import { browserName } from '../../utils/utilities';
 export function Login(): JSX.Element {
 	const navigate = useNavigate();
 	const lang = useTranslation('login');
-	const { login, isLoading } = useAuth();
+	const { login, isLoading, isRedirecting, setRedirection } = useAuth();
 	const [showPassword, setShowPassword] = useState<boolean>(true);
 	const inputPassword = useRef<HTMLInputElement | null>(null);
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({

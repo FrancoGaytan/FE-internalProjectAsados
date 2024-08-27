@@ -14,6 +14,7 @@ import { useAuth } from '../../../stores/AuthContext';
 import { parseMinutes } from '../../../utils/utilities';
 import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
+import Tooltip from '../../micro/Tooltip/Tooltip';
 
 interface IEventData {
 	eventTitle: String;
@@ -151,8 +152,14 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 			<section className={styles.cardMainInfo}>
 				<section className={styles.cardMainData}>
 					<div className={styles.eventTime}>{evTime} hrs</div>
-
-					<div className={styles.eventTitle}>{evTitle}</div>
+					<section className={styles.mainInfo}>
+						<div className={styles.eventTitle}>{evTitle}</div>
+						{privateEvent?.isPrivate && (
+							<Tooltip infoText={lang.privateEvent}>
+								<div className={styles.privateLogo}></div>
+							</Tooltip>
+						)}
+					</section>
 
 					<div className={styles.eventDescription}>{evDescription}</div>
 

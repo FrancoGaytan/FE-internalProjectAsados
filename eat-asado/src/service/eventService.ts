@@ -9,6 +9,11 @@ export async function getPublicEvents(signal?: AbortSignal): Promise<IPublicEven
 	return await _get<IPublicEvent[]>(url, signal);
 }
 
+export async function getPublicAndPrivateEvents(signal?: AbortSignal): Promise<IPublicEvent[]> {
+	const url = '/events/getPublicAndPrivateEvents';
+	return await _get<IPublicEvent[]>(url, signal);
+}
+
 /**
  * Gets the events by its ID.
  */

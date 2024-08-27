@@ -76,5 +76,8 @@ export const eventHome = Object.seal({
 	paymentDataIsNecessary: 'Necesitas cargar tu cbu o tu alias en tu perfil',
 	me: ' Yo',
 	empty: 'Sin Asignar',
-	noSpecialDiet: 'No tiene dieta especial'
+	noSpecialDiet: 'No tiene dieta especial',
+	privateEvent: 'Evento Privado',
+	linkCopiedToClipboard: 'Link copiado al portapapeles',
+	needLoginRedirecting: 'Necesitas estar loggeado para inscribirte al evento, redirigiendo a login'
 });
