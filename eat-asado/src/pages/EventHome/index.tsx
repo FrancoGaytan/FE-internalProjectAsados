@@ -74,7 +74,7 @@ export function EventHome(): JSX.Element {
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [user]);
 
 	useEffect(() => {
 		if (!user) {
