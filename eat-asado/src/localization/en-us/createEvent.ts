@@ -12,5 +12,6 @@ export const createEvent = Object.seal({
 	eventRegisteredConfirmation: 'Event registered successfully',
 	eventRegistrationFailure: 'Event registration failed',
 	completeAllInputs: 'Please, complete all the fields',
-	needToHaveCbu: 'You need to have you CBU or alias loaded to be shopping designee'
+	needToHaveCbu: 'You need to have you CBU or alias loaded to be shopping designee',
+	isPrivate: 'The event is Private'
 });

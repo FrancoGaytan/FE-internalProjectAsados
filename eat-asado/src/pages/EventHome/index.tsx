@@ -6,7 +6,7 @@ import EventCard from '../../components/macro/EventCard/EventCard';
 import { TEventState } from '../../types/eventState';
 import { useEvent } from '../../stores/EventContext';
 import { useNavigate } from 'react-router-dom';
-import { getPublicEvents, isUserDebtor } from '../../service';
+import { getPublicAndPrivateEvents, getPublicEvents, isUserDebtor } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
 import styles from './styles.module.scss';
 
@@ -55,13 +55,23 @@ export function EventHome(): JSX.Element {
 	 * Fetches the public events when page initialize.
 	 */
 	useEffect(() => {
-		getPublicEvents()
-			.then(res => {
-				setPublicEvents(res);
-			})
-			.catch(e => {
-				console.error('Catch in context: ', e);
-			});
+		if (user) {
+			getPublicAndPrivateEvents()
+				.then(res => {
+					setPublicEvents(res);
+				})
+				.catch(e => {
+					console.error('Catch in context: ', e);
+				});
+		} else {
+			getPublicEvents()
+				.then(res => {
+					setPublicEvents(res);
+				})
+				.catch(e => {
+					console.error('Catch in context: ', e);
+				});
+		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

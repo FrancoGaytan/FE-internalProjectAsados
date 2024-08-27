@@ -12,5 +12,6 @@ export const createEvent = Object.seal({
 	eventRegisteredConfirmation: 'Evento registrado exitosamente',
 	eventRegistrationFailure: 'El registro del evento a fallado',
 	completeAllInputs: 'Por favor, completar todos los campos',
-	needToHaveCbu: 'Necesitas cargar Alias o CBU para ser Encargado de Compras'
+	needToHaveCbu: 'Necesitas cargar Alias o CBU para ser Encargado de Compras',
+	isPrivate: 'El evento es privado'
 });

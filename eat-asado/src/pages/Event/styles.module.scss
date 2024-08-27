@@ -59,6 +59,26 @@
 		flex-direction: column;
 		align-items: center;
 
+		.eventPrivate {
+			display: flex;
+			margin-bottom: 10px;
+			.privateLogo {
+				margin: 0;
+				width: 28px;
+				height: 28px;
+				margin: auto;
+				background-size: contain;
+				background-image: url('../../../public/assets/pictures/icons-candado-gris.png');
+			}
+			.privateDescription {
+				margin: 0;
+				font-size: 20px;
+				margin-left: 5px;
+				font-weight: bolder;
+				color: rgb(107, 107, 107);
+			}
+		}
+
 		h1 {
 			width: fit-content;
 			font-family: 'Raleway';
@@ -89,9 +109,21 @@
 				border-radius: 10px;
 				margin: 10px;
 				padding-top: 15px;
-
+				position: relative;
 				flex-direction: column;
 				width: 100%;
+
+				.copyLinkToEvent {
+					position: absolute;
+					top: 0px;
+					right: 20px;
+					width: 25px;
+					height: 25px;
+					border-radius: 0;
+					background-size: contain;
+					background-color: transparent;
+					background-image: url('../../../public/assets/pictures/icons-copiar.png');
+				}
 
 				.secondRow {
 					margin-top: 40px;

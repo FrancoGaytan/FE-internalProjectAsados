@@ -28,5 +28,6 @@ export const event = Object.seal({
 	loadingPurchaseError: 'There has been a failure loading the purchase receipt',
 	fileSendingError: 'There has been an error sending the file',
 	optional: '*Optional',
-	descriptionMissing: 'Transfer description is missing'
+	descriptionMissing: 'Transfer description is missing',
+	privateEvent: 'Private Event'
 });
