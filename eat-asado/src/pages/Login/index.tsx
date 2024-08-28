@@ -34,7 +34,12 @@ export function Login(): JSX.Element {
 
 	return (
 		<FormLayout>
-			<div className={styles.closeBtn} onClick={() => navigate('/')}></div>
+			<div
+				className={styles.closeBtn}
+				onClick={() => {
+					navigate('/');
+					window.location.reload();
+				}}></div>
 
 			<h3 className={styles.title}>{lang.loginTitle}</h3>
 

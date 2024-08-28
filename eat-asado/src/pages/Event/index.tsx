@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
+import Stars from '../../components/micro/Stars/stars';
 import styles from './styles.module.scss';
 import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -353,7 +354,11 @@ export function Event(): JSX.Element {
 				{!!event && (
 					<section className={styles.event}>
 						{/* TODO: NO deberían haber dos h1 en la misma página */}
-						<h1>{event.title}</h1>
+						<h1 className={styles.eventTitle}>{event.title}</h1>
+						{isUserIntoEvent() && (event.state === EventStatesEnum.CLOSED || event.state === EventStatesEnum.FINISHED) && (
+							<Stars iconSize={25} count={5} defaultRating={0} icon={'★'} color="rgb(240, 191, 28)" idEvent={event._id}></Stars>
+						)}
+
 						{event.isPrivate && (
 							<section className={styles.eventPrivate}>
 								<div className={styles.privateLogo}></div>
