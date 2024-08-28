@@ -21,6 +21,9 @@
 			padding: 0;
 		}
 	}
+	.eventTitle {
+		margin-bottom: 15px;
+	}
 	.header {
 		width: 100vw;
 		display: flex;
@@ -53,6 +56,7 @@
 			max-width: 314px;
 		}
 	}
+
 	.event {
 		width: 90%;
 		display: flex;

@@ -55,10 +55,12 @@ export function EventHome(): JSX.Element {
 	 * Fetches the public events when page initialize.
 	 */
 	useEffect(() => {
-		if (user) {
+		if (user !== null) {
 			getPublicAndPrivateEvents()
 				.then(res => {
-					setPublicEvents(res);
+					setTimeout(() => {
+						setPublicEvents(res);
+					}, 200);
 				})
 				.catch(e => {
 					console.error('Catch in context: ', e);
