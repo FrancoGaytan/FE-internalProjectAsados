@@ -15,6 +15,7 @@ import { parseMinutes } from '../../../utils/utilities';
 import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
 import Tooltip from '../../micro/Tooltip/Tooltip';
+import StarRating from '../../micro/starRating/starRating';
 
 interface IEventData {
 	eventTitle: String;
@@ -22,6 +23,8 @@ interface IEventData {
 	eventParticipants: Number;
 	eventParticipantLimit: Number;
 	eventCook: String;
+	eventAvgRate: number;
+	eventRatingsAmount: number;
 }
 
 interface IEventCardProps {
@@ -195,6 +198,26 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 								</Button>
 							)}
 					</div>
+					{(evState === EventStatesEnum.FINISHED || evState === EventStatesEnum.CLOSED) && (
+						<section className={styles.ratingSection}>
+							<StarRating rating={props.eventData.eventAvgRate} />
+							{props.eventData.eventRatingsAmount > 0 && <p className={styles.ratingAvg}>{props.eventData.eventAvgRate}</p>}
+
+							{props.eventData.eventRatingsAmount === 1 ? (
+								<p className={styles.ratingRatingsAmoung}>
+									{'('}
+									{props.eventData.eventRatingsAmount} {lang.reviewText}
+									{')'}
+								</p>
+							) : (
+								<p className={styles.ratingRatingsAmoung}>
+									{'('}
+									{props.eventData.eventRatingsAmount} {lang.reviewTexts}
+									{')'}
+								</p>
+							)}
+						</section>
+					)}
 
 					<div className={styles.infoBtn}>
 						<Button

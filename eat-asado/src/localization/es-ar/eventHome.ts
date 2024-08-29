@@ -79,5 +79,7 @@ export const eventHome = Object.seal({
 	noSpecialDiet: 'No tiene dieta especial',
 	privateEvent: 'Evento Privado',
 	linkCopiedToClipboard: 'Link copiado al portapapeles',
-	needLoginRedirecting: 'Necesitas estar loggeado para inscribirte al evento, redirigiendo a login'
+	needLoginRedirecting: 'Necesitas estar loggeado para inscribirte al evento, redirigiendo a login',
+	reviewText: 'Opinión',
+	reviewTexts: 'Opiniones'
 });

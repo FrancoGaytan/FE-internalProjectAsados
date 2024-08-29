@@ -126,7 +126,9 @@ export function EventHome(): JSX.Element {
 									eventCook: event.chef,
 									eventDescription: event.description,
 									eventParticipants: event.members,
-									eventParticipantLimit: event.memberLimit
+									eventParticipantLimit: event.memberLimit,
+									eventAvgRate: event.ratings.avgScore,
+									eventRatingsAmount: event.ratings.ratingsAmount
 								}}
 							/>
 						);

@@ -1,4 +1,5 @@
 import { EventStatesEnum } from '../enums/EventState.enum';
+import { EventRatingData } from './ratings';
 import { IUser } from './user';
 
 export interface IEvent {
@@ -24,6 +25,7 @@ export interface IPublicEvent {
 	title: string;
 	_id: string;
 	isPrivate: boolean;
+	ratings: EventRatingData;
 }
 
 export interface createRequest {
