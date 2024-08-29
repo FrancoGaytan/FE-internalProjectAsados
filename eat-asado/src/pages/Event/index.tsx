@@ -549,7 +549,7 @@ export function Event(): JSX.Element {
 							)}
 
 							{event.organizer &&
-								event.organizer?._id === user?.id &&
+								(event.organizer?._id === user?.id || event.shopopingDesignee?._id === user?.id) &&
 								event.state !== 'finished' &&
 								event.state !== EventStatesEnum.CLOSED && (
 									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
@@ -557,11 +557,13 @@ export function Event(): JSX.Element {
 									</Button>
 								)}
 
-							{event.organizer && event.organizer?._id === user?.id && event.state === EventStatesEnum.CLOSED && (
-								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
-									{lang.reopenEventBtn}
-								</Button>
-							)}
+							{event.organizer &&
+								(event.organizer?._id === user?.id || event.shopopingDesignee?._id === user?.id) &&
+								event.state === EventStatesEnum.CLOSED && (
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
+										{lang.reopenEventBtn}
+									</Button>
+								)}
 
 							{event.shoppingDesignee &&
 								event.shoppingDesignee?._id !== user?.id &&

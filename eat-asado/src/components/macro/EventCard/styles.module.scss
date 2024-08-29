@@ -194,5 +194,28 @@
 				margin-right: 10px;
 			}
 		}
+		.ratingSection {
+			display: flex;
+			align-items: center;
+			position: absolute;
+			bottom: 45%;
+			left: 0%;
+			min-height: 65px;
+
+			.ratingAvg {
+				display: flex;
+				font-size: 20px;
+				color: grey;
+				padding-top: 1px;
+			}
+
+			.ratingRatingsAmoung {
+				display: flex;
+				font-size: 12px;
+				color: grey;
+				margin-left: 5px;
+				margin-bottom: 4px;
+			}
+		}
 	}
 }
