@@ -51,6 +51,8 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const evCook = props.eventData.eventCook;
 	const evId = props.eventId;
 	const evUserIsDebtor = props.eventUserIsDebtor;
+	const evRatingsAmount = props.eventData.eventRatingsAmount;
+	const evAvgRate = props.eventData.eventAvgRate;
 	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = (evDateTime.getHours() + 3).toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 	const eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
@@ -200,19 +202,19 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 					</div>
 					{(evState === EventStatesEnum.FINISHED || evState === EventStatesEnum.CLOSED) && (
 						<section className={styles.ratingSection}>
-							<StarRating rating={props.eventData.eventAvgRate} />
-							{props.eventData.eventRatingsAmount > 0 && <p className={styles.ratingAvg}>{props.eventData.eventAvgRate}</p>}
+							<StarRating rating={evAvgRate} />
+							{evRatingsAmount > 0 && <p className={styles.ratingAvg}>{evAvgRate}</p>}
 
-							{props.eventData.eventRatingsAmount === 1 ? (
+							{evRatingsAmount === 1 ? (
 								<p className={styles.ratingRatingsAmoung}>
 									{'('}
-									{props.eventData.eventRatingsAmount} {lang.reviewText}
+									{evRatingsAmount} {lang.reviewText}
 									{')'}
 								</p>
 							) : (
 								<p className={styles.ratingRatingsAmoung}>
 									{'('}
-									{props.eventData.eventRatingsAmount} {lang.reviewTexts}
+									{evRatingsAmount} {lang.reviewTexts}
 									{')'}
 								</p>
 							)}
