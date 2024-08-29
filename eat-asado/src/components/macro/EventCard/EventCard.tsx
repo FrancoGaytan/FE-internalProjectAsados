@@ -14,6 +14,8 @@ import { useAuth } from '../../../stores/AuthContext';
 import { parseMinutes } from '../../../utils/utilities';
 import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
+import Tooltip from '../../micro/Tooltip/Tooltip';
+import StarRating from '../../micro/starRating/starRating';
 
 interface IEventData {
 	eventTitle: String;
@@ -21,6 +23,8 @@ interface IEventData {
 	eventParticipants: Number;
 	eventParticipantLimit: Number;
 	eventCook: String;
+	eventAvgRate: number;
+	eventRatingsAmount: number;
 }
 
 interface IEventCardProps {
@@ -47,6 +51,8 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const evCook = props.eventData.eventCook;
 	const evId = props.eventId;
 	const evUserIsDebtor = props.eventUserIsDebtor;
+	const evRatingsAmount = props.eventData.eventRatingsAmount;
+	const evAvgRate = props.eventData.eventAvgRate;
 	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = (evDateTime.getHours() + 3).toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 	const eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
@@ -151,8 +157,14 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 			<section className={styles.cardMainInfo}>
 				<section className={styles.cardMainData}>
 					<div className={styles.eventTime}>{evTime} hrs</div>
-
-					<div className={styles.eventTitle}>{evTitle}</div>
+					<section className={styles.mainInfo}>
+						<div className={styles.eventTitle}>{evTitle}</div>
+						{privateEvent?.isPrivate && (
+							<Tooltip infoText={lang.privateEvent}>
+								<div className={styles.privateLogo}></div>
+							</Tooltip>
+						)}
+					</section>
 
 					<div className={styles.eventDescription}>{evDescription}</div>
 
@@ -188,6 +200,26 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 								</Button>
 							)}
 					</div>
+					{(evState === EventStatesEnum.FINISHED || evState === EventStatesEnum.CLOSED) && (
+						<section className={styles.ratingSection}>
+							<StarRating rating={evAvgRate} />
+							{evRatingsAmount > 0 && <p className={styles.ratingAvg}>{Number(evAvgRate).toFixed(1)}</p>}
+
+							{evRatingsAmount === 1 ? (
+								<p className={styles.ratingRatingsAmoung}>
+									{'('}
+									{evRatingsAmount} {lang.reviewText}
+									{')'}
+								</p>
+							) : (
+								<p className={styles.ratingRatingsAmoung}>
+									{'('}
+									{evRatingsAmount} {lang.reviewTexts}
+									{')'}
+								</p>
+							)}
+						</section>
+					)}
 
 					<div className={styles.infoBtn}>
 						<Button

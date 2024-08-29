@@ -13,6 +13,8 @@ interface IAuthContext {
 	setIsLoading: React.Dispatch<SetStateAction<boolean>>;
 	getUserFromLocalStorage: () => Object;
 	isAuthenticated: () => boolean;
+	isRedirecting: string | null;
+	setRedirection: (currentDirection: string | null) => void;
 	setUser: React.Dispatch<SetStateAction<LoginResponse | null>>;
 	logout: () => void;
 	login: (email: string, password: string) => void;
@@ -24,6 +26,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	const navigate = useNavigate();
 	const [user, setUser] = useState<LoginResponse | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isRedirecting, setIsRedirecting] = useState<string | null>(null);
 	const { setAlert } = useAlert();
 	const lang = useTranslation('login');
 
@@ -43,8 +46,12 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 
 				setUser(res);
 				setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
-
-				navigate('/');
+				if (isRedirecting) {
+					navigate(`${isRedirecting}`);
+					setIsRedirecting(null);
+				} else {
+					navigate('/');
+				}
 				window.location.reload(); //TODO: si no pongo esto, hay request que la primera vez no funcionan, sucede en la primera llamada despues de loggearme
 			})
 			.catch(error => {
@@ -74,6 +81,14 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 		return !!getUserFromLocalStorage();
 	}
 
+	function setRedirection(currentDirection: string | null) {
+		if (isRedirecting !== null) {
+			setIsRedirecting(null);
+		} else {
+			setIsRedirecting(currentDirection as string);
+		}
+	}
+
 	/**
 	 * Looks for a logged user when app initialize
 	 */
@@ -84,7 +99,19 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	}, [user]);
 
 	return (
-		<AuthContext.Provider value={{ user, isLoading, getUserFromLocalStorage, setIsLoading, isAuthenticated, setUser, logout, login }}>
+		<AuthContext.Provider
+			value={{
+				user,
+				isLoading,
+				isRedirecting,
+				setRedirection,
+				getUserFromLocalStorage,
+				setIsLoading,
+				isAuthenticated,
+				setUser,
+				logout,
+				login
+			}}>
 			{props.children}
 		</AuthContext.Provider>
 	);

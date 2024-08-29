@@ -76,5 +76,10 @@ export const eventHome = Object.seal({
 	paymentDataIsNecessary: 'You need to add your alias or cbu in your profile',
 	me: ' Me',
 	empty: 'Unassigned',
-	noSpecialDiet: 'No special diet'
+	noSpecialDiet: 'No special diet',
+	privateEvent: 'Private Event',
+	linkCopiedToClipboard: 'Link copied to clipboard',
+	needLoginRedirecting: 'You need to be logged in to access to the event, redirecting to login',
+	reviewText: 'Review',
+	reviewTexts: 'reviews'
 });

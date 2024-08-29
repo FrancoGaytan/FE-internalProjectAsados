@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
+import Stars from '../../components/micro/Stars/stars';
 import styles from './styles.module.scss';
 import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +15,7 @@ import {
 	unsubscribeToAnEvent
 } from '../../service';
 import { EventStatesEnum } from '../../enums/EventState.enum';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { EventUserResponse, IUser } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
 import { useAlert } from '../../stores/AlertContext';
@@ -32,8 +33,9 @@ import Tooltip from '../../components/micro/Tooltip/Tooltip';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
-	const { user } = useAuth();
+	const { user, isRedirecting, setRedirection } = useAuth();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { setAlert } = useAlert();
 	const [event, setEvent] = useState<any>(); //TODO: Sacar o typear este any
 	const [actualUser, setActualUser] = useState<IUser>();
@@ -43,6 +45,8 @@ export function Event(): JSX.Element {
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [userHasPaid, setUserHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState([]);
+	const baseUrl = getBaseUrl();
+	const currentUrl = `${baseUrl}${location.pathname}${location.search}${location.hash}`;
 	const [transferReceiptId, setTransferReceiptId] = useState<string | undefined>(undefined);
 	const [eventParticipants, setEventParticipants] = useState<EventUserResponse[]>([]);
 	const [userToApprove, setUserToApprove] = useState('');
@@ -72,18 +76,23 @@ export function Event(): JSX.Element {
 	}
 
 	function subscribeUserToEvent(): void {
-		// pasarla a eventhome para que ande el boton de participate
-		if (!user) {
+		if (Object.keys(user as Object).length === 0) {
+			setAlert(lang.needLoginRedirecting, AlertTypes.INFO);
+			setTimeout(() => {
+				setRedirection(`${location.pathname}${location.search}${location.hash}`);
+				navigate('/login');
+			}, 1500);
 			return;
+		} else {
+			setIsLoading(true);
+			subscribeToAnEvent(user?.id as string, event?._id)
+				.then(res => {
+					setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
+					setTimeout(() => window.location.reload(), 1000);
+				})
+				.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR))
+				.finally(() => setIsLoading(false));
 		}
-		setIsLoading(true);
-		subscribeToAnEvent(user?.id as string, event?._id)
-			.then(res => {
-				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
-				setTimeout(() => window.location.reload(), 1000);
-			})
-			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR))
-			.finally(() => setIsLoading(false));
 	}
 
 	function removeResponsabilitiesAtUnsubscribing(): void {
@@ -248,28 +257,45 @@ export function Event(): JSX.Element {
 		return event.shoppingDesignee?._id === user?.id || event.chef?._id === user?.id || event.organizer?._id === user?.id;
 	}
 
-	useEffect(() => {
-		if (!userIdParams) return;
+	function getBaseUrl(): string {
+		if (process.env.NODE_ENV === 'development') {
+			return 'http://localhost:3000';
+		} else {
+			return window.location.origin;
+		}
+	}
 
-		getEventById(userIdParams.eventId)
-			.then(res => {
-				setEvent(res);
-			})
-			.catch(e => {
-				console.error('Catch in context: ', e);
-			});
+	function copyLinkEvent(): void {
+		navigator.clipboard.writeText(currentUrl);
+		setAlert(lang.linkCopiedToClipboard, AlertTypes.SUCCESS);
+	}
+
+	useEffect(() => {
+		if (!userIdParams) {
+			return;
+		} else {
+			getEventById(userIdParams.eventId)
+				.then(res => {
+					setEvent(res);
+				})
+				.catch(e => {
+					console.error('Catch in context: ', e);
+				});
+		}
 	}, [userIdParams]);
 
 	useEffect(() => {
-		if (!event) return;
-
-		getPurchaseReceipts(event?._id)
-			.then(res => {
-				setPurchasesMade(res);
-			})
-			.catch(e => {
-				console.error('Catch in context: ', e);
-			});
+		if (!event) {
+			return;
+		} else {
+			getPurchaseReceipts(event?._id)
+				.then(res => {
+					setPurchasesMade(res);
+				})
+				.catch(e => {
+					//console.error('Catch in context: ', e);
+				});
+		}
 	}, [event]);
 
 	useEffect(() => {
@@ -325,14 +351,23 @@ export function Event(): JSX.Element {
 						{lang.newEventButton}
 					</Button>
 				</section>
-
 				{!!event && (
 					<section className={styles.event}>
 						{/* TODO: NO deberían haber dos h1 en la misma página */}
-						<h1>{event.title}</h1>
+						<h1 className={styles.eventTitle}>{event.title}</h1>
+						{isUserIntoEvent() && (event.state === EventStatesEnum.CLOSED || event.state === EventStatesEnum.FINISHED) && (
+							<Stars iconSize={25} count={5} defaultRating={0} icon={'★'} color="rgb(240, 191, 28)" idEvent={event._id}></Stars>
+						)}
 
+						{event.isPrivate && (
+							<section className={styles.eventPrivate}>
+								<div className={styles.privateLogo}></div>
+								<p className={styles.privateDescription}>{lang.privateEvent}</p>
+							</section>
+						)}
 						<main className={styles.eventData}>
 							<div className={styles.eventOrganization}>
+								{event.isPrivate && <button className={styles.copyLinkToEvent} onClick={() => copyLinkEvent()}></button>}
 								<div className={styles.sectionTitle}>
 									<div className={styles.calendarLogo}></div>
 
@@ -365,32 +400,33 @@ export function Event(): JSX.Element {
 										<div className={styles.cartLogo}></div>
 										<h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
 									</div>
+									{isUserIntoEvent() && (
+										<section className={styles.purchasesList}>
+											{purchasesMade.map((purchase: IPurchaseReceipt) => (
+												<div key={purchase?._id} className={styles.purchasesData}>
+													<h5 className={styles.infoData}>{purchase.description}</h5>
 
-									<section className={styles.purchasesList}>
-										{purchasesMade.map((purchase: IPurchaseReceipt) => (
-											<div key={purchase?._id} className={styles.purchasesData}>
-												<h5 className={styles.infoData}>{purchase.description}</h5>
+													<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
 
-												<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
+													{event?.shoppingDesignee?._id === user?.id && (
+														<button
+															className={styles.deleteBtn}
+															onClick={e => {
+																e.preventDefault();
+																deletePurchase(purchase);
+															}}></button>
+													)}
 
-												{event?.shoppingDesignee?._id === user?.id && (
 													<button
-														className={styles.deleteBtn}
+														className={styles.downloadBtn}
 														onClick={e => {
 															e.preventDefault();
-															deletePurchase(purchase);
+															downloadPurchase(purchase);
 														}}></button>
-												)}
-
-												<button
-													className={styles.downloadBtn}
-													onClick={e => {
-														e.preventDefault();
-														downloadPurchase(purchase);
-													}}></button>
-											</div>
-										))}
-									</section>
+												</div>
+											))}
+										</section>
+									)}
 								</div>
 							</div>
 							<div className={styles.eventParticipants}>
@@ -491,7 +527,6 @@ export function Event(): JSX.Element {
 								</div>
 							</div>
 						</main>
-
 						<section className={styles.btnSection}>
 							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
 								<div>
@@ -514,7 +549,7 @@ export function Event(): JSX.Element {
 							)}
 
 							{event.organizer &&
-								event.organizer?._id === user?.id &&
+								(event.organizer?._id === user?.id || event.shopopingDesignee?._id === user?.id) &&
 								event.state !== 'finished' &&
 								event.state !== EventStatesEnum.CLOSED && (
 									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
@@ -522,11 +557,13 @@ export function Event(): JSX.Element {
 									</Button>
 								)}
 
-							{event.organizer && event.organizer?._id === user?.id && event.state === EventStatesEnum.CLOSED && (
-								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
-									{lang.reopenEventBtn}
-								</Button>
-							)}
+							{event.organizer &&
+								(event.organizer?._id === user?.id || event.shopopingDesignee?._id === user?.id) &&
+								event.state === EventStatesEnum.CLOSED && (
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
+										{lang.reopenEventBtn}
+									</Button>
+								)}
 
 							{event.shoppingDesignee &&
 								event.shoppingDesignee?._id !== user?.id &&

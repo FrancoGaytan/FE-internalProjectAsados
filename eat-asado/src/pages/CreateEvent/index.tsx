@@ -32,7 +32,8 @@ export function CreateEvent(): JSX.Element {
 		state: EventStatesEnum.AVAILABLE,
 		organizer: user ? user.id : '',
 		isChef: undefined,
-		isShoppingDesignee: undefined
+		isShoppingDesignee: undefined,
+		isPrivate: false
 	});
 
 	function handleDinersChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -230,6 +231,20 @@ export function CreateEvent(): JSX.Element {
 							<option value="75" label="75" />
 							<option value="100" label="100" />
 						</datalist>
+					</section>
+					<section className={styles.checkboxesContainer}>
+						<label htmlFor="isPrivate" className={styles.fieldLabel}>
+							<input
+								id="isPrivate"
+								type="checkbox"
+								className={styles.checkbox}
+								checked={event.isPrivate ? true : false}
+								onChange={e => {
+									setEvent({ ...event, isPrivate: e.target.checked });
+								}}
+							/>
+							{lang.isPrivate}
+						</label>
 					</section>
 				</section>
 

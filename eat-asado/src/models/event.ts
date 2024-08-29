@@ -1,4 +1,5 @@
 import { EventStatesEnum } from '../enums/EventState.enum';
+import { EventRatingData } from './ratings';
 import { IUser } from './user';
 
 export interface IEvent {
@@ -11,6 +12,7 @@ export interface IEvent {
 	organizer: string;
 	isChef?: string | undefined; // TODO: No debería ser boolean esto?
 	isShoppingDesignee?: string; // TODO: No debería ser boolean esto?
+	isPrivate: boolean;
 }
 
 export interface IPublicEvent {
@@ -22,6 +24,8 @@ export interface IPublicEvent {
 	state: EventStatesEnum;
 	title: string;
 	_id: string;
+	isPrivate: boolean;
+	ratings: EventRatingData;
 }
 
 export interface createRequest {
@@ -33,6 +37,7 @@ export interface createRequest {
 	organizer: number;
 	chef?: number;
 	shoppingDesignee?: number;
+	isPrivate: boolean;
 }
 
 export interface EventResponse {
@@ -48,4 +53,5 @@ export interface EventResponse {
 	purchaseReceipts: [];
 	_id: string;
 	__v: 0;
+	isPrivate?: boolean;
 }
