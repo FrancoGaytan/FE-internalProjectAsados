@@ -203,7 +203,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 					{(evState === EventStatesEnum.FINISHED || evState === EventStatesEnum.CLOSED) && (
 						<section className={styles.ratingSection}>
 							<StarRating rating={evAvgRate} />
-							{evRatingsAmount > 0 && <p className={styles.ratingAvg}>{evAvgRate}</p>}
+							{evRatingsAmount > 0 && <p className={styles.ratingAvg}>{Number(evAvgRate).toFixed(1)}</p>}
 
 							{evRatingsAmount === 1 ? (
 								<p className={styles.ratingRatingsAmoung}>
