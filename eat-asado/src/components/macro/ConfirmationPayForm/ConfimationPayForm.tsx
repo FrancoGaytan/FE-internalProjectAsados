@@ -12,6 +12,7 @@ import { getImage } from '../../../service/purchaseReceipts';
 import { getTransferReceipt } from '../../../service';
 import { useEffect, useState } from 'react';
 import { transferReceipt } from '../../../models/transfer';
+import { IPurchaseReceipt } from '../../../models/purchases';
 
 interface ConfirmationPayProps {
 	event: EventResponse;
@@ -57,6 +58,20 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		}
 	}
 
+	function gettingPriceToPay(): number {
+		let price = 0;
+
+		if (!event) {
+			return price;
+		}
+
+		event?.purchaseReceipts?.forEach((tr: IPurchaseReceipt) => {
+			price = price + tr.amount;
+		});
+
+		return Math.round(price / event.members.length);
+	}
+
 	useEffect(() => {
 		if (!transferReceiptId) {
 			return;
@@ -74,6 +89,10 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		<div {...className(styles.paycheck)}>
 			<p className={styles.popupTitle}>{lang.validatePaymentTitle}</p>
 			<div className={styles.paycheckContent}>
+				<div className={styles.priceSection}>
+					{lang.amountToBePaid}
+					{gettingPriceToPay()}
+				</div>
 				<section className={styles.downloadContent}>
 					{transferReceipt?.paymentMethod === 'cash' ? (
 						<p className={styles.downloadText}>{lang.paidByCashText}</p>
