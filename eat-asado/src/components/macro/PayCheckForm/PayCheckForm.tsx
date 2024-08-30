@@ -85,6 +85,11 @@ export default function PayCheckForm(props: PayCheckProps) {
 		}
 	}
 
+	function copyLinkEvent(data: string): void {
+		navigator.clipboard.writeText(data);
+		setAlert(lang.linkCopiedToClipboard, AlertTypes.SUCCESS);
+	}
+
 	async function confirmPay(e: any) {
 		e.preventDefault();
 		if (discardTransferWithoutFiles()) {
@@ -140,17 +145,23 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 			<div className={styles.paycheckContent}>
 				{/* TODO: Demasiados h5, no es semántico. */}
-				<h5>
+				<h5 className={styles.paymentData}>
 					{lang.shoppingDesignee} {event?.shoppingDesignee?.name}
 				</h5>
 
-				<h5>
+				<h5 className={styles.paymentData}>
 					{lang.alias} {event?.shoppingDesignee?.alias}
+					{event?.shoppingDesignee?.alias && (
+						<button className={styles.copyBtn} onClick={() => copyLinkEvent(event?.shoppingDesignee?.alias as string)}></button>
+					)}
 				</h5>
 
-				<h5>
+				<h5 className={styles.paymentData}>
 					{lang.cbu}
 					{event?.shoppingDesignee?.cbu}
+					{event?.shoppingDesignee?.cbu && (
+						<button className={styles.copyBtn} onClick={() => copyLinkEvent(event?.shoppingDesignee?.cbu as string)}></button>
+					)}
 				</h5>
 
 				<h5>

@@ -29,5 +29,7 @@ export const event = Object.seal({
 	fileSendingError: 'There has been an error sending the file',
 	optional: '*Optional',
 	descriptionMissing: 'Transfer description is missing',
-	privateEvent: 'Private Event'
+	privateEvent: 'Private Event',
+	amountToBePaid: 'Amount: $',
+	linkCopiedToClipboard: 'Info copied to clipboard'
 });
