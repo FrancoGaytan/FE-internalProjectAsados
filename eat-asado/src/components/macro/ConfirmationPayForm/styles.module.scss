@@ -15,7 +15,7 @@
 .downloadContent {
 	display: flex;
 	justify-content: center;
-	margin-top: 60px;
+	margin-top: 20px;
 }
 .downloadTransferArea {
 	display: flex;
@@ -39,4 +39,12 @@
 	display: flex;
 	justify-content: center;
 	gap: 10px;
+}
+
+.priceSection {
+	display: flex;
+	margin-top: 40px;
+	font-size: larger;
+	font-weight: bold;
+	justify-content: center;
 }

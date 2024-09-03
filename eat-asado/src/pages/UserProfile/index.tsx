@@ -109,7 +109,7 @@ export function UserProfile(): JSX.Element {
 			.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR))
 			.finally(() => {
 				setIsLoading(false);
-				setTimeout(() => window.location.reload(), 1000);
+				setTimeout(() => window.location.reload(), 2000);
 			});
 	}
 
