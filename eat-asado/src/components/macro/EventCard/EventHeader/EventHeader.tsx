@@ -1,5 +1,5 @@
 import { EventStatesEnum } from '../../../../enums/EventState.enum';
-import { useTranslation } from '../../../../stores/LocalizationContext';
+import { useLocalizationContext, useTranslation } from '../../../../stores/LocalizationContext';
 import { TEventParticipationState, TEventState, TSubscribedState } from '../../../../types/eventState';
 
 import { className } from '../../../../utils/className';
@@ -18,6 +18,7 @@ interface IEventCardProps {
 export default function EventHeader(props: IEventCardProps) {
 	const { evDate, evParticipants, evParticipantsLimit, evState, subscribedUser } = props;
 	const lang = useTranslation('eventHome'); //TODO: aplicarlo a los nombres de los estados
+	const { locale } = useLocalizationContext();
 
 	function isEventFull(): boolean {
 		return evParticipants >= evParticipantsLimit;
@@ -54,6 +55,33 @@ export default function EventHeader(props: IEventCardProps) {
 		}
 	}
 
+	function getTranslatedState(stateDesc: string | undefined) {
+		//primero evaluar con un if si el idioma esta en ingles, sino no hagas nada
+		if (locale.id === 'es-AR') {
+			switch (stateDesc) {
+				case EventStatesEnum.AVAILABLE:
+					return 'DISPONIBLE';
+				case EventStatesEnum.CANCELED:
+					return 'CANCELADO';
+				case EventStatesEnum.FULL:
+					return 'LLENO';
+				case EventStatesEnum.FINISHED:
+					return 'FINALIZADO';
+				case EventStatesEnum.CLOSED:
+					return 'CERRADO';
+				case 'subscribed':
+					return 'SUBSCRIPTO';
+				case 'blocked':
+					console.log(stateDesc);
+					return 'BLOCKEADO';
+				case 'Debtor':
+					return 'DEUDOR';
+			}
+		} else {
+			return stateDesc;
+		}
+	}
+
 	return (
 		<div
 			{...className(
@@ -61,7 +89,7 @@ export default function EventHeader(props: IEventCardProps) {
 				styles[getEventState() as string]
 			)}>
 			<section className={styles.cardTitleInfo}>
-				<div className={styles.availabilityDesc}>{getEventState()?.toUpperCase()}</div>
+				<div className={styles.availabilityDesc}>{getTranslatedState(getEventState())?.toUpperCase()}</div>
 
 				<div className={styles.eventCardDate}>{evDate.toString()}</div>
 			</section>

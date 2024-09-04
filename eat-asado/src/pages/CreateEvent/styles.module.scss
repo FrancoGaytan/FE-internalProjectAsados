@@ -83,10 +83,30 @@
 		min-width: 50%;
 		margin-right: 30px;
 
+		::-webkit-calendar-picker-indicator {
+			background-color: transparent;
+			opacity: 0; // con esto lo puedo hacer invisible
+		}
+
 		@media #{variables.media-query(max, lg)} {
 			min-width: 100%;
 			min-height: 450px;
 			margin-right: 0px;
+		}
+		.calendarPicker {
+			position: relative;
+			.calendarLogo {
+				position: absolute;
+				background-size: contain;
+				pointer-events: none;
+				width: 20px;
+				height: 20px;
+				right: 14px;
+				top: 10px;
+				z-index: 10;
+				background-color: transparent;
+				background-image: url('../../../public/assets/pictures/icons-calendario-blanco.png');
+			}
 		}
 	}
 
