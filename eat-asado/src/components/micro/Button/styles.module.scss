@@ -19,20 +19,24 @@ button {
 			background-color: var(--btnPrimaryDarker);
 		}
 	}
+
 	&.secondary {
 		background-color: white;
 		color: var(--btnPrimary);
 		border: 3px solid var(--btnPrimary);
 	}
+
 	&.validation {
 		background-color: rgb(61, 61, 233);
 		color: white;
 		border: 0px;
 	}
+
 	&.whitePrimary {
 		background-color: #dce0d2;
 		color: var(--messageSuccessPrimary);
 	}
+
 	&.whiteSecondary {
 		background-color: #dce0d2;
 		color: var(--btnPrimaryDarker);
@@ -50,17 +54,12 @@ button {
 		height: 40px;
 	}
 
-	&.size-medium {
-	}
-
 	&.size-large {
-		width: 300px;
-		min-height: 40px;
 		max-height: 40px;
+		min-height: 40px;
+		width: 100%;
 	}
 
-	&.size-full {
-	}
 	&.size-micro {
 		width: 80px;
 		height: 20px;

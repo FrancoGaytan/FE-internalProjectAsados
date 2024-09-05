@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { LoginRequest } from '../../models/user';
 import { useAuth } from '../../stores/AuthContext';
 import styles from './styles.module.scss';
-import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
+//import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { browserName } from '../../utils/utilities';
 
 export function Login(): JSX.Element {
 	const navigate = useNavigate();
 	const lang = useTranslation('login');
-	const { login, isLoading, isRedirecting, setRedirection } = useAuth();
+	const { login, isLoading /*, isRedirecting, setRedirection*/ } = useAuth();
 	const [showPassword, setShowPassword] = useState<boolean>(true);
 	const inputPassword = useRef<HTMLInputElement | null>(null);
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
@@ -35,11 +35,13 @@ export function Login(): JSX.Element {
 	return (
 		<FormLayout>
 			<div
-				className={styles.closeBtn}
+				className={styles.closeBtnWrapper}
 				onClick={() => {
 					navigate('/');
 					window.location.reload();
-				}}></div>
+				}}>
+				<div className={styles.closeBtn}></div>
+			</div>
 
 			<h3 className={styles.title}>{lang.loginTitle}</h3>
 
@@ -107,6 +109,7 @@ export function Login(): JSX.Element {
 		</FormLayout>
 	);
 }
-function setAlert(arg0: string, ERROR: any) {
+
+/*function setAlert(arg0: string, ERROR: any) {
 	throw new Error('Function not implemented.');
-}
+}*/

@@ -2,32 +2,35 @@
 @use '/src/styles/shared';
 @use '/src/styles/custom-properties';
 
-// TO DO: que los childrens usen un 100% del ancho, acomodar alineacion
+.closeBtnWrapper {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    height: 30px;
+	justify-content: center;
+    position: relative;
+    width: 30px;
+}
 
 .closeBtn {
-	background-color: var(--backgroundNeutralLighter);
-	height: 25px;
-	width: 2px;
-	transform: rotate(45deg);
-	position: absolute;
-	top: 20px;
-	right: 50px;
-	cursor: pointer;
+    background-color: var(--backgroundNeutralLighter);
+    height: 25px;
+    transform: rotate(45deg);
+    position: absolute;
+    width: 2px;
+}
 
-	&::after {
-		content: '';
-		background-color: var(--backgroundNeutralLighter);
-		height: 25px;
-		width: 2px;
-		transform: rotate(270deg);
-		position: absolute;
-		top: 0px;
-		right: 0px;
-	}
+.closeBtn::after {
+    content: '';
+    background-color: var(--backgroundNeutralLighter);
+    height: 25px;
+    width: 2px;
+    transform: rotate(270deg);
+    position: absolute;
 }
 
 .title {
-	color: white;
+	color: var(--colorWhite);
 	font-family: var(--secondaryFont);
 	font-weight: bold;
 	align-self: flex-start;
@@ -42,11 +45,10 @@
 }
 
 .loginLabel {
+	align-self: flex-start;
 	color: var(--backgroundNeutralLighter);
 	font-family: var(--secondaryFont);
-	align-self: flex-start;
 	margin-bottom: 10px;
-	// margin-top: 15px;
 
 	@media #{variables.media-query(max, lg)} {
 		font-weight: variables.font-weight(bold);
@@ -56,7 +58,7 @@
 
 .loginInput {
 	background: none;
-	border: 1px solid white;
+	border: 1px solid var(--colorWhite);
 	color: var(--backgroundNeutralLighter);
 	font-family: var(--secondaryFont);
 	min-width: 300px;
@@ -78,23 +80,23 @@
 }
 
 .forgotPassword {
+	align-self: flex-end;
 	font-size: 16px;
 	font-family: var(--secondaryFont);
 	font-weight: variables.font-weight(bold);
 	text-decoration: none;
 	color: var(--backgroundNeutralLighter);
 	margin: 30px auto;
-	align-self: flex-end;
 }
 
 .register {
+	align-self: flex-end;
 	font-size: 16px;
 	font-family: var(--secondaryFont);
 	font-weight: variables.font-weight(bold);
 	text-decoration: none;
 	color: var(--backgroundNeutralLighter);
-	margin: 0px auto 30px auto;
-	align-self: flex-end;
+	margin: 0 auto 30px auto;
 
 	.registerHighlighted {
 		color: var(--btnPrimary);
