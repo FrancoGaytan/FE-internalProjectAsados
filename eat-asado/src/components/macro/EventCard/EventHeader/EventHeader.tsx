@@ -27,7 +27,7 @@ export default function EventHeader(props: IEventCardProps) {
 	function getEventState(): string | undefined {
 		//Deuda Tecnica, hacer un elseif para esta funcion
 		if (props.isEventBlocking) {
-			return 'Debtor';
+			return 'debtor';
 		}
 		if (props.isAnotherEventBlocking) {
 			return 'blocked';
@@ -74,7 +74,7 @@ export default function EventHeader(props: IEventCardProps) {
 				case 'blocked':
 					console.log(stateDesc);
 					return 'BLOCKEADO';
-				case 'Debtor':
+				case 'debtor':
 					return 'DEUDOR';
 			}
 		} else {
