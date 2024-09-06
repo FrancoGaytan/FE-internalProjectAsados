@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '../../stores/LocalizationContext';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import Button from '../../components/micro/Button/Button';
@@ -21,8 +21,6 @@ export function CreateEvent(): JSX.Element {
 	const { setIsLoading } = useAuth();
 	const [fullUser, setFullUser] = useState<IUser>();
 
-	/* Acá habia una variable `initialEvent`. Esas variables están buenas cuando necesitas reiniciar el estado de un componente, pero en este caso no es necesario.
-	Asi que moví la inicializaciond el estado event al useState directamente. */
 	const [event, setEvent] = useState<IEvent>({
 		title: '',
 		datetime: new Date(),
@@ -101,8 +99,8 @@ export function CreateEvent(): JSX.Element {
 		<FormLayout>
 			<button className={styles.closeBtn} onClick={handleGoBack}></button>
 
-			{/* TODO: Esto está semánitcamente mal. Los labels no deberian ser titulos. */}
 			<label className={styles.title}>{lang.createEventTitle}</label>
+			{/* TODO: Cambiar esto, no debe ser label un título */}
 
 			<div className={styles.inputSection}>
 				<section className={styles.firstColumn}>
@@ -124,29 +122,30 @@ export function CreateEvent(): JSX.Element {
 						{lang.dateTime}
 					</label>
 
-					<input
-						id="fechaHora"
-						placeholder="Fecha y Hora"
-						type="datetime-local"
-						value={event.datetime.toISOString().slice(0, -8)}
-						onChange={e => {
-							const inputValue = e.target.value;
-							if (inputValue) {
-								const localDate = new Date(inputValue);
+					<div className={styles.calendarPicker}>
+						<input
+							id="fechaHora"
+							placeholder="Fecha y Hora"
+							type="datetime-local"
+							value={event.datetime.toISOString().slice(0, -8)}
+							onChange={e => {
+								const inputValue = e.target.value;
+								if (inputValue) {
+									const localDate = new Date(inputValue);
 
-								// Verifica si el valor se ha convertido en una fecha válida
-								if (!isNaN(localDate.getTime())) {
-									// Comprobar si localDate es válido
-									const utcOffset = localDate.getTimezoneOffset();
-									const adjustedDate = new Date(localDate.getTime() - utcOffset * 60000);
-									setEvent({ ...event, datetime: adjustedDate });
-								} else {
-									// Manejo de errores opcional
-									console.error('Fecha no válida:', inputValue);
+									// Verifica si el valor se ha convertido en una fecha válida
+									if (!isNaN(localDate.getTime())) {
+										const utcOffset = localDate.getTimezoneOffset();
+										const adjustedDate = new Date(localDate.getTime() - utcOffset * 60000);
+										setEvent({ ...event, datetime: adjustedDate });
+									} else {
+										console.error('Invalid Date:', inputValue);
+									}
 								}
-							}
-						}}
-					/>
+							}}
+						/>
+						<span className={styles.calendarLogo}></span>
+					</div>
 
 					<label htmlFor="descripcion" className={styles.fieldLabel}>
 						{lang.eventDescription}

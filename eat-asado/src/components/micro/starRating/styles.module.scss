@@ -1,0 +1,13 @@
+@use '/src/styles/variables';
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.starRating {
+	font-size: 30px;
+	position: relative;
+	display: inline-block;
+
+	.emptyStar {
+		color: #ccc;
+	}
+}
