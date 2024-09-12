@@ -549,6 +549,7 @@ export function Event(): JSX.Element {
 							)}
 
 							{event.organizer &&
+								isUserIntoEvent() &&
 								(event.organizer?._id === user?.id || event.shopopingDesignee?._id === user?.id) &&
 								event.state !== 'finished' &&
 								event.state !== EventStatesEnum.CLOSED && (
@@ -558,6 +559,7 @@ export function Event(): JSX.Element {
 								)}
 
 							{event.organizer &&
+								isUserIntoEvent() &&
 								(event.organizer?._id === user?.id || event.shopopingDesignee?._id === user?.id) &&
 								event.state === EventStatesEnum.CLOSED && (
 									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
