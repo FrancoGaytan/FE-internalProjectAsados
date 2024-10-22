@@ -68,6 +68,7 @@ export default function Stars(props: IStarsProps) {
 				return (
 					<div
 						className={styles.star}
+						data-testid={'stars-id'}
 						key={index}
 						style={{
 							fontSize: props.iconSize ? `${props.iconSize}px` : '14px',
