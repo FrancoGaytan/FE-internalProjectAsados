@@ -46,7 +46,7 @@ const routes: { [key: string]: IRoute } = {
 		isPublic: false
 	},
 	createEvent: {
-		path: '/createEvent',
+		path: `/createEvent/:eventIdParam`,
 		localizationKey: 'createEvent',
 		element: <CreateEvent />,
 		isPublic: true
