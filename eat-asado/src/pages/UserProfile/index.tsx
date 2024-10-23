@@ -203,7 +203,6 @@ export function UserProfile(): JSX.Element {
 							type="text"
 							value={userProfile.userAlias}
 							onChange={e => {
-								console.log(e.target.value);
 								setUser({ ...userProfile, userAlias: e.target.value });
 							}}
 						/>

@@ -72,7 +72,6 @@ export default function EventHeader(props: IEventCardProps) {
 				case 'subscribed':
 					return 'SUBSCRIPTO';
 				case 'blocked':
-					console.log(stateDesc);
 					return 'BLOCKEADO';
 				case 'debtor':
 					return 'DEUDOR';

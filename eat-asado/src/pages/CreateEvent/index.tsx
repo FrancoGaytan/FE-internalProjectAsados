@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '../../stores/LocalizationContext';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import Button from '../../components/micro/Button/Button';
-import { createEvent } from '../../service';
+import { createEvent, editEvent, getEventById } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
 import { IEvent } from '../../models/event';
 import { IUser } from '../../models/user';
@@ -10,11 +10,12 @@ import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { getUserById } from '../../service';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 export function CreateEvent(): JSX.Element {
 	const navigate = useNavigate();
+	const { eventIdParam } = useParams();
 	const lang = useTranslation('createEvent');
 	const { user } = useAuth();
 	const { setAlert } = useAlert();
@@ -63,14 +64,27 @@ export function CreateEvent(): JSX.Element {
 
 		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
 
-		createEvent(event)
-			.then(res => {
-				setAlert(`${lang.eventRegisteredConfirmation}!`, AlertTypes.SUCCESS);
-				handleGoBack();
-			})
-			.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
-			.finally(() => setIsLoading(false));
+		if (eventIdParam === 'new') {
+			createEvent(event)
+				.then(res => {
+					setAlert(`${lang.eventRegisteredConfirmation}!`, AlertTypes.SUCCESS);
+					handleGoBack();
+				})
+				.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
+				.finally(() => setIsLoading(false));
+		} else {
+			editEvent(eventIdParam, event)
+				.then(res => {
+					setAlert(`${lang.eventUpdateConfirmation}!`, AlertTypes.SUCCESS);
+					handleGoBack();
+				})
+				.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
+				.finally(() => setIsLoading(false));
+			navigate(`/event/${eventIdParam}`);
+		}
 	}
+
+	console.log(eventIdParam);
 
 	useEffect(() => {
 		const abortController = new AbortController();
@@ -95,11 +109,35 @@ export function CreateEvent(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, fullUser]);
 
+	useEffect(() => {
+		if (eventIdParam === 'new') {
+			return;
+		}
+		getEventById(eventIdParam)
+			.then(res => {
+				setEvent({
+					...event,
+					title: res.title,
+					datetime: new Date(res.datetime),
+					description: res.description,
+					memberLimit: res.memberLimit,
+					isPrivate: res.isPrivate
+				});
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+	}, [eventIdParam]);
+
 	return (
 		<FormLayout>
 			<button className={styles.closeBtn} onClick={handleGoBack}></button>
 
-			<label className={styles.title}>{lang.createEventTitle}</label>
+			{eventIdParam === 'new' ? (
+				<label className={styles.title}>{lang.createEventTitle}</label>
+			) : (
+				<label className={styles.title}>{lang.editEventTitle}</label>
+			)}
 			{/* TODO: Cambiar esto, no debe ser label un título */}
 
 			<div className={styles.inputSection}>
@@ -164,38 +202,40 @@ export function CreateEvent(): JSX.Element {
 				</section>
 
 				<section className={styles.secondColumn}>
-					<section className={styles.checkboxesContainer}>
-						<div className={styles.internalTitle}>
-							<label className={styles.title}>{lang.rolesTitle}</label>
-							<span className={styles.extraDescription}>{lang.optionalDescription}</span>
-						</div>
+					{eventIdParam === 'new' && (
+						<section className={styles.checkboxesContainer}>
+							<div className={styles.internalTitle}>
+								<label className={styles.title}>{lang.rolesTitle}</label>
+								<span className={styles.extraDescription}>{lang.optionalDescription}</span>
+							</div>
 
-						<label htmlFor="isAsador" className={styles.fieldLabel}>
-							<input
-								id="isAsador"
-								type="checkbox"
-								className={styles.checkbox}
-								checked={event.isChef !== undefined ? true : false}
-								onChange={e => {
-									setEvent({ ...event, isChef: e.target.checked ? (user?.id as string) : undefined });
-								}}
-							/>
-							{lang.chef}
-						</label>
+							<label htmlFor="isAsador" className={styles.fieldLabel}>
+								<input
+									id="isAsador"
+									type="checkbox"
+									className={styles.checkbox}
+									checked={event.isChef !== undefined ? true : false}
+									onChange={e => {
+										setEvent({ ...event, isChef: e.target.checked ? (user?.id as string) : undefined });
+									}}
+								/>
+								{lang.chef}
+							</label>
 
-						<label htmlFor="isEncargadoCompras" className={styles.fieldLabel}>
-							<input
-								id="isEncargadoCompras"
-								type="checkbox"
-								className={styles.checkbox}
-								checked={event.isShoppingDesignee !== undefined ? true : false}
-								onChange={e => {
-									setEvent({ ...event, isShoppingDesignee: e.target.checked ? (user?.id as string) : undefined });
-								}}
-							/>
-							{lang.shoppingDesignee}
-						</label>
-					</section>
+							<label htmlFor="isEncargadoCompras" className={styles.fieldLabel}>
+								<input
+									id="isEncargadoCompras"
+									type="checkbox"
+									className={styles.checkbox}
+									checked={event.isShoppingDesignee !== undefined ? true : false}
+									onChange={e => {
+										setEvent({ ...event, isShoppingDesignee: e.target.checked ? (user?.id as string) : undefined });
+									}}
+								/>
+								{lang.shoppingDesignee}
+							</label>
+						</section>
+					)}
 
 					<section className={styles.rangeSelectionContainer}>
 						<label htmlFor="diners" className={styles.fieldLabel}>
@@ -248,17 +288,31 @@ export function CreateEvent(): JSX.Element {
 				</section>
 
 				<section className={styles.buttonContainer}>
-					<Button
-						kind="primary"
-						size="large"
-						id="registerBtn"
-						type="submit"
-						style={{ marginBottom: '10vh' }}
-						onClick={e => {
-							handleSubmit(e);
-						}}>
-						{lang.createEventBtn}
-					</Button>
+					{eventIdParam ? (
+						<Button
+							kind="primary"
+							size="large"
+							id="registerBtn"
+							type="submit"
+							style={{ marginBottom: '10vh' }}
+							onClick={e => {
+								handleSubmit(e);
+							}}>
+							{lang.editEventBtn}
+						</Button>
+					) : (
+						<Button
+							kind="primary"
+							size="large"
+							id="registerBtn"
+							type="submit"
+							style={{ marginBottom: '10vh' }}
+							onClick={e => {
+								handleSubmit(e);
+							}}>
+							{lang.createEventBtn}
+						</Button>
+					)}
 				</section>
 			</div>
 		</FormLayout>
