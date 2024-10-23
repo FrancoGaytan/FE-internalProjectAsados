@@ -289,7 +289,7 @@ export function CreateEvent(): JSX.Element {
 				</section>
 
 				<section className={styles.buttonContainer}>
-					{eventIdParam ? (
+					{eventIdParam === 'new' ? (
 						<Button
 							kind="primary"
 							size="large"
@@ -299,7 +299,7 @@ export function CreateEvent(): JSX.Element {
 							onClick={e => {
 								handleSubmit(e);
 							}}>
-							{lang.editEventBtn}
+							{lang.createEventBtn}
 						</Button>
 					) : (
 						<Button
@@ -311,7 +311,7 @@ export function CreateEvent(): JSX.Element {
 							onClick={e => {
 								handleSubmit(e);
 							}}>
-							{lang.createEventBtn}
+							{lang.editEventBtn}
 						</Button>
 					)}
 				</section>
