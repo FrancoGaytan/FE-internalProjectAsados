@@ -85,6 +85,8 @@ export function CreateEvent(): JSX.Element {
 		}
 	}
 
+	console.log(eventIdParam);
+
 	useEffect(() => {
 		const abortController = new AbortController();
 
