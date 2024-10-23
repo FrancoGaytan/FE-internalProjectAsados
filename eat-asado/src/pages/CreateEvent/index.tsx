@@ -76,15 +76,14 @@ export function CreateEvent(): JSX.Element {
 			editEvent(eventIdParam, event)
 				.then(res => {
 					setAlert(`${lang.eventUpdateConfirmation}!`, AlertTypes.SUCCESS);
-					handleGoBack();
 				})
 				.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
 				.finally(() => setIsLoading(false));
-			navigate(`/event/${eventIdParam}`);
+			setTimeout(() => {
+				navigate(`/event/${eventIdParam}`);
+			}, 1000);
 		}
 	}
-
-	console.log(eventIdParam);
 
 	useEffect(() => {
 		const abortController = new AbortController();
