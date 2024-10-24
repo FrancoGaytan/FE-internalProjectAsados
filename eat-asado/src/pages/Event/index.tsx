@@ -396,6 +396,16 @@ export function Event(): JSX.Element {
 									{lang.organizer} {event.organizer.name}
 								</h5>
 
+								<h5 className={styles.infoData}>
+									{lang.penalizationAmount + ':'} {event.penalization ? '$' + event.penalization : lang.noPenalizationAmount}
+								</h5>
+
+								{event.penalization > 0 && (
+									<h5 className={styles.infoData}>
+										{lang.penalizationStartDate} {getOnlyDate(new Date(event.penalizationStartDate))}
+									</h5>
+								)}
+
 								<div className={styles.secondRow}>
 									<div className={styles.sectionTitle}>
 										<div className={styles.restaurantLogo} />
