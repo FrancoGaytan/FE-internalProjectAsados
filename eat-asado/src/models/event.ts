@@ -56,4 +56,6 @@ export interface EventResponse {
 	_id: string;
 	__v: 0;
 	isPrivate?: boolean;
+	penalization: number;
+	penalizationStartDate: Date;
 }

@@ -131,7 +131,7 @@ export function CreateEvent(): JSX.Element {
 
 	useEffect(() => {
 		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
-
+		setPenalizationSection(!!event.penalization);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, fullUser]);
 
@@ -147,12 +147,16 @@ export function CreateEvent(): JSX.Element {
 					datetime: new Date(res.datetime),
 					description: res.description,
 					memberLimit: res.memberLimit,
-					isPrivate: res.isPrivate
+					isPrivate: res.isPrivate,
+					penalization: res.penalization,
+					state: res.state
 				});
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
+		setPenalizationSection(!!event.penalization);
+		console.log(event.penalization);
 	}, [eventIdParam]);
 
 	return (
@@ -317,6 +321,7 @@ export function CreateEvent(): JSX.Element {
 								className={styles.checkbox}
 								checked={penalizationSection ? true : false}
 								onChange={e => {
+									penalizationSection && setEvent({ ...event, penalization: 0 });
 									setPenalizationSection(!penalizationSection);
 								}}
 							/>
