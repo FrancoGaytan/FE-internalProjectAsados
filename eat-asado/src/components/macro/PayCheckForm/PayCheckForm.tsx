@@ -43,8 +43,16 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 	const [payForm, setPayForm] = useState<ITransferReceiptRequest>(initialPayForm);
 
+	function gettingDateDiference(): number {
+		const startingDate = new Date(event.penalizationStartDate);
+		const todayDate = new Date();
+		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
+		return diffInMilliseconds / (1000 * 60 * 60 * 24);
+	}
+
 	function gettingPriceToPay(): number {
 		let price = 0;
+		let currentPenalization = 0;
 
 		if (!event) {
 			return price;
@@ -54,7 +62,8 @@ export default function PayCheckForm(props: PayCheckProps) {
 			price = price + tr.amount;
 		});
 
-		return Math.round(price / event.members.length);
+		if (event.penalization && gettingDateDiference() > 0) currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+		return Math.round(price / event.members.length + currentPenalization);
 	}
 
 	function checkForReceiptAndTransfer() {
@@ -145,7 +154,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 			<div className={styles.paycheckContent}>
 				{/* TODO: Demasiados h5, no es semántico. */}
-				<h5 className={styles.paymentData}>
+				<h5 className={styles.paymentDataSD}>
 					{lang.shoppingDesignee} {event?.shoppingDesignee?.name}
 				</h5>
 

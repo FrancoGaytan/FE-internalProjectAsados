@@ -215,6 +215,52 @@
 		cursor: pointer;
 		display: inline;
 	}
+	.hiddenPenalizationOptions {
+		margin-top: 30px;
+		position: relative;
+		//margin-left: 30px;
+		.penalizationInputText {
+			color: rgb(217, 215, 215);
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+		.penalizationAmount {
+			display: flex;
+			align-items: center;
+			.penalizationAmountInput {
+				min-width: 50px;
+				max-width: 50px;
+				height: 45px;
+				display: inline-block;
+				margin-left: 10px;
+				padding-left: 10px;
+				padding-right: 0px;
+			}
+		}
+		.calendarPicker {
+			position: relative;
+			margin-top: 15px;
+			.calendarInput {
+				position: absolute;
+				top: -10px;
+				left: -60px;
+				z-index: 200;
+				opacity: 0;
+			}
+			.calendarLogo {
+				position: absolute;
+				background-size: contain;
+				//pointer-events: none;
+				width: 30px;
+				height: 30px;
+				right: 70px;
+				top: -35px;
+				z-index: 10;
+				background-color: transparent;
+				background-image: url('../../../public/assets/pictures/icons-calendario-blanco.png');
+			}
+		}
+	}
 }
 
 .rangeSelectionContainer {

@@ -16,5 +16,9 @@ export const createEvent = Object.seal({
 	eventRegistrationFailure: 'Event registration failed',
 	completeAllInputs: 'Please, complete all the fields',
 	needToHaveCbu: 'You need to have you CBU or alias loaded to be shopping designee',
-	isPrivate: 'The event is Private'
+	isPrivate: 'The event is Private',
+	hasPenalization: 'Debtors penalization',
+	amountPenalization: 'Penalization amount per day',
+	penalizationStartingDate: 'Penalization starting date',
+	wrongPenalizationDate: 'Penalization starting date must be after the event´s date'
 });

@@ -13,6 +13,8 @@ export interface IEvent {
 	isChef?: string | undefined; // TODO: No debería ser boolean esto?
 	isShoppingDesignee?: string; // TODO: No debería ser boolean esto?
 	isPrivate: boolean;
+	penalization: number;
+	penalizationStartDate: Date;
 }
 
 export interface IPublicEvent {
@@ -54,4 +56,6 @@ export interface EventResponse {
 	_id: string;
 	__v: 0;
 	isPrivate?: boolean;
+	penalization: number;
+	penalizationStartDate: Date;
 }

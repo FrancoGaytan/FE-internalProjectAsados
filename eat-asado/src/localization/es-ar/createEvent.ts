@@ -16,5 +16,9 @@ export const createEvent = Object.seal({
 	eventRegistrationFailure: 'El registro del evento a fallado',
 	completeAllInputs: 'Por favor, completar todos los campos',
 	needToHaveCbu: 'Necesitas cargar Alias o CBU para ser Encargado de Compras',
-	isPrivate: 'El evento es privado'
+	isPrivate: 'El evento es privado',
+	hasPenalization: 'Penalización por deudor',
+	amountPenalization: 'Monto de penalización',
+	penalizationStartingDate: 'Día de comienzo penalización',
+	wrongPenalizationDate: 'Día de penalización debe ser posterior al día del evento'
 });

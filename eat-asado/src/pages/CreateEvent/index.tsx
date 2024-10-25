@@ -21,6 +21,9 @@ export function CreateEvent(): JSX.Element {
 	const { setAlert } = useAlert();
 	const { setIsLoading } = useAuth();
 	const [fullUser, setFullUser] = useState<IUser>();
+	const [penalizationSection, setPenalizationSection] = useState<boolean>(false);
+	const dateTimeRef = useRef<HTMLInputElement>(null);
+	const [calendarState, setCalendarState] = useState<boolean>(false);
 
 	const [event, setEvent] = useState<IEvent>({
 		title: '',
@@ -32,7 +35,9 @@ export function CreateEvent(): JSX.Element {
 		organizer: user ? user.id : '',
 		isChef: undefined,
 		isShoppingDesignee: undefined,
-		isPrivate: false
+		isPrivate: false,
+		penalization: 0,
+		penalizationStartDate: new Date()
 	});
 
 	function handleDinersChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -50,6 +55,19 @@ export function CreateEvent(): JSX.Element {
 		navigate('/');
 	}
 
+	function handleCalendarVisibility(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+		e.preventDefault();
+		if (dateTimeRef.current) {
+			if (calendarState) {
+				setCalendarState(!calendarState);
+				dateTimeRef.current.blur();
+			} else {
+				setCalendarState(!calendarState);
+				dateTimeRef.current.click();
+			}
+		}
+	}
+
 	function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 		e.preventDefault();
 		if (!event.description || !event.title) {
@@ -58,6 +76,15 @@ export function CreateEvent(): JSX.Element {
 		}
 		if (!fullUser?.alias && !fullUser?.cbu && !!event.isShoppingDesignee) {
 			setAlert(lang.needToHaveCbu, AlertTypes.ERROR);
+			return;
+		}
+		if (event.penalization && event.penalizationStartDate <= event.datetime) {
+			setAlert(lang.wrongPenalizationDate, AlertTypes.ERROR);
+			return;
+		}
+		if (event.penalization && Number(event.penalization) === 0) {
+			console.log(event.penalization);
+			setAlert(lang.wrongPenalizationDate, AlertTypes.ERROR);
 			return;
 		}
 		setIsLoading(true);
@@ -85,8 +112,6 @@ export function CreateEvent(): JSX.Element {
 		}
 	}
 
-	console.log(eventIdParam);
-
 	useEffect(() => {
 		const abortController = new AbortController();
 
@@ -106,7 +131,7 @@ export function CreateEvent(): JSX.Element {
 
 	useEffect(() => {
 		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
-
+		setPenalizationSection(!!event.penalization);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, fullUser]);
 
@@ -122,12 +147,16 @@ export function CreateEvent(): JSX.Element {
 					datetime: new Date(res.datetime),
 					description: res.description,
 					memberLimit: res.memberLimit,
-					isPrivate: res.isPrivate
+					isPrivate: res.isPrivate,
+					penalization: res.penalization,
+					state: res.state
 				});
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
+		setPenalizationSection(!!event.penalization);
+		console.log(event.penalization);
 	}, [eventIdParam]);
 
 	return (
@@ -285,6 +314,65 @@ export function CreateEvent(): JSX.Element {
 							/>
 							{lang.isPrivate}
 						</label>
+						<label htmlFor="hasPenalization" className={styles.fieldLabel}>
+							<input
+								id="hasPenalization"
+								type="checkbox"
+								className={styles.checkbox}
+								checked={penalizationSection ? true : false}
+								onChange={e => {
+									penalizationSection && setEvent({ ...event, penalization: 0 });
+									setPenalizationSection(!penalizationSection);
+								}}
+							/>
+							{lang.hasPenalization}
+						</label>
+						{penalizationSection && (
+							<div className={styles.hiddenPenalizationOptions}>
+								<div className={styles.penalizationAmount}>
+									<p className={styles.penalizationInputText}>{lang.amountPenalization}</p>
+									<input
+										id="dinersQuantity"
+										className={styles.penalizationAmountInput}
+										type="number"
+										value={event.penalization}
+										min={1}
+										max={10000}
+										onChange={e => setEvent({ ...event, penalization: Number(e.target.value) })}
+									/>
+								</div>
+								<div className={styles.calendarPicker}>
+									<p className={styles.penalizationInputText}>{lang.penalizationStartingDate}</p>
+									<button
+										className={styles.calendarLogo}
+										onClick={e => {
+											handleCalendarVisibility(e);
+										}}></button>
+									<input
+										id="fechaHora"
+										placeholder="Fecha y Hora"
+										type="datetime-local"
+										ref={dateTimeRef}
+										className={styles.calendarInput}
+										value={event.penalizationStartDate.toISOString().slice(0, -8)}
+										onChange={e => {
+											const inputValue = e.target.value;
+											if (inputValue) {
+												const localDate = new Date(inputValue);
+												// Verifica si el valor se ha convertido en una fecha válida
+												if (!isNaN(localDate.getTime())) {
+													const utcOffset = localDate.getTimezoneOffset();
+													const adjustedDate = new Date(localDate.getTime() - utcOffset * 60000);
+													setEvent({ ...event, penalizationStartDate: adjustedDate });
+												} else {
+													console.error('Invalid Date:', inputValue);
+												}
+											}
+										}}
+									/>
+								</div>
+							</div>
+						)}
 					</section>
 				</section>
 
