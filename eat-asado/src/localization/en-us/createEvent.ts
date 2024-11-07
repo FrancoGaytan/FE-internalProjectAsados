@@ -1,5 +1,6 @@
 export const createEvent = Object.seal({
 	createEventTitle: 'Create Event',
+	editEventTitle: 'Edit Event',
 	eventName: 'Event Name',
 	dateTime: 'Date and Time',
 	eventDescription: 'Description',
@@ -8,10 +9,16 @@ export const createEvent = Object.seal({
 	chef: 'Chef',
 	shoppingDesignee: 'Shopping Designee',
 	createEventBtn: 'CREATE EVENT',
+	editEventBtn: 'EDIT EVENT',
 	memberLimit: 'Member Limit',
 	eventRegisteredConfirmation: 'Event registered successfully',
+	eventUpdateConfirmation: 'Event modified successfully',
 	eventRegistrationFailure: 'Event registration failed',
 	completeAllInputs: 'Please, complete all the fields',
 	needToHaveCbu: 'You need to have you CBU or alias loaded to be shopping designee',
-	isPrivate: 'The event is Private'
+	isPrivate: 'The event is Private',
+	hasPenalization: 'Debtors penalization',
+	amountPenalization: 'Penalization amount per day',
+	penalizationStartingDate: 'Penalization starting date',
+	wrongPenalizationDate: 'Penalization starting date must be after the event´s date'
 });

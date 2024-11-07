@@ -193,7 +193,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 									id="infoBtn"
 									style={{ marginBottom: '10vh' }}
 									onClick={e => {
-										e.preventDefault();
+										//e.preventDefault();
 										handleParticipation();
 									}}>
 									{lang.participateBtn}

@@ -81,5 +81,8 @@ export const eventHome = Object.seal({
 	linkCopiedToClipboard: 'Link copiado al portapapeles',
 	needLoginRedirecting: 'Necesitas estar loggeado para inscribirte al evento, redirigiendo a login',
 	reviewText: 'Opinión',
-	reviewTexts: 'Opiniones'
+	reviewTexts: 'Opiniones',
+	noPenalizationAmount: 'Sin penalización',
+	penalizationAmount: 'Penalización',
+	penalizationStartDate: 'Comienzo de penalización'
 });

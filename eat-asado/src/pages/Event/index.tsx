@@ -270,6 +270,10 @@ export function Event(): JSX.Element {
 		setAlert(lang.linkCopiedToClipboard, AlertTypes.SUCCESS);
 	}
 
+	function editCurrentEvent(): void {
+		navigate(`/createEvent/${event?._id}`);
+	}
+
 	useEffect(() => {
 		if (!userIdParams) {
 			return;
@@ -347,7 +351,7 @@ export function Event(): JSX.Element {
 				<section className={styles.header}>
 					<h1>{lang.messageBanner}</h1>
 
-					<Button kind="primary" size="large" onClick={() => navigate('/createEvent')}>
+					<Button kind="primary" size="large" onClick={() => navigate('/createEvent/new')}>
 						{lang.newEventButton}
 					</Button>
 				</section>
@@ -367,7 +371,13 @@ export function Event(): JSX.Element {
 						)}
 						<main className={styles.eventData}>
 							<div className={styles.eventOrganization}>
-								{event.isPrivate && <button className={styles.copyLinkToEvent} onClick={() => copyLinkEvent()}></button>}
+								<section className={styles.eventBtns}>
+									{event.isPrivate && <button className={styles.copyLinkToEvent} onClick={() => copyLinkEvent()}></button>}
+									{event.organizer?._id === user?.id && (
+										<button className={styles.editEventBtn} onClick={() => editCurrentEvent()}></button>
+									)}
+								</section>
+
 								<div className={styles.sectionTitle}>
 									<div className={styles.calendarLogo}></div>
 
@@ -385,6 +395,16 @@ export function Event(): JSX.Element {
 								<h5 className={styles.infoData}>
 									{lang.organizer} {event.organizer.name}
 								</h5>
+
+								<h5 className={styles.infoData}>
+									{lang.penalizationAmount + ':'} {event.penalization ? '$' + event.penalization : lang.noPenalizationAmount}
+								</h5>
+
+								{event.penalization > 0 && (
+									<h5 className={styles.infoData}>
+										{lang.penalizationStartDate} {getOnlyDate(new Date(event.penalizationStartDate))}
+									</h5>
+								)}
 
 								<div className={styles.secondRow}>
 									<div className={styles.sectionTitle}>

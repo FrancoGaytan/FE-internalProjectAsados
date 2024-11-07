@@ -1,5 +1,6 @@
 export const createEvent = Object.seal({
 	createEventTitle: 'Crear Evento',
+	editEventTitle: 'Editar Evento',
 	eventName: 'Nombre del Evento',
 	dateTime: 'Fecha y Hora',
 	eventDescription: 'Descripción',
@@ -8,10 +9,16 @@ export const createEvent = Object.seal({
 	chef: 'Cocinero',
 	shoppingDesignee: 'Encargado de Compras',
 	createEventBtn: 'CREAR EVENTO',
+	editEventBtn: 'EDITAR EVENT',
 	memberLimit: 'Member Limit',
+	eventUpdateConfirmation: 'Evento modificado exitosamente',
 	eventRegisteredConfirmation: 'Evento registrado exitosamente',
 	eventRegistrationFailure: 'El registro del evento a fallado',
 	completeAllInputs: 'Por favor, completar todos los campos',
 	needToHaveCbu: 'Necesitas cargar Alias o CBU para ser Encargado de Compras',
-	isPrivate: 'El evento es privado'
+	isPrivate: 'El evento es privado',
+	hasPenalization: 'Penalización por deudor',
+	amountPenalization: 'Monto de penalización',
+	penalizationStartingDate: 'Día de comienzo penalización',
+	wrongPenalizationDate: 'Día de penalización debe ser posterior al día del evento'
 });
