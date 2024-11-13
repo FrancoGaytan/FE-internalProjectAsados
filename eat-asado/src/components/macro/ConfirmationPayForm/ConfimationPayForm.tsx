@@ -58,8 +58,18 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		}
 	}
 
+	function gettingDateDiference(): number {
+		const startingDate = new Date(event.penalizationStartDate);
+		const todayDate = new Date(transferReceipt?.datetime as Date);
+		console.log('starting date' + startingDate);
+		console.log('today date' + todayDate);
+		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
+		return diffInMilliseconds / (1000 * 60 * 60 * 24);
+	}
+
 	function gettingPriceToPay(): number {
 		let price = 0;
+		let currentPenalization = 0;
 
 		if (!event) {
 			return price;
@@ -69,7 +79,14 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 			price = price + tr.amount;
 		});
 
-		return Math.round(price / event.members.length);
+		if (event.penalization && gettingDateDiference() > 0) {
+			console.log(gettingDateDiference());
+			if (new Date(transferReceipt?.datetime as Date) < new Date()) {
+				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+			}
+		}
+
+		return Math.round(price / event.members.length + currentPenalization);
 	}
 
 	useEffect(() => {
@@ -79,6 +96,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		getTransferReceipt(transferReceiptId)
 			.then(res => {
 				setTransferReceipt(res);
+				console.log(res);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);

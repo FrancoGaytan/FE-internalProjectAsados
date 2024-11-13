@@ -46,6 +46,8 @@ export default function PayCheckForm(props: PayCheckProps) {
 	function gettingDateDiference(): number {
 		const startingDate = new Date(event.penalizationStartDate);
 		const todayDate = new Date();
+		console.log('starting date' + startingDate);
+		console.log('today date' + todayDate);
 		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
 		return diffInMilliseconds / (1000 * 60 * 60 * 24);
 	}
@@ -62,7 +64,12 @@ export default function PayCheckForm(props: PayCheckProps) {
 			price = price + tr.amount;
 		});
 
-		if (event.penalization && gettingDateDiference() > 0) currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+		if (event.penalization && gettingDateDiference() > 0) {
+			console.log(gettingDateDiference());
+			if (new Date(event.penalizationStartDate) < new Date()) {
+				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+			}
+		}
 		return Math.round(price / event.members.length + currentPenalization);
 	}
 
