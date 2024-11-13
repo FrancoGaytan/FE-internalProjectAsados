@@ -61,8 +61,6 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 	function gettingDateDiference(): number {
 		const startingDate = new Date(event.penalizationStartDate);
 		const todayDate = new Date(transferReceipt?.datetime as Date);
-		console.log('starting date' + startingDate);
-		console.log('today date' + todayDate);
 		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
 		return diffInMilliseconds / (1000 * 60 * 60 * 24);
 	}
@@ -96,7 +94,6 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		getTransferReceipt(transferReceiptId)
 			.then(res => {
 				setTransferReceipt(res);
-				console.log(res);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
