@@ -25,11 +25,18 @@ import Modal from '../../components/macro/Modal/Modal';
 import PayCheckForm from '../../components/macro/PayCheckForm/PayCheckForm';
 import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/PurchaseReceiptForm';
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
-import { IPurchaseReceipt } from '../../models/purchases';
+import { IPurchaseReceipt, IPurchaseReceiptImage } from '../../models/purchases';
 import { downloadFile } from '../../utils/utilities';
+import FilesPreview from '../../components/macro/FilesPreview/FilesPreview';
 import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
-import { transferReceipt } from '../../models/transfer';
+import { ITransferReceiptImage, transferReceipt } from '../../models/transfer';
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
+
+interface FilePreview {
+	uri: string;
+	fileType?: string;
+	fileName?: string;
+}
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -52,6 +59,8 @@ export function Event(): JSX.Element {
 	const [userToApprove, setUserToApprove] = useState('');
 	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
+	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 
 	function parseMinutes(minutes: string) {
@@ -265,6 +274,27 @@ export function Event(): JSX.Element {
 		}
 	}
 
+	async function PreviewPurchase(purchase: IPurchaseReceipt) {
+		setOpenFilePreview(true);
+		try {
+			const purchaseImage = await getImage(purchase.image);
+			const objectURL = URL.createObjectURL(purchaseImage);
+			setFilePreview({
+				uri: objectURL,
+				fileType: purchaseImage.type.split('/')[1], // Extrae el tipo de archivo
+				fileName: 'image-from-api'
+			});
+
+			setTimeout(() => {
+				setOpenFilePreview(true);
+			}, 1000);
+
+			console.log(purchaseImage);
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
 	function copyLinkEvent(): void {
 		navigator.clipboard.writeText(currentUrl);
 		setAlert(lang.linkCopiedToClipboard, AlertTypes.SUCCESS);
@@ -344,7 +374,6 @@ export function Event(): JSX.Element {
 				console.error('Catch in context: ', e);
 			});
 	}, [transferReceiptId]);
-
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -442,6 +471,13 @@ export function Event(): JSX.Element {
 														onClick={e => {
 															e.preventDefault();
 															downloadPurchase(purchase);
+														}}></button>
+
+													<button
+														className={styles.previewBtn}
+														onClick={e => {
+															e.preventDefault();
+															PreviewPurchase(purchase);
 														}}></button>
 												</div>
 											))}
@@ -640,6 +676,7 @@ export function Event(): JSX.Element {
 					openModal={() => openValidationPopup}
 					closeModal={() => closeValidationPopup}></ConfirmationPayForm>
 			</Modal>
+			{filePreview && <FilesPreview doc={[{ uri: filePreview.uri, fileType: 'png', fileName: 'file' }]} state={openFilePreview} />}
 		</PrivateFormLayout>
 	);
 }

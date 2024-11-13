@@ -159,13 +159,15 @@
 				}
 				.deleteBtn {
 					background-image: url('../../../public/assets/pictures/deleteIcon.png');
-					width: 15px;
-					height: 15px;
-					background-size: cover;
+					width: 30px;
+					height: 30px;
+					background-size: 15px;
+					background-repeat: no-repeat;
+					background-position: center;
 					background-color: white;
-					margin-top: auto;
-					margin-bottom: auto;
-					margin-left: 10px;
+					margin: 0;
+					//margin-bottom: auto;
+					//margin-left: 10px;
 				}
 
 				.downloadBtn {
@@ -174,7 +176,19 @@
 					height: 30px;
 					background-size: cover;
 					background-color: white;
-					margin: auto;
+					margin: 0;
+					margin-left: 10px;
+				}
+
+				.previewBtn {
+					background-image: url('../../../public/assets/pictures/icons-preview.png');
+					width: 30px;
+					height: 30px;
+					background-size: 25px;
+					background-repeat: no-repeat;
+					background-position: center;
+					background-color: white;
+					margin: 0;
 					margin-left: 10px;
 				}
 

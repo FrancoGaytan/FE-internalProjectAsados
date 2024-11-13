@@ -4,7 +4,7 @@ import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { useAlert } from '../../stores/AlertContext';
-import { forgotPassword } from '../../service/password';
+import { forgotPassword, verifyCode } from '../../service/password';
 import styles from './styles.module.scss';
 import { useNavigate } from 'react-router-dom';
 
