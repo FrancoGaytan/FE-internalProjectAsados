@@ -78,7 +78,6 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		});
 
 		if (event.penalization && gettingDateDiference() > 0) {
-			console.log(gettingDateDiference());
 			if (new Date(transferReceipt?.datetime as Date) < new Date()) {
 				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
 			}
