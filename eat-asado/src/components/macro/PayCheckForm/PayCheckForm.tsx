@@ -62,7 +62,11 @@ export default function PayCheckForm(props: PayCheckProps) {
 			price = price + tr.amount;
 		});
 
-		if (event.penalization && gettingDateDiference() > 0) currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+		if (event.penalization && gettingDateDiference() > 0) {
+			if (new Date(event.penalizationStartDate) < new Date()) {
+				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+			}
+		}
 		return Math.round(price / event.members.length + currentPenalization);
 	}
 
