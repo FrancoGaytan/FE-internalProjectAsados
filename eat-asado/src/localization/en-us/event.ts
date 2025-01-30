@@ -32,5 +32,5 @@ export const event = Object.seal({
 	privateEvent: 'Private Event',
 	amountToBePaid: 'Amount: $',
 	linkCopiedToClipboard: 'Info copied to clipboard',
-	fastAproveText: 'This user haven´t submit any payment yet, do you want to aprove anyway?'
+	fastAproveText: 'This user hasn´t submitted any payment yet, do you want to approve anyway?'
 });
