@@ -1,0 +1,26 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.paycheckContent {
+	margin-left: 15px;
+}
+
+.popupTitle {
+	color: white;
+	font-size: 15px;
+	font-family: var(--primaryFont);
+}
+
+.downloadContent {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+}
+.btnSection {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}
