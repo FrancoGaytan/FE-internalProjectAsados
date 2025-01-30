@@ -30,6 +30,7 @@ import { downloadFile } from '../../utils/utilities';
 import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
 import { transferReceipt } from '../../models/transfer';
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
+import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -43,6 +44,7 @@ export function Event(): JSX.Element {
 	const [modalPaycheckState, setModalPaycheckState] = useState(false);
 	const [modalValidationState, setModalValidationState] = useState(false);
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
+	const [modalFastAproval, setModalFastAproval] = useState(false);
 	const [userHasPaid, setUserHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState([]);
 	const baseUrl = getBaseUrl();
@@ -51,6 +53,7 @@ export function Event(): JSX.Element {
 	const [eventParticipants, setEventParticipants] = useState<EventUserResponse[]>([]);
 	const [userToApprove, setUserToApprove] = useState('');
 	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [userToFastAprove, setUserToFastAprove] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 
@@ -197,12 +200,22 @@ export function Event(): JSX.Element {
 		setModalPurchaseRecipt(false);
 	}
 
+	function closeModalFastAproval(): void {
+		setModalFastAproval(false);
+		setUserToApprove('');
+	}
+
 	function openModal(): void {
 		setModalPaycheckState(true);
 	}
 
 	function openModalPurchaseRecipt(): void {
 		setModalPurchaseRecipt(true);
+	}
+
+	function openModalFastAproval(userId: string): void {
+		setUserToFastAprove(userId as string);
+		setModalFastAproval(true);
 	}
 
 	function openValidationPopup(): void {
@@ -344,7 +357,7 @@ export function Event(): JSX.Element {
 				console.error('Catch in context: ', e);
 			});
 	}, [transferReceiptId]);
-
+	console.log(event);
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -539,7 +552,15 @@ export function Event(): JSX.Element {
 															{lang.validateBtn}
 														</Button>
 													) : (
-														<h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
+														<>
+															<h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
+															<button
+																className={styles.fastAproveBtn}
+																onClick={e => {
+																	e.preventDefault();
+																	openModalFastAproval(member.userId);
+																}}></button>
+														</>
 													))}
 											</div>
 										))}
@@ -639,6 +660,13 @@ export function Event(): JSX.Element {
 					transferReceiptId={transferReceiptId}
 					openModal={() => openValidationPopup}
 					closeModal={() => closeValidationPopup}></ConfirmationPayForm>
+			</Modal>
+
+			<Modal isOpen={modalFastAproval} closeModal={closeModalFastAproval}>
+				<ConfirmationFastAprovalForm
+					eventId={userIdParams.eventId as string}
+					userId={userToFastAprove}
+					closeModal={closeModalFastAproval}></ConfirmationFastAprovalForm>
 			</Modal>
 		</PrivateFormLayout>
 	);

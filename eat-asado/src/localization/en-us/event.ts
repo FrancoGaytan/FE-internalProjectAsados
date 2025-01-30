@@ -31,5 +31,6 @@ export const event = Object.seal({
 	descriptionMissing: 'Transfer description is missing',
 	privateEvent: 'Private Event',
 	amountToBePaid: 'Amount: $',
-	linkCopiedToClipboard: 'Info copied to clipboard'
+	linkCopiedToClipboard: 'Info copied to clipboard',
+	fastAproveText: 'This user haven´t submit any payment yet, do you want to aprove anyway?'
 });

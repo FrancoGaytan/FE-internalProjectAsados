@@ -31,5 +31,6 @@ export const event = Object.seal({
 	descriptionMissing: 'Es necesario ingresar una descripción de pago',
 	privateEvent: 'Evento Privado',
 	linkCopiedToClipboard: 'Info copiada al portapapeles',
-	amountToBePaid: 'Cantidad: $'
+	amountToBePaid: 'Cantidad: $',
+	fastAproveText: 'Este usuario aún no ha abonado, ¿desea aprobar de todas formas?'
 });
