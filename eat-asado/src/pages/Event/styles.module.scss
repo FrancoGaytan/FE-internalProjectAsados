@@ -269,6 +269,16 @@
 						color: red;
 						align-self: center;
 					}
+					.fastAproveBtn {
+						background-image: url('../../../public/assets/pictures/icons-fastAprove.png');
+						width: 20px;
+						height: 20px;
+						background-size: cover;
+						background-color: rgb(255, 255, 255);
+						margin-top: auto;
+						margin-bottom: auto;
+						margin-left: 15px;
+					}
 				}
 
 				.inChargeLogo {
