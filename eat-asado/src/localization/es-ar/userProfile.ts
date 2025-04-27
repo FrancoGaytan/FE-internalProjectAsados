@@ -15,7 +15,7 @@ export const userProfile = Object.seal({
 	headerWelcome: 'Bienvenido: ',
 	logoutBtn: 'SALIR',
 	loginBtn: 'INICIAR SESION',
-	successMsg: 'La informacion se ha modificado con exito',
+	successMsg: 'La informacion se ha modificado con éxito',
 	failureMsg: 'Ha habido un problema con la actualizacion de su informacion',
-	errorTypeFile: 'La imagen de perfil debe ser de tipo .png .jpeg o .jpg'
+	errorTypeFile: 'La imagen de perfil debe ser de tipo png, jpeg o jpg'
 });

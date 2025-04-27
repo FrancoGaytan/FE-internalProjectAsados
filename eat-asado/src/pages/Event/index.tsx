@@ -27,14 +27,14 @@ import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/Purc
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
 import { IPurchaseReceipt } from '../../models/purchases';
 import { downloadFile } from '../../utils/utilities';
-import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
+import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfirmationPayForm';
 import { transferReceipt } from '../../models/transfer';
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
-import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
+import ConfirmationFastApprovalForm from '../../components/macro/ConfirmationFastApprovalForm/ConfirmationPayForm';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
-	const { user, isRedirecting, setRedirection } = useAuth();
+	const { user, setRedirection } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { setAlert } = useAlert();
@@ -45,23 +45,21 @@ export function Event(): JSX.Element {
 	const [modalValidationState, setModalValidationState] = useState(false);
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [modalFastAproval, setModalFastAproval] = useState(false);
-	const [userHasPaid, setUserHasPaid] = useState(false);
+	const [userHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState([]);
 	const baseUrl = getBaseUrl();
 	const currentUrl = `${baseUrl}${location.pathname}${location.search}${location.hash}`;
 	const [transferReceiptId, setTransferReceiptId] = useState<string | undefined>(undefined);
 	const [eventParticipants, setEventParticipants] = useState<EventUserResponse[]>([]);
-	const [userToApprove, setUserToApprove] = useState('');
-	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [, setUserToApprove] = useState('');
+	const [, setTransferReceipt] = useState<transferReceipt>();
 	const [userToFastAprove, setUserToFastAprove] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 
 	function parseMinutes(minutes: string) {
-		let newMinutes = minutes;
-		if (Number(minutes) < 10) {
-			newMinutes = '0' + minutes;
-		}
+		const newMinutes = Number(minutes) < 10 ? '0' + minutes : minutes;
+
 		return newMinutes;
 	}
 
@@ -91,53 +89,53 @@ export function Event(): JSX.Element {
 			subscribeToAnEvent(user?.id as string, event?._id)
 				.then(res => {
 					setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
-					setTimeout(() => window.location.reload(), 1000);
+					setTimeout(window.location.reload, 1000);
 				})
 				.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR))
 				.finally(() => setIsLoading(false));
 		}
 	}
 
-	function removeResponsabilitiesAtUnsubscribing(): void {
-		event?.chef && event?.chef?._id === user?.id && toogleChef();
-		event?.shoppingDesignee && event?.shoppingDesignee?._id === user?.id && toogleShopDesignee();
+	function removeResponsibilitiesAtUnsubscribing(): void {
+		event?.chef && event?.chef?._id === user?.id && toggleChef();
+		event?.shoppingDesignee && event?.shoppingDesignee?._id === user?.id && toggleShopDesignee();
 	}
 
 	function unsubscribeUserToEvent(): void {
 		if (!user) {
 			return;
 		}
-		removeResponsabilitiesAtUnsubscribing();
+		removeResponsibilitiesAtUnsubscribing();
 
 		unsubscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
 				setAlert(`${lang.userRemovedSuccessfully}!`, AlertTypes.SUCCESS);
-				setTimeout(() => window.location.reload(), 1000);
+				setTimeout(window.location.reload, 1000);
 			})
-			.catch(e => setAlert(`${lang.userRemovingFailure}`, AlertTypes.ERROR));
+			.catch(e => setAlert(lang.userRemovingFailure, AlertTypes.ERROR));
 	}
 
-	function toogleParticipation(): void {
+	function toggleParticipation(): void {
 		isUserIntoEvent() ? unsubscribeUserToEvent() : subscribeUserToEvent();
 	}
 
-	function toogleChef(): void {
+	function toggleChef(): void {
 		!event?.chef
 			? editRoles(event?._id, { ...event, chef: actualUser })
 					.then(res => {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => setTimeout(() => window.location.reload(), 1000))
+					.finally(() => setTimeout(window.location.reload, 1000))
 			: editRoles(event?._id, { ...event, chef: null })
 					.then(res => {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => setTimeout(() => window.location.reload(), 1000));
+					.finally(() => setTimeout(window.location.reload, 1000));
 	}
 
-	function toogleShopDesignee(): void {
+	function toggleShopDesignee(): void {
 		if (!(actualUser?.cbu || actualUser?.alias)) {
 			setAlert(`${lang.paymentDataIsNecessary}`, AlertTypes.INFO);
 			return;
@@ -149,13 +147,13 @@ export function Event(): JSX.Element {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => setTimeout(() => window.location.reload(), 1000))
+					.finally(() => setTimeout(window.location.reload, 1000))
 			: editRoles(event?._id, { ...event, shoppingDesignee: null })
 					.then(res => {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => setTimeout(() => window.location.reload(), 1000));
+					.finally(() => setTimeout(window.location.reload, 1000));
 	}
 
 	function deleteTheEvent(): void {
@@ -172,10 +170,10 @@ export function Event(): JSX.Element {
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
 					.then(res => {
 						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
-						setTimeout(() => window.location.reload(), 1000);
+						setTimeout(window.location.reload, 1000);
 					})
 					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
-			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
+			: setAlert(lang.unassignAtClosing, AlertTypes.ERROR);
 	}
 
 	function reopenEvent(): void {
@@ -185,7 +183,7 @@ export function Event(): JSX.Element {
 				setAlert(`${lang.eventOpen}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
-			.finally(() => setTimeout(() => window.location.reload(), 1000));
+			.finally(() => setTimeout(window.location.reload, 1000));
 	}
 
 	function payCheck(): void {
@@ -196,11 +194,11 @@ export function Event(): JSX.Element {
 		setModalPaycheckState(false);
 	}
 
-	function closeModalPurchaseRecipt(): void {
+	function closeModalPurchaseReceipt(): void {
 		setModalPurchaseRecipt(false);
 	}
 
-	function closeModalFastAproval(): void {
+	function closeModalFastApproval(): void {
 		setModalFastAproval(false);
 		setUserToApprove('');
 	}
@@ -209,11 +207,11 @@ export function Event(): JSX.Element {
 		setModalPaycheckState(true);
 	}
 
-	function openModalPurchaseRecipt(): void {
+	function openModalPurchaseReceipt(): void {
 		setModalPurchaseRecipt(true);
 	}
 
-	function openModalFastAproval(userId: string): void {
+	function openModalFastApproval(userId: string): void {
 		setUserToFastAprove(userId as string);
 		setModalFastAproval(true);
 	}
@@ -230,7 +228,7 @@ export function Event(): JSX.Element {
 		deleteEventPurchase(purchase?._id, event?._id)
 			.then(res => {
 				setAlert(lang.purchaseDeleted, AlertTypes.SUCCESS);
-				setTimeout(() => window.location.reload(), 1000);
+				setTimeout(window.location.reload, 1000);
 			})
 			.catch(e => setAlert(lang.purchaseDeletedError, AlertTypes.ERROR));
 	}
@@ -253,13 +251,13 @@ export function Event(): JSX.Element {
 	}
 
 	function checkIfUserHasUploaded() {
-		const myReceipt = eventParticipants.find(member => member.userId === user?.id);
-		return myReceipt?.hasUploaded;
+		const receipt = eventParticipants.find(member => member.userId === user?.id);
+		return receipt?.hasUploaded;
 	}
 
 	function checkIfUserHasPaid() {
-		const myReceipt = eventParticipants.find(member => member.userId === user?.id);
-		return myReceipt?.hasReceiptApproved;
+		const receipt = eventParticipants.find(member => member.userId === user?.id);
+		return receipt?.hasReceiptApproved;
 	}
 
 	function isEventFull(): boolean {
@@ -271,11 +269,7 @@ export function Event(): JSX.Element {
 	}
 
 	function getBaseUrl(): string {
-		if (process.env.NODE_ENV === 'development') {
-			return 'http://localhost:3000';
-		} else {
-			return window.location.origin;
-		}
+		return process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : window.location.origin;
 	}
 
 	function copyLinkEvent(): void {
@@ -288,40 +282,30 @@ export function Event(): JSX.Element {
 	}
 
 	useEffect(() => {
-		if (!userIdParams) {
-			return;
-		} else {
-			getEventById(userIdParams.eventId)
-				.then(res => {
-					setEvent(res);
-				})
-				.catch(e => {
-					console.error('Catch in context: ', e);
-				});
-		}
+		if (!userIdParams) return;
+
+		getEventById(userIdParams.eventId)
+			.then(setEvent)
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
 	}, [userIdParams]);
 
 	useEffect(() => {
-		if (!event) {
-			return;
-		} else {
-			getPurchaseReceipts(event?._id)
-				.then(res => {
-					setPurchasesMade(res);
-				})
-				.catch(e => {
-					//console.error('Catch in context: ', e);
-				});
-		}
+		if (!event) return;
+
+		getPurchaseReceipts(event?._id)
+			.then(setPurchasesMade)
+			.catch(e => {
+				//console.error('Catch in context: ', e);
+			});
 	}, [event]);
 
 	useEffect(() => {
 		if (!user) return;
 
 		getUserById(user?.id)
-			.then(res => {
-				setActualUser(res);
-			})
+			.then(setActualUser)
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
@@ -337,9 +321,7 @@ export function Event(): JSX.Element {
 		}
 		const abortController = new AbortController();
 		getMembersAndReceiptsInfo(event?._id, abortController.signal)
-			.then(res => {
-				setEventParticipants(res);
-			})
+			.then(setEventParticipants)
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
@@ -350,9 +332,7 @@ export function Event(): JSX.Element {
 			return;
 		}
 		getTransferReceipt(transferReceiptId)
-			.then(res => {
-				setTransferReceipt(res);
-			})
+			.then(setTransferReceipt)
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
@@ -385,9 +365,9 @@ export function Event(): JSX.Element {
 						<main className={styles.eventData}>
 							<div className={styles.eventOrganization}>
 								<section className={styles.eventBtns}>
-									{event.isPrivate && <button className={styles.copyLinkToEvent} onClick={() => copyLinkEvent()}></button>}
+									{event.isPrivate && <button className={styles.copyLinkToEvent} onClick={copyLinkEvent}></button>}
 									{event.organizer?._id === user?.id && (
-										<button className={styles.editEventBtn} onClick={() => editCurrentEvent()}></button>
+										<button className={styles.editEventBtn} onClick={editCurrentEvent}></button>
 									)}
 								</section>
 
@@ -479,10 +459,10 @@ export function Event(): JSX.Element {
 										{event.chef &&
 											event.chef?._id === user?.id &&
 											event.state !== EventStatesEnum.CLOSED &&
-											isUserIntoEvent() && <AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>}
+											isUserIntoEvent() && <AssignBtn key={user?.id} kind="unAssign" onClick={toggleChef}></AssignBtn>}
 
 										{!event.chef && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
-											<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
+											<AssignBtn key={user?.id} kind="assign" onClick={toggleChef}></AssignBtn>
 										)}
 									</div>
 									<div className={styles.inChargeOpt}>
@@ -498,12 +478,10 @@ export function Event(): JSX.Element {
 										{event.shoppingDesignee &&
 											event.shoppingDesignee?._id === user?.id &&
 											event.state !== EventStatesEnum.CLOSED &&
-											isUserIntoEvent() && (
-												<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
-											)}
+											isUserIntoEvent() && <AssignBtn key={user?.id} kind="unAssign" onClick={toggleShopDesignee}></AssignBtn>}
 
 										{!event.shoppingDesignee && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
-											<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
+											<AssignBtn key={user?.id} kind="assign" onClick={toggleShopDesignee}></AssignBtn>
 										)}
 									</div>
 								</div>
@@ -558,7 +536,7 @@ export function Event(): JSX.Element {
 																className={styles.fastAproveBtn}
 																onClick={e => {
 																	e.preventDefault();
-																	openModalFastAproval(member.userId);
+																	openModalFastApproval(member.userId);
 																}}></button>
 														</>
 													))}
@@ -576,7 +554,7 @@ export function Event(): JSX.Element {
 											{EventStatesEnum.FULL}
 										</Button>
 									) : (
-										<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
+										<Button className={styles.btnEvent} kind="secondary" size="short" onClick={toggleParticipation}>
 											{isUserIntoEvent() ? lang.getOff : !isEventFull() && lang.getInto}
 										</Button>
 									)}
@@ -584,7 +562,7 @@ export function Event(): JSX.Element {
 							)}
 
 							{event.organizer && event.organizer?._id === user?.id && (
-								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => deleteTheEvent()}>
+								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={deleteTheEvent}>
 									{lang.deleteEventBtn}
 								</Button>
 							)}
@@ -594,7 +572,7 @@ export function Event(): JSX.Element {
 								(event.organizer?._id === user?.id || event.shoppingDesignee?._id === user?.id) &&
 								event.state !== 'finished' &&
 								event.state !== EventStatesEnum.CLOSED && (
-									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={closeEvent}>
 										{lang.closeEventBtn}
 									</Button>
 								)}
@@ -603,7 +581,7 @@ export function Event(): JSX.Element {
 								isUserIntoEvent() &&
 								(event.organizer?._id === user?.id || event.shopopingDesignee?._id === user?.id) &&
 								event.state === EventStatesEnum.CLOSED && (
-									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={reopenEvent}>
 										{lang.reopenEventBtn}
 									</Button>
 								)}
@@ -625,19 +603,19 @@ export function Event(): JSX.Element {
 								isUserIntoEvent() &&
 								(event.purchaseReceipts.length as number) !== 0 &&
 								(!checkIfUserHasUploaded() ? (
-									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
+									<Button className={styles.btnEvent} kind="primary" size="short" onClick={payCheck}>
 										{lang.payBtn}
 									</Button>
 								) : (
 									!checkIfUserHasPaid() && (
-										<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => payCheck()}>
+										<Button className={styles.btnEvent} kind="secondary" size="short" onClick={payCheck}>
 											{lang.modifyPay}
 										</Button>
 									)
 								))}
 
 							{event.shoppingDesignee && event.shoppingDesignee?._id === user?.id && event.state === EventStatesEnum.CLOSED && (
-								<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
+								<Button className={styles.btnEvent} kind="primary" size="short" onClick={openModalPurchaseReceipt}>
 									{lang.loadPurchase}
 								</Button>
 							)}
@@ -647,26 +625,28 @@ export function Event(): JSX.Element {
 			</div>
 
 			<Modal isOpen={modalPaycheckState} closeModal={closeModal}>
-				<PayCheckForm event={event} shoppingDesignee={event?.shoppingDesignee} openModal={openModal} closeModal={closeModal}></PayCheckForm>
+				<PayCheckForm event={event} shoppingDesignee={event?.shoppingDesignee} openModal={openModal} closeModal={closeModal} />
 			</Modal>
 
-			<Modal isOpen={modalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}>
-				<PurchaseReceiptForm event={event} openModal={openModalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}></PurchaseReceiptForm>
+			<Modal isOpen={modalPurchaseRecipt} closeModal={closeModalPurchaseReceipt}>
+				<PurchaseReceiptForm event={event} openModal={openModalPurchaseReceipt} closeModal={closeModalPurchaseReceipt} />
 			</Modal>
 
 			<Modal isOpen={modalValidationState} closeModal={closeValidationPopup}>
 				<ConfirmationPayForm
 					event={event}
 					transferReceiptId={transferReceiptId}
-					openModal={() => openValidationPopup}
-					closeModal={() => closeValidationPopup}></ConfirmationPayForm>
+					openModal={openValidationPopup}
+					closeModal={closeValidationPopup}
+				/>
 			</Modal>
 
-			<Modal isOpen={modalFastAproval} closeModal={closeModalFastAproval}>
-				<ConfirmationFastAprovalForm
+			<Modal isOpen={modalFastAproval} closeModal={closeModalFastApproval}>
+				<ConfirmationFastApprovalForm
 					eventId={userIdParams.eventId as string}
 					userId={userToFastAprove}
-					closeModal={closeModalFastAproval}></ConfirmationFastAprovalForm>
+					closeModal={closeModalFastApproval}
+				/>
 			</Modal>
 		</PrivateFormLayout>
 	);

@@ -1,8 +1,9 @@
 import { ITransferReceiptImage } from '../models/transfer';
+import { getLocalStorageKey } from '../utils/localStorageHelpers';
 import { localStorageKeys } from '../utils/localStorageKeys';
 
 const baseURL = process.env.REACT_APP_ENDPOINT;
-const token = JSON.parse(window.localStorage.getItem(localStorageKeys.token) as string);
+const token = JSON.parse(getLocalStorageKey(localStorageKeys.token) as string);
 
 const fetchConfig: RequestInit = {
 	mode: 'cors',

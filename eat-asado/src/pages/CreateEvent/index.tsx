@@ -32,7 +32,7 @@ export function CreateEvent(): JSX.Element {
 		memberLimit: 1,
 		members: [],
 		state: EventStatesEnum.AVAILABLE,
-		organizer: user ? user.id : '',
+		organizer: user?.id || '',
 		isChef: undefined,
 		isShoppingDesignee: undefined,
 		isPrivate: false,
@@ -42,13 +42,14 @@ export function CreateEvent(): JSX.Element {
 
 	function handleDinersChange(e: React.ChangeEvent<HTMLInputElement>) {
 		let value = parseInt(e.target.value);
+		let memberLimit = value;
+
 		if (value >= 100) {
-			setEvent({ ...event, memberLimit: 100 });
+			memberLimit = 100;
 		} else if (value <= 1) {
-			setEvent({ ...event, memberLimit: 1 });
-		} else {
-			setEvent({ ...event, memberLimit: value });
+			memberLimit = 1;
 		}
+		setEvent({ ...event, memberLimit });
 	}
 
 	function handleGoBack(): void {
@@ -58,11 +59,10 @@ export function CreateEvent(): JSX.Element {
 	function handleCalendarVisibility(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 		e.preventDefault();
 		if (dateTimeRef.current) {
+			setCalendarState(!calendarState);
 			if (calendarState) {
-				setCalendarState(!calendarState);
 				dateTimeRef.current.blur();
 			} else {
-				setCalendarState(!calendarState);
 				dateTimeRef.current.click();
 			}
 		}
@@ -116,9 +116,7 @@ export function CreateEvent(): JSX.Element {
 		const abortController = new AbortController();
 
 		getUserById(user?.id, abortController.signal)
-			.then(res => {
-				setFullUser(res);
-			})
+			.then(setFullUser)
 			.catch(e => {
 				console.error('Catch in context: ', e);
 				//setAlert(`${e}`, AlertTypes.ERROR);
@@ -140,19 +138,19 @@ export function CreateEvent(): JSX.Element {
 			return;
 		}
 		getEventById(eventIdParam)
-			.then(res => {
+			.then(({ title, datetime, description, memberLimit, isPrivate, penalization, penalizationStartDate, state }) => {
 				setEvent({
 					...event,
-					title: res.title,
-					datetime: new Date(res.datetime),
-					description: res.description,
-					memberLimit: res.memberLimit,
-					isPrivate: res.isPrivate,
-					penalization: res.penalization,
-					penalizationStartDate: new Date(res.penalizationStartDate),
-					state: res.state
+					title,
+					datetime: new Date(datetime),
+					description,
+					memberLimit,
+					isPrivate,
+					penalization,
+					penalizationStartDate: new Date(penalizationStartDate),
+					state
 				});
-				setPenalizationSection(!!res.penalization);
+				setPenalizationSection(!!penalization);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
@@ -164,11 +162,8 @@ export function CreateEvent(): JSX.Element {
 		<FormLayout>
 			<button className={styles.closeBtn} onClick={handleGoBack}></button>
 
-			{eventIdParam === 'new' ? (
-				<label className={styles.title}>{lang.createEventTitle}</label>
-			) : (
-				<label className={styles.title}>{lang.editEventTitle}</label>
-			)}
+			<label className={styles.title}>{eventIdParam === 'new' ? lang.createEventTitle : lang.editEventTitle}</label>
+
 			{/* TODO: Cambiar esto, no debe ser label un título */}
 
 			<div className={styles.inputSection}>
@@ -199,17 +194,19 @@ export function CreateEvent(): JSX.Element {
 							value={event.datetime.toISOString().slice(0, -8)}
 							onChange={e => {
 								const inputValue = e.target.value;
-								if (inputValue) {
-									const localDate = new Date(inputValue);
+								if (!inputValue) {
+									return;
+								}
 
-									// Verifica si el valor se ha convertido en una fecha válida
-									if (!isNaN(localDate.getTime())) {
-										const utcOffset = localDate.getTimezoneOffset();
-										const adjustedDate = new Date(localDate.getTime() - utcOffset * 60000);
-										setEvent({ ...event, datetime: adjustedDate });
-									} else {
-										console.error('Invalid Date:', inputValue);
-									}
+								const localDate = new Date(inputValue);
+
+								// Verifica si el valor se ha convertido en una fecha válida
+								if (!isNaN(localDate.getTime())) {
+									const utcOffset = localDate.getTimezoneOffset();
+									const adjustedDate = new Date(localDate.getTime() - utcOffset * 60000);
+									setEvent({ ...event, datetime: adjustedDate });
+								} else {
+									console.error('Invalid Date:', inputValue);
 								}
 							}}
 						/>
@@ -226,8 +223,8 @@ export function CreateEvent(): JSX.Element {
 						className={styles.textArea}
 						placeholder={lang.eventDescription}
 						value={event.description}
-						onChange={e => {
-							setEvent({ ...event, description: e.target.value });
+						onChange={({ target: { value } }) => {
+							setEvent({ ...event, description: value });
 						}}
 					/>
 				</section>
@@ -245,9 +242,9 @@ export function CreateEvent(): JSX.Element {
 									id="isAsador"
 									type="checkbox"
 									className={styles.checkbox}
-									checked={event.isChef !== undefined ? true : false}
-									onChange={e => {
-										setEvent({ ...event, isChef: e.target.checked ? (user?.id as string) : undefined });
+									checked={event.isChef !== undefined}
+									onChange={({ target: { checked } }) => {
+										setEvent({ ...event, isChef: checked ? (user?.id as string) : undefined });
 									}}
 								/>
 								{lang.chef}
@@ -259,8 +256,8 @@ export function CreateEvent(): JSX.Element {
 									type="checkbox"
 									className={styles.checkbox}
 									checked={event.isShoppingDesignee !== undefined ? true : false}
-									onChange={e => {
-										setEvent({ ...event, isShoppingDesignee: e.target.checked ? (user?.id as string) : undefined });
+									onChange={({ target: { checked } }) => {
+										setEvent({ ...event, isShoppingDesignee: checked ? (user?.id as string) : undefined });
 									}}
 								/>
 								{lang.shoppingDesignee}
@@ -308,9 +305,9 @@ export function CreateEvent(): JSX.Element {
 								id="isPrivate"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={event.isPrivate ? true : false}
-								onChange={e => {
-									setEvent({ ...event, isPrivate: e.target.checked });
+								checked={event.isPrivate}
+								onChange={({ target: { checked } }) => {
+									setEvent({ ...event, isPrivate: checked });
 								}}
 							/>
 							{lang.isPrivate}
@@ -320,7 +317,7 @@ export function CreateEvent(): JSX.Element {
 								id="hasPenalization"
 								type="checkbox"
 								className={styles.checkbox}
-								checked={penalizationSection ? true : false}
+								checked={penalizationSection}
 								onChange={e => {
 									penalizationSection && setEvent({ ...event, penalization: 0 });
 									setPenalizationSection(!penalizationSection);
@@ -339,16 +336,12 @@ export function CreateEvent(): JSX.Element {
 										value={event.penalization}
 										min={1}
 										max={10000}
-										onChange={e => setEvent({ ...event, penalization: Number(e.target.value) })}
+										onChange={({ target: { value } }) => setEvent({ ...event, penalization: Number(value) })}
 									/>
 								</div>
 								<div className={styles.calendarPicker}>
 									<p className={styles.penalizationInputText}>{lang.penalizationStartingDate}</p>
-									<button
-										className={styles.calendarLogo}
-										onClick={e => {
-											handleCalendarVisibility(e);
-										}}></button>
+									<button className={styles.calendarLogo} onClick={handleCalendarVisibility}></button>
 									<input
 										id="fechaHora"
 										placeholder="Fecha y Hora"
@@ -356,8 +349,8 @@ export function CreateEvent(): JSX.Element {
 										ref={dateTimeRef}
 										className={styles.calendarInput}
 										value={event.penalizationStartDate.toISOString().slice(0, -8)}
-										onChange={e => {
-											const inputValue = e.target.value;
+										onChange={({ target: { value } }) => {
+											const inputValue = value;
 											if (inputValue) {
 												const localDate = new Date(inputValue);
 												// Verifica si el valor se ha convertido en una fecha válida
@@ -379,27 +372,11 @@ export function CreateEvent(): JSX.Element {
 
 				<section className={styles.buttonContainer}>
 					{eventIdParam === 'new' ? (
-						<Button
-							kind="primary"
-							size="large"
-							id="registerBtn"
-							type="submit"
-							style={{ marginBottom: '10vh' }}
-							onClick={e => {
-								handleSubmit(e);
-							}}>
+						<Button kind="primary" size="large" id="registerBtn" type="submit" style={{ marginBottom: '10vh' }} onClick={handleSubmit}>
 							{lang.createEventBtn}
 						</Button>
 					) : (
-						<Button
-							kind="primary"
-							size="large"
-							id="registerBtn"
-							type="submit"
-							style={{ marginBottom: '10vh' }}
-							onClick={e => {
-								handleSubmit(e);
-							}}>
+						<Button kind="primary" size="large" id="registerBtn" type="submit" style={{ marginBottom: '10vh' }} onClick={handleSubmit}>
 							{lang.editEventBtn}
 						</Button>
 					)}

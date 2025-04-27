@@ -4,7 +4,6 @@ import { EventResponse } from '../../../models/event';
 import Button from '../../micro/Button/Button';
 import { downloadFile } from '../../../utils/utilities';
 import { approveTransferReceipts, deleteTransferReceipt } from '../../../service';
-import { useAuth } from '../../../stores/AuthContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useAlert } from '../../../stores/AlertContext';
@@ -22,7 +21,6 @@ interface ConfirmationPayProps {
 }
 
 function ConfirmationPayForm(props: ConfirmationPayProps) {
-	const { user } = useAuth();
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
 	const { event, transferReceiptId } = props;
@@ -42,7 +40,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		try {
 			await approveTransferReceipts(receiptId, event._id, abortController.signal);
 			setAlert(lang.payApprovedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
+			setTimeout(window.location.reload, 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
 		} catch (error) {
 			setAlert(lang.payApproveFailed, AlertTypes.ERROR);
 		}
@@ -52,13 +50,13 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		try {
 			await deleteTransferReceipt(receiptId);
 			setAlert(lang.payRejectedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000);
+			setTimeout(window.location.reload, 1000);
 		} catch (error) {
 			setAlert(lang.payRejectionFailed, AlertTypes.ERROR);
 		}
 	}
 
-	function gettingDateDiference(): number {
+	function gettingDateDifference(): number {
 		const startingDate = new Date(event.penalizationStartDate);
 		const todayDate = new Date(transferReceipt?.datetime as Date);
 		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
@@ -77,9 +75,9 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 			price = price + tr.amount;
 		});
 
-		if (event.penalization && gettingDateDiference() > 0) {
+		if (event.penalization && gettingDateDifference() > 0) {
 			if (new Date(transferReceipt?.datetime as Date) < new Date()) {
-				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+				currentPenalization = event.penalization * Math.floor(gettingDateDifference());
 			}
 		}
 

@@ -6,13 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { LoginRequest } from '../../models/user';
 import { useAuth } from '../../stores/AuthContext';
 import styles from './styles.module.scss';
-import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { browserName } from '../../utils/utilities';
 
 export function Login(): JSX.Element {
 	const navigate = useNavigate();
 	const lang = useTranslation('login');
-	const { login, isLoading, isRedirecting, setRedirection } = useAuth();
+	const { login, isLoading } = useAuth();
 	const [showPassword, setShowPassword] = useState<boolean>(true);
 	const inputPassword = useRef<HTMLInputElement | null>(null);
 	const [loginCredentials, setLoginCredentials] = useState<LoginRequest>({
@@ -20,10 +19,10 @@ export function Login(): JSX.Element {
 		password: ''
 	});
 
-	function handleChange(e: React.ChangeEvent<HTMLInputElement>): void {
+	function handleChange({ target: { id, value } }: React.ChangeEvent<HTMLInputElement>): void {
 		setLoginCredentials({
 			...loginCredentials,
-			[e.target.id]: e.target.value
+			[id]: value
 		});
 	}
 
@@ -52,7 +51,7 @@ export function Login(): JSX.Element {
 				className={styles.loginInput}
 				placeholder={lang.user}
 				type="text"
-				onChange={e => handleChange(e)}
+				onChange={handleChange}
 				value={loginCredentials.email}
 			/>
 
@@ -67,7 +66,7 @@ export function Login(): JSX.Element {
 					className={styles.loginInput}
 					placeholder={lang.password}
 					type={browserName === 'Edge' ? 'password' : showPassword ? 'password' : 'text'}
-					onChange={e => handleChange(e)}
+					onChange={handleChange}
 					value={loginCredentials.password}
 				/>
 				{browserName !== 'Edge' && (
@@ -84,13 +83,13 @@ export function Login(): JSX.Element {
 							}, 0);
 						}}></div>
 				)}
-				{browserName !== 'Edge' && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+				{browserName !== 'Edge' && !showPassword && <div className={styles.passwordEyeCrossedLine} />}
 			</section>
 
 			{isLoading ? (
 				<span style={{ color: '#fff' }}>Cargando... (⌐■_■)</span> //TODO: Acá va un spinner para cuando esté cargando el login.
 			) : (
-				<Button kind="primary" size="large" type="submit" onClick={e => handleLogin(e)}>
+				<Button kind="primary" size="large" type="submit" onClick={handleLogin}>
 					{lang.loginBtn}
 				</Button>
 			)}
@@ -100,7 +99,7 @@ export function Login(): JSX.Element {
 			</a>
 
 			<a href="/register" className={styles.register} id="register">
-				<span>{lang.alreadyRegistered} </span>
+				<span>{lang.alreadyRegistered}</span>
 
 				<span className={styles.registerHighlighted}>{lang.registerHere}</span>
 			</a>

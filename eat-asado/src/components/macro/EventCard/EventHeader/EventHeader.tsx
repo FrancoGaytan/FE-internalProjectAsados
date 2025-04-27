@@ -25,6 +25,7 @@ export default function EventHeader(props: IEventCardProps) {
 	}
 
 	function getEventState(): string | undefined {
+		
 		//Deuda Tecnica, hacer un elseif para esta funcion
 		if (props.isEventBlocking) {
 			return 'debtor';
@@ -33,26 +34,26 @@ export default function EventHeader(props: IEventCardProps) {
 			return 'blocked';
 		}
 
-		if (evState === EventStatesEnum.FINISHED) {
-			return EventStatesEnum.FINISHED;
-		} //dejar este if para chequear
-
-		if (evState === EventStatesEnum.AVAILABLE) {
-			if (subscribedUser) {
-				return 'subscribed';
-			} else {
-				if (isEventFull()) return EventStatesEnum.FULL;
-			}
-			return EventStatesEnum.AVAILABLE;
-		} else if (evState === EventStatesEnum.CLOSED) {
-			return EventStatesEnum.CLOSED;
-		} else if (evState === EventStatesEnum.CANCELED) {
-			return EventStatesEnum.CANCELED;
-		} else if (isEventFull()) {
-			return EventStatesEnum.FULL;
-		} else {
-			return EventStatesEnum.FINISHED;
+		switch (evState) {
+			case EventStatesEnum.FINISHED:
+			case EventStatesEnum.CLOSED:
+			case EventStatesEnum.CANCELED:
+				return evState;
+			case EventStatesEnum.AVAILABLE:
+				let eventState: string;
+				if(subscribedUser) {
+					eventState = 'subscribed';
+				} else if (isEventFull()) {
+					eventState = EventStatesEnum.FULL;
+				} else {
+					eventState = evState;
+				}
+				return eventState;
+			default:
+				return isEventFull() ? EventStatesEnum.FULL : EventStatesEnum.FINISHED;
+				
 		}
+
 	}
 
 	function getTranslatedState(stateDesc: string | undefined) {

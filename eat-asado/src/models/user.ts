@@ -12,6 +12,13 @@ export interface RegisterResponse {
 	jwt: string;
 }
 
+export enum SpecialDietMenu {
+	Celiac = 'celiac',
+	Hypertensive = 'hypertensive',
+	Vegan = 'vegan',
+	Vegetarian = 'vegetarian'
+}
+
 export interface IUser {
 	//TODO: definir si el id va a ser un number o string asi lo normalizamos
 	_id: string; //esto estaba como number //TODO: Esto lo necesitaba para vincularlo con la creacion del evento, necesita el id del organizador por lo que tiene que estar aca
@@ -20,7 +27,7 @@ export interface IUser {
 	email: string;
 	password: string;
 	confirmPassword: string;
-	specialDiet: string[];
+	specialDiet: SpecialDietMenu[];
 	cbu?: string;
 	alias?: string;
 	profilePicture?: string;
@@ -32,7 +39,7 @@ export interface RegisterRequest {
 	email: string;
 	password: string;
 	repeatedPassword?: string;
-	specialDiet: string[]; // TODO: estos strings solo pueden ser celiac, hypertensive, vegan, vegetarian
+	specialDiet: SpecialDietMenu[];
 }
 
 export interface profilePicture {
@@ -46,5 +53,5 @@ export interface EventUserResponse {
 	transferReceipt: string | undefined;
 	hasReceiptApproved: boolean | null;
 	hasUploaded: boolean;
-	specialDiet: [string];
+	specialDiet: SpecialDietMenu[];
 }

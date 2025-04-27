@@ -57,10 +57,10 @@ export function UserProfile(): JSX.Element {
 		lastName: actualUser.lastName,
 		userCbu: actualUser.cbu,
 		userAlias: actualUser.alias,
-		userVegan: chekingSpecialDiet('vegan'),
-		userVegetarian: chekingSpecialDiet('vegetarian'),
-		userHypertensive: chekingSpecialDiet('hypertensive'),
-		userCeliac: chekingSpecialDiet('celiac')
+		userVegan: checkingSpecialDiet('vegan'),
+		userVegetarian: checkingSpecialDiet('vegetarian'),
+		userHypertensive: checkingSpecialDiet('hypertensive'),
+		userCeliac: checkingSpecialDiet('celiac')
 	};
 
 	const [userProfile, setUser] = useState<UserProfileInterface>(initialUser); //este es el usuario que despues se va a submitear al form, el que se ve en los inputs
@@ -104,30 +104,30 @@ export function UserProfile(): JSX.Element {
 						.then(res => {
 							setAlert(`${lang.successMsg}!`, AlertTypes.SUCCESS);
 						})
-						.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR));
+						.catch(e => setAlert(lang.failureMsg, AlertTypes.ERROR));
 			})
-			.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR))
+			.catch(e => setAlert(lang.failureMsg, AlertTypes.ERROR))
 			.finally(() => {
 				setIsLoading(false);
-				setTimeout(() => window.location.reload(), 2000);
+				setTimeout(window.location.reload, 2000);
 			});
 	}
 
-	function chekingSpecialDiet(diet: any) {
+	function checkingSpecialDiet(diet: any) {
 		return actualUser?.specialDiet?.includes(diet) && diet.toString();
 	}
 
 	function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
 		e.preventDefault();
 		e.stopPropagation();
-		const target = e.target;
+		const files = e.target.files;
 
-		if (target.files?.length && target.files.length > 0) {
-			if (!checkForWrongFileType(target.files[0])) {
+		if (files?.length && files.length > 0) {
+			if (!checkForWrongFileType(files[0])) {
 				setAlert(lang.errorTypeFile, AlertTypes.ERROR);
 				return;
 			} else {
-				setUser({ ...userProfile, userImage: target.files[0] });
+				setUser({ ...userProfile, userImage: files[0] });
 			}
 		}
 	}
@@ -158,7 +158,7 @@ export function UserProfile(): JSX.Element {
 
 	return (
 		<div className={styles.userProfileContainer}>
-			<form onSubmit={e => handleUpdateProfile(e)}>
+			<form onSubmit={handleUpdateProfile}>
 				<h1>{lang.profileTitle}</h1>
 
 				<section className={styles.dataSection}>
@@ -189,8 +189,8 @@ export function UserProfile(): JSX.Element {
 							id="cbu"
 							type="text"
 							value={userProfile.userCbu}
-							onChange={e => {
-								setUser({ ...userProfile, userCbu: e.target.value });
+							onChange={({ target: { value } }) => {
+								setUser({ ...userProfile, userCbu: value });
 							}}
 						/>
 
@@ -202,8 +202,8 @@ export function UserProfile(): JSX.Element {
 							id="alias"
 							type="text"
 							value={userProfile.userAlias}
-							onChange={e => {
-								setUser({ ...userProfile, userAlias: e.target.value });
+							onChange={({ target: { value } }) => {
+								setUser({ ...userProfile, userAlias: value });
 							}}
 						/>
 
@@ -215,8 +215,8 @@ export function UserProfile(): JSX.Element {
 							id="name"
 							type="text"
 							value={userProfile.userName}
-							onChange={e => {
-								setUser({ ...userProfile, userName: e.target.value });
+							onChange={({ target: { value } }) => {
+								setUser({ ...userProfile, userName: value });
 							}}
 						/>
 						<label htmlFor="lastName" className={styles.cbuLabel}>
@@ -227,8 +227,8 @@ export function UserProfile(): JSX.Element {
 							id="lastName"
 							type="text"
 							value={userProfile.lastName}
-							onChange={e => {
-								setUser({ ...userProfile, lastName: e.target.value });
+							onChange={({ target: { value } }) => {
+								setUser({ ...userProfile, lastName: value });
 							}}
 						/>
 					</div>
@@ -242,8 +242,8 @@ export function UserProfile(): JSX.Element {
 									type="checkbox"
 									className={styles.checkbox}
 									checked={userProfile.userVegan}
-									onChange={e => {
-										setUser({ ...userProfile, userVegan: e.target.checked });
+									onChange={({ target: { checked } }) => {
+										setUser({ ...userProfile, userVegan: checked });
 									}}
 								/>
 								{lang.veganDiet}
@@ -255,8 +255,8 @@ export function UserProfile(): JSX.Element {
 									type="checkbox"
 									className={styles.checkbox}
 									checked={userProfile.userVegetarian}
-									onChange={e => {
-										setUser({ ...userProfile, userVegetarian: e.target.checked });
+									onChange={({ target: { checked } }) => {
+										setUser({ ...userProfile, userVegetarian: checked });
 									}}
 								/>
 								{lang.vegetarianDiet}
@@ -268,8 +268,8 @@ export function UserProfile(): JSX.Element {
 									type="checkbox"
 									className={styles.checkbox}
 									checked={userProfile.userHypertensive}
-									onChange={e => {
-										setUser({ ...userProfile, userHypertensive: e.target.checked });
+									onChange={({ target: { checked } }) => {
+										setUser({ ...userProfile, userHypertensive: checked });
 									}}
 								/>
 								{lang.hypertensiveDiet}
@@ -280,8 +280,8 @@ export function UserProfile(): JSX.Element {
 									type="checkbox"
 									className={styles.checkbox}
 									checked={userProfile.userCeliac}
-									onChange={e => {
-										setUser({ ...userProfile, userCeliac: e.target.checked });
+									onChange={({ target: { checked } }) => {
+										setUser({ ...userProfile, userCeliac: checked });
 									}}
 								/>
 								{lang.celiacDiet}

@@ -42,7 +42,7 @@ export function SettingNewPassword(): JSX.Element {
 			return;
 		}
 		if (!validatePassword(newPassword.userPassword)) {
-			setAlert(`${lang.wrongPassword}`, AlertTypes.ERROR);
+			setAlert(lang.wrongPassword, AlertTypes.ERROR);
 			return;
 		}
 		try {
@@ -80,8 +80,8 @@ export function SettingNewPassword(): JSX.Element {
 						placeholder={lang.email}
 						type="text"
 						value={newPassword.userEmail}
-						onChange={e => {
-							setNewPassword({ ...newPassword, userEmail: e.target.value });
+						onChange={({ target: { value } }) => {
+							setNewPassword({ ...newPassword, userEmail: value });
 						}}
 					/>
 
@@ -95,8 +95,8 @@ export function SettingNewPassword(): JSX.Element {
 						placeholder={lang.verificationCode}
 						type="text"
 						value={newPassword.userVerificationCode}
-						onChange={e => {
-							setNewPassword({ ...newPassword, userVerificationCode: e.target.value });
+						onChange={({ target: { value } }) => {
+							setNewPassword({ ...newPassword, userVerificationCode: value });
 						}}
 					/>
 
@@ -111,8 +111,8 @@ export function SettingNewPassword(): JSX.Element {
 							placeholder={lang.password}
 							type={browserName === 'Edge' ? 'password' : showPassword ? 'password' : 'text'}
 							value={newPassword.userPassword}
-							onChange={e => {
-								setNewPassword({ ...newPassword, userPassword: e.target.value });
+							onChange={({ target: { value } }) => {
+								setNewPassword({ ...newPassword, userPassword: value });
 							}}
 						/>
 						{browserName !== 'Edge' && (
@@ -129,7 +129,7 @@ export function SettingNewPassword(): JSX.Element {
 									}, 0);
 								}}></div>
 						)}
-						{browserName !== 'Edge' && !showPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+						{browserName !== 'Edge' && !showPassword && <div className={styles.passwordEyeCrossedLine} />}
 					</section>
 
 					<p className={styles.mainDesc}>{lang.passwordDescription}</p>
@@ -146,8 +146,8 @@ export function SettingNewPassword(): JSX.Element {
 							placeholder={lang.confirmPassword}
 							type={browserName === 'Edge' ? 'password' : showConfirmedPassword ? 'password' : 'text'}
 							value={newPassword.userConfirmedPassword}
-							onChange={e => {
-								setNewPassword({ ...newPassword, userConfirmedPassword: e.target.value });
+							onChange={({ target: { value } }) => {
+								setNewPassword({ ...newPassword, userConfirmedPassword: value });
 							}}
 						/>
 						{browserName !== 'Edge' && (
@@ -164,7 +164,7 @@ export function SettingNewPassword(): JSX.Element {
 									}, 0);
 								}}></div>
 						)}
-						{browserName !== 'Edge' && !showConfirmedPassword && <div className={styles.passwordEyeCrossedLine}></div>}
+						{browserName !== 'Edge' && !showConfirmedPassword && <div className={styles.passwordEyeCrossedLine} />}
 					</section>
 
 					<Button kind="primary" size="large" id="registerBtn" style={{ marginBottom: 30 }} onClick={handleSubmit}>

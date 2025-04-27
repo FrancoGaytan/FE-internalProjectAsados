@@ -54,33 +54,37 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 
 	async function confirmNewPurchase(e: any) {
 		e.preventDefault();
-		if (discardPurchaseWithoutFiles()) {
-			if (checkForInputsToBeCompleted()) {
-				const data = new FormData();
-				data.append('file', purchaseForm.file as File);
+		
+		if (!discardPurchaseWithoutFiles()) {
+			setAlert(lang.uploadReceiptFirst, AlertTypes.ERROR);
+			return;
+		}
+
+		if (checkForInputsToBeCompleted()) {
+			const data = new FormData();
+			data.append('file', purchaseForm.file as File);
+
+			try {
+				const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
+				setAlert(lang.purchaseReceiptLoaded, AlertTypes.SUCCESS);
+
 
 				try {
-					const resp = await createPurchaseReceipt(event?._id, { ...purchaseForm });
-					setAlert(lang.purchaseReceiptLoaded, AlertTypes.SUCCESS);
-
-
-					try {
-						await uploadPurchaseFile(purchaseForm.file, resp._id);
-						setAlert(`${lang.purchaseReceiptLoaded}!`, AlertTypes.SUCCESS);
-					} catch (e) {
-						setAlert(lang.fileSendingError, AlertTypes.ERROR);
-					}
-
-					setTimeout(() => window.location.reload(), 1000);
-
+					await uploadPurchaseFile(purchaseForm.file, resp._id);
+					setAlert(`${lang.purchaseReceiptLoaded}!`, AlertTypes.SUCCESS);
 				} catch (e) {
-					/* TODO: Acá hay un alert en inglés y en el otro hay uno en español
-				Deberían estar en el mismo idioma y localizados */
-					setAlert(lang.loadingPurchaseError, AlertTypes.ERROR);
+					setAlert(lang.fileSendingError, AlertTypes.ERROR);
 				}
+
+				setTimeout(window.location.reload, 1000);
+
+			} catch (e) {
+				/*
+				 * TODO: Acá hay un alert en inglés y en el otro hay uno en español
+				 * Deberían estar en el mismo idioma y localizados
+				 */
+				setAlert(lang.loadingPurchaseError, AlertTypes.ERROR);
 			}
-		} else {
-			setAlert(lang.uploadReceiptFirst, AlertTypes.ERROR);
 		}
 	}
 
@@ -89,7 +93,7 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 			<h4>{lang.payTitle}</h4>
 
 			<div className={styles.paycheckContent}>
-				<form onSubmit={e => confirmNewPurchase(e)} className={styles.purchaseForm}>
+				<form onSubmit={confirmNewPurchase} className={styles.purchaseForm}>
 					<div className={styles.descInput}>
 						<label className={styles.descLabel}>{lang.description}</label>
 						<input
@@ -133,7 +137,7 @@ export default function PurchaseReceiptForm(props: PurchaseReceiptProps) {
 					<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
 
 					<section className={styles.btnSection}>
-						<Button className={styles.confirmPayBtn} kind="primary" size="large" onClick={e => confirmNewPurchase(e)}>
+						<Button className={styles.confirmPayBtn} kind="primary" size="large" onClick={confirmNewPurchase}>
 							{lang.confirmPayBtn}
 						</Button>
 					</section>

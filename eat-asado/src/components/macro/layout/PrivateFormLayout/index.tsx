@@ -1,5 +1,5 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
-import { useLocalizationContext, useTranslation } from '../../../../stores/LocalizationContext';
+import { useTranslation } from '../../../../stores/LocalizationContext';
 import AlertPopup from '../../../micro/AlertPopup/AlertPopup';
 import { useAuth } from '../../../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -8,11 +8,11 @@ import { locales } from '../../../../localization';
 import { getUserById } from '../../../../service';
 import { IUser } from '../../../../models/user';
 import { getImage } from '../../../../service/purchaseReceipts';
+import FlagButton from './FlagButton';
 
 export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element {
 	const lang = useTranslation('userProfile');
 	const navigate = useNavigate();
-	const { setLocale } = useLocalizationContext();
 	const { user, logout } = useAuth();
 	const [userData, setUserData] = useState<IUser | undefined>(undefined);
 	const [image, setImage] = useState<File | undefined>(undefined);
@@ -21,8 +21,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 		e.preventDefault();
 		logout();
 	}
-	function handleGoToProfile(e: any) {
-		//arreglar este any
+	function handleGoToProfile(e: React.MouseEvent<HTMLImageElement, MouseEvent>) {
 		e.preventDefault();
 		navigate('/userProfile');
 	}
@@ -38,9 +37,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 					setUserData(resp);
 
 					getImage(resp.profilePicture)
-						.then(res => {
-							setImage(res);
-						})
+						.then(setImage)
 						.catch(e => {
 							console.error('Catch in context: ', e);
 						});
@@ -65,28 +62,18 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 									className={styles.profileBtn}
 									src={URL.createObjectURL(image as File)}
 									alt="selected"
-									onClick={e => handleGoToProfile(e)}
+									onClick={handleGoToProfile}
 								/>
 							) : (
 								<img
 									src="/assets/pictures/profile.png"
 									className={styles.profileBtn}
 									alt="placeholder"
-									onClick={e => handleGoToProfile(e)}
+									onClick={handleGoToProfile}
 								/>
 							)}
-							<button
-								className={styles.spanishFlag}
-								onClick={(e): void => {
-									e.preventDefault();
-									setLocale(locales[1]);
-								}}></button>
-							<button
-								className={styles.englishFlag}
-								onClick={(e): void => {
-									e.preventDefault();
-									setLocale(locales[0]);
-								}}></button>
+							<FlagButton className={styles.spanishFlag} locale={locales[1]} />
+							<FlagButton className={styles.englishFlag} locale={locales[0]} /> 
 						</div>
 					)}
 
@@ -107,12 +94,12 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 			<section className={styles.secondHeader}>
 				<button className={styles.logo} onClick={handleGoToMain}></button>
 
-				<div className={styles.fire}></div>
+				<div className={styles.fire} />
 			</section>
 
 			<section className={styles.containerLayout}>{props.children}</section>
 
-			<footer className={styles.footerFire}></footer>
+			<footer className={styles.footerFire} />
 		</div>
 	);
 }
