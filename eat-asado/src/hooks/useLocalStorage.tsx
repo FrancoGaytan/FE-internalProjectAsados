@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getLocalStorageKey, setLocalStorageKey } from '../utils/localStorageHelpers';
 
 type ReturnType<T> = [storedValue: T, setValue: (value: T) => void];
 
@@ -7,7 +8,7 @@ export default function useLocalStorage<T>(key: string, initialValue: T): Return
 		if (typeof window === 'undefined') return initialValue;
 
 		try {
-			const item = window.localStorage.getItem(key);
+			const item = getLocalStorageKey(key);
 
 			if (!item) return initialValue;
 
@@ -25,9 +26,9 @@ export default function useLocalStorage<T>(key: string, initialValue: T): Return
 			if (typeof window === 'undefined') return;
 
 			if (typeof value === 'string') {
-				window.localStorage.setItem(key, value);
+				setLocalStorageKey(key, value);
 			} else {
-				window.localStorage.setItem(key, JSON.stringify(value));
+				setLocalStorageKey(key, JSON.stringify(value));
 			}
 		} catch (error) {
 			console.error(error);

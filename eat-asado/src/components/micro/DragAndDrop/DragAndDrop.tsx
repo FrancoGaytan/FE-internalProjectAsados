@@ -24,7 +24,7 @@ export default function DragAndDrop(props: IDragAndDrop) {
 		const dataTransfer = e.dataTransfer as DataTransfer;
 
 		const files = dataTransfer.files;
-		if (files && files.length) {
+		if (files?.length) {
 			onUpload(files);
 		}
 	}

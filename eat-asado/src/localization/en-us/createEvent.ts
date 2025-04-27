@@ -20,5 +20,5 @@ export const createEvent = Object.seal({
 	hasPenalization: 'Debtors penalization',
 	amountPenalization: 'Penalization amount per day',
 	penalizationStartingDate: 'Penalization starting date',
-	wrongPenalizationDate: 'Penalization starting date must be after the event´s date'
+	wrongPenalizationDate: "Penalization starting date must be after the event's date"
 });

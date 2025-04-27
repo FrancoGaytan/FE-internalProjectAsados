@@ -67,9 +67,7 @@ export function EventHome(): JSX.Element {
 				});
 		} else {
 			getPublicEvents()
-				.then(res => {
-					setPublicEvents(res);
-				})
+				.then(setPublicEvents)
 				.catch(e => {
 					console.error('Catch in context: ', e);
 				});
@@ -112,23 +110,23 @@ export function EventHome(): JSX.Element {
 				</section>
 
 				<section className={styles.eventsContainer}>
-					{publicEvents.map(event => {
+					{publicEvents.map(({ _id, title, datetime, description, members, memberLimit, ratings, state, chef }) => {
 						return (
 							<EventCard
-								key={event._id}
-								eventId={event._id}
-								eventDateTime={event.datetime}
+								key={_id}
+								eventId={_id}
+								eventDateTime={datetime}
 								eventUserIsDebtor={userDebtor}
 								userId={user?.id}
-								eventState={event.state as TEventState}
+								eventState={state as TEventState}
 								eventData={{
-									eventTitle: event.title,
-									eventCook: event.chef,
-									eventDescription: event.description,
-									eventParticipants: event.members,
-									eventParticipantLimit: event.memberLimit,
-									eventAvgRate: event.ratings.avgScore,
-									eventRatingsAmount: event.ratings.ratingsAmount
+									eventTitle: title,
+									eventCook: chef,
+									eventDescription: description,
+									eventParticipants: members,
+									eventParticipantLimit: memberLimit,
+									eventAvgRate: ratings.avgScore,
+									eventRatingsAmount: ratings.ratingsAmount
 								}}
 							/>
 						);
@@ -155,8 +153,8 @@ export function EventHome(): JSX.Element {
 						<h2 className={styles.title}>{lang.participationStepsTitle}</h2>
 
 						<ul className={styles.icons}>
-							{itemStepsData.map((item, index) => (
-								<StepItem key={`step-item-${index}`} title={item.title} description={item.description} imagePath={item.imagePath} />
+							{itemStepsData.map(({ title, description, imagePath }, index) => (
+								<StepItem key={`step-item-${index}`} title={title} description={description} imagePath={imagePath} />
 							))}
 						</ul>
 
@@ -174,14 +172,14 @@ export function EventHome(): JSX.Element {
 	);
 }
 
-function StepItem(props: IStepItem) {
+function StepItem({ title, description, imagePath }: IStepItem) {
 	return (
 		<li className={styles.stepItem}>
-			<img src={props.imagePath} alt="stepItem" />
+			<img src={imagePath} alt="stepItem" />
 
-			<h1>{props.title}</h1>
+			<h1>{title}</h1>
 
-			<p>{props.description}</p>
+			<p>{description}</p>
 		</li>
 	);
 }

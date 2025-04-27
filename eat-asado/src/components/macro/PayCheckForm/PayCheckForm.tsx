@@ -43,7 +43,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 	const [payForm, setPayForm] = useState<ITransferReceiptRequest>(initialPayForm);
 
-	function gettingDateDiference(): number {
+	function gettingDateDifference(): number {
 		const startingDate = new Date(event.penalizationStartDate);
 		const todayDate = new Date();
 		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
@@ -62,9 +62,9 @@ export default function PayCheckForm(props: PayCheckProps) {
 			price = price + tr.amount;
 		});
 
-		if (event.penalization && gettingDateDiference() > 0) {
+		if (event.penalization && gettingDateDifference() > 0) {
 			if (new Date(event.penalizationStartDate) < new Date()) {
-				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+				currentPenalization = event.penalization * Math.floor(gettingDateDifference());
 			}
 		}
 		return Math.round(price / event.members.length + currentPenalization);
@@ -79,7 +79,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 		return !(payOpt === 'transfer' && !payForm.file);
 	}
 
-	function tooglePaymentOp(e: React.ChangeEvent<HTMLInputElement>) {
+	function togglePaymentOp(e: React.ChangeEvent<HTMLInputElement>) {
 		setPayOpt(e.target.value as PaymentOpts);
 	}
 
@@ -105,32 +105,34 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 	async function confirmPay(e: any) {
 		e.preventDefault();
-		if (discardTransferWithoutFiles()) {
-			if (checkForReceiptAndTransfer()) {
-				const data = new FormData();
-				data.append('file', payForm.file as File);
-				try {
-					const resp = await createTransferReceipt(event?._id, { ...payForm });
-					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
 
-					try {
-						await uploadFile(payForm.file, resp._id);
-						setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-						setTimeout(() => window.location.reload(), 1000);
-						//closeModal(); // Mejora: lograr que se cierre el popup una vez que se confirme el updateFile
-					} catch (e) {
-						setAlert(lang.errorSubmittingFile, AlertTypes.ERROR);
-					}
-				} catch (e) {
-					setAlert(`${lang.transferReceiptFailure}`, AlertTypes.ERROR);
-				}
-			} else {
-				await createTransferReceipt(event?._id, { ...payForm });
+		if (!discardTransferWithoutFiles()) {
+			setAlert(lang.uploadReceiptFirst, AlertTypes.ERROR);
+			return;
+		}
+
+		if (checkForReceiptAndTransfer()) {
+			const data = new FormData();
+			data.append('file', payForm.file as File);
+			try {
+				const resp = await createTransferReceipt(event?._id, { ...payForm });
 				setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-				setTimeout(() => window.location.reload(), 1000);
+
+				try {
+					await uploadFile(payForm.file, resp._id);
+					setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+					setTimeout(window.location.reload, 1000);
+					//closeModal(); // Mejora: lograr que se cierre el popup una vez que se confirme el updateFile
+				} catch (e) {
+					setAlert(lang.errorSubmittingFile, AlertTypes.ERROR);
+				}
+			} catch (e) {
+				setAlert(lang.transferReceiptFailure, AlertTypes.ERROR);
 			}
 		} else {
-			setAlert(lang.uploadReceiptFirst, AlertTypes.ERROR);
+			await createTransferReceipt(event?._id, { ...payForm });
+			setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
+			setTimeout(window.location.reload, 1000);
 		}
 	}
 
@@ -181,12 +183,12 @@ export default function PayCheckForm(props: PayCheckProps) {
 					{lang.totalPrice}${priceToPay}
 				</h5>
 
-				<form onSubmit={e => confirmPay(e)} className={styles.payForm}>
+				<form onSubmit={confirmPay} className={styles.payForm}>
 					<h4>{lang.payOptTitle}</h4>
-					<input type="radio" name="cashOption" value="cash" checked={payOpt === 'cash'} onChange={tooglePaymentOp} />
+					<input type="radio" name="cashOption" value="cash" checked={payOpt === 'cash'} onChange={togglePaymentOp} />
 					<label>{lang.cashRadioBtn}</label>
 
-					<input type="radio" name="transferOption" value="transfer" checked={payOpt === 'transfer'} onChange={e => tooglePaymentOp(e)} />
+					<input type="radio" name="transferOption" value="transfer" checked={payOpt === 'transfer'} onChange={togglePaymentOp} />
 					<label>{lang.transferRadioBtn}</label>
 
 					<div className={styles.descInput}>
@@ -214,7 +216,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 					<input type="file" style={{ display: 'none' }} onChange={handleFile} ref={inputRef} />
 
 					<section className={styles.btnSection}>
-						<Button type="submit" className={styles.confirmPayBtn} kind="primary" size="large" onClick={e => confirmPay(e)}>
+						<Button type="submit" className={styles.confirmPayBtn} kind="primary" size="large" onClick={confirmPay}>
 							{lang.confirmPayBtn}
 						</Button>
 					</section>

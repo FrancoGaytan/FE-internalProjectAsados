@@ -29,8 +29,8 @@ export default function Stars(props: IStarsProps) {
 		}
 		setRating(rating);
 		createRating(props.idEvent, user.id, { score: rating })
-			.then(res => {
-				setRating(res.score);
+			.then(({ score }) => {
+				setRating(score);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
@@ -42,9 +42,9 @@ export default function Stars(props: IStarsProps) {
 			return;
 		} else {
 			getRatingFromUser(props.idEvent, user.id)
-				.then(res => {
-					if (res.score) {
-						setRating(res.score);
+				.then(({ score }) => {
+					if (score) {
+						setRating(score);
 					}
 				})
 				.catch(e => {
@@ -57,14 +57,8 @@ export default function Stars(props: IStarsProps) {
 		<div className={styles.starsContainer}>
 			{stars.map((item, index) => {
 				const isActiveColor = (rating || temporaryRating) && (index < rating || index < temporaryRating);
+				const elementColor = isActiveColor ? props.color || DEFAULT_COLOR : DEFAULT_UNSELECTED_COLOR;
 
-				let elementColor = '';
-
-				if (isActiveColor) {
-					elementColor = props.color || DEFAULT_COLOR;
-				} else {
-					elementColor = DEFAULT_UNSELECTED_COLOR;
-				}
 				return (
 					<div
 						className={styles.star}
@@ -78,7 +72,7 @@ export default function Stars(props: IStarsProps) {
 						onMouseEnter={() => setTemporaryRating(index + 1)}
 						onMouseLeave={() => setTemporaryRating(0)}
 						onClick={() => handleClick(index + 1)}>
-						{props.icon ? props.icon : DEFAULT_ICON}
+						{props.icon || DEFAULT_ICON}
 					</div>
 				);
 			})}

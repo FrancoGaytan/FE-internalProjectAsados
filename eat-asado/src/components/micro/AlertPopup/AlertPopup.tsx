@@ -35,14 +35,12 @@ export default function AlertPopup() {
 			break;
 	}
 
-	if (text && type) {
-		return (
-			<div className={`${styles.messageContainer} ${popupStyle}`}>
-				<i className={`${styles.messageIcon} material-icons`}>{iconName}</i>
-				<span className={styles.message}>{text}</span>
-			</div>
-		);
-	} else {
-		return <></>;
-	}
+	return text && type ? (
+		<div className={`${styles.messageContainer} ${popupStyle}`}>
+			<i className={`${styles.messageIcon} material-icons`}>{iconName}</i>
+			<span className={styles.message}>{text}</span>
+		</div>
+	) : (
+		<></>
+	);
 }
