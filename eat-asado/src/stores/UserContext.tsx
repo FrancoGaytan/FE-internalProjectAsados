@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, PropsWithChildren } from 'react';
+import { createContext, useContext, useState, PropsWithChildren, JSX } from 'react';
 import { IUser } from '../models/user'; //TODO: hay que corregir esta interfaz ahora es la posta fijate de rehacer los ultimos cambios
 
 interface IUserContext {

@@ -47,5 +47,9 @@
 			color: var(--btnPrimaryDarker);
 			background-image: url('../../../../public/assets/pictures/closeIcon.png');
 		}
+		&.add {
+			color: var(--btnPrimaryDarker);
+			background-image: url('../../../../public/assets/pictures/addBtn50.png');
+		}
 	}
 }

@@ -1,8 +1,6 @@
 import { className } from '../../../utils/className';
 import { EventResponse } from '../../../models/event';
-import { IUser } from '../../../models/user';
 import { ITransferReceiptRequest } from '../../../models/transfer';
-import { IPurchaseReceipt } from '../../../models/purchases';
 import Button from '../../micro/Button/Button';
 import { useState, useEffect, useRef } from 'react';
 import DragAndDrop from '../../micro/DragAndDrop/DragAndDrop';
@@ -16,15 +14,31 @@ import styles from './styles.module.scss';
 
 interface PayCheckProps {
 	event: EventResponse;
-	shoppingDesignee: IUser;
+	shoppingDesignee: IUserReceiverInfo;
+	amount: number;
 	openModal: () => void;
 	closeModal: () => void;
+}
+
+export interface IUserReceiverInfo {
+	receiverAlias: string;
+	receiverCbu: string;
+	receiverId: string;
+	receiverLastName: string;
+	receiverName: string;
+}
+
+export interface PayCheckInfoResponse {
+	userId: string;
+	userName: string;
+	amount: number;
+	receiver: IUserReceiverInfo;
 }
 
 type PaymentOpts = PaymentOptsEnum.CASH | PaymentOptsEnum.TRANSFER;
 
 export default function PayCheckForm(props: PayCheckProps) {
-	const [priceToPay, setPriceToPay] = useState(0);
+	const [paymentInfo, setPaymentInfo] = useState({ amount: 0, receiver: {} as IUserReceiverInfo });
 	const [payOpt, setPayOpt] = useState<PaymentOpts>(PaymentOptsEnum.TRANSFER);
 	const [paymentDesc, setPaymentDesc] = useState<string>('');
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -35,7 +49,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 	const initialPayForm: ITransferReceiptRequest = {
 		paymentMethod: 'transfer',
-		amount: gettingPriceToPay(),
+		amount: 0,
 		file: undefined,
 		description: '',
 		user: user ? user.id : ''
@@ -50,24 +64,25 @@ export default function PayCheckForm(props: PayCheckProps) {
 		return diffInMilliseconds / (1000 * 60 * 60 * 24);
 	}
 
-	function gettingPriceToPay(): number {
-		let price = 0;
+	function gettingPriceToPay(): { amount: number; receiver: IUserReceiverInfo } {
+		let price = props.amount;
+		let userToPay = props.shoppingDesignee;
 		let currentPenalization = 0;
 
 		if (!event) {
-			return price;
+			return { amount: 0, receiver: {} as IUserReceiverInfo };
 		}
-
-		event?.purchaseReceipts?.forEach((tr: IPurchaseReceipt) => {
-			price = price + tr.amount;
-		});
 
 		if (event.penalization && gettingDateDiference() > 0) {
 			if (new Date(event.penalizationStartDate) < new Date()) {
 				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
 			}
 		}
-		return Math.round(price / event.members.length + currentPenalization);
+
+		return {
+			amount: Math.round(price + currentPenalization),
+			receiver: userToPay
+		};
 	}
 
 	function checkForReceiptAndTransfer() {
@@ -135,10 +150,9 @@ export default function PayCheckForm(props: PayCheckProps) {
 	}
 
 	useEffect(() => {
-		setPriceToPay(gettingPriceToPay());
-
+		setPaymentInfo(gettingPriceToPay());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [event, payForm]);
+	}, [props]);
 
 	useEffect(() => {
 		setPayForm(prev => ({ ...prev, paymentMethod: payOpt }));
@@ -155,30 +169,27 @@ export default function PayCheckForm(props: PayCheckProps) {
 	return (
 		<div {...className(styles.paycheck)}>
 			<h4>{lang.payTitle}</h4>
+			<div className={styles.priceTitle}>${paymentInfo.amount}</div>
 
 			<div className={styles.paycheckContent}>
 				{/* TODO: Demasiados h5, no es semántico. */}
-				<h5 className={styles.paymentDataSD}>
-					{lang.shoppingDesignee} {event?.shoppingDesignee?.name}
+				<h5 className={styles.paymentData}>
+					{lang.shoppingDesignee} {props.shoppingDesignee?.receiverName}
 				</h5>
 
 				<h5 className={styles.paymentData}>
-					{lang.alias} {event?.shoppingDesignee?.alias}
-					{event?.shoppingDesignee?.alias && (
-						<button className={styles.copyBtn} onClick={() => copyLinkEvent(event?.shoppingDesignee?.alias as string)}></button>
+					{lang.alias} {props.shoppingDesignee?.receiverAlias}
+					{props.shoppingDesignee?.receiverAlias && (
+						<button className={styles.copyBtn} onClick={() => copyLinkEvent(props.shoppingDesignee?.receiverAlias as string)}></button>
 					)}
 				</h5>
 
 				<h5 className={styles.paymentData}>
 					{lang.cbu}
-					{event?.shoppingDesignee?.cbu}
-					{event?.shoppingDesignee?.cbu && (
-						<button className={styles.copyBtn} onClick={() => copyLinkEvent(event?.shoppingDesignee?.cbu as string)}></button>
+					{paymentInfo.receiver.receiverCbu}
+					{paymentInfo.receiver.receiverCbu && (
+						<button className={styles.copyBtn} onClick={() => copyLinkEvent(paymentInfo.receiver.receiverCbu as string)}></button>
 					)}
-				</h5>
-
-				<h5>
-					{lang.totalPrice}${priceToPay}
 				</h5>
 
 				<form onSubmit={e => confirmPay(e)} className={styles.payForm}>

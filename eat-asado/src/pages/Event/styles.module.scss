@@ -215,6 +215,11 @@
 
 				.responsibilitiesSection {
 					margin-top: 20px;
+					.infoData {
+						margin: 5px;
+						margin-left: 25px;
+						display: flex;
+					}
 				}
 				.logoTitle {
 					margin-bottom: 0px;
@@ -289,6 +294,43 @@
 				}
 				.inChargeOpt {
 					display: flex;
+					flex-direction: column;
+					gap: 10px;
+
+					.shoppingDesigneeDescSection {
+						display: flex;
+					}
+
+					.chefDesigneeSection {
+						display: flex;
+						flex-direction: row;
+						align-items: flex-start;
+						gap: 5px;
+						margin-bottom: 10px;
+					}
+
+					.shoppingDesigneeSection {
+						display: flex;
+						flex-direction: column;
+						align-items: flex-start;
+						gap: 5px;
+						margin-left: 35px;
+					}
+
+					.singleDesigneeSection {
+						display: flex;
+						align-items: center;
+						gap: 8px;
+						min-height: 25px;
+					}
+
+					h5 {
+						margin: 0;
+					}
+
+					button {
+						margin-left: auto;
+					}
 				}
 				@media #{variables.media-query(max, sm)} {
 					align-items: center;

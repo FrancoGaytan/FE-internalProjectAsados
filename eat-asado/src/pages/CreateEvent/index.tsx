@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import { useTranslation } from '../../stores/LocalizationContext';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import Button from '../../components/micro/Button/Button';

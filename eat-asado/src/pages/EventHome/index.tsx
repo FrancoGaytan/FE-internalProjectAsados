@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { JSX, useEffect, useMemo, useState } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
@@ -97,8 +97,6 @@ export function EventHome(): JSX.Element {
 		<PrivateFormLayout>
 			<div className={styles.content}>
 				<section className={styles.header}>
-					<h1>{lang.messageBanner}</h1>
-
 					<Button kind="primary" size="large" onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}>
 						{lang.newEventButton}
 					</Button>

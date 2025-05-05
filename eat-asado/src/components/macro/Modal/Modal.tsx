@@ -1,5 +1,6 @@
 import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
+import { JSX } from 'react';
 
 interface ModalProps {
 	children: JSX.Element;

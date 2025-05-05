@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, JSX } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
@@ -8,9 +8,10 @@ import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
 	getEventById,
+	getMembersAmount,
 	getMembersAndReceiptsInfo,
 	getTransferReceipt,
-	hasUploadedTransferReceipt,
+	/* 	hasUploadedTransferReceipt, */
 	subscribeToAnEvent,
 	unsubscribeToAnEvent
 } from '../../service';
@@ -22,7 +23,7 @@ import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import { getUserById, editRoles, deleteEvent, editEvent } from '../../service';
 import Modal from '../../components/macro/Modal/Modal';
-import PayCheckForm from '../../components/macro/PayCheckForm/PayCheckForm';
+import PayCheckForm, { IUserReceiverInfo, PayCheckInfoResponse } from '../../components/macro/PayCheckForm/PayCheckForm';
 import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/PurchaseReceiptForm';
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
 import { IPurchaseReceipt } from '../../models/purchases';
@@ -34,7 +35,7 @@ import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFast
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
-	const { user, isRedirecting, setRedirection } = useAuth();
+	const { user, /* isRedirecting, */ setRedirection } = useAuth();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { setAlert } = useAlert();
@@ -45,7 +46,7 @@ export function Event(): JSX.Element {
 	const [modalValidationState, setModalValidationState] = useState(false);
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [modalFastAproval, setModalFastAproval] = useState(false);
-	const [userHasPaid, setUserHasPaid] = useState(false);
+	//const [userHasPaid, setUserHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState([]);
 	const baseUrl = getBaseUrl();
 	const currentUrl = `${baseUrl}${location.pathname}${location.search}${location.hash}`;
@@ -53,6 +54,7 @@ export function Event(): JSX.Element {
 	const [eventParticipants, setEventParticipants] = useState<EventUserResponse[]>([]);
 	const [userToApprove, setUserToApprove] = useState('');
 	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [paymentInfo, setPaymentInfo] = useState({ amount: 0, receiver: {} as IUserReceiverInfo });
 	const [userToFastAprove, setUserToFastAprove] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
@@ -100,11 +102,15 @@ export function Event(): JSX.Element {
 
 	function removeResponsabilitiesAtUnsubscribing(): void {
 		event?.chef && event?.chef?._id === user?.id && toogleChef();
-		event?.shoppingDesignee && event?.shoppingDesignee?._id === user?.id && toogleShopDesignee();
+		event?.shoppingDesignee.length > 0 && event?.shoppingDesignee?.some((designee: IUser) => designee._id === user?.id) && toogleShopDesignee();
 	}
 
 	function unsubscribeUserToEvent(): void {
 		if (!user) {
+			return;
+		}
+		if (event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) {
+			setAlert(`${lang.shoppingDesigneeTryingToGetOff}`, AlertTypes.ERROR);
 			return;
 		}
 		removeResponsabilitiesAtUnsubscribing();
@@ -143,19 +149,23 @@ export function Event(): JSX.Element {
 			return;
 		}
 
-		!event?.shoppingDesignee
-			? editRoles(event?._id, { ...event, shoppingDesignee: actualUser })
-					.then(res => {
-						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
-					})
-					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => setTimeout(() => window.location.reload(), 1000))
-			: editRoles(event?._id, { ...event, shoppingDesignee: null })
-					.then(res => {
-						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
-					})
-					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
-					.finally(() => setTimeout(() => window.location.reload(), 1000));
+		const currentDesignees = event?.shoppingDesignee || [];
+		const isUserAlreadyDesignee = currentDesignees.some((designee: IUser) => designee._id === actualUser._id);
+
+		let updatedDesignees;
+
+		if (isUserAlreadyDesignee) {
+			updatedDesignees = currentDesignees.filter((designee: IUser) => designee._id !== actualUser._id);
+		} else {
+			updatedDesignees = [...currentDesignees, actualUser];
+		}
+
+		editRoles(event?._id, { ...event, shoppingDesignee: updatedDesignees })
+			.then(res => {
+				setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
+			})
+			.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
+			.finally(() => setTimeout(() => window.location.reload(), 1000));
 	}
 
 	function deleteTheEvent(): void {
@@ -168,10 +178,37 @@ export function Event(): JSX.Element {
 	}
 
 	function closeEvent(): void {
-		event.chef && event.shoppingDesignee
+		//preguntarle a nani si cuando se cierra un evento quien tiene cero deuda ya se da por aprobado, sino como hacemos? ahí tendríamos que usar el readyforpayment, el cual todavía nose si esta implementado
+		event.chef && event.shoppingDesignee.length > 0
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
 					.then(res => {
 						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
+						setTimeout(() => window.location.reload(), 1000);
+					})
+					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
+			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
+	}
+
+	function setEventToReadyForPay(): void {
+		if ((event.purchaseReceipts.length as number) === 0) {
+			setAlert(`${lang.eventCantBeReadyForPaymentWithoutPurchases}`, AlertTypes.ERROR);
+			return;
+		}
+		event.chef && event.shoppingDesignee.length > 0
+			? editEvent(event?._id, { ...event, state: EventStatesEnum.READYFORPAYMENT })
+					.then(res => {
+						setAlert(`${lang.eventReadyForPayment}!`, AlertTypes.SUCCESS);
+						setTimeout(() => window.location.reload(), 1000);
+					})
+					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
+			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
+	}
+
+	function reclosingEvent(): void {
+		event.chef && event.shoppingDesignee.length > 0 && event.state === EventStatesEnum.READYFORPAYMENT
+			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
+					.then(res => {
+						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS); //TODO: cambiar los textos aca
 						setTimeout(() => window.location.reload(), 1000);
 					})
 					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
@@ -245,7 +282,9 @@ export function Event(): JSX.Element {
 	}
 
 	function showPaymentData() {
-		return event.state === EventStatesEnum.CLOSED && event.shoppingDesignee && event.shoppingDesignee?._id === user?.id;
+		return (
+			event.state === EventStatesEnum.READYFORPAYMENT && event.shoppingDesignee && event.shoppingDesignee.some((d: IUser) => d._id === user?.id)
+		);
 	}
 
 	function actualUserIsShoppingDesignee(member: EventUserResponse) {
@@ -277,6 +316,28 @@ export function Event(): JSX.Element {
 			return window.location.origin;
 		}
 	}
+
+	useEffect(() => {
+		function checkWhoDoesntNeedToTransfer(): void {
+			//tengo que agregarle a esta funcion la validacion que ester readyforpay antes de ejecutarla
+			const abortController = new AbortController();
+
+			getMembersAmount(event?._id, abortController.signal)
+				.then(res => {
+					const myInfo = res.find((member: PayCheckInfoResponse) => member.userId === user?.id);
+					if (myInfo?.amount === 0) {
+						setPaymentInfo({ amount: 0, receiver: {} as IUserReceiverInfo });
+					} else {
+						setPaymentInfo({ amount: myInfo?.amount ?? 0, receiver: myInfo?.receiver ?? ({} as IUserReceiverInfo) });
+					}
+				})
+				.catch(e => {
+					console.error('Catch in context: ', e);
+				});
+		}
+		checkWhoDoesntNeedToTransfer();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [event]);
 
 	function copyLinkEvent(): void {
 		navigator.clipboard.writeText(currentUrl);
@@ -310,7 +371,7 @@ export function Event(): JSX.Element {
 					setPurchasesMade(res);
 				})
 				.catch(e => {
-					//console.error('Catch in context: ', e);
+					console.error('Catch in context: ', e);
 				});
 		}
 	}, [event]);
@@ -357,13 +418,14 @@ export function Event(): JSX.Element {
 				console.error('Catch in context: ', e);
 			});
 	}, [transferReceiptId]);
-	console.log(event);
+
+	//event.state && console.log(event.state);
+	console.log(paymentInfo);
+
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
 				<section className={styles.header}>
-					<h1>{lang.messageBanner}</h1>
-
 					<Button kind="primary" size="large" onClick={() => navigate('/createEvent/new')}>
 						{lang.newEventButton}
 					</Button>
@@ -471,40 +533,62 @@ export function Event(): JSX.Element {
 
 								<div className={styles.responsibilitiesSection}>
 									<div className={styles.inChargeOpt}>
-										<h5 className={styles.infoData}>
-											{lang.cook}
-											{event.chef ? (event.chef?._id === user?.id ? lang.me : event.chef.name) : lang.empty}
-										</h5>
+										<div className={styles.chefDesigneeSection}>
+											<h5 className={styles.infoData}>
+												{lang.cook}
+												{event.chef ? (event.chef?._id === user?.id ? lang.me : event.chef.name) : lang.empty}
+											</h5>
+											{event.chef &&
+												event.chef?._id === user?.id &&
+												event.state !== EventStatesEnum.CLOSED &&
+												event.state !== EventStatesEnum.READYFORPAYMENT &&
+												isUserIntoEvent() && (
+													<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
+												)}
 
-										{event.chef &&
-											event.chef?._id === user?.id &&
-											event.state !== EventStatesEnum.CLOSED &&
-											isUserIntoEvent() && <AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>}
-
-										{!event.chef && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
-											<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
-										)}
+											{!event.chef &&
+												event.state !== EventStatesEnum.CLOSED &&
+												event.state !== EventStatesEnum.READYFORPAYMENT &&
+												isUserIntoEvent() && (
+													<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
+												)}
+										</div>
 									</div>
 									<div className={styles.inChargeOpt}>
-										<h5 className={styles.infoData}>
-											{lang.buyer}{' '}
-											{event.shoppingDesignee
-												? event.shoppingDesignee?._id === user?.id
-													? lang.meOpt
-													: event.shoppingDesignee.name
-												: lang.emptyOpt}
-										</h5>
+										<div className={styles.shoppingDesigneeDescSection}>
+											<h5 className={styles.infoData}>
+												{lang.buyer} {event.shoppingDesignee.length === 0 && lang.empty}
+											</h5>
 
-										{event.shoppingDesignee &&
-											event.shoppingDesignee?._id === user?.id &&
-											event.state !== EventStatesEnum.CLOSED &&
-											isUserIntoEvent() && (
-												<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
-											)}
+											{!event.shoppingDesignee.length &&
+												event.state !== EventStatesEnum.CLOSED &&
+												event.state !== EventStatesEnum.READYFORPAYMENT &&
+												isUserIntoEvent() && <AssignBtn kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>}
+											{event.shoppingDesignee.length > 0 &&
+												event.state !== EventStatesEnum.CLOSED &&
+												event.state !== EventStatesEnum.READYFORPAYMENT &&
+												isUserIntoEvent() &&
+												!event.shoppingDesignee.some((d: IUser) => d._id === user?.id) && (
+													<AssignBtn kind="add" onClick={() => toogleShopDesignee()}></AssignBtn>
+												)}
+										</div>
+										<div className={styles.shoppingDesigneeSection}>
+											{event.shoppingDesignee.length
+												? event.shoppingDesignee.map((designee: IUser, i: number) => (
+														<div key={designee._id} className={styles.singleDesigneeSection}>
+															<h5>{designee._id === user?.id ? lang.meOpt : designee.name}</h5>
 
-										{!event.shoppingDesignee && event.state !== EventStatesEnum.CLOSED && isUserIntoEvent() && (
-											<AssignBtn key={user?.id} kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
-										)}
+															{event.shoppingDesignee.length &&
+																event.shoppingDesignee[i]._id === user?.id &&
+																event.state !== EventStatesEnum.CLOSED &&
+																event.state !== EventStatesEnum.READYFORPAYMENT &&
+																isUserIntoEvent() && (
+																	<AssignBtn kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
+																)}
+														</div>
+												  ))
+												: ''}
+										</div>
 									</div>
 								</div>
 
@@ -591,7 +675,18 @@ export function Event(): JSX.Element {
 
 							{event.organizer &&
 								isUserIntoEvent() &&
-								(event.organizer?._id === user?.id || event.shoppingDesignee?._id === user?.id) &&
+								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
+								event.state !== 'finished' &&
+								event.state !== EventStatesEnum.READYFORPAYMENT &&
+								event.state !== EventStatesEnum.AVAILABLE && (
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => setEventToReadyForPay()}>
+										Ready for payment
+									</Button>
+								)}
+
+							{event.organizer &&
+								isUserIntoEvent() &&
+								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
 								event.state !== 'finished' &&
 								event.state !== EventStatesEnum.CLOSED && (
 									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
@@ -601,28 +696,30 @@ export function Event(): JSX.Element {
 
 							{event.organizer &&
 								isUserIntoEvent() &&
-								(event.organizer?._id === user?.id || event.shopopingDesignee?._id === user?.id) &&
+								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
 								event.state === EventStatesEnum.CLOSED && (
 									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
 										{lang.reopenEventBtn}
 									</Button>
 								)}
 
-							{event.shoppingDesignee &&
-								event.shoppingDesignee?._id !== user?.id &&
-								event.state === EventStatesEnum.CLOSED &&
+							{/* 							{event.shoppingDesignee &&//este boton deshabilitado no recuerdo para que caso funcionaba
+								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
+								event.state === EventStatesEnum.READYFORPAYMENT &&
 								isUserIntoEvent() &&
-								!userHasPaid &&
-								(event.purchaseReceipts.length as number) === 0 && (
+								//!userHasPaid &&
+								paymentInfo.amount !== 0 &&
+								(event.purchaseReceipts.length as number) !== 0 && (
 									<Button className={styles.btnEvent} kind="tertiary" size="short">
 										{lang.payBtn}
 									</Button>
-								)}
+								)} */}
 
 							{event.shoppingDesignee &&
-								event.shoppingDesignee?._id !== user?.id &&
-								event.state === EventStatesEnum.CLOSED &&
+								//(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
+								event.state === EventStatesEnum.READYFORPAYMENT &&
 								isUserIntoEvent() &&
+								paymentInfo.amount !== 0 &&
 								(event.purchaseReceipts.length as number) !== 0 &&
 								(!checkIfUserHasUploaded() ? (
 									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
@@ -636,18 +733,27 @@ export function Event(): JSX.Element {
 									)
 								))}
 
-							{event.shoppingDesignee && event.shoppingDesignee?._id === user?.id && event.state === EventStatesEnum.CLOSED && (
-								<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
-									{lang.loadPurchase}
-								</Button>
-							)}
+							{event.shoppingDesignee &&
+								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
+								event.state === EventStatesEnum.CLOSED &&
+								event.state !== EventStatesEnum.READYFORPAYMENT && (
+									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
+										{lang.loadPurchase}
+									</Button>
+								)}
 						</section>
 					</section>
 				)}
 			</div>
 
 			<Modal isOpen={modalPaycheckState} closeModal={closeModal}>
-				<PayCheckForm event={event} shoppingDesignee={event?.shoppingDesignee} openModal={openModal} closeModal={closeModal}></PayCheckForm>
+				{/* estos shopping designees va a haber que cambiarlos todos  */}
+				<PayCheckForm
+					event={event}
+					shoppingDesignee={paymentInfo.receiver}
+					amount={paymentInfo.amount}
+					openModal={openModal}
+					closeModal={closeModal}></PayCheckForm>
 			</Modal>
 
 			<Modal isOpen={modalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}>

@@ -1,3 +1,4 @@
+import { PayCheckInfoResponse } from '../components/macro/PayCheckForm/PayCheckForm';
 import { IEvent, IPublicEvent } from '../models/event';
 import { _delete, _get, _post, _put } from './httpService';
 
@@ -84,5 +85,13 @@ export async function deleteEvent(id: number, signal?: AbortSignal): Promise<any
 export async function getMembersAndReceiptsInfo(eventId: string, signal?: AbortSignal): Promise<any> {
 	//TODO: tipar any
 	const url = `/events/getMembersAndReceiptsInfo/${eventId}`;
+	return await _get(url, signal);
+}
+/**
+ * Gets the info of who a user is supposed to pay to for a certain event and the amount.
+ */
+export async function getMembersAmount(eventId: string, signal?: AbortSignal): Promise<PayCheckInfoResponse[]> {
+	//TODO: tipar any
+	const url = `/events/getMembersAmount/${eventId}`;
 	return await _get(url, signal);
 }

@@ -1,6 +1,6 @@
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { JSX, useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
 import { useAuth } from '../../stores/AuthContext';
 import { editProfilePicture, editUser, getUserById } from '../../service';

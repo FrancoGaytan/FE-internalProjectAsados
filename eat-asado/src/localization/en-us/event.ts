@@ -7,7 +7,7 @@ export const event = Object.seal({
 	rejectPayBtn: 'Reject Pay',
 	cashRadioBtn: 'Cash',
 	payOptTitle: 'Payment Alternatives',
-	payTitle: 'Payment',
+	payTitle: 'Payment Data',
 	shoppingDesignee: 'Shopping Designee: ',
 	alias: 'Alias: ',
 	cbu: 'CBU: ',
