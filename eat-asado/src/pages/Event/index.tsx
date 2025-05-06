@@ -31,7 +31,7 @@ import { downloadFile } from '../../utils/utilities';
 import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
 import { transferReceipt } from '../../models/transfer';
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
-import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
+import ConfirmationFastApprovalForm from '../../components/macro/ConfirmationFastApprovalForm/ConfimationPayForm';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -434,9 +434,12 @@ export function Event(): JSX.Element {
 					<section className={styles.event}>
 						{/* TODO: NO deberían haber dos h1 en la misma página */}
 						<h1 className={styles.eventTitle}>{event.title}</h1>
-						{isUserIntoEvent() && (event.state === EventStatesEnum.CLOSED || event.state === EventStatesEnum.FINISHED) && (
-							<Stars iconSize={25} count={5} defaultRating={0} icon={'★'} color="rgb(240, 191, 28)" idEvent={event._id}></Stars>
-						)}
+						{isUserIntoEvent() &&
+							(event.state === EventStatesEnum.CLOSED ||
+								event.state === EventStatesEnum.FINISHED ||
+								event.state === EventStatesEnum.READYFORPAYMENT) && (
+								<Stars iconSize={25} count={5} defaultRating={0} icon={'★'} color="rgb(240, 191, 28)" idEvent={event._id}></Stars>
+							)}
 
 						{event.isPrivate && (
 							<section className={styles.eventPrivate}>
@@ -769,10 +772,10 @@ export function Event(): JSX.Element {
 			</Modal>
 
 			<Modal isOpen={modalFastAproval} closeModal={closeModalFastAproval}>
-				<ConfirmationFastAprovalForm
+				<ConfirmationFastApprovalForm
 					eventId={userIdParams.eventId as string}
 					userId={userToFastAprove}
-					closeModal={closeModalFastAproval}></ConfirmationFastAprovalForm>
+					closeModal={closeModalFastAproval}></ConfirmationFastApprovalForm>
 			</Modal>
 		</PrivateFormLayout>
 	);

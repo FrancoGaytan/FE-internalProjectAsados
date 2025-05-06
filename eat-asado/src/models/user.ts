@@ -20,7 +20,7 @@ export interface IUser {
 	email: string;
 	password: string;
 	confirmPassword: string;
-	specialDiet: string[];
+	specialDiet: SpecialDietMenu[];
 	cbu?: string;
 	alias?: string;
 	profilePicture?: string;
@@ -32,7 +32,7 @@ export interface RegisterRequest {
 	email: string;
 	password: string;
 	repeatedPassword?: string;
-	specialDiet: string[]; // TODO: estos strings solo pueden ser celiac, hypertensive, vegan, vegetarian
+	specialDiet: SpecialDietMenu[];
 }
 
 export interface profilePicture {
@@ -46,5 +46,12 @@ export interface EventUserResponse {
 	transferReceipt: string | undefined;
 	hasReceiptApproved: boolean | null;
 	hasUploaded: boolean;
-	specialDiet: [string];
+	specialDiet: SpecialDietMenu[];
+}
+
+export enum SpecialDietMenu {
+	Celiac = 'celiac',
+	Hypertensive = 'hypertensive',
+	Vegan = 'vegan',
+	Vegetarian = 'vegetarian'
 }

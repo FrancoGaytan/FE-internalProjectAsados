@@ -1,7 +1,7 @@
 export const event = Object.seal({
 	transferReceiptLoaded: 'Transfer receipt successfully loaded',
 	purchaseReceiptLoaded: 'Purchase receipt successfully loaded',
-	transferReceiptFailure: 'Transfer receipt couldn´t be uploaded',
+	transferReceiptFailure: "Transfer receipt couldn't be uploaded",
 	confirmPayBtn: 'Confirm Pay',
 	transferRadioBtn: 'Transfer',
 	rejectPayBtn: 'Reject Pay',
@@ -18,8 +18,8 @@ export const event = Object.seal({
 	amountLabel: 'Amount',
 	validatePaymentTitle: 'Validate Payment',
 	downloadText: 'Download Transfer Receipt',
-	payApprovedSuccessfully: 'Payment Aproved Successfully',
-	payApproveFailed: 'There has been an error aproving',
+	payApprovedSuccessfully: 'Payment Approved Successfully',
+	payApproveFailed: 'There has been an error approving',
 	payRejectedSuccessfully: 'Payment rejected Successfully',
 	payRejectionFailed: 'There has been an error rejecting',
 	paidByCashText: 'This User has paid by cash',
@@ -32,5 +32,5 @@ export const event = Object.seal({
 	privateEvent: 'Private Event',
 	amountToBePaid: 'Amount: $',
 	linkCopiedToClipboard: 'Info copied to clipboard',
-	fastAproveText: 'This user hasn´t submitted any payment yet, do you want to approve anyway?'
+	fastAproveText: "This user hasn't submitted any payment yet, do you want to approve anyway?"
 });

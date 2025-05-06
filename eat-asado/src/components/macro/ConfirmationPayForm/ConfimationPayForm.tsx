@@ -56,7 +56,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		}
 	}
 
-	function gettingDateDiference(): number {
+	function gettingDateDifference(): number {
 		const startingDate = new Date(event.penalizationStartDate);
 		const todayDate = new Date();
 
@@ -81,9 +81,9 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 			price = price + tr.amount;
 		});
 
-		if (event.penalization && gettingDateDiference() > 0) {
+		if (event.penalization && gettingDateDifference() > 0) {
 			if (new Date(transferReceipt?.datetime as Date) < new Date()) {
-				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+				currentPenalization = event.penalization * Math.floor(gettingDateDifference());
 			}
 		}
 

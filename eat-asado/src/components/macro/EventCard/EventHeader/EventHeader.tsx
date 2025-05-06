@@ -33,7 +33,7 @@ export default function EventHeader(props: IEventCardProps) {
 			return 'blocked';
 		}
 
-		if (evState === EventStatesEnum.FINISHED) {
+		/* if (evState === EventStatesEnum.FINISHED) {
 			return EventStatesEnum.FINISHED;
 		} //dejar este if para chequear
 
@@ -56,6 +56,25 @@ export default function EventHeader(props: IEventCardProps) {
 			return EventStatesEnum.FULL;
 		} else {
 			return EventStatesEnum.FINISHED;
+		} */
+		switch (evState) {
+			case EventStatesEnum.FINISHED:
+			case EventStatesEnum.READYFORPAYMENT:
+			case EventStatesEnum.CLOSED:
+			case EventStatesEnum.CANCELED:
+				return evState;
+			case EventStatesEnum.AVAILABLE:
+				let eventState: string;
+				if (subscribedUser) {
+					eventState = 'subscribed';
+				} else if (isEventFull()) {
+					eventState = EventStatesEnum.FULL;
+				} else {
+					eventState = evState;
+				}
+				return eventState;
+			default:
+				return isEventFull() ? EventStatesEnum.FULL : EventStatesEnum.FINISHED;
 		}
 	}
 

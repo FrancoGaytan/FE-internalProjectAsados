@@ -26,16 +26,7 @@ export function AlertProvider({ children }: any) {
 		}, ALERT_TIME);
 	};
 
-	return (
-		<AlertContext.Provider
-			value={{
-				text,
-				type,
-				setAlert
-			}}>
-			{children}
-		</AlertContext.Provider>
-	);
+	return <AlertContext.Provider value={{ text, type, setAlert }}>{children}</AlertContext.Provider>;
 }
 
 /**

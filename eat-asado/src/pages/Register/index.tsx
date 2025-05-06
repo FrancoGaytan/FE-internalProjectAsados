@@ -1,7 +1,7 @@
 import { JSX, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../stores/LocalizationContext';
-import { RegisterRequest } from '../../models/user';
+import { RegisterRequest, SpecialDietMenu } from '../../models/user';
 import Button from '../../components/micro/Button/Button';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import { registering } from '../../service';
@@ -63,13 +63,13 @@ export function Register(): JSX.Element {
 		});
 	}
 
-	function checkSpecialDiet(): string[] {
+	function checkSpecialDiet(): SpecialDietMenu[] {
 		let speDiet = [];
 
-		specialDietOptions.isVegan && speDiet.push('vegan');
-		specialDietOptions.isVegetarian && speDiet.push('vegetarian');
-		specialDietOptions.isHypertensive && speDiet.push('hypertensive');
-		specialDietOptions.isCeliac && speDiet.push('celiac');
+		specialDietOptions.isVegan && speDiet.push(SpecialDietMenu.Vegan);
+		specialDietOptions.isVegetarian && speDiet.push(SpecialDietMenu.Vegetarian);
+		specialDietOptions.isHypertensive && speDiet.push(SpecialDietMenu.Hypertensive);
+		specialDietOptions.isCeliac && speDiet.push(SpecialDietMenu.Celiac);
 
 		return speDiet;
 	}

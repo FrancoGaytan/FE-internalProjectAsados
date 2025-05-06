@@ -100,11 +100,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 			return false;
 		}
 		if (evUserIsDebtor !== null) {
-			if (evUserIsDebtor === evId) {
-				return false;
-			} else {
-				return true;
-			}
+			return evUserIsDebtor !== evId;
 		} else {
 			return false;
 		}
@@ -112,11 +108,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 
 	function isThisEventBlocking(): boolean {
 		if (evUserIsDebtor !== null) {
-			if (evUserIsDebtor === evId) {
-				return true;
-			} else {
-				return false;
-			}
+			return evUserIsDebtor === evId;
 		} else {
 			return false;
 		}
@@ -206,17 +198,9 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 							{evRatingsAmount > 0 && <p className={styles.ratingAvg}>{Number(evAvgRate).toFixed(1)}</p>}
 
 							{evRatingsAmount === 1 ? (
-								<p className={styles.ratingRatingsAmoung}>
-									{'('}
-									{evRatingsAmount} {lang.reviewText}
-									{')'}
-								</p>
+								<p className={styles.ratingRatingsAmoung}>{`(${evRatingsAmount} ${lang.reviewText})`}</p>
 							) : (
-								<p className={styles.ratingRatingsAmoung}>
-									{'('}
-									{evRatingsAmount} {lang.reviewTexts}
-									{')'}
-								</p>
+								<p className={styles.ratingRatingsAmoung}>{`(${evRatingsAmount} ${lang.reviewTexts})`}</p>
 							)}
 						</section>
 					)}

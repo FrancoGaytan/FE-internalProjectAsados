@@ -5,7 +5,7 @@ export const login = Object.seal({
 	loginTitle: 'Inicio de Sesión',
 	loginBtn: 'LOGEARSE',
 	alreadyRegistered: '¿No estas registrado?',
-	registerHere: 'Registrate aqui',
+	registerHere: 'Registrate aquí',
 	user: 'usuario@endava.com',
 	welcomeMessage: '¡Bienvenido',
 	loginErrorMessage: 'Los datos ingresados no coinciden con ningun usuario.'

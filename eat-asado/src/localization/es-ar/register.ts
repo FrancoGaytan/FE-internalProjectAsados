@@ -10,15 +10,15 @@ export const register = Object.seal({
 	specialDiet: 'Dieta especial',
 	specialDietOptional: '(opcional)',
 	specialDietOptions: {
-		vegan: 'Are you Vegan?',
-		vegetarian: 'Are you Vegetarian?',
-		hypertensive: 'Are you Hypertensive?',
-		celiac: 'Are you Celiac?'
+		vegan: 'Sos Vegano?',
+		vegetarian: 'Sos Vegetariano?',
+		hypertensive: 'Sos Hipertenso?',
+		celiac: 'Sos Celíaco?'
 	},
 	registerTitle: 'Registro',
 	registerBtn: 'REGISTRO',
-	successMsg: 'Se ha registrado con exito',
-	failureMsg: 'You coudn´t register successfully',
+	successMsg: 'Se ha registrado con éxito',
+	failureMsg: 'No ha podido registrarse con éxito',
 	wrongPassword: 'Formato de contraseña incorrecto',
 	passwordArentMatching: 'Las contraseñas ingresadas no coinciden'
 });

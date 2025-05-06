@@ -11,17 +11,17 @@ interface ConfirmationPayProps {
 	closeModal: () => void;
 }
 
-function ConfirmationFastAprovalForm(props: ConfirmationPayProps) {
+function ConfirmationFastApprovalForm(props: ConfirmationPayProps) {
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
 	const { eventId, userId } = props;
 
-	async function aprovePayment(): Promise<void> {
+	async function approvePayment(): Promise<void> {
 		const abortController = new AbortController();
 		try {
 			await approvePaymentWithoutReceipt(userId, eventId, abortController.signal);
 			setAlert(lang.payApprovedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
+			setTimeout(window.location.reload, 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
 		} catch (error) {
 			setAlert(lang.payApproveFailed, AlertTypes.ERROR);
 		}
@@ -32,7 +32,7 @@ function ConfirmationFastAprovalForm(props: ConfirmationPayProps) {
 			<p className={styles.popupTitle}>{lang.fastAproveText}</p>
 			<div className={styles.paycheckContent}>
 				<section className={styles.btnSection}>
-					<Button className={styles.confirmPayBtn} kind="whitePrimary" size="short" onClick={e => aprovePayment()}>
+					<Button className={styles.confirmPayBtn} kind="whitePrimary" size="short" onClick={e => approvePayment()}>
 						{lang.confirmPayBtn}
 					</Button>
 				</section>
@@ -41,4 +41,4 @@ function ConfirmationFastAprovalForm(props: ConfirmationPayProps) {
 	);
 }
 
-export default ConfirmationFastAprovalForm;
+export default ConfirmationFastApprovalForm;

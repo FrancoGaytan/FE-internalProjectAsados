@@ -57,7 +57,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 
 	const [payForm, setPayForm] = useState<ITransferReceiptRequest>(initialPayForm);
 
-	function gettingDateDiference(): number {
+	function gettingDateDifference(): number {
 		const startingDate = new Date(event.penalizationStartDate);
 		const todayDate = new Date();
 		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
@@ -73,9 +73,9 @@ export default function PayCheckForm(props: PayCheckProps) {
 			return { amount: 0, receiver: {} as IUserReceiverInfo };
 		}
 
-		if (event.penalization && gettingDateDiference() > 0) {
+		if (event.penalization && gettingDateDifference() > 0) {
 			if (new Date(event.penalizationStartDate) < new Date()) {
-				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
+				currentPenalization = event.penalization * Math.floor(gettingDateDifference());
 			}
 		}
 

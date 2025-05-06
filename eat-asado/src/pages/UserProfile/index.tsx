@@ -57,10 +57,10 @@ export function UserProfile(): JSX.Element {
 		lastName: actualUser.lastName,
 		userCbu: actualUser.cbu,
 		userAlias: actualUser.alias,
-		userVegan: chekingSpecialDiet('vegan'),
-		userVegetarian: chekingSpecialDiet('vegetarian'),
-		userHypertensive: chekingSpecialDiet('hypertensive'),
-		userCeliac: chekingSpecialDiet('celiac')
+		userVegan: checkingSpecialDiet('vegan'),
+		userVegetarian: checkingSpecialDiet('vegetarian'),
+		userHypertensive: checkingSpecialDiet('hypertensive'),
+		userCeliac: checkingSpecialDiet('celiac')
 	};
 
 	const [userProfile, setUser] = useState<UserProfileInterface>(initialUser); //este es el usuario que despues se va a submitear al form, el que se ve en los inputs
@@ -113,7 +113,7 @@ export function UserProfile(): JSX.Element {
 			});
 	}
 
-	function chekingSpecialDiet(diet: any) {
+	function checkingSpecialDiet(diet: any) {
 		return actualUser?.specialDiet?.includes(diet) && diet.toString();
 	}
 
@@ -148,9 +148,10 @@ export function UserProfile(): JSX.Element {
 
 		getUserById(user.id).then(res => {
 			setActualUser(res);
-			getImage(res.profilePicture).then(res2 => {
-				setActualUser(prev => ({ ...prev, image: res2 }));
-			});
+			res.profilePicture &&
+				getImage(res.profilePicture).then(res2 => {
+					setActualUser(prev => ({ ...prev, image: res2 }));
+				});
 		});
 
 		return () => abortController.abort();

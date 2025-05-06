@@ -6,6 +6,7 @@ import { _login } from '../service';
 import { useAlert } from './AlertContext';
 import { AlertTypes } from '../components/micro/AlertPopup/AlertPopup';
 import { useTranslation } from './LocalizationContext';
+import { getLocalStorageKey, removeLocalStorageKey, setLocalStorageKey } from '../utils/localStorageHelpers';
 
 interface IAuthContext {
 	user: LoginResponse | null;
@@ -41,8 +42,8 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 				/**
 				 * @todo: Ver si vale la pena guardar 2 keys. De momento dejalo asi.
 				 */
-				localStorage.setItem(localStorageKeys.user, JSON.stringify(res));
-				localStorage.setItem(localStorageKeys.token, JSON.stringify(res.jwt));
+				setLocalStorageKey(localStorageKeys.user, JSON.stringify(res));
+				setLocalStorageKey(localStorageKeys.token, JSON.stringify(res.jwt));
 
 				setUser(res);
 				setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
@@ -64,14 +65,14 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 	 * Logs out current user
 	 */
 	function logout() {
-		localStorage.removeItem(localStorageKeys.user);
-		localStorage.removeItem(localStorageKeys.token);
+		removeLocalStorageKey(localStorageKeys.user);
+		removeLocalStorageKey(localStorageKeys.token);
 		setUser(null);
 		navigate('/login');
 	}
 
 	function getUserFromLocalStorage(): LoginResponse {
-		return JSON.parse(localStorage.getItem(localStorageKeys.user) ?? '{}');
+		return JSON.parse(getLocalStorageKey(localStorageKeys.user) ?? '{}');
 	}
 
 	/**

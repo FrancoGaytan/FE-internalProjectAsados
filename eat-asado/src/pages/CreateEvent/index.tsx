@@ -32,7 +32,7 @@ export function CreateEvent(): JSX.Element {
 		memberLimit: 1,
 		members: [],
 		state: EventStatesEnum.AVAILABLE,
-		organizer: user ? user.id : '',
+		organizer: user?.id || '',
 		isChef: undefined,
 		isShoppingDesignee: undefined,
 		isPrivate: false,

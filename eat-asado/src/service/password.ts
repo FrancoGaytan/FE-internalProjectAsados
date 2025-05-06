@@ -2,19 +2,21 @@ import { IMailRequest, IRecoverPasswordRequest, IVerificationCode } from '../mod
 import { IPurchaseReceiptImage, IPurchaseReceiptRequest } from '../models/purchases';
 import { _delete, _get, _post, _put, _postFiles, __getFiles } from './httpService';
 
+const baseURL = '/password';
+
 export async function forgotPassword(payload: IMailRequest, signal?: AbortSignal): Promise<any> {
-	const url = `/password/forgot`;
+	const url = `${baseURL}/forgot`;
 	return await _post<any, IMailRequest>(url, payload, signal);
 }
 
 export async function verifyCode(payload: IVerificationCode, signal?: AbortSignal): Promise<any> {
 	//TODO: tipar any
-	const url = `/password/verifyCode`;
+	const url = `${baseURL}/verifyCode`;
 	return await _put<any, IVerificationCode>(url, payload, signal);
 }
 
 export async function recoverPassword(payload: IRecoverPasswordRequest, signal?: AbortSignal): Promise<any> {
 	//TODO: tipar any
-	const url = `/password/recover`;
+	const url = `${baseURL}/recover`;
 	return await _put<any>(url, payload, signal);
 }

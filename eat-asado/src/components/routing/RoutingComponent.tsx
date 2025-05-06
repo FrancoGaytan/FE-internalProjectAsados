@@ -17,11 +17,13 @@ export default function RoutingComponent(props: RoutingComponentProps): JSX.Elem
 
 	const translation = useTranslation('navigation');
 
-	useEffect(() => changeTitle(translation[props.route.localizationKey || '']), [props.route, translation]);
+	const { localizationKey, isPublic, element } = props.route;
 
-	if (props.route.isPublic) {
-		return <PublicLayout>{props.route.element}</PublicLayout>;
+	useEffect(() => changeTitle(translation[localizationKey || '']), [props.route, translation]);
+
+	if (isPublic) {
+		return <PublicLayout>{element}</PublicLayout>;
 	}
 
-	return !isAuthenticated ? <Navigate to="/login" /> : <PrivateFormLayout>{props.route.element}</PrivateFormLayout>;
+	return !isAuthenticated ? <Navigate to="/login" /> : <PrivateFormLayout>{element}</PrivateFormLayout>;
 }

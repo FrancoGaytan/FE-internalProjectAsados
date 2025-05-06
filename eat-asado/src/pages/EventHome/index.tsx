@@ -172,14 +172,14 @@ export function EventHome(): JSX.Element {
 	);
 }
 
-function StepItem(props: IStepItem) {
+function StepItem({ title, description, imagePath }: IStepItem) {
 	return (
 		<li className={styles.stepItem}>
-			<img src={props.imagePath} alt="stepItem" />
+			<img src={imagePath} alt="stepItem" />
 
-			<h1>{props.title}</h1>
+			<h1>{title}</h1>
 
-			<p>{props.description}</p>
+			<p>{description}</p>
 		</li>
 	);
 }
