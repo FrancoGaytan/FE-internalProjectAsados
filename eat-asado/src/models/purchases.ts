@@ -3,6 +3,9 @@ export interface IPurchaseReceipt {
 	description: string;
 	image: string;
 	_id: string;
+	participants: string[];
+	event: string;
+	shoppingDesignee: string;
 }
 
 export interface IPurchaseReceiptImage {

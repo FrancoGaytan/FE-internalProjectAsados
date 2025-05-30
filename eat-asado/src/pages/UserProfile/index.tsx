@@ -159,7 +159,7 @@ export function UserProfile(): JSX.Element {
 	return (
 		<div className={styles.userProfileContainer}>
 			<form onSubmit={e => handleUpdateProfile(e)}>
-				<h1>{lang.profileTitle}</h1>
+				<h1 className={styles.profileTitle}>{lang.profileTitle}</h1>
 
 				<section className={styles.dataSection}>
 					<div className={styles.firstColumnProfile}>

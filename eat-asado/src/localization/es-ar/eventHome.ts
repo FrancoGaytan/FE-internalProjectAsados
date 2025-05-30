@@ -88,5 +88,8 @@ export const eventHome = Object.seal({
 	noPenalizationAmount: 'Sin penalización',
 	penalizationAmount: 'Penalización',
 	penalizationStartDate: 'Comienzo de penalización',
-	eventCantBeReadyForPaymentWithoutPurchases: 'El evento no puede estar listo para el pago sin compras realizadas'
+	eventCantBeReadyForPaymentWithoutPurchases: 'El evento no puede estar listo para el pago sin compras realizadas',
+	readyForPaymentBtn: 'Listo para pagar',
+	sdCanNotRemove: 'No puedes desasignarte si tienes una compra asignada',
+	awaitingNoti: 'EN ESPERA'
 });

@@ -8,6 +8,8 @@ import { useEvent } from '../../stores/EventContext';
 import { useNavigate } from 'react-router-dom';
 import { getPublicAndPrivateEvents, getPublicEvents, isUserDebtor } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
+import ImageSlider from '../../components/macro/Slider/ImageSlider';
+import { eventImages } from '../../utils/eventImages';
 import styles from './styles.module.scss';
 
 interface IStepItem {
@@ -93,6 +95,50 @@ export function EventHome(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
+	useEffect(() => {
+		const fetchLatestData = () => {
+			if (user !== null) {
+				getPublicAndPrivateEvents()
+					.then(res => {
+						setTimeout(() => {
+							setPublicEvents(res);
+						}, 200);
+					})
+					.catch(e => {
+						console.error('Catch in context: ', e);
+					});
+			} else {
+				getPublicEvents()
+					.then(res => {
+						setPublicEvents(res);
+					})
+					.catch(e => {
+						console.error('Catch in context: ', e);
+					});
+			}
+		};
+		// Llamada periódica cada 3 minutos
+		const interval = setInterval(() => {
+			if (document.visibilityState === 'visible') {
+				fetchLatestData();
+			}
+		}, 180000);
+
+		// También actualiza al volver a la pestaña
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'visible') {
+				fetchLatestData();
+			}
+		};
+
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+		return () => {
+			clearInterval(interval);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
+	}, []);
+
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -134,7 +180,7 @@ export function EventHome(): JSX.Element {
 				</section>
 
 				<section className={styles.participationInfo}>
-					<img alt="sausages" src="/assets/pictures/pictureEvent.jpg" />
+					<ImageSlider images={eventImages} altText="Event image" />
 
 					<div className={styles.description}>
 						<h1>{lang.participationInfoTitle}</h1>

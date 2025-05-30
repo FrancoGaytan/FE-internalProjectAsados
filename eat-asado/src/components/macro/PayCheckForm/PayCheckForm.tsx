@@ -131,8 +131,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 					try {
 						await uploadFile(payForm.file, resp._id);
 						setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-						setTimeout(() => window.location.reload(), 1000);
-						//closeModal(); // Mejora: lograr que se cierre el popup una vez que se confirme el updateFile
+						props.closeModal();
 					} catch (e) {
 						setAlert(lang.errorSubmittingFile, AlertTypes.ERROR);
 					}
@@ -142,7 +141,7 @@ export default function PayCheckForm(props: PayCheckProps) {
 			} else {
 				await createTransferReceipt(event?._id, { ...payForm });
 				setAlert(`${lang.transferReceiptLoaded}!`, AlertTypes.SUCCESS);
-				setTimeout(() => window.location.reload(), 1000);
+				props.closeModal();
 			}
 		} else {
 			setAlert(lang.uploadReceiptFirst, AlertTypes.ERROR);

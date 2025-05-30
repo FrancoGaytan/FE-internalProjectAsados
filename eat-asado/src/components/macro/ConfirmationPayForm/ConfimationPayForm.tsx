@@ -40,7 +40,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		try {
 			await approveTransferReceipts(receiptId, event._id, abortController.signal);
 			setAlert(lang.payApprovedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
+			props.closeModal();
 		} catch (error) {
 			setAlert(lang.payApproveFailed, AlertTypes.ERROR);
 		}
@@ -50,7 +50,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		try {
 			await deleteTransferReceipt(receiptId);
 			setAlert(lang.payRejectedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000);
+			props.closeModal();
 		} catch (error) {
 			setAlert(lang.payRejectionFailed, AlertTypes.ERROR);
 		}
