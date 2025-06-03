@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { JSX, PropsWithChildren, useEffect, useState } from 'react';
 import { useLocalizationContext, useTranslation } from '../../../../stores/LocalizationContext';
 import AlertPopup from '../../../micro/AlertPopup/AlertPopup';
 import { useAuth } from '../../../../stores/AuthContext';
@@ -36,18 +36,17 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 			getUserById(user.id)
 				.then(resp => {
 					setUserData(resp);
-
-					getImage(resp.profilePicture)
-						.then(res => {
-							setImage(res);
-						})
-						.catch(e => {
-							console.error('Catch in context: ', e);
-						});
+					resp.profilePicture &&
+						getImage(resp.profilePicture)
+							.then(res => {
+								setImage(res);
+							})
+							.catch(e => {
+								console.error('Catch in context: ', e);
+							});
 				})
 				.catch(e => {
 					console.error('Catch in context:', e);
-
 				});
 		}
 	}, [user]);

@@ -4,7 +4,7 @@ import { className } from '../../../utils/className';
 import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import { getEventById, subscribeToAnEvent } from '../../../service/eventService';
 import { useAlert } from '../../../stores/AlertContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';

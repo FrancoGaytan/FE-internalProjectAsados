@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { JSX, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import PublicLayout from '../macro/PublicLayout';
 //import PrivateLayout from '@/components/macro/PrivateLayout';

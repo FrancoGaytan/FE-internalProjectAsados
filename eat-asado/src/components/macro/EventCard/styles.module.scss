@@ -47,6 +47,16 @@
 		}
 	}
 
+	&.readyforpayment {
+		border-top: 5px solid var(--subscribedPrimary);
+		.availabilityDesc {
+			background-color: var(--subscribedPrimary);
+		}
+		.eventCardDate {
+			color: var(--subscribedPrimary);
+		}
+	}
+
 	&.canceled {
 		border-top: 5px solid var(--btnPrimaryDarker);
 		.availabilityDesc {

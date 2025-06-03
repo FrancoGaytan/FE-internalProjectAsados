@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { RegisterRequest } from '../../models/user';

@@ -1,6 +1,6 @@
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { JSX, useEffect, useRef, useState } from 'react';
 import DragAndDrop from '../../components/micro/DragAndDrop/DragAndDrop';
 import { useAuth } from '../../stores/AuthContext';
 import { editProfilePicture, editUser, getUserById } from '../../service';
@@ -159,7 +159,7 @@ export function UserProfile(): JSX.Element {
 	return (
 		<div className={styles.userProfileContainer}>
 			<form onSubmit={e => handleUpdateProfile(e)}>
-				<h1>{lang.profileTitle}</h1>
+				<h1 className={styles.profileTitle}>{lang.profileTitle}</h1>
 
 				<section className={styles.dataSection}>
 					<div className={styles.firstColumnProfile}>

@@ -21,7 +21,7 @@ function ConfirmationFastAprovalForm(props: ConfirmationPayProps) {
 		try {
 			await approvePaymentWithoutReceipt(userId, eventId, abortController.signal);
 			setAlert(lang.payApprovedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
+			props.closeModal();
 		} catch (error) {
 			setAlert(lang.payApproveFailed, AlertTypes.ERROR);
 		}

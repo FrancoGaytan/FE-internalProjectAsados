@@ -1,4 +1,4 @@
-import { createContext, useContext, Dispatch, SetStateAction, useState, PropsWithChildren } from 'react';
+import { createContext, useContext, Dispatch, SetStateAction, useState, PropsWithChildren, JSX } from 'react';
 
 interface IGlobalContext {
 	isSomethingLoading: boolean;

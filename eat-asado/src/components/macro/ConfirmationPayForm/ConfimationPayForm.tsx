@@ -4,7 +4,6 @@ import { EventResponse } from '../../../models/event';
 import Button from '../../micro/Button/Button';
 import { downloadFile } from '../../../utils/utilities';
 import { approveTransferReceipts, deleteTransferReceipt } from '../../../service';
-import { useAuth } from '../../../stores/AuthContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useAlert } from '../../../stores/AlertContext';
@@ -22,7 +21,6 @@ interface ConfirmationPayProps {
 }
 
 function ConfirmationPayForm(props: ConfirmationPayProps) {
-	const { user } = useAuth();
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
 	const { event, transferReceiptId } = props;
@@ -42,7 +40,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		try {
 			await approveTransferReceipts(receiptId, event._id, abortController.signal);
 			setAlert(lang.payApprovedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
+			props.closeModal();
 		} catch (error) {
 			setAlert(lang.payApproveFailed, AlertTypes.ERROR);
 		}
@@ -52,7 +50,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		try {
 			await deleteTransferReceipt(receiptId);
 			setAlert(lang.payRejectedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000);
+			props.closeModal();
 		} catch (error) {
 			setAlert(lang.payRejectionFailed, AlertTypes.ERROR);
 		}
@@ -60,8 +58,14 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 
 	function gettingDateDiference(): number {
 		const startingDate = new Date(event.penalizationStartDate);
-		const todayDate = new Date(transferReceipt?.datetime as Date);
-		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
+		const todayDate = new Date();
+
+		const start = new Date(startingDate.getFullYear(), startingDate.getMonth(), startingDate.getDate());
+		const today = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+
+		if (today <= start) return 0;
+
+		const diffInMilliseconds = today.getTime() - start.getTime();
 		return diffInMilliseconds / (1000 * 60 * 60 * 24);
 	}
 
