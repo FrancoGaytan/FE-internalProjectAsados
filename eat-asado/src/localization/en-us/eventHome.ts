@@ -91,5 +91,6 @@ export const eventHome = Object.seal({
 	eventCantBeReadyForPaymentWithoutPurchases: 'The event can´t be ready for payment without purchases',
 	readyForPaymentBtn: 'Ready to Pay',
 	sdCanNotRemove: 'You can not unassign yourself if you have purchases made',
-	awaitingNoti: 'AWAITING'
+	awaitingNoti: 'AWAITING',
+	backBtn: 'BACK'
 });
