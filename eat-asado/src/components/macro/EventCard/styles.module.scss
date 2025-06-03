@@ -147,6 +147,10 @@
 				margin-top: 5px;
 				min-height: 52px;
 				font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: 100%;
 			}
 			.privateLogo {
 				margin-right: 10px;
