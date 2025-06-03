@@ -132,7 +132,11 @@
 					border-radius: 0;
 					background-size: contain;
 					background-color: transparent;
+					box-shadow: none;
 					background-image: url('../../../public/assets/pictures/icons-copiar.png');
+					&:hover {
+						scale: 1.05;
+					}
 				}
 				.editEventBtn {
 					position: absolute;
@@ -141,13 +145,36 @@
 					width: 23px;
 					height: 23px;
 					border-radius: 0;
+					box-shadow: none;
 					background-size: contain;
 					background-color: transparent;
 					background-image: url('../../../public/assets/pictures/editLogo.png');
+					&:hover {
+						scale: 1.05;
+					}
 				}
 
 				.secondRow {
 					margin-top: 40px;
+					.sectionTitle {
+						position: relative;
+
+						.assignEventBtn {
+							position: absolute;
+							bottom: 16px;
+							right: 16px;
+							width: 29px;
+							height: 29px;
+							border-radius: 0;
+							box-shadow: none;
+							background-size: contain;
+							background-color: transparent;
+							background-image: url('../../../public/assets/pictures/assignIcon.png');
+							&:hover {
+								scale: 1.05;
+							}
+						}
+					}
 				}
 
 				.logoTitle {

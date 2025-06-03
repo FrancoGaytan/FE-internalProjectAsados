@@ -32,6 +32,7 @@ import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/Conf
 import { transferReceipt } from '../../models/transfer';
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
 import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
+import AssignationTable from '../../components/macro/AssignationTable/AssignationTable';
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -46,6 +47,7 @@ export function Event(): JSX.Element {
 	const [modalValidationState, setModalValidationState] = useState(false);
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [modalFastAproval, setModalFastAproval] = useState(false);
+	const [modalAssignation, setModalAssignation] = useState(false);
 	//const [userHasPaid, setUserHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState([]);
 	const baseUrl = getBaseUrl();
@@ -245,6 +247,14 @@ export function Event(): JSX.Element {
 	function closeModalFastAproval(): void {
 		setModalFastAproval(false);
 		setUserToApprove('');
+	}
+
+	function closeModalAssignation(): void {
+		setModalAssignation(false);
+	}
+
+	function openModalAssignation(): void {
+		setModalAssignation(true);
 	}
 
 	function openModal(): void {
@@ -498,6 +508,9 @@ export function Event(): JSX.Element {
 									{event.organizer?._id === user?.id && (
 										<button className={styles.editEventBtn} onClick={() => editCurrentEvent()}></button>
 									)}
+									{/* {event.state === EventStatesEnum.CLOSED && (
+										<button className={styles.assignEventBtn} onClick={() => console.log()}></button>
+									)} */}
 								</section>
 
 								<div className={styles.sectionTitle}>
@@ -541,6 +554,9 @@ export function Event(): JSX.Element {
 									<div className={styles.sectionTitle}>
 										<div className={styles.cartLogo}></div>
 										<h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
+										{event.state === EventStatesEnum.CLOSED && (
+											<button className={styles.assignEventBtn} onClick={openModalAssignation}></button>
+										)}
 									</div>
 									{isUserIntoEvent() && (
 										<section className={styles.purchasesList}>
@@ -832,6 +848,16 @@ export function Event(): JSX.Element {
 						closeModalFastAproval();
 						refetchEvent();
 					}}></ConfirmationFastAprovalForm>
+			</Modal>
+
+			<Modal isOpen={modalAssignation} closeModal={closeModalAssignation}>
+				<AssignationTable
+					eventId={userIdParams.eventId as string}
+					userId={currentUser?._id as string}
+					closeModal={() => {
+						closeModalAssignation();
+						refetchEvent();
+					}}></AssignationTable>
 			</Modal>
 		</PrivateFormLayout>
 	);

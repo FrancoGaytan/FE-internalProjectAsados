@@ -18,3 +18,8 @@ export interface IPurchaseReceiptRequest {
 	description: string;
 	file: any;
 }
+
+export interface IPurchaseByEvent {
+	id: string;
+	participants: string[];
+}
