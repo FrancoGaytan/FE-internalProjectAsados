@@ -387,7 +387,7 @@ export function Event(): JSX.Element {
 					console.error('Catch in context: ', e);
 				});
 		}
-	}, [userIdParams]);
+	}, [userIdParams, eventParticipants]);
 
 	useEffect(() => {
 		if (!event) {

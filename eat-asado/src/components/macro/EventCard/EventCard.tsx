@@ -80,7 +80,6 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		if (!!user?.name) {
 			subscribeUserToEvent();
 			navigate(`/event/${evId}`);
-			setTimeout(() => window.location.reload(), 1000);
 		} else {
 			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
 		}
@@ -129,7 +128,6 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
-				//setAlert(`${lang.needsLogin}!`, AlertTypes.ERROR);
 			});
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
