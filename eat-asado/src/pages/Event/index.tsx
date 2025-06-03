@@ -375,6 +375,11 @@ export function Event(): JSX.Element {
 		navigate(`/createEvent/${event?._id}`);
 	}
 
+	function handleGoToMain(e: React.MouseEvent<HTMLButtonElement>) {
+		e.preventDefault();
+		navigate('/');
+	}
+
 	useEffect(() => {
 		if (!userIdParams) {
 			return;
@@ -482,6 +487,11 @@ export function Event(): JSX.Element {
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
+				<section className={styles.backBtnSection}>
+					<button className={styles.backBtn} onClick={handleGoToMain}></button>
+					<p className={styles.backText}>{lang.backBtn}</p>
+				</section>
+
 				<section className={styles.header}>
 					<Button kind="primary" size="large" onClick={() => navigate('/createEvent/new')}>
 						{lang.newEventButton}

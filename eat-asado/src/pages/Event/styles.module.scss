@@ -11,6 +11,33 @@
 		margin-left: 0;
 		margin-right: 0;
 	}
+
+	.backBtnSection {
+		position: absolute;
+		left: 15px;
+		top: 5px;
+		transform: translateY(-15px);
+		&:hover {
+			scale: 1.05;
+		}
+
+		.backBtn {
+			height: 30px;
+			width: 30px;
+			box-shadow: none;
+			background-color: transparent;
+			background-size: contain;
+			background-image: url('../../../public/assets/pictures/icons-back.png');
+		}
+
+		.backText {
+			margin: 0;
+			font-size: 12px;
+			font-weight: bold;
+			color: grey;
+		}
+	}
+
 	.icons {
 		display: flex;
 		flex-direction: row;
@@ -23,6 +50,10 @@
 	}
 	.eventTitle {
 		margin-bottom: 15px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 90%;
 	}
 	.header {
 		width: 100vw;
@@ -53,7 +84,8 @@
 			font-weight: 700;
 			font-size: 20px;
 			line-height: 27px;
-			max-width: 314px;
+			max-width: 60%;
+			//max-width: 314px;
 		}
 	}
 
