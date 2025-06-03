@@ -554,7 +554,7 @@ export function Event(): JSX.Element {
 									<div className={styles.sectionTitle}>
 										<div className={styles.cartLogo}></div>
 										<h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
-										{event.state === EventStatesEnum.CLOSED && (
+										{event.state === EventStatesEnum.CLOSED && purchasesMade.length > 0 && (
 											<button className={styles.assignEventBtn} onClick={openModalAssignation}></button>
 										)}
 									</div>
