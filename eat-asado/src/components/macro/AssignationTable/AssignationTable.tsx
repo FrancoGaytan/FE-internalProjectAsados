@@ -84,7 +84,7 @@ function AssignationTable(props: ConfirmationPayProps) {
 			.catch(e => {
 				console.error('Error getting receipts:', e);
 			});
-	}, [eventReceipts]);
+	}, [eventId]);
 
 	return (
 		<div className={styles.assignationTableWrapper}>
