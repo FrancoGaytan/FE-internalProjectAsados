@@ -223,12 +223,13 @@
 
 					.purchasesRow {
 						font-family: 'Raleway';
-						font-size: 14px;
+						font-size: 12px;
 						font-weight: bold;
 						display: grid;
-						grid-template-columns: 1fr auto auto;
+						grid-template-columns: 1fr auto auto auto;
 						align-items: center;
 						padding: 0.2rem 0;
+						gap: 5px;
 					}
 
 					.actions {
