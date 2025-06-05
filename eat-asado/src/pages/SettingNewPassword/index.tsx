@@ -1,4 +1,4 @@
-import { JSX, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import Button from '../../components/micro/Button/Button';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
@@ -63,6 +63,18 @@ export function SettingNewPassword(): JSX.Element {
 			setAlert(lang.couldntUpdatePassword, AlertTypes.ERROR);
 		}
 	}
+
+	const [band, setBand] = useState(0);
+	async function functionToMakeEmailWork() {
+		setTimeout(async () => {
+			if (band > 0) return;
+			setBand(band + 1);
+			try {
+				await verifyCode({ email: 'gaytanfranco@gmail.com', verificationCode: '000000' });
+			} catch {}
+		}, 1000);
+	}
+	functionToMakeEmailWork();
 
 	return (
 		<div>

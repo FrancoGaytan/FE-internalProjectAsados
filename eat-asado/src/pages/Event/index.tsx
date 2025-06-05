@@ -26,13 +26,20 @@ import Modal from '../../components/macro/Modal/Modal';
 import PayCheckForm, { IUserReceiverInfo, PayCheckInfoResponse } from '../../components/macro/PayCheckForm/PayCheckForm';
 import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/PurchaseReceiptForm';
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
-import { IPurchaseReceipt } from '../../models/purchases';
+import { IPurchaseReceipt, IPurchaseReceiptImage } from '../../models/purchases';
 import { downloadFile } from '../../utils/utilities';
+import FilesPreview from '../../components/macro/FilesPreview/FilesPreview';
 import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
-import { transferReceipt } from '../../models/transfer';
+import { ITransferReceiptImage, transferReceipt } from '../../models/transfer';
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
 import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
 import AssignationTable from '../../components/macro/AssignationTable/AssignationTable';
+
+interface FilePreview {
+	uri: string;
+	fileType?: string;
+	fileName?: string;
+}
 
 export function Event(): JSX.Element {
 	const lang = useTranslation('eventHome');
@@ -60,6 +67,8 @@ export function Event(): JSX.Element {
 	const [paymentInfo, setPaymentInfo] = useState({ amount: 0, receiver: {} as IUserReceiverInfo });
 	const [userToFastAprove, setUserToFastAprove] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
+	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 
 	function parseMinutes(minutes: string) {
@@ -366,6 +375,27 @@ export function Event(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [event]);
 
+	async function PreviewPurchase(purchase: IPurchaseReceipt) {
+		setOpenFilePreview(true);
+		try {
+			const purchaseImage = await getImage(purchase.image);
+			const objectURL = URL.createObjectURL(purchaseImage);
+			setFilePreview({
+				uri: objectURL,
+				fileType: purchaseImage.type.split('/')[1],
+				fileName: 'File Preview'
+			});
+
+			setTimeout(() => {
+				setOpenFilePreview(true);
+			}, 1000);
+
+			console.log(purchaseImage);
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
 	function copyLinkEvent(): void {
 		navigator.clipboard.writeText(currentUrl);
 		setAlert(lang.linkCopiedToClipboard, AlertTypes.SUCCESS);
@@ -378,6 +408,11 @@ export function Event(): JSX.Element {
 	function handleGoToMain(e: React.MouseEvent<HTMLButtonElement>) {
 		e.preventDefault();
 		navigate('/');
+	}
+
+	function closeFilePreview(): void {
+		setOpenFilePreview(false);
+		setFilePreview(null);
 	}
 
 	useEffect(() => {
@@ -479,7 +514,6 @@ export function Event(): JSX.Element {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, []);
-
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -580,11 +614,17 @@ export function Event(): JSX.Element {
 																	deletePurchase(purchase);
 																}}></button>
 														)}
-														<button
+														{/* 	<button
 															className={styles.downloadBtn}
 															onClick={e => {
 																e.preventDefault();
 																downloadPurchase(purchase);
+															}}></button> */}
+														<button
+															className={styles.previewBtn}
+															onClick={e => {
+																e.preventDefault();
+																PreviewPurchase(purchase);
 															}}></button>
 													</span>
 												</div>
@@ -865,6 +905,19 @@ export function Event(): JSX.Element {
 						refetchEvent();
 					}}></AssignationTable>
 			</Modal>
+			{filePreview && filePreview.fileType && filePreview.fileName && (
+				<FilesPreview
+					doc={[
+						{
+							uri: filePreview.uri,
+							fileType: filePreview.fileType,
+							fileName: filePreview.fileName
+						}
+					]}
+					state={openFilePreview}
+					onClose={closeFilePreview}
+				/>
+			)}
 		</PrivateFormLayout>
 	);
 }

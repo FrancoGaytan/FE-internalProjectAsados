@@ -1,3 +1,7 @@
+import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
+import '@cyntler/react-doc-viewer/dist/index.css';
+import { useState } from 'react';
+
 export function parseMinutes(minutes: string) {
 	let newMinutes = minutes;
 	if (Number(minutes) < 10) {
@@ -36,3 +40,29 @@ export const browserName = (function (agent) {
 			return 'other';
 	}
 })(window.navigator.userAgent.toLowerCase());
+
+/* interface PreviewFileProps {
+	file: any[];
+} */
+
+/* export function PreviewFile(file: File[]) {
+	const [activeDocument, setActiveDocument] = useState(file[0]); // Inicializa con el primer archivo
+  
+	const handleDocumentChange = (doc: any) => {
+	  setActiveDocument(doc);
+	};
+  
+	return (
+		<div>
+		<DocViewer
+		documents={file}
+		activeDocument={activeDocument}
+		onDocumentChange={handleDocumentChange}
+		pluginRenderers={DocViewerRenderers} // Asegúrate de pasar los renderizadores
+	  />
+	</div>
+	)
+	  
+  };
+ 
+ */

@@ -267,7 +267,19 @@
 					height: 27px;
 					background-size: cover;
 					background-color: white;
-					margin: auto;
+					margin: 0;
+					margin-left: 10px;
+				}
+
+				.previewBtn {
+					background-image: url('../../../public/assets/pictures/icons-preview.png');
+					width: 30px;
+					height: 30px;
+					background-size: 25px;
+					background-repeat: no-repeat;
+					background-position: center;
+					background-color: white;
+					margin: 0;
 					margin-left: 10px;
 					&:hover {
 						scale: 1.1;
