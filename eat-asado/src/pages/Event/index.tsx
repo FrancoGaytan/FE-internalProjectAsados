@@ -392,7 +392,7 @@ export function Event(): JSX.Element {
 					console.error('Catch in context: ', e);
 				});
 		}
-	}, [userIdParams, eventParticipants]);
+	}, [userIdParams]);
 
 	useEffect(() => {
 		if (!event) {
@@ -419,10 +419,6 @@ export function Event(): JSX.Element {
 				console.error('Catch in context: ', e);
 			});
 	}, [user]);
-
-	useEffect(() => {
-		setEvent(event);
-	}, [user, currentUser, event]);
 
 	useEffect(() => {
 		if (!event?._id) {
@@ -571,26 +567,25 @@ export function Event(): JSX.Element {
 									{isUserIntoEvent() && (
 										<section className={styles.purchasesList}>
 											{purchasesMade.map((purchase: IPurchaseReceipt) => (
-												<div key={purchase?._id} className={styles.purchasesData}>
-													<h5 className={styles.infoData}>{purchase.description}</h5>
-
-													<h5 className={styles.infoData}>{'$ ' + purchase.amount}</h5>
-
-													{event.shoppingDesignee && event.shoppingDesignee.some((d: IUser) => d._id === user?.id) && (
+												<div key={purchase?._id} className={styles.purchasesRow}>
+													<span>{purchase.description}</span>
+													<span>{'$ ' + purchase.amount}</span>
+													<span className={styles.actions}>
+														{event.shoppingDesignee?.some((d: IUser) => d._id === user?.id) && (
+															<button
+																className={styles.deleteBtn}
+																onClick={e => {
+																	e.preventDefault();
+																	deletePurchase(purchase);
+																}}></button>
+														)}
 														<button
-															className={styles.deleteBtn}
+															className={styles.downloadBtn}
 															onClick={e => {
 																e.preventDefault();
-																deletePurchase(purchase);
+																downloadPurchase(purchase);
 															}}></button>
-													)}
-
-													<button
-														className={styles.downloadBtn}
-														onClick={e => {
-															e.preventDefault();
-															downloadPurchase(purchase);
-														}}></button>
+													</span>
 												</div>
 											))}
 										</section>

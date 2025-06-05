@@ -190,11 +190,14 @@
 					margin-top: 40px;
 					.sectionTitle {
 						position: relative;
+						display: flex;
+						align-items: center;
+						margin-right: 10px;
 
 						.assignEventBtn {
-							position: absolute;
-							bottom: 16px;
-							right: 16px;
+							margin-bottom: 10px;
+							align-self: center;
+							margin-left: auto;
 							width: 29px;
 							height: 29px;
 							border-radius: 0;
@@ -205,12 +208,37 @@
 							&:hover {
 								scale: 1.05;
 							}
+							@media #{variables.media-query(max, sm)} {
+							}
 						}
+					}
+					.purchasesList {
+						padding: 1rem;
+					}
+
+					.gridHeader {
+						display: grid;
+						grid-template-columns: 1fr auto auto;
+					}
+
+					.purchasesRow {
+						font-family: 'Raleway';
+						font-size: 14px;
+						font-weight: bold;
+						display: grid;
+						grid-template-columns: 1fr auto auto;
+						align-items: center;
+						padding: 0.2rem 0;
+					}
+
+					.actions {
+						display: flex;
+						justify-content: flex-end;
 					}
 				}
 
 				.logoTitle {
-					margin-bottom: 20px;
+					margin-bottom: 10px;
 					color: black;
 				}
 
@@ -438,29 +466,20 @@
 		border-radius: 1px;
 	}
 
-	.purchasesList {
-		max-height: 110px;
-		overflow-y: scroll;
-	}
-
-	.purchasesData {
-		display: flex;
-	}
-	.btnSection {
-		display: flex;
-		margin-top: 40px;
-
-		@media #{variables.media-query(max, sm)} {
-			flex-direction: column;
-			margin-top: 20px;
-		}
-	}
-
 	.btnEvent {
 		margin: 5px;
 		@media #{variables.media-query(max, sm)} {
 			min-width: fit-content;
 			margin-top: 15px;
+		}
+	}
+	.btnSection {
+		display: flex;
+		flex-direction: row;
+		margin-top: 20px;
+
+		@media #{variables.media-query(max, sm)} {
+			flex-direction: column;
 		}
 	}
 }
