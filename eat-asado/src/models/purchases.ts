@@ -1,3 +1,5 @@
+import { IUser } from './user';
+
 export interface IPurchaseReceipt {
 	amount: number;
 	description: string;
@@ -5,7 +7,7 @@ export interface IPurchaseReceipt {
 	_id: string;
 	participants: string[];
 	event: string;
-	shoppingDesignee: string;
+	shoppingDesignee: IUser;
 }
 
 export interface IPurchaseReceiptImage {

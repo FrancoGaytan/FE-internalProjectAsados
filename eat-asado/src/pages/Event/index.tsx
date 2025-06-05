@@ -152,7 +152,7 @@ export function Event(): JSX.Element {
 			return;
 		}
 
-		if (purchasesMade.some((pur: IPurchaseReceipt) => pur.shoppingDesignee === currentUser._id)) {
+		if (purchasesMade.some((pur: IPurchaseReceipt) => pur.shoppingDesignee._id === currentUser._id)) {
 			setAlert(`${lang.sdCanNotRemove}`, AlertTypes.INFO);
 			return;
 		}
@@ -569,6 +569,7 @@ export function Event(): JSX.Element {
 											{purchasesMade.map((purchase: IPurchaseReceipt) => (
 												<div key={purchase?._id} className={styles.purchasesRow}>
 													<span>{purchase.description}</span>
+													<span>{purchase.shoppingDesignee.name}</span>
 													<span>{'$ ' + purchase.amount}</span>
 													<span className={styles.actions}>
 														{event.shoppingDesignee?.some((d: IUser) => d._id === user?.id) && (
