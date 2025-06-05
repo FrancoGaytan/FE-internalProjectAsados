@@ -11,6 +11,33 @@
 		margin-left: 0;
 		margin-right: 0;
 	}
+
+	.backBtnSection {
+		position: absolute;
+		left: 15px;
+		top: 5px;
+		transform: translateY(-15px);
+		&:hover {
+			scale: 1.05;
+		}
+
+		.backBtn {
+			height: 30px;
+			width: 30px;
+			box-shadow: none;
+			background-color: transparent;
+			background-size: contain;
+			background-image: url('../../../public/assets/pictures/icons-back.png');
+		}
+
+		.backText {
+			margin: 0;
+			font-size: 12px;
+			font-weight: bold;
+			color: grey;
+		}
+	}
+
 	.icons {
 		display: flex;
 		flex-direction: row;
@@ -23,6 +50,10 @@
 	}
 	.eventTitle {
 		margin-bottom: 15px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 90%;
 	}
 	.header {
 		width: 100vw;
@@ -44,7 +75,7 @@
 			font-size: 56px;
 			line-height: 66px;
 			text-align: center;
-			color: #f6faf9;
+			color: white;
 			@media #{variables.media-query(max, xl)} {
 				font-size: 4vw;
 			}
@@ -53,7 +84,8 @@
 			font-weight: 700;
 			font-size: 20px;
 			line-height: 27px;
-			max-width: 314px;
+			max-width: 60%;
+			//max-width: 314px;
 		}
 	}
 
@@ -116,6 +148,7 @@
 				position: relative;
 				flex-direction: column;
 				width: 100%;
+				box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15);
 
 				.eventBtns {
 					position: absolute;
@@ -131,7 +164,11 @@
 					border-radius: 0;
 					background-size: contain;
 					background-color: transparent;
+					box-shadow: none;
 					background-image: url('../../../public/assets/pictures/icons-copiar.png');
+					&:hover {
+						scale: 1.05;
+					}
 				}
 				.editEventBtn {
 					position: absolute;
@@ -140,17 +177,69 @@
 					width: 23px;
 					height: 23px;
 					border-radius: 0;
+					box-shadow: none;
 					background-size: contain;
 					background-color: transparent;
 					background-image: url('../../../public/assets/pictures/editLogo.png');
+					&:hover {
+						scale: 1.05;
+					}
 				}
 
 				.secondRow {
 					margin-top: 40px;
+					.sectionTitle {
+						position: relative;
+						display: flex;
+						align-items: center;
+						margin-right: 10px;
+
+						.assignEventBtn {
+							margin-bottom: 10px;
+							align-self: center;
+							margin-left: auto;
+							width: 29px;
+							height: 29px;
+							border-radius: 0;
+							box-shadow: none;
+							background-size: contain;
+							background-color: transparent;
+							background-image: url('../../../public/assets/pictures/assignIcon.png');
+							&:hover {
+								scale: 1.05;
+							}
+							@media #{variables.media-query(max, sm)} {
+							}
+						}
+					}
+					.purchasesList {
+						padding: 1rem;
+					}
+
+					.gridHeader {
+						display: grid;
+						grid-template-columns: 1fr auto auto;
+					}
+
+					.purchasesRow {
+						font-family: 'Raleway';
+						font-size: 12px;
+						font-weight: bold;
+						display: grid;
+						grid-template-columns: 1fr auto auto auto;
+						align-items: center;
+						padding: 0.2rem 0;
+						gap: 5px;
+					}
+
+					.actions {
+						display: flex;
+						justify-content: flex-end;
+					}
 				}
 
 				.logoTitle {
-					margin-bottom: 20px;
+					margin-bottom: 10px;
 					color: black;
 				}
 
@@ -159,21 +248,23 @@
 				}
 				.deleteBtn {
 					background-image: url('../../../public/assets/pictures/deleteIcon.png');
-					width: 30px;
-					height: 30px;
-					background-size: 15px;
-					background-repeat: no-repeat;
+					width: 27px;
+					height: 27px;
+					background-size: 50% 50%;
 					background-position: center;
+					background-repeat: no-repeat;
 					background-color: white;
-					margin: 0;
-					//margin-bottom: auto;
-					//margin-left: 10px;
+					border-radius: 50%;
+					margin: auto 0 auto 10px;
+					&:hover {
+						scale: 1.1;
+					}
 				}
 
 				.downloadBtn {
 					background-image: url('../../../public/assets/pictures/downloadBtn.png');
-					width: 30px;
-					height: 30px;
+					width: 27px;
+					height: 27px;
 					background-size: cover;
 					background-color: white;
 					margin: 0;
@@ -190,6 +281,9 @@
 					background-color: white;
 					margin: 0;
 					margin-left: 10px;
+					&:hover {
+						scale: 1.1;
+					}
 				}
 
 				.calendarLogo {
@@ -226,9 +320,14 @@
 				margin: 10px;
 				padding-top: 15px;
 				border-radius: 10px;
-
+				box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15);
 				.responsibilitiesSection {
 					margin-top: 20px;
+					.infoData {
+						margin: 5px;
+						margin-left: 25px;
+						display: flex;
+					}
 				}
 				.logoTitle {
 					margin-bottom: 0px;
@@ -250,6 +349,10 @@
 
 				.secondRow {
 					margin-top: 40px;
+					display: flex;
+					flex-direction: column;
+					flex-grow: 1;
+					min-height: 0;
 
 					.infoDataUsername {
 						margin: 5px;
@@ -268,9 +371,13 @@
 					}
 
 					.infoParticipants {
-						max-height: 200px;
+						/* max-height: 200px;
 						overflow-y: scroll;
+						padding-top: 25px; */
+						flex-grow: 1;
+						overflow-y: auto;
 						padding-top: 25px;
+						min-height: 0;
 					}
 
 					.infoDataUsernamePayed {
@@ -283,6 +390,23 @@
 						color: red;
 						align-self: center;
 					}
+					.waitingValidationPay {
+						margin: 0 0 0 10px;
+						color: blue;
+						align-self: center;
+					}
+					.fastAproveBtn {
+						background-image: url('../../../public/assets/pictures/icons-fastAprove.png');
+						width: 25px;
+						height: 25px;
+						background-size: 70% 70%;
+						background-position: center;
+						background-repeat: no-repeat;
+						background-color: rgb(255, 255, 255);
+						margin-top: auto;
+						margin-bottom: auto;
+						margin-left: 15px;
+					}
 				}
 
 				.inChargeLogo {
@@ -293,6 +417,43 @@
 				}
 				.inChargeOpt {
 					display: flex;
+					flex-direction: column;
+					gap: 10px;
+
+					.shoppingDesigneeDescSection {
+						display: flex;
+					}
+
+					.chefDesigneeSection {
+						display: flex;
+						flex-direction: row;
+						align-items: flex-start;
+						gap: 5px;
+						margin-bottom: 10px;
+					}
+
+					.shoppingDesigneeSection {
+						display: flex;
+						flex-direction: column;
+						align-items: flex-start;
+						gap: 5px;
+						margin-left: 35px;
+					}
+
+					.singleDesigneeSection {
+						display: flex;
+						align-items: center;
+						gap: 8px;
+						min-height: 25px;
+					}
+
+					h5 {
+						margin: 0;
+					}
+
+					button {
+						margin-left: auto;
+					}
 				}
 				@media #{variables.media-query(max, sm)} {
 					align-items: center;
@@ -318,29 +479,20 @@
 		border-radius: 1px;
 	}
 
-	.purchasesList {
-		max-height: 110px;
-		overflow-y: scroll;
-	}
-
-	.purchasesData {
-		display: flex;
-	}
-	.btnSection {
-		display: flex;
-		margin-top: 40px;
-
-		@media #{variables.media-query(max, sm)} {
-			flex-direction: column;
-			margin-top: 20px;
-		}
-	}
-
 	.btnEvent {
 		margin: 5px;
 		@media #{variables.media-query(max, sm)} {
 			min-width: fit-content;
 			margin-top: 15px;
+		}
+	}
+	.btnSection {
+		display: flex;
+		flex-direction: row;
+		margin-top: 20px;
+
+		@media #{variables.media-query(max, sm)} {
+			flex-direction: column;
 		}
 	}
 }

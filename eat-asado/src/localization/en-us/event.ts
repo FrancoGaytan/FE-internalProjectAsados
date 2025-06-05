@@ -7,7 +7,7 @@ export const event = Object.seal({
 	rejectPayBtn: 'Reject Pay',
 	cashRadioBtn: 'Cash',
 	payOptTitle: 'Payment Alternatives',
-	payTitle: 'Payment',
+	payTitle: 'Payment Data',
 	shoppingDesignee: 'Shopping Designee: ',
 	alias: 'Alias: ',
 	cbu: 'CBU: ',
@@ -31,5 +31,10 @@ export const event = Object.seal({
 	descriptionMissing: 'Transfer description is missing',
 	privateEvent: 'Private Event',
 	amountToBePaid: 'Amount: $',
-	linkCopiedToClipboard: 'Info copied to clipboard'
+	linkCopiedToClipboard: 'Info copied to clipboard',
+	fastAproveText: 'This user hasn´t submitted any payment yet, do you want to approve anyway?',
+	confirmChangeBtn: 'Confirm Change',
+	purchasesMadeTitle: 'Purchases Made',
+	assignationsUpdatedSuccessfully: 'Assignations updated successfully',
+	errorUpdatingAssignations: 'There has been an error updating assignations'
 });

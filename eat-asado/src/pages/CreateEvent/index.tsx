@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import { useTranslation } from '../../stores/LocalizationContext';
 import FormLayout from '../../components/macro/layout/FormLayout';
 import Button from '../../components/micro/Button/Button';
@@ -149,14 +149,15 @@ export function CreateEvent(): JSX.Element {
 					memberLimit: res.memberLimit,
 					isPrivate: res.isPrivate,
 					penalization: res.penalization,
+					penalizationStartDate: new Date(res.penalizationStartDate),
 					state: res.state
 				});
+				setPenalizationSection(!!res.penalization);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
 			});
 		setPenalizationSection(!!event.penalization);
-		console.log(event.penalization);
 	}, [eventIdParam]);
 
 	return (

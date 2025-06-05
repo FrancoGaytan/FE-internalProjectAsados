@@ -10,6 +10,10 @@ button {
 	font-weight: bold;
 	cursor: pointer;
 	margin-top: 30px; //revisar esto
+	box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
+	&:hover {
+		scale: 1.02;
+	}
 
 	//kind
 

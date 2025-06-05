@@ -38,13 +38,13 @@ describe('button component test', () => {
 		const btnText = screen.getByText('Register');
 		expect(btnText).toHaveClass('size-large');
 	});
-  
+
 	test('button text context proper display', () => {
 		render(<Button size="large">Register</Button>);
 		const btnText = screen.getByText('Register');
 		expect(btnText).toHaveTextContent('Register');
 	});
-  
+
 	test('button checking to be enable test', () => {
 		render(<Button size="large">Register</Button>);
 		const btnText = screen.getByText('Register');

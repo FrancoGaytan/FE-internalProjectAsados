@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import routes, { IRoute } from './routes';
 import { GlobalProvider } from './stores/GlobalContext';

@@ -3,6 +3,7 @@ import { IUser } from './user';
 export interface transferReceipt {
 	amount: number;
 	description: string;
+	datetime: Date; //nuevo
 	eventId: string;
 	hasPaid: boolean;
 	image: string;

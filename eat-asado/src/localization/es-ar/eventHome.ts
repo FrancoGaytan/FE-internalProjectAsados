@@ -37,13 +37,16 @@ export const eventHome = Object.seal({
 	userAddingFailure: 'ha habido un error al agregarte al evento',
 	userRemovedSuccessfully: 'haz sido removido del evento satisfactoriamente',
 	userRemovingFailure: 'ha habido un error al removerte del evento',
+	shoppingDesigneeTryingToGetOff: 'no puedes bajarte del evento si eres un encargado de las compras',
 	userResponsabilityChange: 'ha modificado su responsabilidad con exito',
 	userResponsabilityFailure: 'ha habido un problema modificado su responsabilidad',
 	eventDeleted: 'el evento ha sido eliminado con exito',
 	eventDeletingFailure: 'ha habido un error eliminando el evento',
 	eventClosed: 'el evento ha sido cerrado con exito',
+	eventReadyForPayment: 'ek evento esta listo para comenzar el proceso de pago',
 	eventOpen: 'el evento ha sido abierto con exito',
 	eventClosingFailure: 'ha habido un error cerrando el evento',
+	eventReadyForPaymentFailure: 'ha habido un error habilitando los pagos del evento',
 	organizationTitle: 'Organización',
 	date: 'Fecha: ',
 	time: 'Hora: ',
@@ -84,5 +87,10 @@ export const eventHome = Object.seal({
 	reviewTexts: 'Opiniones',
 	noPenalizationAmount: 'Sin penalización',
 	penalizationAmount: 'Penalización',
-	penalizationStartDate: 'Comienzo de penalización'
+	penalizationStartDate: 'Comienzo de penalización',
+	eventCantBeReadyForPaymentWithoutPurchases: 'El evento no puede estar listo para el pago sin compras realizadas',
+	readyForPaymentBtn: 'Listo para pagar',
+	sdCanNotRemove: 'No puedes desasignarte si tienes una compra asignada',
+	awaitingNoti: 'EN ESPERA',
+	backBtn: 'VOLVER'
 });

@@ -37,6 +37,10 @@ export default function EventHeader(props: IEventCardProps) {
 			return EventStatesEnum.FINISHED;
 		} //dejar este if para chequear
 
+		if (evState === EventStatesEnum.READYFORPAYMENT) {
+			return EventStatesEnum.READYFORPAYMENT;
+		}
+
 		if (evState === EventStatesEnum.AVAILABLE) {
 			if (subscribedUser) {
 				return 'subscribed';
@@ -63,6 +67,8 @@ export default function EventHeader(props: IEventCardProps) {
 					return 'DISPONIBLE';
 				case EventStatesEnum.CANCELED:
 					return 'CANCELADO';
+				case EventStatesEnum.READYFORPAYMENT:
+					return 'ABONABLE';
 				case EventStatesEnum.FULL:
 					return 'LLENO';
 				case EventStatesEnum.FINISHED:
@@ -72,10 +78,18 @@ export default function EventHeader(props: IEventCardProps) {
 				case 'subscribed':
 					return 'SUBSCRIPTO';
 				case 'blocked':
-					return 'BLOCKEADO';
+					return 'BLOQUEADO';
 				case 'debtor':
 					return 'DEUDOR';
 			}
+		} else {
+			return stateDesc;
+		}
+	}
+
+	function getParticularNameChanges(stateDesc: string | undefined) {
+		if (stateDesc === 'READYFORPAYMENT') {
+			return 'READY TO PAY';
 		} else {
 			return stateDesc;
 		}
@@ -88,7 +102,7 @@ export default function EventHeader(props: IEventCardProps) {
 				styles[getEventState() as string]
 			)}>
 			<section className={styles.cardTitleInfo}>
-				<div className={styles.availabilityDesc}>{getTranslatedState(getEventState())?.toUpperCase()}</div>
+				<div className={styles.availabilityDesc}>{getParticularNameChanges(getTranslatedState(getEventState())?.toUpperCase())}</div>
 
 				<div className={styles.eventCardDate}>{evDate.toString()}</div>
 			</section>

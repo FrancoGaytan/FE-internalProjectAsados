@@ -7,7 +7,7 @@ export const event = Object.seal({
 	rejectPayBtn: 'Rechazar Pago',
 	cashRadioBtn: 'Efectivo',
 	payOptTitle: 'Opciones de Pago',
-	payTitle: 'Pago',
+	payTitle: 'Datos del Pago',
 	shoppingDesignee: 'Encargado de compras: ',
 	alias: 'Alias: ',
 	cbu: 'CBU: ',
@@ -31,5 +31,10 @@ export const event = Object.seal({
 	descriptionMissing: 'Es necesario ingresar una descripción de pago',
 	privateEvent: 'Evento Privado',
 	linkCopiedToClipboard: 'Info copiada al portapapeles',
-	amountToBePaid: 'Cantidad: $'
+	amountToBePaid: 'Cantidad: $',
+	fastAproveText: 'Este usuario aún no ha abonado, ¿desea aprobar de todas formas?',
+	confirmChangeBtn: 'Confirmar Cambio',
+	purchasesMadeTitle: 'Compras realizadas',
+	assignationsUpdatedSuccessfully: 'Asignaciones actualizadas correctamente',
+	errorUpdatingAssignations: 'Ocurrió un error al guardar las asignaciones.'
 });

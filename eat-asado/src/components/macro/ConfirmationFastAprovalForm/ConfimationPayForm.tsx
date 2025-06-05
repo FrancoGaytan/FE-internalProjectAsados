@@ -1,0 +1,44 @@
+import styles from './styles.module.scss';
+import { className } from '../../../utils/className';
+import Button from '../../micro/Button/Button';
+import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
+import { useTranslation } from '../../../stores/LocalizationContext';
+import { useAlert } from '../../../stores/AlertContext';
+import { approvePaymentWithoutReceipt } from '../../../service';
+interface ConfirmationPayProps {
+	eventId: string;
+	userId: string;
+	closeModal: () => void;
+}
+
+function ConfirmationFastAprovalForm(props: ConfirmationPayProps) {
+	const lang = useTranslation('event');
+	const { setAlert } = useAlert();
+	const { eventId, userId } = props;
+
+	async function aprovePayment(): Promise<void> {
+		const abortController = new AbortController();
+		try {
+			await approvePaymentWithoutReceipt(userId, eventId, abortController.signal);
+			setAlert(lang.payApprovedSuccessfully, AlertTypes.SUCCESS);
+			props.closeModal();
+		} catch (error) {
+			setAlert(lang.payApproveFailed, AlertTypes.ERROR);
+		}
+	}
+
+	return (
+		<div {...className(styles.paycheck)}>
+			<p className={styles.popupTitle}>{lang.fastAproveText}</p>
+			<div className={styles.paycheckContent}>
+				<section className={styles.btnSection}>
+					<Button className={styles.confirmPayBtn} kind="whitePrimary" size="short" onClick={e => aprovePayment()}>
+						{lang.confirmPayBtn}
+					</Button>
+				</section>
+			</div>
+		</div>
+	);
+}
+
+export default ConfirmationFastAprovalForm;

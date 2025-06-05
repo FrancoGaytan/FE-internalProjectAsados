@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import styles from './styles.module.scss';
 import Button from '../../components/micro/Button/Button';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';

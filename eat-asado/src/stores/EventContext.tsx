@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, PropsWithChildren, SetStateAction } from 'react';
+import React, { createContext, useContext, useState, PropsWithChildren, SetStateAction, JSX } from 'react';
 import { IPublicEvent } from '../models/event';
 
 interface IEventContext {

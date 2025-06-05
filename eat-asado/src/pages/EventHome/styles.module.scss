@@ -33,6 +33,9 @@
 			top: 50%;
 			left: 100%;
 			transform: translate(-50%, -50%);
+			&:hover {
+				background-color: #f6faf9a5;
+			}
 			@media #{variables.media-query(max, xl)} {
 				left: 50%;
 				width: 56%;

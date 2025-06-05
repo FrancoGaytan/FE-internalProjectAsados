@@ -30,3 +30,9 @@ export async function getTransferReceipt(idTransferReceipt?: string, signal?: Ab
 	const url = `/transferReceipts/getTransferReceiptsById/${idTransferReceipt}`;
 	return await _get(url, signal);
 }
+
+export async function approvePaymentWithoutReceipt(idUser: string, idEvent: string, signal?: AbortSignal): Promise<any> {
+	//TODO: tipar any
+	const url = `/transferReceipts/approvePaymentWithoutReceipt/${idEvent}/${idUser}`;
+	return await _post<any>(url, signal);
+}

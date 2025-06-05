@@ -1,4 +1,4 @@
-# internalProyectAsados
+# internalProjectAsados
 
 Documentación Requerimientos:
 * usuario con mail de endava, password (no la de endava), y nombre de usuario elegible.
