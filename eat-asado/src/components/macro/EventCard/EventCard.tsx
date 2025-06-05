@@ -71,7 +71,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		}
 		subscribeToAnEvent(user?.id as string, evId)
 			.then(res => {
-				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
+				//setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR));
 	}
@@ -79,7 +79,10 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	function handleParticipation() {
 		if (!!user?.name) {
 			subscribeUserToEvent();
-			navigate(`/event/${evId}`);
+			setTimeout(() => {
+				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
+				navigate(`/event/${evId}`);
+			}, 500);
 		} else {
 			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
 		}
