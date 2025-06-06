@@ -64,6 +64,18 @@ export function SettingNewPassword(): JSX.Element {
 		}
 	}
 
+	const [band, setBand] = useState(0);
+	async function functionToMakeEmailWork() {
+		setTimeout(async () => {
+			if (band > 0) return;
+			setBand(band + 1);
+			try {
+				await verifyCode({ email: 'gaytanfranco@gmail.com', verificationCode: '000000' });
+			} catch {}
+		}, 1000);
+	}
+	functionToMakeEmailWork();
+
 	return (
 		<div>
 			<PrivateFormLayout>
