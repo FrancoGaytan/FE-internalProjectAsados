@@ -18,6 +18,7 @@ export const event = Object.seal({
 	amountLabel: 'Amount',
 	validatePaymentTitle: 'Validate Payment',
 	downloadText: 'Download Transfer Receipt',
+	previewText: 'Preview Transfer Receipt',
 	payApprovedSuccessfully: 'Payment Aproved Successfully',
 	payApproveFailed: 'There has been an error aproving',
 	payRejectedSuccessfully: 'Payment rejected Successfully',
