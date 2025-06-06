@@ -12,6 +12,8 @@ import { getTransferReceipt } from '../../../service';
 import { useEffect, useState } from 'react';
 import { transferReceipt } from '../../../models/transfer';
 import { IPurchaseReceipt } from '../../../models/purchases';
+import { FilePreview } from '../../../pages';
+import FilesPreview from '../FilesPreview/FilesPreview';
 
 interface ConfirmationPayProps {
 	event: EventResponse;
@@ -25,6 +27,8 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 	const { setAlert } = useAlert();
 	const { event, transferReceiptId } = props;
 	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
+	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
 
 	async function downloadTransfer(transferId: string) {
 		try {
@@ -69,6 +73,11 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		return diffInMilliseconds / (1000 * 60 * 60 * 24);
 	}
 
+	function closeFilePreview(): void {
+		setOpenFilePreview(false);
+		setFilePreview(null);
+	}
+
 	function gettingPriceToPay(): number {
 		let price = 0;
 		let currentPenalization = 0;
@@ -88,6 +97,25 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		}
 
 		return Math.round(price / event.members.length + currentPenalization);
+	}
+
+	async function PreviewTransfer(transfer: transferReceipt) {
+		setOpenFilePreview(true);
+		try {
+			const transferImage = await getImage(transfer.image);
+			const objectURL = URL.createObjectURL(transferImage);
+			setFilePreview({
+				uri: objectURL,
+				fileType: transferImage.type.split('/')[1],
+				fileName: 'File Preview'
+			});
+
+			setTimeout(() => {
+				setOpenFilePreview(true);
+			}, 1000);
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	useEffect(() => {
@@ -117,13 +145,13 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 					) : (
 						<div className={styles.downloadTransferArea}>
 							<button
-								className={styles.uploadBtn}
+								className={styles.previewBtn}
 								onClick={e => {
 									e.preventDefault();
-									downloadTransfer(transferReceipt?.image as string);
+									PreviewTransfer(transferReceipt as transferReceipt);
 								}}
 								style={{ cursor: 'pointer' }}></button>
-							<p className={styles.downloadText}>{lang.downloadText}</p>
+							<p className={styles.downloadText}>{lang.previewText}</p>
 						</div>
 					)}
 				</section>
@@ -136,6 +164,20 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 						{lang.rejectPayBtn}
 					</Button>
 				</section>
+
+				{filePreview && filePreview.fileType && filePreview.fileName && (
+					<FilesPreview
+						doc={[
+							{
+								uri: filePreview.uri,
+								fileType: filePreview.fileType,
+								fileName: filePreview.fileName
+							}
+						]}
+						state={openFilePreview}
+						onClose={closeFilePreview}
+					/>
+				)}
 			</div>
 		</div>
 	);

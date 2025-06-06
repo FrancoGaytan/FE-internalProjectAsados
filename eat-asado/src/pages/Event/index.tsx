@@ -35,7 +35,7 @@ import Tooltip from '../../components/micro/Tooltip/Tooltip';
 import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
 import AssignationTable from '../../components/macro/AssignationTable/AssignationTable';
 
-interface FilePreview {
+export interface FilePreview {
 	uri: string;
 	fileType?: string;
 	fileName?: string;
@@ -389,8 +389,6 @@ export function Event(): JSX.Element {
 			setTimeout(() => {
 				setOpenFilePreview(true);
 			}, 1000);
-
-			console.log(purchaseImage);
 		} catch (e) {
 			console.log(e);
 		}

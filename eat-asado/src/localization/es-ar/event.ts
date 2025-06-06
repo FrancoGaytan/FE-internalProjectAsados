@@ -18,6 +18,7 @@ export const event = Object.seal({
 	amountLabel: 'Monto',
 	validatePaymentTitle: 'Validar Pago',
 	downloadText: 'Descargar Recibo',
+	previewText: 'Vista Previa del Recibo',
 	payApprovedSuccessfully: 'Se ha aprobado el pago con exito!',
 	payApproveFailed: 'Ha ocurrido un error al aprovar el pago',
 	payRejectedSuccessfully: 'Se ha rechazado el pago!',
