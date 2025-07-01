@@ -17,5 +17,15 @@ export const userProfile = Object.seal({
 	loginBtn: 'INICIAR SESION',
 	successMsg: 'La informacion se ha modificado con exito',
 	failureMsg: 'Ha habido un problema con la actualizacion de su informacion',
-	errorTypeFile: 'La imagen de perfil debe ser de tipo .png .jpeg o .jpg'
+	errorTypeFile: 'La imagen de perfil debe ser de tipo .png .jpeg o .jpg',
+	notificationsTitle: 'Notificaciones',
+	activateNotifications: 'Activar Notificaciones',
+	personalEmail: 'Correo Electrónico Personal',
+	newEventNotification: 'Un nuevo evento ha sido creado',
+	eventComingNotification: 'Un evento está por comenzar',
+	penalizationStartedNotification: 'Tu penalización ha comenzado',
+	oneWeekDebtorNotification: 'Has sido deudor por una semana',
+	notificationDescription: 'Deseo recibir notificaciones cuando:',
+	invalidEmail: 'El correo electrónico ingresado no es válido',
+	errorEmailRequired: 'El correo electrónico personal es obligatorio para recibir notificaciones'
 });

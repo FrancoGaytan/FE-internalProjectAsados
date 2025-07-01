@@ -43,8 +43,8 @@ export interface EventUserResponse {
 	userId: string;
 	userName: string;
 	userLastName: string;
-	transferReceipt: string | undefined;
+	transferReceipt: string | null;
 	hasReceiptApproved: boolean | null;
 	hasUploaded: boolean;
-	specialDiet: [string];
+	specialDiet: [];
 }

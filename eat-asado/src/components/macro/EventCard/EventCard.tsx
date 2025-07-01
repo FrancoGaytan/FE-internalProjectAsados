@@ -8,7 +8,7 @@ import { JSX, useEffect, useState } from 'react';
 import { getEventById, subscribeToAnEvent } from '../../../service/eventService';
 import { useAlert } from '../../../stores/AlertContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
-import { IEvent } from '../../../models/event';
+import { EventByIdResponse, IEvent } from '../../../models/event';
 import EventHeader from './EventHeader/EventHeader';
 import { useAuth } from '../../../stores/AuthContext';
 import { parseMinutes } from '../../../utils/utilities';
@@ -38,7 +38,7 @@ interface IEventCardProps {
 
 export default function EventCard(props: IEventCardProps): JSX.Element {
 	const lang = useTranslation('eventHome');
-	const [privateEvent, setPrivateEvent] = useState<IEvent>();
+	const [privateEvent, setPrivateEvent] = useState<EventByIdResponse>();
 	const navigate = useNavigate();
 	const { setAlert } = useAlert();
 	const { user } = useAuth();

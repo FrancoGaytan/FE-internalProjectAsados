@@ -19,6 +19,11 @@ export interface UserProfileInterface {
 	userVegetarian?: boolean;
 	userHypertensive?: boolean;
 	userCeliac?: boolean;
+	personalEmail?: string;
+	newEventNotification?: boolean;
+	eventComingNotification?: boolean;
+	penalizationStartedNotification?: boolean;
+	oneWeekDebtorNotification?: boolean;
 }
 
 export interface IUserByIdResponse {
@@ -30,6 +35,11 @@ export interface IUserByIdResponse {
 	alias?: string;
 	specialDiet?: string[];
 	image?: any;
+	personalEmail?: string;
+	newEventNotification?: boolean;
+	eventComingNotification?: boolean;
+	penalizationStartedNotification?: boolean;
+	oneWeekDebtorNotification?: boolean;
 }
 
 // En un futuro esto debería estar en estado, para poder cambiarle el valor.
@@ -37,8 +47,9 @@ const emptyFile = undefined as unknown as File;
 
 export function UserProfile(): JSX.Element {
 	const lang = useTranslation('userProfile');
-	const { user, setIsLoading } = useAuth(); // usuario que llega primero desde el useAuth
+	const { user, setIsLoading } = useAuth();
 	const { setAlert } = useAlert();
+	const [activateNotifications, setActivateNotifications] = useState<boolean>(false);
 	const [actualUser, setActualUser] = useState<IUserByIdResponse>({
 		email: '',
 		name: '',
@@ -47,7 +58,12 @@ export function UserProfile(): JSX.Element {
 		cbu: '',
 		password: '',
 		specialDiet: [],
-		image: emptyFile
+		image: emptyFile,
+		personalEmail: '',
+		newEventNotification: false,
+		eventComingNotification: false,
+		penalizationStartedNotification: false,
+		oneWeekDebtorNotification: false
 	}); //este es el user que se utiliza para comparar la response del getUserById y despues actualizar el userProfile
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -60,7 +76,12 @@ export function UserProfile(): JSX.Element {
 		userVegan: chekingSpecialDiet('vegan'),
 		userVegetarian: chekingSpecialDiet('vegetarian'),
 		userHypertensive: chekingSpecialDiet('hypertensive'),
-		userCeliac: chekingSpecialDiet('celiac')
+		userCeliac: chekingSpecialDiet('celiac'),
+		personalEmail: actualUser.personalEmail || '',
+		newEventNotification: actualUser.newEventNotification || false,
+		eventComingNotification: actualUser.eventComingNotification || false,
+		penalizationStartedNotification: actualUser.penalizationStartedNotification || false,
+		oneWeekDebtorNotification: actualUser.oneWeekDebtorNotification || false
 	};
 
 	const [userProfile, setUser] = useState<UserProfileInterface>(initialUser); //este es el usuario que despues se va a submitear al form, el que se ve en los inputs
@@ -83,13 +104,36 @@ export function UserProfile(): JSX.Element {
 		e.preventDefault();
 		setIsLoading(true);
 
+		if (
+			activateNotifications &&
+			!userProfile.personalEmail &&
+			(userProfile.newEventNotification ||
+				userProfile.penalizationStartedNotification ||
+				userProfile.eventComingNotification ||
+				userProfile.oneWeekDebtorNotification)
+		) {
+			setAlert(lang.errorEmailRequired, AlertTypes.WARNING);
+			return;
+		}
+
+		if (userProfile.personalEmail) {
+			const isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(userProfile.personalEmail);
+			if (!isValid) {
+				setAlert(lang.invalidEmail, AlertTypes.ERROR);
+				return;
+			}
+		}
 		const provisionalSendingUser = {
 			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
 			name: userProfile.userName,
 			lastName: userProfile.lastName,
 			cbu: userProfile.userCbu,
 			alias: userProfile.userAlias,
-			specialDiet: checkSpecialDiet()
+			specialDiet: checkSpecialDiet(),
+			newEventNotification: userProfile.newEventNotification, //revisar estas ultimas cuatro propiedades
+			eventComingNotification: userProfile.eventComingNotification,
+			penalizationStartedNotification: userProfile.penalizationStartedNotification,
+			oneWeekDebtorNotification: userProfile.oneWeekDebtorNotification
 		};
 
 		editUser(user?.id, provisionalSendingUser)
@@ -109,7 +153,6 @@ export function UserProfile(): JSX.Element {
 			.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR))
 			.finally(() => {
 				setIsLoading(false);
-				setTimeout(() => window.location.reload(), 2000);
 			});
 	}
 
@@ -138,7 +181,11 @@ export function UserProfile(): JSX.Element {
 
 	useEffect(() => {
 		setUser(initialUser);
-
+		(actualUser.newEventNotification ||
+			actualUser.eventComingNotification ||
+			actualUser.penalizationStartedNotification ||
+			actualUser.oneWeekDebtorNotification) &&
+			setActivateNotifications(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [actualUser]);
 
@@ -286,6 +333,102 @@ export function UserProfile(): JSX.Element {
 								/>
 								{lang.celiacDiet}
 							</label>
+						</section>
+
+						<section className={styles.notificationsSection}>
+							<h3>{lang.notificationsTitle}</h3>
+							<label className={styles.profileLabel}>
+								<input
+									id="activateNotifications"
+									type="checkbox"
+									className={styles.checkbox}
+									checked={activateNotifications}
+									onChange={e => {
+										activateNotifications &&
+											setUser({
+												...userProfile,
+												newEventNotification: false,
+												eventComingNotification: false,
+												penalizationStartedNotification: false,
+												oneWeekDebtorNotification: false
+											});
+										setActivateNotifications(e.target.checked);
+									}}
+								/>
+								{lang.activateNotifications}
+							</label>
+							{activateNotifications && (
+								<div className={styles.visibleNotificationSettings}>
+									<label htmlFor="personalEmail" className={styles.cbuLabel}>
+										{lang.personalEmail}
+									</label>
+									<input
+										className={styles.input}
+										id="personalEmail"
+										type="text"
+										value={userProfile.personalEmail}
+										onChange={e => {
+											setUser({ ...userProfile, personalEmail: e.target.value });
+										}}
+										onBlur={e => {
+											const email = e.target.value;
+											const isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+											if (email && !isValid) {
+												setAlert(lang.invalidEmail, AlertTypes.ERROR);
+											}
+										}}
+									/>
+									<p className={styles.notificationDescription}>{lang.notificationDescription}</p>
+									<label className={styles.personalEmail}>
+										<input
+											id="newEventNotification"
+											type="checkbox"
+											className={styles.checkbox}
+											checked={userProfile.newEventNotification}
+											onChange={e => {
+												setUser({ ...userProfile, newEventNotification: e.target.checked });
+											}}
+										/>
+										{lang.newEventNotification}
+									</label>
+									<label className={styles.profileLabel}>
+										<input
+											id="eventComingNotification"
+											type="checkbox"
+											className={styles.checkbox}
+											checked={userProfile.eventComingNotification}
+											onChange={e => {
+												setUser({ ...userProfile, eventComingNotification: e.target.checked });
+											}}
+										/>
+										{lang.eventComingNotification}
+									</label>
+									<label className={styles.profileLabel}>
+										<input
+											id="penalizationStartedNotification"
+											type="checkbox"
+											className={styles.checkbox}
+											checked={userProfile.penalizationStartedNotification}
+											onChange={e => {
+												setUser({ ...userProfile, penalizationStartedNotification: e.target.checked });
+											}}
+										/>
+										{lang.penalizationStartedNotification}
+									</label>
+									<label className={styles.profileLabel}>
+										<input
+											id="oneWeekDebtorNotification"
+											type="checkbox"
+											className={styles.checkbox}
+											checked={userProfile.oneWeekDebtorNotification}
+											onChange={e => {
+												setUser({ ...userProfile, oneWeekDebtorNotification: e.target.checked });
+											}}
+										/>
+										{lang.oneWeekDebtorNotification}
+									</label>
+								</div>
+							)}
 						</section>
 					</div>
 				</section>

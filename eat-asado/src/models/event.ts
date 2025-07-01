@@ -59,3 +59,23 @@ export interface EventResponse {
 	penalization: number;
 	penalizationStartDate: Date;
 }
+
+export interface EventByIdResponse {
+	title: string;
+	chef: IUser;
+	datetime: Date;
+	description: string;
+	memberLimit: number;
+	state: string;
+	members: IUser[];
+	organizer: IUser;
+	shoppingDesignee: IUser;
+	transferReceipts: [];
+	purchaseReceipts: [];
+	ratings: [];
+	_id: string;
+	__v: 0;
+	isPrivate?: boolean;
+	penalization: number;
+	penalizationStartDate: Date;
+}

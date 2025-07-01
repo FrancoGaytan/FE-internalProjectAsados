@@ -147,7 +147,7 @@ export function CreateEvent(): JSX.Element {
 					datetime: new Date(res.datetime),
 					description: res.description,
 					memberLimit: res.memberLimit,
-					isPrivate: res.isPrivate,
+					isPrivate: res.isPrivate as boolean,
 					penalization: res.penalization,
 					penalizationStartDate: new Date(res.penalizationStartDate),
 					state: res.state

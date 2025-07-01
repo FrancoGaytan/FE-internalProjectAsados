@@ -729,7 +729,7 @@ export function Event(): JSX.Element {
 																kind="validation"
 																size="micro"
 																onClick={() => {
-																	setTransferReceiptId(member.transferReceipt);
+																	setTransferReceiptId(member.transferReceipt as string);
 																	openValidationPopup();
 																	setUserToApprove(member.userId);
 																}}>

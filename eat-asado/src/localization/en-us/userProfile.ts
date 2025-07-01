@@ -17,5 +17,15 @@ export const userProfile = Object.seal({
 	loginBtn: 'LOGIN',
 	successMsg: 'Information successfully changed',
 	failureMsg: 'You couldn´t update successfully your information',
-	errorTypeFile: 'Profile image must be .png .jpeg or .jpg type'
+	errorTypeFile: 'Profile image must be .png .jpeg or .jpg type',
+	notificationsTitle: 'Notifications',
+	activateNotifications: 'Activate Notifications',
+	personalEmail: 'Personal Email',
+	newEventNotification: 'A new event has been created',
+	eventComingNotification: 'An event is about to start',
+	penalizationStartedNotification: 'Your penalization has started',
+	oneWeekDebtorNotification: 'You have been a debtor for a week',
+	notificationDescription: 'I want to receive notifications when:',
+	invalidEmail: 'The entered email is not valid',
+	errorEmailRequired: 'Personal email is required to receive notifications'
 });
