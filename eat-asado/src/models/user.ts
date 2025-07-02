@@ -26,6 +26,17 @@ export interface IUser {
 	profilePicture?: string;
 }
 
+export interface IPublicUser {
+	_id: string;
+	name: string;
+	lastName: string;
+	email: string;
+	specialDiet: string[];
+	cbu?: string;
+	alias?: string;
+	profilePicture?: string;
+}
+
 export interface RegisterRequest {
 	name: string;
 	lastName: string;
@@ -47,4 +58,13 @@ export interface EventUserResponse {
 	hasReceiptApproved: boolean | null;
 	hasUploaded: boolean;
 	specialDiet: [];
+}
+
+export interface EditUserResponse {
+	imageId: string;
+}
+
+export interface IsUserDebtorResponse {
+	eventId: string;
+	reason: string;
 }

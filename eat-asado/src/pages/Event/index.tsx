@@ -11,13 +11,12 @@ import {
 	getMembersAmount,
 	getMembersAndReceiptsInfo,
 	getTransferReceipt,
-	/* 	hasUploadedTransferReceipt, */
 	subscribeToAnEvent,
 	unsubscribeToAnEvent
 } from '../../service';
 import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useParams, useLocation } from 'react-router-dom';
-import { EventUserResponse, IUser } from '../../models/user';
+import { EventUserResponse, IUser, IPublicUser } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
@@ -47,7 +46,7 @@ export function Event(): JSX.Element {
 	const location = useLocation();
 	const { setAlert } = useAlert();
 	const [event, setEvent] = useState<any>(); //TODO: Sacar o typear este any
-	const [currentUser, setcurrentUser] = useState<IUser>();
+	const [currentUser, setcurrentUser] = useState<IPublicUser>();
 	const userIdParams = useParams();
 	const [modalPaycheckState, setModalPaycheckState] = useState(false);
 	const [modalValidationState, setModalValidationState] = useState(false);

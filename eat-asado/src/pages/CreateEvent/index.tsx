@@ -5,7 +5,7 @@ import Button from '../../components/micro/Button/Button';
 import { createEvent, editEvent, getEventById } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
 import { IEvent } from '../../models/event';
-import { IUser } from '../../models/user';
+import { IUser, IPublicUser } from '../../models/user';
 import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
@@ -20,7 +20,7 @@ export function CreateEvent(): JSX.Element {
 	const { user } = useAuth();
 	const { setAlert } = useAlert();
 	const { setIsLoading } = useAuth();
-	const [fullUser, setFullUser] = useState<IUser>();
+	const [fullUser, setFullUser] = useState<IPublicUser>();
 	const [penalizationSection, setPenalizationSection] = useState<boolean>(false);
 	const dateTimeRef = useRef<HTMLInputElement>(null);
 	const [calendarState, setCalendarState] = useState<boolean>(false);
