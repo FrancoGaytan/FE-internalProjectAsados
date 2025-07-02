@@ -1,5 +1,3 @@
-import { IUser } from './user';
-
 export interface transferReceipt {
 	amount: number;
 	description: string;
@@ -33,4 +31,20 @@ export interface ITransferReceiptInfoResponse {
 	hasUploaded: boolean;
 	specialDiet: [];
 	transferReceipt: string | null;
+}
+
+export interface ITransferReceiptResponse {
+	_id: string;
+	amount: number;
+	description: string;
+	datetime: string;
+	event: string;
+	hasPaid: boolean;
+	image: string;
+	paymentMethod: string;
+	user: string;
+}
+
+export interface IUploadFileResponse {
+	imageId: string;
 }

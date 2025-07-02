@@ -26,11 +26,10 @@ import Modal from '../../components/macro/Modal/Modal';
 import PayCheckForm, { IUserReceiverInfo, PayCheckInfoResponse } from '../../components/macro/PayCheckForm/PayCheckForm';
 import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/PurchaseReceiptForm';
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
-import { IPurchaseReceipt, IPurchaseReceiptImage } from '../../models/purchases';
-import { downloadFile } from '../../utils/utilities';
+import { IPurchaseReceipt } from '../../models/purchases';
+import { ITransferReceiptResponse } from '../../models/transfer';
 import FilesPreview from '../../components/macro/FilesPreview/FilesPreview';
 import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
-import { ITransferReceiptImage, transferReceipt } from '../../models/transfer';
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
 import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
 import AssignationTable from '../../components/macro/AssignationTable/AssignationTable';
@@ -56,14 +55,14 @@ export function Event(): JSX.Element {
 	const [modalFastAproval, setModalFastAproval] = useState(false);
 	const [modalAssignation, setModalAssignation] = useState(false);
 	//const [userHasPaid, setUserHasPaid] = useState(false);
-	const [purchasesMade, setPurchasesMade] = useState([]);
+	const [purchasesMade, setPurchasesMade] = useState<IPurchaseReceipt[]>([]);
 	const baseUrl = getBaseUrl();
 	const currentUrl = `${baseUrl}${location.pathname}${location.search}${location.hash}`;
 	const [transferReceiptId, setTransferReceiptId] = useState<string | undefined>(undefined);
 	const [eventParticipants, setEventParticipants] = useState<EventUserResponse[]>([]);
 	const [userToApprove, setUserToApprove] = useState('');
 	const [totalPaymentInfo, setTotalPaymentInfo] = useState<PayCheckInfoResponse[]>([]);
-	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [transferReceipt, setTransferReceipt] = useState<ITransferReceiptResponse>();
 	const [paymentInfo, setPaymentInfo] = useState({ amount: 0, receiver: {} as IUserReceiverInfo });
 	const [userToFastAprove, setUserToFastAprove] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -220,7 +219,7 @@ export function Event(): JSX.Element {
 			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
 	}
 
-	function reclosingEvent(): void {
+	/* 	function reclosingEvent(): void {
 		event.chef && event.shoppingDesignee.length > 0 && event.state === EventStatesEnum.READYFORPAYMENT
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
 					.then(res => {
@@ -229,7 +228,7 @@ export function Event(): JSX.Element {
 					})
 					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
 			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
-	}
+	} */
 
 	function reopenEvent(): void {
 		//TODO: deuda tecnica hacer una sola funcion para closeEvent y reopenEvent --> algo como: toogleEvent
@@ -296,14 +295,14 @@ export function Event(): JSX.Element {
 			.catch(e => setAlert(lang.purchaseDeletedError, AlertTypes.ERROR));
 	}
 
-	async function downloadPurchase(purchase: IPurchaseReceipt) {
+	/* 	async function downloadPurchase(purchase: IPurchaseReceipt) {
 		try {
 			const purchaseImage = await getImage(purchase.image);
 			downloadFile({ file: purchaseImage, fileName: purchase.description });
 		} catch (e) {
 			setAlert(lang.downloadingImageError, AlertTypes.ERROR);
 		}
-	}
+	} */
 
 	function showPaymentData() {
 		return (
@@ -433,7 +432,7 @@ export function Event(): JSX.Element {
 		} else {
 			getPurchaseReceipts(event?._id)
 				.then(res => {
-					setPurchasesMade(res);
+					setPurchasesMade(res as IPurchaseReceipt[]);
 				})
 				.catch(e => {
 					console.error('Catch in context: ', e);

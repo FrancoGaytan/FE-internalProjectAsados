@@ -1,4 +1,4 @@
-import { ITransferReceiptImage } from '../models/transfer';
+import { IUploadFileResponse } from '../models/transfer';
 import { localStorageKeys } from '../utils/localStorageKeys';
 
 const baseURL = process.env.REACT_APP_ENDPOINT;
@@ -81,7 +81,7 @@ export async function _post<T, P = any>(path: string, payload?: P, signal?: Abor
 	}
 }
 
-export async function _postFiles(formFile: any, path: string, signal?: AbortSignal): Promise<ITransferReceiptImage> {
+export async function _postFiles(formFile: any, path: string, signal?: AbortSignal): Promise<IUploadFileResponse> {
 	try {
 		const formData = new FormData();
 		formData.append('file', formFile);
