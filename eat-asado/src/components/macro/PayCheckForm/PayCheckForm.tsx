@@ -1,5 +1,5 @@
 import { className } from '../../../utils/className';
-import { EventResponse } from '../../../models/event';
+import { EventResponse, EventByIdResponse } from '../../../models/event';
 import { ITransferReceiptRequest } from '../../../models/transfer';
 import Button from '../../micro/Button/Button';
 import { useState, useEffect, useRef } from 'react';
@@ -13,7 +13,7 @@ import { PaymentOptsEnum } from '../../../enums/PaymentsMethods.enum';
 import styles from './styles.module.scss';
 
 interface PayCheckProps {
-	event: EventResponse;
+	event: EventResponse | EventByIdResponse;
 	shoppingDesignee: IUserReceiverInfo;
 	amount: number;
 	openModal: () => void;

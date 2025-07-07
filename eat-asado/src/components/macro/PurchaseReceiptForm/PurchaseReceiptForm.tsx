@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { className } from '../../../utils/className';
-import { EventResponse } from '../../../models/event';
+import { EventByIdResponse, EventResponse } from '../../../models/event';
 import { IPurchaseReceiptRequest } from '../../../models/purchases';
 import Button from '../../micro/Button/Button';
 import DragAndDrop from '../../micro/DragAndDrop/DragAndDrop';
@@ -11,7 +11,7 @@ import { createPurchaseReceipt, uploadPurchaseFile } from '../../../service/purc
 import styles from './styles.module.scss';
 
 interface PurchaseReceiptProps {
-	event: EventResponse;
+	event: EventResponse | EventByIdResponse;
 	openModal: () => void;
 	closeModal: () => void;
 }

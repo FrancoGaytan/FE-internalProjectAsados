@@ -1,14 +1,11 @@
 import styles from './styles.module.scss';
-import { className } from '../../../utils/className';
 import Button from '../../micro/Button/Button';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useAlert } from '../../../stores/AlertContext';
-import { approvePaymentWithoutReceipt } from '../../../service';
 import { useEffect, useState } from 'react';
 import { getPurchaseReceiptsByEvent } from '../../../service/purchaseReceipts';
 import { assignMembersToReceipt } from '../../../service/purchaseReceipts';
-import { IPurchaseByEvent } from '../../../models/purchases';
 import { IUser } from '../../../models/user';
 
 interface ConfirmationPayProps {
@@ -84,7 +81,7 @@ function AssignationTable(props: ConfirmationPayProps) {
 			.catch(e => {
 				console.error('Error getting receipts:', e);
 			});
-	}, [eventId]);
+	}, [props, eventId]);
 
 	return (
 		<div className={styles.assignationTableWrapper}>

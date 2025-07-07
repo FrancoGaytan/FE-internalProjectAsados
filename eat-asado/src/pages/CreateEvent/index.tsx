@@ -4,7 +4,7 @@ import FormLayout from '../../components/macro/layout/FormLayout';
 import Button from '../../components/micro/Button/Button';
 import { createEvent, editEvent, getEventById } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
-import { IEvent } from '../../models/event';
+import { createEventRequest } from '../../models/event';
 import { IUser, IPublicUser } from '../../models/user';
 import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useAlert } from '../../stores/AlertContext';
@@ -25,16 +25,16 @@ export function CreateEvent(): JSX.Element {
 	const dateTimeRef = useRef<HTMLInputElement>(null);
 	const [calendarState, setCalendarState] = useState<boolean>(false);
 
-	const [event, setEvent] = useState<IEvent>({
+	const [event, setEvent] = useState<createEventRequest>({
 		title: '',
 		datetime: new Date(),
 		description: '',
 		memberLimit: 1,
 		members: [],
 		state: EventStatesEnum.AVAILABLE,
-		organizer: user ? user.id : '',
-		isChef: undefined,
-		isShoppingDesignee: undefined,
+		organizer: {} as IUser,
+		isChef: null,
+		shoppingDesignee: [],
 		isPrivate: false,
 		penalization: 0,
 		penalizationStartDate: new Date()
@@ -70,11 +70,13 @@ export function CreateEvent(): JSX.Element {
 
 	function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 		e.preventDefault();
+		if (!eventIdParam) return;
 		if (!event.description || !event.title) {
 			setAlert(lang.completeAllInputs, AlertTypes.ERROR);
 			return;
 		}
-		if (!fullUser?.alias && !fullUser?.cbu && !!event.isShoppingDesignee) {
+		if (!fullUser?.alias && !fullUser?.cbu && (event.shoppingDesignee?.length ?? 0) > 0) {
+			//TODO: chequear que no haya roto algo esto
 			setAlert(lang.needToHaveCbu, AlertTypes.ERROR);
 			return;
 		}
@@ -83,13 +85,12 @@ export function CreateEvent(): JSX.Element {
 			return;
 		}
 		if (event.penalization && Number(event.penalization) === 0) {
-			console.log(event.penalization);
 			setAlert(lang.wrongPenalizationDate, AlertTypes.ERROR);
 			return;
 		}
 		setIsLoading(true);
 
-		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
+		setEvent({ ...event, members: [fullUser as IUser], organizer: fullUser as IUser }); //TODO: chequear que no haya roto algo esto
 
 		if (eventIdParam === 'new') {
 			createEvent(event)
@@ -100,7 +101,11 @@ export function CreateEvent(): JSX.Element {
 				.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
 				.finally(() => setIsLoading(false));
 		} else {
-			editEvent(eventIdParam, event)
+			const editionEvent = {
+				...event,
+				chef: event.isChef ? (fullUser as IUser) : null // Esto no esta bien, cuando cambiemos los tipos veamos de unificar todos los tipos de eventos
+			};
+			editEvent(eventIdParam, editionEvent) //editionEvent constante temporal para unificar los tipos
 				.then(res => {
 					setAlert(`${lang.eventUpdateConfirmation}!`, AlertTypes.SUCCESS);
 				})
@@ -130,7 +135,7 @@ export function CreateEvent(): JSX.Element {
 	}, [user]);
 
 	useEffect(() => {
-		setEvent({ ...event, members: [fullUser as IUser], organizer: user?.id as string });
+		setEvent({ ...event, members: [fullUser as IUser], organizer: fullUser as IUser });
 		setPenalizationSection(!!event.penalization);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, fullUser]);
@@ -245,9 +250,9 @@ export function CreateEvent(): JSX.Element {
 									id="isAsador"
 									type="checkbox"
 									className={styles.checkbox}
-									checked={event.isChef !== undefined ? true : false}
+									checked={event.isChef !== null ? true : false}
 									onChange={e => {
-										setEvent({ ...event, isChef: e.target.checked ? (user?.id as string) : undefined });
+										setEvent({ ...event, isChef: e.target.checked ? fullUser?._id ?? null : null }); //TODO: esto esta rompiendo, queda como null
 									}}
 								/>
 								{lang.chef}
@@ -258,9 +263,9 @@ export function CreateEvent(): JSX.Element {
 									id="isEncargadoCompras"
 									type="checkbox"
 									className={styles.checkbox}
-									checked={event.isShoppingDesignee !== undefined ? true : false}
+									checked={(event.shoppingDesignee?.length ?? 0) > 0 ? true : false} //TODO: chequear que no haya roto algo esto
 									onChange={e => {
-										setEvent({ ...event, isShoppingDesignee: e.target.checked ? (user?.id as string) : undefined });
+										setEvent({ ...event, shoppingDesignee: e.target.checked ? [fullUser as IUser] : [] });
 									}}
 								/>
 								{lang.shoppingDesignee}

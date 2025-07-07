@@ -195,9 +195,11 @@ export function UserProfile(): JSX.Element {
 
 		getUserById(user.id).then(res => {
 			setActualUser(res);
-			getImage(res.profilePicture).then(res2 => {
-				setActualUser(prev => ({ ...prev, image: res2 }));
-			});
+			if (res.profilePicture !== null) {
+				getImage(res.profilePicture).then(res2 => {
+					setActualUser(prev => ({ ...prev, image: res2 }));
+				});
+			}
 		});
 
 		return () => abortController.abort();

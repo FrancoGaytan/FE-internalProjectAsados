@@ -5,7 +5,7 @@ export const register = Object.seal({
 	password: 'Password',
 	confirmPassword: 'Confirm Password',
 	emailPlaceholder: 'user@endava.com',
-	emailDescription: 'Please, use your Endava email adress',
+	emailDescription: 'Please, use your Endava email address',
 	passwordDescription: 'At least 8 characters including: 1 lowercase, 1 uppercase, 1 special character and 1 number',
 	specialDiet: 'Special Diet',
 	specialDietOptional: '(optional)',
@@ -18,8 +18,7 @@ export const register = Object.seal({
 	registerTitle: 'Register',
 	registerBtn: 'REGISTER',
 	successMsg: 'You have registered successfully',
-	failureMsg: 'You coudn´t register successfully',
+	failureMsg: "You couldn't register successfully",
 	wrongPassword: 'Invalid password format',
 	passwordArentMatching: 'Passwords are not matching'
-
 });

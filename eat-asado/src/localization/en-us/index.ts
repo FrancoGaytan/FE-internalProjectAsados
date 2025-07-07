@@ -7,6 +7,7 @@ import { userProfile } from './userProfile';
 import { createEvent } from './createEvent';
 import { eventHome } from './eventHome';
 import { event } from './event';
+import { faq } from './faq';
 
 export const enUS = Object.seal({
 	appName: 'Eat-Meat',
@@ -18,5 +19,6 @@ export const enUS = Object.seal({
 	userProfile,
 	createEvent,
 	eventHome,
-	event
+	event,
+	faq
 });

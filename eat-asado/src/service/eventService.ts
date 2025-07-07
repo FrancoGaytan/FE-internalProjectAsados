@@ -1,5 +1,5 @@
 import { PayCheckInfoResponse } from '../components/macro/PayCheckForm/PayCheckForm';
-import { EventByIdResponse, IEvent, IPublicEvent } from '../models/event';
+import { createEventRequest, EventByIdResponse, IEvent, IPublicEvent } from '../models/event';
 import { ITransferReceiptInfoResponse } from '../models/transfer';
 import { _delete, _get, _post, _put } from './httpService';
 
@@ -27,9 +27,9 @@ export async function getEventById(id: string | undefined, signal?: AbortSignal)
 /**
  * Gets the public events for the Event Home page.
  */
-export async function createEvent(payload: IEvent, signal?: AbortSignal): Promise<EventByIdResponse> {
+export async function createEvent(payload: createEventRequest, signal?: AbortSignal): Promise<EventByIdResponse> {
 	const url = '/events/createEvent';
-	return await _post<EventByIdResponse, IEvent>(url, payload, signal);
+	return await _post<EventByIdResponse, createEventRequest>(url, payload, signal);
 }
 
 /**
@@ -37,7 +37,7 @@ export async function createEvent(payload: IEvent, signal?: AbortSignal): Promis
 Edits an event by its ID, needs to be the organizer who calls it.
  */
 
-export async function editEvent(id: string | undefined, payload: IEvent, signal?: AbortSignal): Promise<EventByIdResponse> {
+export async function editEvent(id: string, payload: IEvent, signal?: AbortSignal): Promise<EventByIdResponse> {
 	const url = `/events/editEvent/${id}`;
 	return await _put<EventByIdResponse, IEvent>(url, payload, signal);
 }
@@ -47,7 +47,7 @@ export async function editEvent(id: string | undefined, payload: IEvent, signal?
 Edits just the chef or shopping designee by its ID
  */
 
-export async function editRoles(id: number, payload: IEvent, signal?: AbortSignal): Promise<EventByIdResponse> {
+export async function editRoles(id: string, payload: IEvent, signal?: AbortSignal): Promise<EventByIdResponse> {
 	const url = `/events/editRoles/${id}`;
 	return await _put<EventByIdResponse, IEvent>(url, payload, signal);
 }
@@ -73,7 +73,7 @@ export async function unsubscribeToAnEvent(userId: string, eventId: string, sign
 /**
  * Deletes an event by its ID
  */
-export async function deleteEvent(id: number, signal?: AbortSignal): Promise<EventByIdResponse> {
+export async function deleteEvent(id: string, signal?: AbortSignal): Promise<EventByIdResponse> {
 	const url = `/events/deleteEvent/${id}`;
 	return await _delete(url, signal);
 }

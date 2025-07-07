@@ -28,7 +28,7 @@ interface IEventData {
 }
 
 interface IEventCardProps {
-	eventId: string; //esto es nuevo, necesito saber si me la trae o no
+	eventId: string;
 	eventState: TEventState;
 	eventUserIsDebtor: string;
 	eventDateTime: Date;
@@ -42,8 +42,8 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const navigate = useNavigate();
 	const { setAlert } = useAlert();
 	const { user } = useAuth();
-	const evState = props.eventState; //esta prop va a ser para darle el estilo a la card
-	const evDateTime = new Date(props.eventDateTime); //esto va a haber que pasarlo x una funcion que seccione la fecha y la hora y despues separarlos en dos variables diferentes
+	const evState = props.eventState;
+	const evDateTime = new Date(props.eventDateTime);
 	const evTitle = props.eventData.eventTitle;
 	const evDescription = props.eventData.eventDescription;
 	const evParticipants = props.eventData.eventParticipants;
@@ -71,7 +71,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		}
 		subscribeToAnEvent(user?.id as string, evId)
 			.then(res => {
-				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
+				//setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR));
 	}
@@ -79,7 +79,9 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	function handleParticipation() {
 		if (!!user?.name) {
 			subscribeUserToEvent();
-			navigate(`/event/${evId}`);
+			setTimeout(() => {
+				navigate(`/event/${evId}`);
+			}, 1000);
 		} else {
 			setAlert(lang.noLoggedMsgParticipate, AlertTypes.ERROR);
 		}

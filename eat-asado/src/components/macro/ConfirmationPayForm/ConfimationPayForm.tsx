@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
-import { EventResponse } from '../../../models/event';
+import { EventByIdResponse, EventResponse } from '../../../models/event';
 import Button from '../../micro/Button/Button';
 /* import { downloadFile } from '../../../utils/utilities'; */
 import { approveTransferReceipts, deleteTransferReceipt } from '../../../service';
@@ -16,7 +16,7 @@ import { FilePreview } from '../../../pages';
 import FilesPreview from '../FilesPreview/FilesPreview';
 
 interface ConfirmationPayProps {
-	event: EventResponse;
+	event: EventResponse | EventByIdResponse;
 	openModal: () => void;
 	transferReceiptId?: string;
 	closeModal: () => void;

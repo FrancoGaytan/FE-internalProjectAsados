@@ -6,3 +6,4 @@ export * from './Register';
 export * from './SettingNewPassword';
 export * from './UserProfile';
 export * from './Event';
+export * from './FAQ';
