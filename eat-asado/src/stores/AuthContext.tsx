@@ -47,12 +47,12 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 				setUser(res);
 				setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
 				if (isRedirecting) {
-					navigate(`${isRedirecting}`);
+					//navigate(`${isRedirecting}`);
 					setIsRedirecting(null);
 				} else {
 					navigate('/');
 				}
-				window.location.reload(); //TODO: si no pongo esto, hay request que la primera vez no funcionan, sucede en la primera llamada despues de loggearme
+				//window.location.reload(); //TODO: si no pongo esto, hay request que la primera vez no funcionan, sucede en la primera llamada despues de loggearme
 			})
 			.catch(error => {
 				setAlert(lang.loginErrorMessage, AlertTypes.ERROR);
