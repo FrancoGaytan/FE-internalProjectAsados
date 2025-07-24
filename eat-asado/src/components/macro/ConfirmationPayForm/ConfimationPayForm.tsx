@@ -2,8 +2,8 @@ import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
 import { EventByIdResponse, EventResponse } from '../../../models/event';
 import Button from '../../micro/Button/Button';
-/* import { downloadFile } from '../../../utils/utilities'; */
-import { approveTransferReceipts, deleteTransferReceipt } from '../../../service';
+import { downloadFile } from '../../../utils/utilities';
+import { approveTransferReceipts, deleteTransferReceipt, getMembersAmount } from '../../../service';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useAlert } from '../../../stores/AlertContext';
@@ -20,6 +20,7 @@ interface ConfirmationPayProps {
 	openModal: () => void;
 	transferReceiptId?: string;
 	closeModal: () => void;
+	userToApprove: string;
 }
 
 function ConfirmationPayForm(props: ConfirmationPayProps) {
@@ -29,6 +30,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 	const [transferReceipt, setTransferReceipt] = useState<ITransferReceiptResponse>();
 	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
 	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
+	const [amountToValidate, setAmountToValidate] = useState<number>(0);
 
 	/* 	async function downloadTransfer(transferId: string) {
 		try {
@@ -79,24 +81,18 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 	}
 
 	function gettingPriceToPay(): number {
-		let price = 0;
 		let currentPenalization = 0;
 
 		if (!event) {
-			return price;
+			return 0;
 		}
-
-		event?.purchaseReceipts?.forEach((tr: IPurchaseReceipt) => {
-			price = price + tr.amount;
-		});
 
 		if (event.penalization && gettingDateDiference() > 0) {
 			if (transferReceipt?.datetime && new Date(transferReceipt.datetime) < new Date()) {
 				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
 			}
 		}
-
-		return Math.round(price / event.members.length + currentPenalization);
+		return Math.round(amountToValidate + currentPenalization);
 	}
 
 	async function PreviewTransfer(transfer: ITransferReceiptResponse) {
@@ -130,6 +126,18 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 				console.error('Catch in context: ', e);
 			});
 	}, [transferReceiptId]);
+
+	useEffect(() => {
+		if (!event?._id) return;
+		getMembersAmount(event._id)
+			.then(res => {
+				const userToValidate = res.find(member => member.userId === props.userToApprove);
+				setAmountToValidate(userToValidate?.amount || 0);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+	}, [props.userToApprove]);
 
 	return (
 		<div {...className(styles.paycheck)}>
