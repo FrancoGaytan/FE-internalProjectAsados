@@ -730,8 +730,8 @@ export function Event(): JSX.Element {
 																size="micro"
 																onClick={() => {
 																	setTransferReceiptId(member.transferReceipt);
-																	openValidationPopup();
 																	setUserToApprove(member.userId);
+																	openValidationPopup();
 																}}>
 																{lang.validateBtn}
 															</Button>
@@ -876,6 +876,7 @@ export function Event(): JSX.Element {
 			<Modal isOpen={modalValidationState} closeModal={closeValidationPopup}>
 				<ConfirmationPayForm
 					event={event}
+					userToApprove={userToApprove}
 					transferReceiptId={transferReceiptId}
 					openModal={() => openValidationPopup}
 					closeModal={() => {
