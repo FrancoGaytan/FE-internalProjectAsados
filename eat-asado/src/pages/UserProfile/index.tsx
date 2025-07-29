@@ -8,6 +8,8 @@ import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
 import styles from './styles.module.scss';
 import { getImage } from '../../service/purchaseReceipts';
+import { INotificationOptions } from '../../models/user';
+import { event } from '../../localization/en-us/event';
 
 export interface UserProfileInterface {
 	userImage?: File;
@@ -19,6 +21,12 @@ export interface UserProfileInterface {
 	userVegetarian?: boolean;
 	userHypertensive?: boolean;
 	userCeliac?: boolean;
+	alternativeEmail?: string;
+	newEventNotification?: boolean;
+	eventComingNotification?: boolean;
+	penalizationStartedNotification?: boolean;
+	oneWeekDebtorNotification?: boolean;
+	notifications: INotificationOptions;
 }
 
 export interface IUserByIdResponse {
@@ -30,6 +38,8 @@ export interface IUserByIdResponse {
 	alias?: string;
 	specialDiet?: string[];
 	image?: any;
+	alternativeEmail?: string;
+	notifications: INotificationOptions;
 }
 
 // En un futuro esto debería estar en estado, para poder cambiarle el valor.
@@ -37,9 +47,10 @@ const emptyFile = undefined as unknown as File;
 
 export function UserProfile(): JSX.Element {
 	const lang = useTranslation('userProfile');
-	const { user, setIsLoading } = useAuth(); // usuario que llega primero desde el useAuth
+	const { user, setIsLoading } = useAuth();
 	const { setAlert } = useAlert();
-	const [actualUser, setActualUser] = useState<IUserByIdResponse>({
+	const [activateNotifications, setActivateNotifications] = useState<boolean>(false);
+	const [currentUser, setCurrentUser] = useState<IUserByIdResponse>({
 		email: '',
 		name: '',
 		lastName: '',
@@ -47,20 +58,34 @@ export function UserProfile(): JSX.Element {
 		cbu: '',
 		password: '',
 		specialDiet: [],
-		image: emptyFile
+		image: emptyFile,
+		alternativeEmail: '',
+		notifications: {
+			newEvent: false,
+			eventStart: false,
+			penalizationStart: false,
+			penalizationOneWeek: false
+		}
 	}); //este es el user que se utiliza para comparar la response del getUserById y despues actualizar el userProfile
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const initialUser = {
-		userImage: actualUser.image,
-		userName: actualUser.name,
-		lastName: actualUser.lastName,
-		userCbu: actualUser.cbu,
-		userAlias: actualUser.alias,
+		userImage: currentUser.image,
+		userName: currentUser.name,
+		lastName: currentUser.lastName,
+		userCbu: currentUser.cbu,
+		userAlias: currentUser.alias,
 		userVegan: chekingSpecialDiet('vegan'),
 		userVegetarian: chekingSpecialDiet('vegetarian'),
 		userHypertensive: chekingSpecialDiet('hypertensive'),
-		userCeliac: chekingSpecialDiet('celiac')
+		userCeliac: chekingSpecialDiet('celiac'),
+		alternativeEmail: currentUser.alternativeEmail || '',
+		notifications: {
+			newEvent: currentUser.notifications.newEvent || false,
+			eventStart: currentUser.notifications.eventStart || false,
+			penalizationStart: currentUser.notifications.penalizationStart || false,
+			penalizationOneWeek: currentUser.notifications.penalizationOneWeek || false
+		}
 	};
 
 	const [userProfile, setUser] = useState<UserProfileInterface>(initialUser); //este es el usuario que despues se va a submitear al form, el que se ve en los inputs
@@ -83,13 +108,38 @@ export function UserProfile(): JSX.Element {
 		e.preventDefault();
 		setIsLoading(true);
 
+		if (
+			activateNotifications &&
+			!userProfile.alternativeEmail &&
+			(userProfile.newEventNotification ||
+				userProfile.penalizationStartedNotification ||
+				userProfile.eventComingNotification ||
+				userProfile.oneWeekDebtorNotification)
+		) {
+			setAlert(lang.errorEmailRequired, AlertTypes.WARNING);
+			return;
+		}
+		if (userProfile.alternativeEmail) {
+			const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userProfile.alternativeEmail); //chequear si esta funcionando este test
+			if (!isValid) {
+				setAlert(lang.invalidEmail, AlertTypes.ERROR);
+				return;
+			}
+		}
 		const provisionalSendingUser = {
 			//TODO: Cuando el back acepte el archivo de foto de perfil hay que mandar directamente el userProfile
 			name: userProfile.userName,
 			lastName: userProfile.lastName,
 			cbu: userProfile.userCbu,
 			alias: userProfile.userAlias,
-			specialDiet: checkSpecialDiet()
+			specialDiet: checkSpecialDiet(),
+			alternativeEmail: userProfile.alternativeEmail,
+			notifications: {
+				eventStart: userProfile.notifications.eventStart, //revisar estas ultimas cuatro propiedades
+				newEvent: userProfile.notifications.newEvent,
+				penalizationStart: userProfile.notifications.penalizationStart,
+				penalizationOneWeek: userProfile.notifications.penalizationOneWeek
+			}
 		};
 
 		editUser(user?.id, provisionalSendingUser)
@@ -109,12 +159,11 @@ export function UserProfile(): JSX.Element {
 			.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR))
 			.finally(() => {
 				setIsLoading(false);
-				setTimeout(() => window.location.reload(), 2000);
 			});
 	}
 
 	function chekingSpecialDiet(diet: any) {
-		return actualUser?.specialDiet?.includes(diet) && diet.toString();
+		return currentUser?.specialDiet?.includes(diet) && diet.toString();
 	}
 
 	function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -138,19 +187,25 @@ export function UserProfile(): JSX.Element {
 
 	useEffect(() => {
 		setUser(initialUser);
-
+		(currentUser.notifications.newEvent ||
+			currentUser.notifications.eventStart ||
+			currentUser.notifications.penalizationStart ||
+			currentUser.notifications.penalizationOneWeek) &&
+			setActivateNotifications(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [actualUser]);
+	}, [currentUser]);
 
 	useEffect(() => {
 		if (!user?.id) return;
 		const abortController = new AbortController();
 
 		getUserById(user.id).then(res => {
-			setActualUser(res);
-			getImage(res.profilePicture).then(res2 => {
-				setActualUser(prev => ({ ...prev, image: res2 }));
-			});
+			setCurrentUser(res as IUserByIdResponse); //ojo esto, no son del mismo tipo
+			if (res.profilePicture !== null) {
+				getImage(res.profilePicture).then(res2 => {
+					setCurrentUser(prev => ({ ...prev, image: res2 }));
+				});
+			}
 		});
 
 		return () => abortController.abort();
@@ -286,6 +341,129 @@ export function UserProfile(): JSX.Element {
 								/>
 								{lang.celiacDiet}
 							</label>
+						</section>
+
+						<section className={styles.notificationsSection}>
+							<h3>{lang.notificationsTitle}</h3>
+							<label className={styles.profileLabel}>
+								<input
+									id="activateNotifications"
+									type="checkbox"
+									className={styles.checkbox}
+									checked={activateNotifications}
+									onChange={e => {
+										activateNotifications &&
+											setUser({
+												...userProfile,
+												notifications: {
+													...userProfile.notifications,
+													newEvent: false,
+													eventStart: false,
+													penalizationStart: false,
+													penalizationOneWeek: false
+												}
+											});
+										setActivateNotifications(e.target.checked);
+									}}
+								/>
+								{lang.activateNotifications}
+							</label>
+							{activateNotifications && (
+								<div className={styles.visibleNotificationSettings}>
+									<label htmlFor="alternativeEmail" className={styles.cbuLabel}>
+										{lang.alternativeEmail}
+									</label>
+									<input
+										className={styles.input}
+										id="alternativeEmail"
+										type="text"
+										value={userProfile.alternativeEmail}
+										onChange={e => {
+											setUser({ ...userProfile, alternativeEmail: e.target.value });
+										}}
+										onBlur={e => {
+											const email = e.target.value;
+											const isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+											if (email && !isValid) {
+												setAlert(lang.invalidEmail, AlertTypes.ERROR);
+											}
+										}}
+									/>
+									<p className={styles.notificationDescription}>{lang.notificationDescription}</p>
+									<label className={styles.alternativeEmail}>
+										<input
+											id="newEventNotification"
+											type="checkbox"
+											className={styles.checkbox}
+											checked={userProfile.notifications.newEvent}
+											onChange={e => {
+												setUser({
+													...userProfile,
+													notifications: {
+														...userProfile.notifications,
+														newEvent: e.target.checked
+													}
+												});
+											}}
+										/>
+										{lang.newEventNotification}
+									</label>
+									<label className={styles.profileLabel}>
+										<input
+											id="eventComingNotification"
+											type="checkbox"
+											className={styles.checkbox}
+											checked={userProfile.notifications.eventStart}
+											onChange={e => {
+												setUser({
+													...userProfile,
+													notifications: {
+														...userProfile.notifications,
+														eventStart: e.target.checked
+													}
+												});
+											}}
+										/>
+										{lang.eventComingNotification}
+									</label>
+									<label className={styles.profileLabel}>
+										<input
+											id="penalizationStartedNotification"
+											type="checkbox"
+											className={styles.checkbox}
+											checked={userProfile.notifications.penalizationStart}
+											onChange={e => {
+												setUser({
+													...userProfile,
+													notifications: {
+														...userProfile.notifications,
+														penalizationStart: e.target.checked
+													}
+												});
+											}}
+										/>
+										{lang.penalizationStartedNotification}
+									</label>
+									<label className={styles.profileLabel}>
+										<input
+											id="penalizationStartedNotification"
+											type="checkbox"
+											className={styles.checkbox}
+											checked={userProfile.notifications.penalizationOneWeek}
+											onChange={e => {
+												setUser({
+													...userProfile,
+													notifications: {
+														...userProfile.notifications,
+														penalizationOneWeek: e.target.checked
+													}
+												});
+											}}
+										/>
+										{lang.oneWeekDebtorNotification}
+									</label>
+								</div>
+							)}
 						</section>
 					</div>
 				</section>

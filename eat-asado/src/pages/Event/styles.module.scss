@@ -460,6 +460,27 @@
 					margin: 0;
 					margin-top: 30px;
 				}
+				.assignTransitionWrapper {
+					display: inline-block;
+					position: relative;
+					transition: opacity 1s ease, transform 1s ease;
+
+					// animación de entrada
+					:global(button) {
+						animation: fadeInAssign 1s ease;
+					}
+
+					@keyframes fadeInAssign {
+						from {
+							opacity: 0;
+							transform: scale(0.8);
+						}
+						to {
+							opacity: 1;
+							transform: scale(1);
+						}
+					}
+				}
 			}
 			@media #{variables.media-query(max, sm)} {
 				flex-direction: column;

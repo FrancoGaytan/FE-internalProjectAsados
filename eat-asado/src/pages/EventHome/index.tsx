@@ -37,12 +37,8 @@ export function EventHome(): JSX.Element {
 		[lang]
 	);
 
-	const handleScrollToEnd = () => {
-		window.scrollTo({
-			top: document.body.scrollHeight,
-			behavior: 'smooth'
-		});
-		setIsScrolling(true);
+	const goToFaq = () => {
+		navigate('/faq');
 	};
 
 	const handleScrollToStart = () => {
@@ -187,7 +183,7 @@ export function EventHome(): JSX.Element {
 
 						<p>{lang.participationInfoDescription}</p>
 
-						<Button kind="primary" size="large" onClick={handleScrollToEnd}>
+						<Button kind="primary" size="large" onClick={goToFaq}>
 							{' '}
 							{lang.moreAbout}{' '}
 						</Button>

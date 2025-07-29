@@ -5,7 +5,7 @@ export const createEvent = Object.seal({
 	dateTime: 'Date and Time',
 	eventDescription: 'Description',
 	rolesTitle: 'Roles',
-	optionalDescription: '(optional)',
+	optionalDescription: '(Optional)',
 	chef: 'Chef',
 	shoppingDesignee: 'Shopping Designee',
 	createEventBtn: 'CREATE EVENT',
@@ -14,11 +14,11 @@ export const createEvent = Object.seal({
 	eventRegisteredConfirmation: 'Event registered successfully',
 	eventUpdateConfirmation: 'Event modified successfully',
 	eventRegistrationFailure: 'Event registration failed',
-	completeAllInputs: 'Please, complete all the fields',
-	needToHaveCbu: 'You need to have you CBU or alias loaded to be shopping designee',
-	isPrivate: 'The event is Private',
-	hasPenalization: 'Debtors penalization',
+	completeAllInputs: 'Please complete all the fields',
+	needToHaveCbu: 'You need to have your CBU or alias loaded to be a shopping designee',
+	isPrivate: 'The event is private',
+	hasPenalization: "Debtor's penalization",
 	amountPenalization: 'Penalization amount per day',
 	penalizationStartingDate: 'Penalization starting date',
-	wrongPenalizationDate: 'Penalization starting date must be after the event´s date'
+	wrongPenalizationDate: "Penalization starting date must be after the event's date"
 });

@@ -39,6 +39,10 @@
 				&:hover {
 					transform: scale(1.03);
 				}
+
+				@media #{variables.media-query(max, lg)} {
+					margin: 0 auto;
+				}
 			}
 
 			.editImgSection {
@@ -51,6 +55,10 @@
 
 				&:hover {
 					text-decoration: underline;
+				}
+				@media #{variables.media-query(max, lg)} {
+					display: flex;
+					justify-content: center;
 				}
 			}
 			.editLogo {
@@ -89,6 +97,18 @@
 				border-radius: 25%;
 				cursor: pointer;
 				display: inline;
+			}
+
+			.notificationsSection {
+				.visibleNotificationSettings {
+					margin-left: 15px;
+				}
+				.notificationDescription {
+					font-weight: bold;
+				}
+				.profileLabel {
+					font-weight: normal;
+				}
 			}
 		}
 	}

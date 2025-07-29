@@ -1,6 +1,5 @@
 import { IMailRequest, IRecoverPasswordRequest, IVerificationCode } from '../models/mail';
-import { IPurchaseReceiptImage, IPurchaseReceiptRequest } from '../models/purchases';
-import { _delete, _get, _post, _put, _postFiles, __getFiles } from './httpService';
+import { _post, _put } from './httpService';
 
 export async function forgotPassword(payload: IMailRequest, signal?: AbortSignal): Promise<any> {
 	const url = `/password/forgot`;

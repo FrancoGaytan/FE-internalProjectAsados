@@ -25,3 +25,7 @@ export interface IPurchaseByEvent {
 	id: string;
 	participants: string[];
 }
+
+export interface IPurchaseAssignmentResponse {
+	message: string;
+}

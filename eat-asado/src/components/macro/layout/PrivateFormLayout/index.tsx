@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
 import { locales } from '../../../../localization';
 import { getUserById } from '../../../../service';
-import { IUser } from '../../../../models/user';
+import { IPublicUser } from '../../../../models/user';
 import { getImage } from '../../../../service/purchaseReceipts';
 
 export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element {
@@ -14,7 +14,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 	const navigate = useNavigate();
 	const { setLocale } = useLocalizationContext();
 	const { user, logout } = useAuth();
-	const [userData, setUserData] = useState<IUser | undefined>(undefined);
+	const [userData, setUserData] = useState<IPublicUser | undefined>(undefined);
 	const [image, setImage] = useState<File | undefined>(undefined);
 
 	function handleLogout(e: React.MouseEvent<HTMLButtonElement>) {

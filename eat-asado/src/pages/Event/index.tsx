@@ -11,13 +11,12 @@ import {
 	getMembersAmount,
 	getMembersAndReceiptsInfo,
 	getTransferReceipt,
-	/* 	hasUploadedTransferReceipt, */
 	subscribeToAnEvent,
 	unsubscribeToAnEvent
 } from '../../service';
 import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useParams, useLocation } from 'react-router-dom';
-import { EventUserResponse, IUser } from '../../models/user';
+import { EventUserResponse, IUser, IPublicUser } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
@@ -26,14 +25,14 @@ import Modal from '../../components/macro/Modal/Modal';
 import PayCheckForm, { IUserReceiverInfo, PayCheckInfoResponse } from '../../components/macro/PayCheckForm/PayCheckForm';
 import PurchaseReceiptForm from '../../components/macro/PurchaseReceiptForm/PurchaseReceiptForm';
 import { getPurchaseReceipts, deleteEventPurchase, getImage } from '../../service/purchaseReceipts';
-import { IPurchaseReceipt, IPurchaseReceiptImage } from '../../models/purchases';
-import { downloadFile } from '../../utils/utilities';
+import { IPurchaseReceipt } from '../../models/purchases';
+import { ITransferReceiptResponse } from '../../models/transfer';
 import FilesPreview from '../../components/macro/FilesPreview/FilesPreview';
 import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/ConfimationPayForm';
-import { ITransferReceiptImage, transferReceipt } from '../../models/transfer';
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
 import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
 import AssignationTable from '../../components/macro/AssignationTable/AssignationTable';
+import { EventByIdResponse, IEvent } from '../../models/event';
 
 export interface FilePreview {
 	uri: string;
@@ -47,8 +46,8 @@ export function Event(): JSX.Element {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { setAlert } = useAlert();
-	const [event, setEvent] = useState<any>(); //TODO: Sacar o typear este any
-	const [currentUser, setcurrentUser] = useState<IUser>();
+	const [event, setEvent] = useState<EventByIdResponse>();
+	const [currentUser, setcurrentUser] = useState<IPublicUser>();
 	const userIdParams = useParams();
 	const [modalPaycheckState, setModalPaycheckState] = useState(false);
 	const [modalValidationState, setModalValidationState] = useState(false);
@@ -56,14 +55,14 @@ export function Event(): JSX.Element {
 	const [modalFastAproval, setModalFastAproval] = useState(false);
 	const [modalAssignation, setModalAssignation] = useState(false);
 	//const [userHasPaid, setUserHasPaid] = useState(false);
-	const [purchasesMade, setPurchasesMade] = useState([]);
+	const [purchasesMade, setPurchasesMade] = useState<IPurchaseReceipt[]>([]);
 	const baseUrl = getBaseUrl();
 	const currentUrl = `${baseUrl}${location.pathname}${location.search}${location.hash}`;
 	const [transferReceiptId, setTransferReceiptId] = useState<string | undefined>(undefined);
 	const [eventParticipants, setEventParticipants] = useState<EventUserResponse[]>([]);
 	const [userToApprove, setUserToApprove] = useState('');
 	const [totalPaymentInfo, setTotalPaymentInfo] = useState<PayCheckInfoResponse[]>([]);
-	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [transferReceipt, setTransferReceipt] = useState<ITransferReceiptResponse>();
 	const [paymentInfo, setPaymentInfo] = useState({ amount: 0, receiver: {} as IUserReceiverInfo });
 	const [userToFastAprove, setUserToFastAprove] = useState('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -88,11 +87,14 @@ export function Event(): JSX.Element {
 	}
 
 	function isUserIntoEvent(): Boolean {
-		const ev = event.members;
-		return ev.find((member: { _id: string }) => member._id === user?.id);
+		//chequear no haber roto esta funcion
+		if (!event) return false;
+		const ev = event?.members;
+		return !!ev.find((member: { _id: string }) => member._id === user?.id);
 	}
 
 	function subscribeUserToEvent(): void {
+		if (!event) return;
 		if (Object.keys(user as Object).length === 0) {
 			setAlert(lang.needLoginRedirecting, AlertTypes.INFO);
 			setTimeout(() => {
@@ -104,8 +106,8 @@ export function Event(): JSX.Element {
 			setIsLoading(true);
 			subscribeToAnEvent(user?.id as string, event?._id)
 				.then(res => {
+					refetchEvent();
 					setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
-					setTimeout(() => window.location.reload(), 1000);
 				})
 				.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR))
 				.finally(() => setIsLoading(false));
@@ -113,14 +115,15 @@ export function Event(): JSX.Element {
 	}
 
 	function removeResponsabilitiesAtUnsubscribing(): void {
+		if (!event) return;
 		event?.chef && event?.chef?._id === user?.id && toogleChef();
 		event?.shoppingDesignee.length > 0 && event?.shoppingDesignee?.some((designee: IUser) => designee._id === user?.id) && toogleShopDesignee();
 	}
 
 	function unsubscribeUserToEvent(): void {
-		if (!user) {
-			return;
-		}
+		if (!event) return;
+		if (!user) return;
+
 		if (event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) {
 			setAlert(`${lang.shoppingDesigneeTryingToGetOff}`, AlertTypes.ERROR);
 			return;
@@ -129,8 +132,8 @@ export function Event(): JSX.Element {
 
 		unsubscribeToAnEvent(user?.id as string, event?._id)
 			.then(res => {
-				setAlert(`${lang.userRemovedSuccessfully}!`, AlertTypes.SUCCESS);
 				refetchEvent();
+				setAlert(`${lang.userRemovedSuccessfully}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.userRemovingFailure}`, AlertTypes.ERROR));
 	}
@@ -140,14 +143,15 @@ export function Event(): JSX.Element {
 	}
 
 	function toogleChef(): void {
+		if (!event) return;
 		!event?.chef
-			? editRoles(event?._id, { ...event, chef: currentUser })
+			? editRoles(event?._id, { ...event, chef: currentUser ?? null, isPrivate: event.isPrivate ?? false })
 					.then(res => {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.userResponsabilityFailure}`, AlertTypes.ERROR))
 					.finally(() => refetchEvent())
-			: editRoles(event?._id, { ...event, chef: null })
+			: editRoles(event?._id, { ...event, chef: null, isPrivate: event.isPrivate ?? false })
 					.then(res => {
 						setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 					})
@@ -156,6 +160,7 @@ export function Event(): JSX.Element {
 	}
 
 	function toogleShopDesignee(): void {
+		if (!event) return;
 		if (!(currentUser?.cbu || currentUser?.alias)) {
 			setAlert(`${lang.paymentDataIsNecessary}`, AlertTypes.INFO);
 			return;
@@ -167,17 +172,17 @@ export function Event(): JSX.Element {
 		}
 
 		const currentDesignees = event?.shoppingDesignee || [];
-		const isUserAlreadyDesignee = currentDesignees.some((designee: IUser) => designee._id === currentUser._id);
+		const isUserAlreadyDesignee = currentDesignees.some((designee: IPublicUser) => designee._id === currentUser._id);
 
 		let updatedDesignees;
 
 		if (isUserAlreadyDesignee) {
-			updatedDesignees = currentDesignees.filter((designee: IUser) => designee._id !== currentUser._id);
+			updatedDesignees = currentDesignees.filter((designee: IPublicUser) => designee._id !== currentUser._id);
 		} else {
 			updatedDesignees = [...currentDesignees, currentUser];
 		}
 
-		editRoles(event?._id, { ...event, shoppingDesignee: updatedDesignees })
+		editRoles(event?._id, { ...event, shoppingDesignee: updatedDesignees, isPrivate: event.isPrivate ?? false })
 			.then(res => {
 				setAlert(`${lang.userResponsabilityChange}!`, AlertTypes.SUCCESS);
 			})
@@ -186,6 +191,7 @@ export function Event(): JSX.Element {
 	}
 
 	function deleteTheEvent(): void {
+		if (!event) return;
 		deleteEvent(event?._id)
 			.then(res => {
 				setAlert(`${lang.eventDeleted}!`, AlertTypes.SUCCESS);
@@ -195,45 +201,37 @@ export function Event(): JSX.Element {
 	}
 
 	function closeEvent(): void {
+		if (!event) return;
 		event.chef && event.shoppingDesignee.length > 0
-			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
+			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED, isPrivate: event.isPrivate ?? false })
 					.then(res => {
-						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
 						refetchEvent();
+						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS);
 					})
 					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
 			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
 	}
 
 	function setEventToReadyForPay(): void {
+		if (!event) return;
 		if ((event.purchaseReceipts.length as number) === 0) {
 			setAlert(`${lang.eventCantBeReadyForPaymentWithoutPurchases}`, AlertTypes.ERROR);
 			return;
 		}
 		event.chef && event.shoppingDesignee.length > 0
-			? editEvent(event?._id, { ...event, state: EventStatesEnum.READYFORPAYMENT })
+			? editEvent(event?._id, { ...event, state: EventStatesEnum.READYFORPAYMENT, isPrivate: event.isPrivate ?? false })
 					.then(res => {
+						refetchEvent();
 						setAlert(`${lang.eventReadyForPayment}!`, AlertTypes.SUCCESS);
-						refetchEvent();
-					})
-					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
-			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
-	}
-
-	function reclosingEvent(): void {
-		event.chef && event.shoppingDesignee.length > 0 && event.state === EventStatesEnum.READYFORPAYMENT
-			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED })
-					.then(res => {
-						setAlert(`${lang.eventClosed}!`, AlertTypes.SUCCESS); //TODO: cambiar los textos aca
-						refetchEvent();
 					})
 					.catch(e => setAlert(`${lang.eventClosingFailure}`, AlertTypes.ERROR))
 			: setAlert(`${lang.unassignAtClosing}`, AlertTypes.ERROR);
 	}
 
 	function reopenEvent(): void {
+		if (event?._id === undefined) return;
 		//TODO: deuda tecnica hacer una sola funcion para closeEvent y reopenEvent --> algo como: toogleEvent
-		editEvent(event?._id, { ...event, state: EventStatesEnum.AVAILABLE })
+		editEvent(event?._id, { ...event, state: EventStatesEnum.AVAILABLE, isPrivate: event.isPrivate ?? false })
 			.then(res => {
 				setAlert(`${lang.eventOpen}!`, AlertTypes.SUCCESS);
 			})
@@ -290,22 +288,23 @@ export function Event(): JSX.Element {
 	function deletePurchase(purchase: IPurchaseReceipt): any {
 		deleteEventPurchase(purchase?._id, event?._id)
 			.then(res => {
-				setAlert(lang.purchaseDeleted, AlertTypes.SUCCESS);
 				refetchEvent();
+				setAlert(lang.purchaseDeleted, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(lang.purchaseDeletedError, AlertTypes.ERROR));
 	}
 
-	async function downloadPurchase(purchase: IPurchaseReceipt) {
+	/* 	async function downloadPurchase(purchase: IPurchaseReceipt) {
 		try {
 			const purchaseImage = await getImage(purchase.image);
 			downloadFile({ file: purchaseImage, fileName: purchase.description });
 		} catch (e) {
 			setAlert(lang.downloadingImageError, AlertTypes.ERROR);
 		}
-	}
+	} */
 
 	function showPaymentData() {
+		if (!event) return false;
 		return (
 			event.state === EventStatesEnum.READYFORPAYMENT &&
 			event.shoppingDesignee &&
@@ -334,10 +333,12 @@ export function Event(): JSX.Element {
 	}
 
 	function isEventFull(): boolean {
+		if (!event) return false;
 		return event.members.length >= event.memberLimit;
 	}
 
 	function showDiets(): boolean {
+		if (!event) return false;
 		return (
 			(event.shoppingDesignee && event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) ||
 			event.chef?._id === user?.id ||
@@ -357,6 +358,7 @@ export function Event(): JSX.Element {
 		function checkWhoDoesntNeedToTransfer(): void {
 			const abortController = new AbortController();
 
+			if (!event?._id) return;
 			getMembersAmount(event?._id, abortController.signal)
 				.then(res => {
 					const myInfo = res.find((member: PayCheckInfoResponse) => member.userId === user?.id);
@@ -433,7 +435,7 @@ export function Event(): JSX.Element {
 		} else {
 			getPurchaseReceipts(event?._id)
 				.then(res => {
-					setPurchasesMade(res);
+					setPurchasesMade(res as IPurchaseReceipt[]);
 				})
 				.catch(e => {
 					console.error('Catch in context: ', e);
@@ -645,46 +647,58 @@ export function Event(): JSX.Element {
 												{lang.cook}
 												{event.chef ? (event.chef?._id === user?.id ? lang.me : event.chef.name) : lang.empty}
 											</h5>
-											{event.chef &&
-												event.chef?._id === user?.id &&
-												event.state === EventStatesEnum.AVAILABLE &&
-												isUserIntoEvent() && (
-													<AssignBtn key={user?.id} kind="unAssign" onClick={() => toogleChef()}></AssignBtn>
-												)}
+											<div className={styles.assignTransitionWrapper}>
+												{event.chef &&
+													event.chef?._id === user?.id &&
+													event.state === EventStatesEnum.AVAILABLE &&
+													isUserIntoEvent() && (
+														<AssignBtn
+															key={`unassign-${user?.id}`}
+															kind="unAssign"
+															onClick={() => toogleChef()}></AssignBtn>
+													)}
 
-											{!event.chef && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
-												<AssignBtn key={user?.id} kind="assign" onClick={() => toogleChef()}></AssignBtn>
-											)}
+												{!event.chef && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
+													<AssignBtn key={`assign-${user?.id}`} kind="assign" onClick={() => toogleChef()}></AssignBtn>
+												)}
+											</div>
 										</div>
 									</div>
 									<div className={styles.inChargeOpt}>
 										<div className={styles.shoppingDesigneeDescSection}>
 											<h5 className={styles.infoData}>
-												{lang.buyer} {event.shoppingDesignee.length === 0 && lang.empty}
+												{lang.buyer} {event.shoppingDesignee.length === 0 ? lang.empty : lang.assignedOpt}
 											</h5>
 
-											{!event.shoppingDesignee.length && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
-												<AssignBtn kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
-											)}
-											{event.shoppingDesignee.length > 0 &&
-												event.state === EventStatesEnum.AVAILABLE &&
-												isUserIntoEvent() &&
-												!event.shoppingDesignee.some((d: IUser) => d._id === user?.id) && (
-													<AssignBtn kind="add" onClick={() => toogleShopDesignee()}></AssignBtn>
+											<div className={styles.assignTransitionWrapper}>
+												{!event.shoppingDesignee.length && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
+													<AssignBtn key="assign" kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
 												)}
+												{Boolean(
+													event.shoppingDesignee.length &&
+														event.state === EventStatesEnum.AVAILABLE &&
+														isUserIntoEvent() &&
+														event.shoppingDesignee.find(sd => sd._id === user?.id)
+												) && <AssignBtn key="unassign" kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>}
+												{event.shoppingDesignee.length > 0 &&
+													event.state === EventStatesEnum.AVAILABLE &&
+													isUserIntoEvent() &&
+													!event.shoppingDesignee.some((d: IUser) => d._id === user?.id) && (
+														<AssignBtn key="add" kind="add" onClick={() => toogleShopDesignee()}></AssignBtn>
+													)}
+											</div>
 										</div>
 										<div className={styles.shoppingDesigneeSection}>
 											{event.shoppingDesignee.length
 												? event.shoppingDesignee.map((designee: IUser, i: number) => (
 														<div key={designee._id} className={styles.singleDesigneeSection}>
 															<h5>{designee._id === user?.id ? lang.meOpt : designee.name}</h5>
-
-															{event.shoppingDesignee.length &&
+															{/* {event.shoppingDesignee.length &&
 																event.shoppingDesignee[i]._id === user?.id &&
 																event.state === EventStatesEnum.AVAILABLE &&
 																isUserIntoEvent() && (
 																	<AssignBtn kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>
-																)}
+																)} */}
 														</div>
 												  ))
 												: ''}
@@ -729,7 +743,7 @@ export function Event(): JSX.Element {
 																kind="validation"
 																size="micro"
 																onClick={() => {
-																	setTransferReceiptId(member.transferReceipt);
+																	setTransferReceiptId(member.transferReceipt as string);
 																	setUserToApprove(member.userId);
 																	openValidationPopup();
 																}}>
@@ -840,8 +854,7 @@ export function Event(): JSX.Element {
 
 							{event.shoppingDesignee &&
 								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
-								event.state === EventStatesEnum.CLOSED &&
-								event.state !== EventStatesEnum.READYFORPAYMENT && (
+								event.state === EventStatesEnum.CLOSED && (
 									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
 										{lang.loadPurchase}
 									</Button>
@@ -851,39 +864,47 @@ export function Event(): JSX.Element {
 				)}
 			</div>
 
-			<Modal isOpen={modalPaycheckState} closeModal={closeModal}>
-				<PayCheckForm
-					event={event}
-					shoppingDesignee={paymentInfo.receiver}
-					amount={paymentInfo.amount}
-					openModal={openModal}
-					closeModal={() => {
-						closeModal();
-						refetchEvent();
-					}}></PayCheckForm>
-			</Modal>
+			{event && (
+				<Modal isOpen={modalPaycheckState} closeModal={closeModal}>
+					<PayCheckForm
+						event={event}
+						shoppingDesignee={paymentInfo.receiver}
+						amount={paymentInfo.amount}
+						openModal={openModal}
+						closeModal={() => {
+							closeModal();
+							refetchEvent();
+						}}
+					/>
+				</Modal>
+			)}
 
-			<Modal isOpen={modalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}>
-				<PurchaseReceiptForm
-					event={event}
-					openModal={openModalPurchaseRecipt}
-					closeModal={() => {
-						closeModalPurchaseRecipt();
-						refetchEvent();
-					}}></PurchaseReceiptForm>
-			</Modal>
+			{event && (
+				<Modal isOpen={modalPurchaseRecipt} closeModal={closeModalPurchaseRecipt}>
+					<PurchaseReceiptForm
+						event={event}
+						openModal={openModalPurchaseRecipt}
+						closeModal={() => {
+							closeModalPurchaseRecipt();
+							refetchEvent();
+						}}></PurchaseReceiptForm>
+				</Modal>
+			)}
 
-			<Modal isOpen={modalValidationState} closeModal={closeValidationPopup}>
-				<ConfirmationPayForm
-					event={event}
-					userToApprove={userToApprove}
-					transferReceiptId={transferReceiptId}
-					openModal={() => openValidationPopup}
-					closeModal={() => {
-						closeValidationPopup();
-						refetchEvent();
-					}}></ConfirmationPayForm>
-			</Modal>
+			{event && (
+				<Modal isOpen={modalValidationState} closeModal={closeValidationPopup}>
+					<ConfirmationPayForm
+						event={event}
+						userToApprove={userToApprove}
+						transferReceiptId={transferReceiptId}
+						openModal={() => openValidationPopup}
+						closeModal={() => {
+							closeValidationPopup();
+							refetchEvent();
+						}}
+					/>
+				</Modal>
+			)}
 
 			<Modal isOpen={modalFastAproval} closeModal={closeModalFastAproval}>
 				<ConfirmationFastAprovalForm

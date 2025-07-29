@@ -9,9 +9,9 @@ export interface IEvent {
 	memberLimit: number;
 	state: string;
 	members: IUser[];
-	organizer: string;
-	isChef?: string | undefined; // TODO: No debería ser boolean esto?
-	isShoppingDesignee?: string; // TODO: No debería ser boolean esto?
+	organizer: IUser;
+	chef: IUser | null;
+	shoppingDesignee?: IUser[];
 	isPrivate: boolean;
 	penalization: number;
 	penalizationStartDate: Date;
@@ -30,14 +30,29 @@ export interface IPublicEvent {
 	ratings: EventRatingData;
 }
 
+export interface createEventRequest {
+	title: string;
+	datetime: Date;
+	description: string;
+	memberLimit: number;
+	state: string;
+	members: IUser[];
+	organizer: IUser;
+	isChef: string | null; //pedirle a nani que veamos esta propiedad, debería ser chef nomas
+	shoppingDesignee?: IUser[];
+	isPrivate: boolean;
+	penalization: number;
+	penalizationStartDate: Date;
+}
+
 export interface createRequest {
 	title: string;
 	description: string;
 	datetime: Date;
 	memberLimit: number;
-	members: IUser[]; //TODO: Chequear que sea asi
+	members: IUser[];
 	organizer: number;
-	chef?: number;
+	chef?: string | null;
 	shoppingDesignee?: number;
 	isPrivate: boolean;
 }
@@ -50,9 +65,30 @@ export interface EventResponse {
 	state: string;
 	members: string[];
 	organizer: IUser;
+	chef: string | null;
 	shoppingDesignee: IUser;
 	transferReceipts: [];
 	purchaseReceipts: [];
+	_id: string;
+	__v: 0;
+	isPrivate?: boolean;
+	penalization: number;
+	penalizationStartDate: Date;
+}
+
+export interface EventByIdResponse {
+	title: string;
+	chef: IUser | null;
+	datetime: Date;
+	description: string;
+	memberLimit: number;
+	state: string;
+	members: IUser[];
+	organizer: IUser;
+	shoppingDesignee: IUser[];
+	transferReceipts: [];
+	purchaseReceipts: [];
+	ratings: [];
 	_id: string;
 	__v: 0;
 	isPrivate?: boolean;

@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
-import { EventResponse } from '../../../models/event';
+import { EventByIdResponse, EventResponse } from '../../../models/event';
 import Button from '../../micro/Button/Button';
 import { downloadFile } from '../../../utils/utilities';
 import { approveTransferReceipts, deleteTransferReceipt, getMembersAmount } from '../../../service';
@@ -10,13 +10,13 @@ import { useAlert } from '../../../stores/AlertContext';
 import { getImage } from '../../../service/purchaseReceipts';
 import { getTransferReceipt } from '../../../service';
 import { useEffect, useState } from 'react';
-import { transferReceipt } from '../../../models/transfer';
+import { transferReceipt, ITransferReceiptResponse } from '../../../models/transfer';
 import { IPurchaseReceipt } from '../../../models/purchases';
 import { FilePreview } from '../../../pages';
 import FilesPreview from '../FilesPreview/FilesPreview';
 
 interface ConfirmationPayProps {
-	event: EventResponse;
+	event: EventResponse | EventByIdResponse;
 	openModal: () => void;
 	transferReceiptId?: string;
 	closeModal: () => void;
@@ -27,19 +27,19 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
 	const { event, transferReceiptId } = props;
-	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [transferReceipt, setTransferReceipt] = useState<ITransferReceiptResponse>();
 	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
 	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
 	const [amountToValidate, setAmountToValidate] = useState<number>(0);
 
-	async function downloadTransfer(transferId: string) {
+	/* 	async function downloadTransfer(transferId: string) {
 		try {
 			const transferImage = await getImage(transferReceipt?.image);
 			downloadFile({ file: transferImage, fileName: transferId });
 		} catch (e) {
 			setAlert('error', AlertTypes.ERROR);
 		}
-	}
+	} */
 
 	async function confirmPayment(receiptId: string | undefined): Promise<void> {
 		const abortController = new AbortController();
@@ -88,14 +88,14 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		}
 
 		if (event.penalization && gettingDateDiference() > 0) {
-			if (new Date(transferReceipt?.datetime as Date) < new Date()) {
+			if (transferReceipt?.datetime && new Date(transferReceipt.datetime) < new Date()) {
 				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
 			}
 		}
 		return Math.round(amountToValidate + currentPenalization);
 	}
 
-	async function PreviewTransfer(transfer: transferReceipt) {
+	async function PreviewTransfer(transfer: ITransferReceiptResponse) {
 		setOpenFilePreview(true);
 		try {
 			const transferImage = await getImage(transfer.image);
@@ -156,7 +156,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 								className={styles.previewBtn}
 								onClick={e => {
 									e.preventDefault();
-									PreviewTransfer(transferReceipt as transferReceipt);
+									PreviewTransfer(transferReceipt as ITransferReceiptResponse);
 								}}
 								style={{ cursor: 'pointer' }}></button>
 							<p className={styles.downloadText}>{lang.previewText}</p>

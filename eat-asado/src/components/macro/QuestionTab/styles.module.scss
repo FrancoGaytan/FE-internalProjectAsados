@@ -1,0 +1,37 @@
+.questionTab {
+	max-width: 100%;
+	margin: 12px auto;
+}
+
+.questionHeader {
+	width: 100%;
+	background-color: #2774a5;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	font-weight: bold;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	&:hover {
+		transform: scale(0.98);
+	}
+}
+
+.answer {
+	max-height: 0;
+	overflow: hidden;
+	padding: 0 16px;
+	background-color: #f9f9f9;
+	color: #333;
+	font-size: 15px;
+	transition: max-height 0.5s ease, padding 0.5s ease;
+}
+
+.open {
+	max-height: 300px;
+	padding: 16px;
+}
