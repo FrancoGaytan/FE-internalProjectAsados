@@ -25,6 +25,13 @@ export interface IUser {
 	profilePicture?: string;
 }
 
+export interface INotificationOptions {
+	newEvent: boolean;
+	eventStart: boolean;
+	penalizationStart: boolean;
+	penalizationOneWeek: boolean;
+}
+
 export interface IPublicUser {
 	_id: string;
 	name: string;
@@ -34,6 +41,7 @@ export interface IPublicUser {
 	cbu?: string;
 	alias?: string;
 	profilePicture?: string;
+	notifications?: INotificationOptions;
 }
 
 export interface RegisterRequest {

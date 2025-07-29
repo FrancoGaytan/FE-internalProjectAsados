@@ -20,7 +20,7 @@ export const userProfile = Object.seal({
 	errorTypeFile: 'La imagen de perfil debe ser de tipo .png, .jpeg o .jpg',
 	notificationsTitle: 'Notificaciones',
 	activateNotifications: 'Activar Notificaciones',
-	personalEmail: 'Correo Electrónico Personal',
+	alternativeEmail: 'Correo Electrónico Personal',
 	newEventNotification: 'Un nuevo evento ha sido creado',
 	eventComingNotification: 'Un evento está por comenzar',
 	penalizationStartedNotification: 'Tu penalización ha comenzado',
