@@ -41,20 +41,17 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 				/**
 				 * @todo: Ver si vale la pena guardar 2 keys. De momento dejalo asi.
 				 */
-				localStorage.removeItem(localStorageKeys.user);
-				localStorage.removeItem(localStorageKeys.token);
 				localStorage.setItem(localStorageKeys.user, JSON.stringify(res));
 				localStorage.setItem(localStorageKeys.token, JSON.stringify(res.jwt));
 
 				setUser(res);
 				setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
 				if (isRedirecting) {
-					//navigate(`${isRedirecting}`);
 					setIsRedirecting(null);
 				} else {
 					navigate('/');
 				}
-				//window.location.reload(); //TODO: si no pongo esto, hay request que la primera vez no funcionan, sucede en la primera llamada despues de loggearme
+				window.location.reload();
 			})
 			.catch(error => {
 				setAlert(lang.loginErrorMessage, AlertTypes.ERROR);
@@ -69,7 +66,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 		localStorage.removeItem(localStorageKeys.user);
 		localStorage.removeItem(localStorageKeys.token);
 		setUser(null);
-		navigate('/login');
+		window.location.href = '/login';
 	}
 
 	function getUserFromLocalStorage(): LoginResponse {
