@@ -3,7 +3,7 @@ export const login = Object.seal({
 	password: 'Contraseña',
 	forgotPassword: '¿No te acordás de tu clave?',
 	loginTitle: 'Inicio de sesión',
-	loginBtn: 'LOGEARSESE',
+	loginBtn: 'LOGEARSE',
 	alreadyRegistered: '¿No estás registrado?',
 	registerHere: 'Registrate acá',
 	user: 'usuario@endava.com',
