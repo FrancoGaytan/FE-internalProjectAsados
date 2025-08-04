@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { getPurchaseReceiptsByEvent } from '../../../service/purchaseReceipts';
 import { assignMembersToReceipt } from '../../../service/purchaseReceipts';
 import { IUser } from '../../../models/user';
+import { getEventById } from '../../../service';
 
 interface ConfirmationPayProps {
 	eventId: string;
@@ -36,6 +37,7 @@ function AssignationTable(props: ConfirmationPayProps) {
 	const { eventId } = props;
 	const [eventReceipts, setEventReceipts] = useState<IPurchaseAssignment[]>([]);
 	const [allUsers, setAllUsers] = useState<IParticipant[]>([]);
+	const [currenEventUsers, setCurrentEventUser] = useState<IUser[]>([]);
 
 	function isEditable(targetUserId: string): boolean {
 		const userIsShoppingDesignee = eventReceipts.some(receipt => receipt.shoppingDesignee._id === props.userId);
@@ -83,6 +85,16 @@ function AssignationTable(props: ConfirmationPayProps) {
 			});
 	}, [props, eventId]);
 
+	useEffect(() => {
+		getEventById(eventId)
+			.then(res => {
+				setCurrentEventUser(res.members);
+			})
+			.catch(e => {
+				console.error('Error getting users:', e);
+			});
+	}, [eventId]);
+
 	return (
 		<div className={styles.assignationTableWrapper}>
 			<div className={styles.modalTitle}>{lang.purchasesMadeTitle}</div>
@@ -97,7 +109,7 @@ function AssignationTable(props: ConfirmationPayProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{allUsers.map(user => (
+						{currenEventUsers.map(user => (
 							<tr key={user._id}>
 								<td className={styles.namesColumn}>{`${user.name} ${user.lastName?.charAt(0)}`}</td>
 								{eventReceipts.map(receipt => (
