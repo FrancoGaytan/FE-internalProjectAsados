@@ -381,13 +381,6 @@ export function UserProfile(): JSX.Element {
 										onChange={e => {
 											setUser({ ...userProfile, alternativeEmail: e.target.value });
 										}}
-										onBlur={e => {
-											const email = e.target.value;
-											const isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
-											if (email && !isValid) {
-												setAlert(lang.invalidEmail, AlertTypes.ERROR);
-											}
-										}}
 									/>
 									<p className={styles.notificationDescription}>{lang.notificationDescription}</p>
 									<label className={styles.alternativeEmail}>
