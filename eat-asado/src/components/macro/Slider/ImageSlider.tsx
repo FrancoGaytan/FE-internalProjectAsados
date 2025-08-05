@@ -41,13 +41,6 @@ export default function ImageSlider({ images, altText = 'slide' }: ImageSliderPr
 					<img key={index} src={img} alt={`${altText} ${index + 1}`} className={styles.slideImage} />
 				))}
 			</div>
-
-			<button onClick={prevSlide} className={`${styles.arrow} ${styles.left}`}>
-				‹
-			</button>
-			<button onClick={nextSlide} className={`${styles.arrow} ${styles.right}`}>
-				›
-			</button>
 		</div>
 	);
 }

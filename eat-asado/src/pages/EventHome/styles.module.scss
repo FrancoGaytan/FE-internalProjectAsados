@@ -63,6 +63,13 @@
 				font-size: 12px;
 				line-height: 18px;
 			}
+			.buttonContainer {
+				display: flex;
+				justify-content: center;
+				& Button {
+					max-width: 100%;
+				}
+			}
 		}
 	}
 	.participationSteps {

@@ -182,11 +182,12 @@ export function EventHome(): JSX.Element {
 						<h1>{lang.participationInfoTitle}</h1>
 
 						<p>{lang.participationInfoDescription}</p>
-
-						<Button kind="primary" size="large" onClick={goToFaq}>
-							{' '}
-							{lang.moreAbout}{' '}
-						</Button>
+						<div className={styles.buttonContainer}>
+							<Button kind="primary" size="large" onClick={goToFaq}>
+								{' '}
+								{lang.moreAbout}{' '}
+							</Button>
+						</div>
 					</div>
 				</section>
 
