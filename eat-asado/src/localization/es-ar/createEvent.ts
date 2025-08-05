@@ -19,6 +19,6 @@ export const createEvent = Object.seal({
 	isPrivate: 'El evento es privado',
 	hasPenalization: 'Penalización por deudor',
 	amountPenalization: 'Monto de penalización',
-	penalizationStartingDate: 'Día de inicio de la penalización',
+	penalizationStartingDate: 'Día de inicio de penalidad',
 	wrongPenalizationDate: 'El día de penalización debe ser posterior al día del evento'
 });
