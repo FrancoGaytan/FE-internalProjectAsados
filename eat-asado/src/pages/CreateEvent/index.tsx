@@ -107,7 +107,7 @@ export function CreateEvent(): JSX.Element {
 			};
 			editEvent(eventIdParam, editionEvent) //editionEvent constante temporal para unificar los tipos
 				.then(res => {
-					setAlert(`${lang.eventUpdateConfirmation}!`, AlertTypes.SUCCESS);
+					setTimeout(() => setAlert(`${lang.eventUpdateConfirmation}!`, AlertTypes.SUCCESS), 400);
 				})
 				.catch(e => setAlert(`${e}`, AlertTypes.ERROR))
 				.finally(() => setIsLoading(false));
@@ -154,7 +154,10 @@ export function CreateEvent(): JSX.Element {
 					memberLimit: res.memberLimit,
 					isPrivate: res.isPrivate as boolean,
 					penalization: res.penalization,
-					penalizationStartDate: new Date(res.penalizationStartDate),
+					penalizationStartDate:
+						res.penalizationStartDate && !isNaN(new Date(res.penalizationStartDate).getTime())
+							? new Date(res.penalizationStartDate)
+							: new Date(),
 					state: res.state
 				});
 				setPenalizationSection(!!res.penalization);
@@ -365,7 +368,6 @@ export function CreateEvent(): JSX.Element {
 											const inputValue = e.target.value;
 											if (inputValue) {
 												const localDate = new Date(inputValue);
-												// Verifica si el valor se ha convertido en una fecha válida
 												if (!isNaN(localDate.getTime())) {
 													const utcOffset = localDate.getTimezoneOffset();
 													const adjustedDate = new Date(localDate.getTime() - utcOffset * 60000);
