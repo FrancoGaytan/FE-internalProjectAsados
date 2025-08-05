@@ -61,6 +61,7 @@ export const eventHome = Object.seal({
 	meOpt: 'Yo',
 	emptyOpt: 'Sin asignar',
 	assignedOpt: 'Asignado',
+	addmeOpt: 'Agregarme',
 	payBtn: 'Pagar',
 	modifyPay: 'Modificar Pago',
 	unassignAtClosing: 'No se puede cerrar un evento sin responsables asignados',

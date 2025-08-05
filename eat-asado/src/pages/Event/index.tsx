@@ -93,6 +93,12 @@ export function Event(): JSX.Element {
 		return !!ev.find((member: { _id: string }) => member._id === user?.id);
 	}
 
+	function isUserShoppingDesignee(): Boolean {
+		if (!event) return false;
+		const ev = event?.shoppingDesignee;
+		return !!ev.find((member: { _id: string }) => member._id === user?.id);
+	}
+
 	function subscribeUserToEvent(): void {
 		if (!event) return;
 		if (Object.keys(user as Object).length === 0) {
@@ -667,7 +673,12 @@ export function Event(): JSX.Element {
 									<div className={styles.inChargeOpt}>
 										<div className={styles.shoppingDesigneeDescSection}>
 											<h5 className={styles.infoData}>
-												{lang.buyer} {event.shoppingDesignee.length === 0 ? lang.empty : lang.assignedOpt}
+												{lang.buyer}{' '}
+												{event.shoppingDesignee.length === 0
+													? lang.empty
+													: isUserShoppingDesignee()
+													? lang.assignedOpt
+													: lang.addmeOpt}
 											</h5>
 
 											<div className={styles.assignTransitionWrapper}>

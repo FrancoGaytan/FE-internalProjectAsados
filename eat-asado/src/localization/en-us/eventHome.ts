@@ -60,6 +60,7 @@ export const eventHome = Object.seal({
 	reopenEventBtn: 'Re-Open Event',
 	meOpt: ' Me',
 	emptyOpt: 'Unassigned',
+	addmeOpt: 'Add myself',
 	assignedOpt: 'Assigned ',
 	payBtn: 'Pay',
 	modifyPay: 'Pending Approval - Modify Payment',
