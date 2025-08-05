@@ -612,14 +612,16 @@ export function Event(): JSX.Element {
 													<span>{purchase.shoppingDesignee.name}</span>
 													<span>{'$ ' + purchase.amount}</span>
 													<span className={styles.actions}>
-														{event.shoppingDesignee?.some((d: IUser) => d._id === user?.id) && (
-															<button
-																className={styles.deleteBtn}
-																onClick={e => {
-																	e.preventDefault();
-																	deletePurchase(purchase);
-																}}></button>
-														)}
+														{event.shoppingDesignee?.some((d: IUser) => d._id === user?.id) &&
+															event.state !== EventStatesEnum.AVAILABLE &&
+															event.state !== EventStatesEnum.READYFORPAYMENT && (
+																<button
+																	className={styles.deleteBtn}
+																	onClick={e => {
+																		e.preventDefault();
+																		deletePurchase(purchase);
+																	}}></button>
+															)}
 														{/* 	<button
 															className={styles.downloadBtn}
 															onClick={e => {
@@ -676,7 +678,7 @@ export function Event(): JSX.Element {
 												{lang.buyer}{' '}
 												{event.shoppingDesignee.length === 0
 													? lang.empty
-													: isUserShoppingDesignee()
+													: isUserShoppingDesignee() || !isUserIntoEvent()
 													? lang.assignedOpt
 													: lang.addmeOpt}
 											</h5>
