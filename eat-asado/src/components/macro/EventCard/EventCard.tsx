@@ -5,7 +5,7 @@ import { EventStatesEnum } from '../../../enums/EventState.enum';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useNavigate } from 'react-router-dom';
 import { JSX, useEffect, useState } from 'react';
-import { getEventById, subscribeToAnEvent } from '../../../service/eventService';
+import { getEventById, getMembersAndReceiptsInfo, subscribeToAnEvent } from '../../../service/eventService';
 import { useAlert } from '../../../stores/AlertContext';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { EventByIdResponse, IEvent } from '../../../models/event';
@@ -16,6 +16,7 @@ import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
 import Tooltip from '../../micro/Tooltip/Tooltip';
 import StarRating from '../../micro/starRating/starRating';
+import { EventUserResponse } from '../../../models/user';
 
 interface IEventData {
 	eventTitle: String;
@@ -56,6 +57,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const evDate = evDateTime.getDate().toString() + '. ' + String(evDateTime.getMonth() + 1) + '. ' + evDateTime.getFullYear().toString() + '.';
 	const evTime = (evDateTime.getHours() + 3).toString() + ':' + parseMinutes(evDateTime.getMinutes().toString());
 	const eventParticipationState: TEventParticipationState = calculateAvailability() ? EventStatesEnum.INCOMPLETED : EventStatesEnum.FULL;
+	const [eventParticipants, setEventParticipants] = useState<EventUserResponse[]>([]);
 
 	function handleInfo() {
 		if (!!user?.name) {
@@ -74,6 +76,14 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 				setAlert(`${lang.userAddedSuccessfully}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.userAddingFailure}`, AlertTypes.ERROR));
+	}
+
+	function checkIfUserHasPaid() {
+		if (eventParticipants.length === 0) {
+			return false;
+		}
+		const myReceipt = eventParticipants.find(member => member.userId === user?.id);
+		return myReceipt?.hasReceiptApproved;
 	}
 
 	function handleParticipation() {
@@ -138,6 +148,20 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [privateEvent]);
 
+	useEffect(() => {
+		if (!evId) {
+			return;
+		}
+		const abortController = new AbortController();
+		getMembersAndReceiptsInfo(evId, abortController.signal)
+			.then(res => {
+				setEventParticipants(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+	}, [evId]);
+
 	return (
 		//la clase cardContainer tiene que ir acompañado con una clase que represente al estado del evento que trae por props
 		<div {...className(styles.cardContainer)}>
@@ -148,6 +172,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 				evParticipants={evParticipants}
 				evParticipantsLimit={evParticipantsLimit}
 				evDate={evDate}
+				userHasPaid={!!checkIfUserHasPaid()}
 				subscribedUser={verifySubscription()}
 			/>
 
