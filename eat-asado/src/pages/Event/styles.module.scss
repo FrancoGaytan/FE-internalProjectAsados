@@ -371,9 +371,9 @@
 					}
 
 					.infoParticipants {
-						/* max-height: 200px;
-						overflow-y: scroll;
-						padding-top: 25px; */
+						height: 200px;
+						overflow-y: auto;
+						padding-top: 25px;
 						flex-grow: 1;
 						overflow-y: auto;
 						padding-top: 25px;
