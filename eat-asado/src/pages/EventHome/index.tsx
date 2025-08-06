@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { JSX, useEffect, useMemo, useState } from 'react';
 import PrivateFormLayout from '../../components/macro/layout/PrivateFormLayout';
 import Button from '../../components/micro/Button/Button';
 import { useTranslation } from '../../stores/LocalizationContext';
@@ -8,6 +8,8 @@ import { useEvent } from '../../stores/EventContext';
 import { useNavigate } from 'react-router-dom';
 import { getPublicAndPrivateEvents, getPublicEvents, isUserDebtor } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
+import ImageSlider from '../../components/macro/Slider/ImageSlider';
+import { eventImages } from '../../utils/eventImages';
 import styles from './styles.module.scss';
 
 interface IStepItem {
@@ -35,12 +37,8 @@ export function EventHome(): JSX.Element {
 		[lang]
 	);
 
-	const handleScrollToEnd = () => {
-		window.scrollTo({
-			top: document.body.scrollHeight,
-			behavior: 'smooth'
-		});
-		setIsScrolling(true);
+	const goToFaq = () => {
+		navigate('/faq');
 	};
 
 	const handleScrollToStart = () => {
@@ -93,12 +91,54 @@ export function EventHome(): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
+	useEffect(() => {
+		const fetchLatestData = () => {
+			if (user !== null) {
+				getPublicAndPrivateEvents()
+					.then(res => {
+						setTimeout(() => {
+							setPublicEvents(res);
+						}, 200);
+					})
+					.catch(e => {
+						console.error('Catch in context: ', e);
+					});
+			} else {
+				getPublicEvents()
+					.then(res => {
+						setPublicEvents(res);
+					})
+					.catch(e => {
+						console.error('Catch in context: ', e);
+					});
+			}
+		};
+		// Llamada periódica cada 3 minutos
+		const interval = setInterval(() => {
+			if (document.visibilityState === 'visible') {
+				fetchLatestData();
+			}
+		}, 180000);
+
+		// También actualiza al volver a la pestaña
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'visible') {
+				fetchLatestData();
+			}
+		};
+
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+
+		return () => {
+			clearInterval(interval);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
+		};
+	}, []);
+
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
 				<section className={styles.header}>
-					<h1>{lang.messageBanner}</h1>
-
 					<Button kind="primary" size="large" onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}>
 						{lang.newEventButton}
 					</Button>
@@ -136,17 +176,18 @@ export function EventHome(): JSX.Element {
 				</section>
 
 				<section className={styles.participationInfo}>
-					<img alt="sausages" src="/assets/pictures/pictureEvent.jpg" />
+					<ImageSlider images={eventImages} altText="Event image" />
 
 					<div className={styles.description}>
 						<h1>{lang.participationInfoTitle}</h1>
 
 						<p>{lang.participationInfoDescription}</p>
-
-						<Button kind="primary" size="large" onClick={handleScrollToEnd}>
-							{' '}
-							{lang.moreAbout}{' '}
-						</Button>
+						<div className={styles.buttonContainer}>
+							<Button kind="primary" size="large" onClick={goToFaq}>
+								{' '}
+								{lang.moreAbout}{' '}
+							</Button>
+						</div>
 					</div>
 				</section>
 

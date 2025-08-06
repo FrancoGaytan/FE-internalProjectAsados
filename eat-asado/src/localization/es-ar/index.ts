@@ -7,6 +7,7 @@ import { userProfile } from './userProfile';
 import { createEvent } from './createEvent';
 import { eventHome } from './eventHome';
 import { event } from './event';
+import { faq } from './faq';
 
 export const esAr = Object.seal({
 	appName: 'FoodSpot',
@@ -18,5 +19,6 @@ export const esAr = Object.seal({
 	userProfile,
 	createEvent,
 	eventHome,
-	event
+	event,
+	faq
 });

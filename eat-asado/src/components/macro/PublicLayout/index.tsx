@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { JSX, PropsWithChildren } from 'react';
 import AlertPopup from '../../micro/AlertPopup/AlertPopup';
 // import styles from './styles.module.scss';
 

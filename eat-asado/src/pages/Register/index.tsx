@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../../stores/LocalizationContext';
 import { RegisterRequest } from '../../models/user';
@@ -95,8 +95,8 @@ export function Register(): JSX.Element {
 		})
 			.then(res => {
 				setJWT(res.jwt);
-				setAlert(`${lang.successMsg}!`, AlertTypes.SUCCESS);
 				navigate('/login');
+				setAlert(`${lang.successMsg}!`, AlertTypes.SUCCESS);
 			})
 			.catch(e => setAlert(`${lang.failureMsg}`, AlertTypes.ERROR))
 			.finally(() => setIsLoading(false));

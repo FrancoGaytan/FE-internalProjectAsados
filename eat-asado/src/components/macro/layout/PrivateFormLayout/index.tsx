@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { JSX, PropsWithChildren, useEffect, useState } from 'react';
 import { useLocalizationContext, useTranslation } from '../../../../stores/LocalizationContext';
 import AlertPopup from '../../../micro/AlertPopup/AlertPopup';
 import { useAuth } from '../../../../stores/AuthContext';
@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
 import { locales } from '../../../../localization';
 import { getUserById } from '../../../../service';
-import { IUser } from '../../../../models/user';
+import { IPublicUser } from '../../../../models/user';
 import { getImage } from '../../../../service/purchaseReceipts';
 
 export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element {
@@ -14,7 +14,7 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 	const navigate = useNavigate();
 	const { setLocale } = useLocalizationContext();
 	const { user, logout } = useAuth();
-	const [userData, setUserData] = useState<IUser | undefined>(undefined);
+	const [userData, setUserData] = useState<IPublicUser | undefined>(undefined);
 	const [image, setImage] = useState<File | undefined>(undefined);
 
 	function handleLogout(e: React.MouseEvent<HTMLButtonElement>) {
@@ -36,18 +36,17 @@ export default function PrivateFormLayout(props: PropsWithChildren): JSX.Element
 			getUserById(user.id)
 				.then(resp => {
 					setUserData(resp);
-
-					getImage(resp.profilePicture)
-						.then(res => {
-							setImage(res);
-						})
-						.catch(e => {
-							console.error('Catch in context: ', e);
-						});
+					resp.profilePicture &&
+						getImage(resp.profilePicture)
+							.then(res => {
+								setImage(res);
+							})
+							.catch(e => {
+								console.error('Catch in context: ', e);
+							});
 				})
 				.catch(e => {
 					console.error('Catch in context:', e);
-
 				});
 		}
 	}, [user]);

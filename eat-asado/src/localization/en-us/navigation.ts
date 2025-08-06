@@ -6,5 +6,6 @@ export const navigation = Object.seal({
 	userProfile: 'UserProfile',
 	createEvent: 'CreateEvent',
 	eventHome: 'EventHome',
-	event: 'Event'
+	event: 'Event',
+	faq: 'FAQ'
 });

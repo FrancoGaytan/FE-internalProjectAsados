@@ -27,6 +27,7 @@
 		}
 	}
 	.button {
+		box-shadow: 1px 4px 3px rgba(0, 0, 0, 0.3);
 		border: none;
 		background-color: none;
 		font-family: var(--secondaryFont);
@@ -39,6 +40,10 @@
 		background-position: center;
 		background-repeat: no-repeat;
 
+		&:hover {
+			transform: scale(1.1);
+		}
+
 		&.assign {
 			color: var(--backgroundNeutral);
 			background-image: url('../../../../public/assets/pictures/checkIcon.png');
@@ -46,6 +51,10 @@
 		&.unAssign {
 			color: var(--btnPrimaryDarker);
 			background-image: url('../../../../public/assets/pictures/closeIcon.png');
+		}
+		&.add {
+			color: var(--btnPrimaryDarker);
+			background-image: url('../../../../public/assets/pictures/addBtn50.png');
 		}
 	}
 }

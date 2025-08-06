@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, Dispatch, useContext, SetStateAction, useState, useEffect } from 'react';
+import { createContext, PropsWithChildren, Dispatch, useContext, SetStateAction, useState, useEffect, JSX } from 'react';
 import { defaultLocale, Translation, Locale, locales } from '../localization';
 import { getObjectByKeys } from '../utils/common';
 import useLocalStorage from '../hooks/useLocalStorage';

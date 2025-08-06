@@ -1,4 +1,4 @@
-import { PropsWithChildren, ButtonHTMLAttributes } from 'react';
+import { PropsWithChildren, ButtonHTMLAttributes, JSX } from 'react';
 import { TSize } from '../../../types/size';
 import styles from './styles.module.scss';
 import { className } from '../../../utils/className';

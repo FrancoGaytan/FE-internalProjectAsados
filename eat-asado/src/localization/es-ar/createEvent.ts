@@ -9,16 +9,16 @@ export const createEvent = Object.seal({
 	chef: 'Cocinero',
 	shoppingDesignee: 'Encargado de Compras',
 	createEventBtn: 'CREAR EVENTO',
-	editEventBtn: 'EDITAR EVENT',
-	memberLimit: 'Member Limit',
+	editEventBtn: 'EDITAR EVENTO',
+	memberLimit: 'Límite de Participantes',
 	eventUpdateConfirmation: 'Evento modificado exitosamente',
 	eventRegisteredConfirmation: 'Evento registrado exitosamente',
-	eventRegistrationFailure: 'El registro del evento a fallado',
-	completeAllInputs: 'Por favor, completar todos los campos',
-	needToHaveCbu: 'Necesitas cargar Alias o CBU para ser Encargado de Compras',
+	eventRegistrationFailure: 'El registro del evento ha fallado',
+	completeAllInputs: 'Por favor, completá todos los campos',
+	needToHaveCbu: 'Necesitás cargar Alias o CBU para ser Encargado de Compras',
 	isPrivate: 'El evento es privado',
 	hasPenalization: 'Penalización por deudor',
 	amountPenalization: 'Monto de penalización',
-	penalizationStartingDate: 'Día de inicio penalidad',
-	wrongPenalizationDate: 'Día de penalización debe ser posterior al día del evento'
+	penalizationStartingDate: 'Día de inicio de penalidad',
+	wrongPenalizationDate: 'El día de penalización debe ser posterior al día del evento'
 });

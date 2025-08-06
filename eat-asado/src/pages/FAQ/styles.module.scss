@@ -1,0 +1,36 @@
+@use '/src/styles/variables' as variables;
+
+.content {
+	width: 70%;
+	.title {
+		font-size: 40px;
+		text-align: center;
+		margin: 0 auto;
+		margin-top: 50px;
+		margin-bottom: 50px;
+	}
+	.backBtnSection {
+		position: absolute;
+		left: 15px;
+		top: 5px;
+		transform: translateY(-15px);
+		&:hover {
+			scale: 1.05;
+		}
+		.backText {
+			margin: 0;
+			font-size: 12px;
+			font-weight: bold;
+			color: grey;
+		}
+
+		.backBtn {
+			height: 30px;
+			width: 30px;
+			box-shadow: none;
+			background-color: transparent;
+			background-size: contain;
+			background-image: url('../../../public/assets/pictures/icons-back.png');
+		}
+	}
+}

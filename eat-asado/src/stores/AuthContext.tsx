@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { createContext, useContext, useState, PropsWithChildren, SetStateAction, useEffect } from 'react';
+import { createContext, useContext, useState, PropsWithChildren, SetStateAction, useEffect, JSX } from 'react';
 import { localStorageKeys } from '.././utils/localStorageKeys';
 import { LoginResponse } from '../models/user';
 import { _login } from '../service';
@@ -47,12 +47,11 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 				setUser(res);
 				setAlert(`${lang.welcomeMessage} ${res.name}!`, AlertTypes.SUCCESS);
 				if (isRedirecting) {
-					navigate(`${isRedirecting}`);
 					setIsRedirecting(null);
 				} else {
 					navigate('/');
 				}
-				window.location.reload(); //TODO: si no pongo esto, hay request que la primera vez no funcionan, sucede en la primera llamada despues de loggearme
+				window.location.reload();
 			})
 			.catch(error => {
 				setAlert(lang.loginErrorMessage, AlertTypes.ERROR);
@@ -67,7 +66,7 @@ export function AuthProvider(props: PropsWithChildren<{}>): JSX.Element {
 		localStorage.removeItem(localStorageKeys.user);
 		localStorage.removeItem(localStorageKeys.token);
 		setUser(null);
-		navigate('/login');
+		window.location.href = '/login';
 	}
 
 	function getUserFromLocalStorage(): LoginResponse {

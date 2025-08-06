@@ -13,17 +13,35 @@ export interface RegisterResponse {
 }
 
 export interface IUser {
-	//TODO: definir si el id va a ser un number o string asi lo normalizamos
-	_id: string; //esto estaba como number //TODO: Esto lo necesitaba para vincularlo con la creacion del evento, necesita el id del organizador por lo que tiene que estar aca
+	_id: string;
 	name: string;
 	lastName: string;
 	email: string;
-	password: string;
-	confirmPassword: string;
+	password?: string;
+	confirmPassword?: string;
 	specialDiet: string[];
 	cbu?: string;
 	alias?: string;
 	profilePicture?: string;
+}
+
+export interface INotificationOptions {
+	newEvent: boolean;
+	eventStart: boolean;
+	penalizationStart: boolean;
+	penalizationOneWeek: boolean;
+}
+
+export interface IPublicUser {
+	_id: string;
+	name: string;
+	lastName: string;
+	email: string;
+	specialDiet: string[];
+	cbu?: string;
+	alias?: string;
+	profilePicture?: string;
+	notifications?: INotificationOptions;
 }
 
 export interface RegisterRequest {
@@ -43,8 +61,17 @@ export interface EventUserResponse {
 	userId: string;
 	userName: string;
 	userLastName: string;
-	transferReceipt: string | undefined;
+	transferReceipt: string | null;
 	hasReceiptApproved: boolean | null;
 	hasUploaded: boolean;
-	specialDiet: [string];
+	specialDiet: [];
+}
+
+export interface EditUserResponse {
+	imageId: string;
+}
+
+export interface IsUserDebtorResponse {
+	eventId: string;
+	reason: string;
 }

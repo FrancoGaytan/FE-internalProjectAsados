@@ -1,48 +1,52 @@
 import styles from './styles.module.scss';
 import { className } from '../../../utils/className';
-import { EventResponse } from '../../../models/event';
+import { EventByIdResponse, EventResponse } from '../../../models/event';
 import Button from '../../micro/Button/Button';
 import { downloadFile } from '../../../utils/utilities';
-import { approveTransferReceipts, deleteTransferReceipt } from '../../../service';
-import { useAuth } from '../../../stores/AuthContext';
+import { approveTransferReceipts, deleteTransferReceipt, getMembersAmount } from '../../../service';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { useTranslation } from '../../../stores/LocalizationContext';
 import { useAlert } from '../../../stores/AlertContext';
 import { getImage } from '../../../service/purchaseReceipts';
 import { getTransferReceipt } from '../../../service';
 import { useEffect, useState } from 'react';
-import { transferReceipt } from '../../../models/transfer';
+import { transferReceipt, ITransferReceiptResponse } from '../../../models/transfer';
 import { IPurchaseReceipt } from '../../../models/purchases';
+import { FilePreview } from '../../../pages';
+import FilesPreview from '../FilesPreview/FilesPreview';
 
 interface ConfirmationPayProps {
-	event: EventResponse;
+	event: EventResponse | EventByIdResponse;
 	openModal: () => void;
 	transferReceiptId?: string;
 	closeModal: () => void;
+	userToApprove: string;
 }
 
 function ConfirmationPayForm(props: ConfirmationPayProps) {
-	const { user } = useAuth();
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
 	const { event, transferReceiptId } = props;
-	const [transferReceipt, setTransferReceipt] = useState<transferReceipt>();
+	const [transferReceipt, setTransferReceipt] = useState<ITransferReceiptResponse>();
+	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
+	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
+	const [amountToValidate, setAmountToValidate] = useState<number>(0);
 
-	async function downloadTransfer(transferId: string) {
+	/* 	async function downloadTransfer(transferId: string) {
 		try {
 			const transferImage = await getImage(transferReceipt?.image);
 			downloadFile({ file: transferImage, fileName: transferId });
 		} catch (e) {
 			setAlert('error', AlertTypes.ERROR);
 		}
-	}
+	} */
 
 	async function confirmPayment(receiptId: string | undefined): Promise<void> {
 		const abortController = new AbortController();
 		try {
 			await approveTransferReceipts(receiptId, event._id, abortController.signal);
 			setAlert(lang.payApprovedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000); //TODO: mejora propuesta, sacar todos estos reloads con los timaouts y utilizar un refetch y usar la funcion closemodal
+			props.closeModal();
 		} catch (error) {
 			setAlert(lang.payApproveFailed, AlertTypes.ERROR);
 		}
@@ -52,7 +56,7 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 		try {
 			await deleteTransferReceipt(receiptId);
 			setAlert(lang.payRejectedSuccessfully, AlertTypes.SUCCESS);
-			setTimeout(() => window.location.reload(), 1000);
+			props.closeModal();
 		} catch (error) {
 			setAlert(lang.payRejectionFailed, AlertTypes.ERROR);
 		}
@@ -60,30 +64,54 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 
 	function gettingDateDiference(): number {
 		const startingDate = new Date(event.penalizationStartDate);
-		const todayDate = new Date(transferReceipt?.datetime as Date);
-		const diffInMilliseconds = Math.abs(startingDate.getTime() - todayDate.getTime());
+		const todayDate = new Date();
+
+		const start = new Date(startingDate.getFullYear(), startingDate.getMonth(), startingDate.getDate());
+		const today = new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+
+		if (today <= start) return 0;
+
+		const diffInMilliseconds = today.getTime() - start.getTime();
 		return diffInMilliseconds / (1000 * 60 * 60 * 24);
 	}
 
+	function closeFilePreview(): void {
+		setOpenFilePreview(false);
+		setFilePreview(null);
+	}
+
 	function gettingPriceToPay(): number {
-		let price = 0;
 		let currentPenalization = 0;
 
 		if (!event) {
-			return price;
+			return 0;
 		}
 
-		event?.purchaseReceipts?.forEach((tr: IPurchaseReceipt) => {
-			price = price + tr.amount;
-		});
-
 		if (event.penalization && gettingDateDiference() > 0) {
-			if (new Date(transferReceipt?.datetime as Date) < new Date()) {
+			if (transferReceipt?.datetime && new Date(transferReceipt.datetime) < new Date()) {
 				currentPenalization = event.penalization * Math.floor(gettingDateDiference());
 			}
 		}
+		return Math.round(amountToValidate + currentPenalization);
+	}
 
-		return Math.round(price / event.members.length + currentPenalization);
+	async function PreviewTransfer(transfer: ITransferReceiptResponse) {
+		setOpenFilePreview(true);
+		try {
+			const transferImage = await getImage(transfer.image);
+			const objectURL = URL.createObjectURL(transferImage);
+			setFilePreview({
+				uri: objectURL,
+				fileType: transferImage.type.split('/')[1],
+				fileName: 'File Preview'
+			});
+
+			setTimeout(() => {
+				setOpenFilePreview(true);
+			}, 1000);
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	useEffect(() => {
@@ -99,6 +127,18 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 			});
 	}, [transferReceiptId]);
 
+	useEffect(() => {
+		if (!event?._id) return;
+		getMembersAmount(event._id)
+			.then(res => {
+				const userToValidate = res.find(member => member.userId === props.userToApprove);
+				setAmountToValidate(userToValidate?.amount || 0);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
+	}, [props.userToApprove]);
+
 	return (
 		<div {...className(styles.paycheck)}>
 			<p className={styles.popupTitle}>{lang.validatePaymentTitle}</p>
@@ -113,13 +153,13 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 					) : (
 						<div className={styles.downloadTransferArea}>
 							<button
-								className={styles.uploadBtn}
+								className={styles.previewBtn}
 								onClick={e => {
 									e.preventDefault();
-									downloadTransfer(transferReceipt?.image as string);
+									PreviewTransfer(transferReceipt as ITransferReceiptResponse);
 								}}
 								style={{ cursor: 'pointer' }}></button>
-							<p className={styles.downloadText}>{lang.downloadText}</p>
+							<p className={styles.downloadText}>{lang.previewText}</p>
 						</div>
 					)}
 				</section>
@@ -132,6 +172,20 @@ function ConfirmationPayForm(props: ConfirmationPayProps) {
 						{lang.rejectPayBtn}
 					</Button>
 				</section>
+
+				{filePreview && filePreview.fileType && filePreview.fileName && (
+					<FilesPreview
+						doc={[
+							{
+								uri: filePreview.uri,
+								fileType: filePreview.fileType,
+								fileName: filePreview.fileName
+							}
+						]}
+						state={openFilePreview}
+						onClose={closeFilePreview}
+					/>
+				)}
 			</div>
 		</div>
 	);
