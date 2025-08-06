@@ -537,9 +537,12 @@ export function Event(): JSX.Element {
 					<section className={styles.event}>
 						{/* TODO: NO deberían haber dos h1 en la misma página */}
 						<h1 className={styles.eventTitle}>{event.title}</h1>
-						{isUserIntoEvent() && (event.state === EventStatesEnum.CLOSED || event.state === EventStatesEnum.FINISHED) && (
-							<Stars iconSize={25} count={5} defaultRating={0} icon={'★'} color="rgb(240, 191, 28)" idEvent={event._id}></Stars>
-						)}
+						{isUserIntoEvent() &&
+							(event.state === EventStatesEnum.CLOSED ||
+								event.state === EventStatesEnum.READYFORPAYMENT ||
+								event.state === EventStatesEnum.FINISHED) && (
+								<Stars iconSize={25} count={5} defaultRating={0} icon={'★'} color="rgb(240, 191, 28)" idEvent={event._id}></Stars>
+							)}
 
 						{event.isPrivate && (
 							<section className={styles.eventPrivate}>
@@ -866,7 +869,7 @@ export function Event(): JSX.Element {
 								))}
 
 							{event.shoppingDesignee &&
-								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
+								event.shoppingDesignee.some((d: IUser) => d._id === user?.id) &&
 								event.state === EventStatesEnum.CLOSED && (
 									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
 										{lang.loadPurchase}
