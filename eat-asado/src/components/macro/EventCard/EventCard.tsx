@@ -86,6 +86,13 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		return myReceipt?.hasReceiptApproved;
 	}
 
+	function checkIfUserIsIntoTheEvent() {
+		if (eventParticipants.length === 0) {
+			return false;
+		}
+		return eventParticipants.find(member => member.userId === user?.id);
+	}
+
 	function handleParticipation() {
 		if (!!user?.name) {
 			subscribeUserToEvent();
@@ -173,6 +180,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 				evParticipantsLimit={evParticipantsLimit}
 				evDate={evDate}
 				userHasPaid={!!checkIfUserHasPaid()}
+				userIntoTheEvent={!!checkIfUserIsIntoTheEvent()}
 				subscribedUser={verifySubscription()}
 			/>
 

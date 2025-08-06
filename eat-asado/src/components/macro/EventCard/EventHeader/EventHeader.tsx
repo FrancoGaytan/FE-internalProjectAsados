@@ -13,6 +13,7 @@ interface IEventCardProps {
 	evParticipantsLimit: Number;
 	subscribedUser: Boolean;
 	userHasPaid: Boolean;
+	userIntoTheEvent: Boolean;
 	evDate: String;
 }
 
@@ -39,7 +40,7 @@ export default function EventHeader(props: IEventCardProps) {
 		} //dejar este if para chequear
 
 		if (evState === EventStatesEnum.READYFORPAYMENT) {
-			return props.userHasPaid ? EventStatesEnum.CLOSED : EventStatesEnum.READYFORPAYMENT;
+			return props.userHasPaid ? EventStatesEnum.CLOSED : !props.userIntoTheEvent ? EventStatesEnum.CLOSED : EventStatesEnum.READYFORPAYMENT;
 		}
 
 		if (evState === EventStatesEnum.AVAILABLE) {
