@@ -683,7 +683,7 @@ export function Event(): JSX.Element {
 													? lang.empty
 													: isUserShoppingDesignee() || !isUserIntoEvent()
 													? lang.assignedOpt
-													: lang.addmeOpt}
+													: event.state === EventStatesEnum.AVAILABLE && lang.addmeOpt}
 											</h5>
 
 											<div className={styles.assignTransitionWrapper}>
