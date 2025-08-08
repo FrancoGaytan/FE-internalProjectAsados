@@ -523,8 +523,8 @@ export function Event(): JSX.Element {
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
-				<section className={styles.backBtnSection}>
-					<button className={styles.backBtn} onClick={handleGoToMain}></button>
+				<section className={styles.backBtnSection} onClick={handleGoToMain}>
+					<button className={styles.backBtn}></button>
 					<p className={styles.backText}>{lang.backBtn}</p>
 				</section>
 
