@@ -205,6 +205,7 @@ export function CreateEvent(): JSX.Element {
 							placeholder="Fecha y Hora"
 							type="datetime-local"
 							value={event.datetime.toISOString().slice(0, -8)}
+							min={new Date().toISOString().slice(0, -8)}
 							onChange={e => {
 								const inputValue = e.target.value;
 								if (inputValue) {
@@ -364,6 +365,7 @@ export function CreateEvent(): JSX.Element {
 										ref={dateTimeRef}
 										className={styles.calendarInput}
 										value={event.penalizationStartDate.toISOString().slice(0, -8)}
+										min={new Date().toISOString().slice(0, -8)}
 										onChange={e => {
 											const inputValue = e.target.value;
 											if (inputValue) {
