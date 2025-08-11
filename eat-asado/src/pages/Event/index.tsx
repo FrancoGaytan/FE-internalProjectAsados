@@ -208,7 +208,7 @@ export function Event(): JSX.Element {
 
 	function closeEvent(): void {
 		if (!event) return;
-		event.chef && event.shoppingDesignee.length > 0
+		event.shoppingDesignee.length > 0
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED, isPrivate: event.isPrivate ?? false })
 					.then(res => {
 						refetchEvent();
@@ -224,7 +224,7 @@ export function Event(): JSX.Element {
 			setAlert(`${lang.eventCantBeReadyForPaymentWithoutPurchases}`, AlertTypes.ERROR);
 			return;
 		}
-		event.chef && event.shoppingDesignee.length > 0
+		event.shoppingDesignee.length > 0
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.READYFORPAYMENT, isPrivate: event.isPrivate ?? false })
 					.then(res => {
 						refetchEvent();
