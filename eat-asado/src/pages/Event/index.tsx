@@ -813,7 +813,8 @@ export function Event(): JSX.Element {
 								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
 								event.state !== 'finished' &&
 								event.state !== EventStatesEnum.READYFORPAYMENT &&
-								event.state !== EventStatesEnum.AVAILABLE && (
+								event.state !== EventStatesEnum.AVAILABLE &&
+								event.purchaseReceipts.length > 0 && (
 									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => setEventToReadyForPay()}>
 										{lang.readyForPaymentBtn}
 									</Button>
