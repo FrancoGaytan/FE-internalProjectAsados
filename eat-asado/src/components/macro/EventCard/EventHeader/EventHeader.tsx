@@ -51,7 +51,7 @@ export default function EventHeader(props: IEventCardProps) {
 			}
 			return EventStatesEnum.AVAILABLE;
 		} else if (evState === EventStatesEnum.CLOSED) {
-			return EventStatesEnum.CLOSED;
+			return props.userIntoTheEvent ? 'subscribed' : EventStatesEnum.CLOSED;
 		} else if (evState === EventStatesEnum.CANCELED) {
 			return EventStatesEnum.CANCELED;
 		} else if (isEventFull()) {
