@@ -12,6 +12,7 @@ export default function Button(props: PropsWithChildren<IButtonProps>): JSX.Elem
 	return (
 		<button
 			onClick={props.onClick}
+			disabled={props.disabled}
 			{...className(
 				styles.button,
 				styles[props.kind ?? 'primary'],

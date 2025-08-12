@@ -134,12 +134,15 @@ export function EventHome(): JSX.Element {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, []);
-
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
 				<section className={styles.header}>
-					<Button kind="primary" size="large" onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}>
+					<Button
+						kind="primary"
+						size="large"
+						onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}
+						disabled={!!userDebtor}>
 						{lang.newEventButton}
 					</Button>
 				</section>

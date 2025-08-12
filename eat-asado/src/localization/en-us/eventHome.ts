@@ -64,7 +64,7 @@ export const eventHome = Object.seal({
 	assignedOpt: 'Assigned ',
 	payBtn: 'Pay',
 	modifyPay: 'Pending Approval - Modify Payment',
-	unassignAtClosing: "You can't close an event without an assigned chef or shopping designee",
+	unassignAtClosing: "You can't close an event without an assigned shopping designee",
 	needsLogin: 'You need to log in to access this functionality',
 	noLoggedMsg: "You need to be logged in to access the event's info",
 	noLoggedMsgParticipate: 'You need to be logged in to participate in the event',
@@ -94,5 +94,6 @@ export const eventHome = Object.seal({
 	readyForPaymentBtn: 'Ready to Pay',
 	sdCanNotRemove: 'You cannot unassign yourself if you have made purchases',
 	awaitingNoti: 'AWAITING',
-	backBtn: 'BACK'
+	backBtn: 'BACK',
+	eventWithApprovedReceiptsCannotBeReclosed: 'The event with approved receipts cannot be re-closed'
 });

@@ -208,6 +208,10 @@ export function Event(): JSX.Element {
 
 	function closeEvent(): void {
 		if (!event) return;
+		if (eventParticipants.some(member => member.hasReceiptApproved)) {
+			setAlert(`${lang.eventWithApprovedReceiptsCannotBeReclosed}`, AlertTypes.ERROR);
+			return;
+		}
 		event.shoppingDesignee.length > 0
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED, isPrivate: event.isPrivate ?? false })
 					.then(res => {
