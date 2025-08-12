@@ -37,10 +37,10 @@ export default function EventHeader(props: IEventCardProps) {
 
 		if (evState === EventStatesEnum.FINISHED) {
 			return EventStatesEnum.FINISHED;
-		} //dejar este if para chequear
+		}
 
 		if (evState === EventStatesEnum.READYFORPAYMENT) {
-			return props.userHasPaid ? EventStatesEnum.CLOSED : !props.userIntoTheEvent ? EventStatesEnum.CLOSED : EventStatesEnum.READYFORPAYMENT;
+			return !props.userIntoTheEvent ? EventStatesEnum.CLOSED : props.userHasPaid ? EventStatesEnum.CLOSED : EventStatesEnum.READYFORPAYMENT;
 		}
 
 		if (evState === EventStatesEnum.AVAILABLE) {
