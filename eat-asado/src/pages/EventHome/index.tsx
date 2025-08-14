@@ -134,7 +134,6 @@ export function EventHome(): JSX.Element {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, []);
-
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
@@ -143,7 +142,7 @@ export function EventHome(): JSX.Element {
 						kind="primary"
 						size="large"
 						onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}
-						disabled={userDebtor?.length === 0}>
+						disabled={userDebtor?.length > 0}>
 						{lang.newEventButton}
 					</Button>
 				</section>
