@@ -16,12 +16,13 @@ import styles from './styles.module.scss';
 import { event } from '../../../localization/en-us/event';
 import Tooltip from '../../micro/Tooltip/Tooltip';
 import StarRating from '../../micro/starRating/starRating';
-import { EventUserResponse } from '../../../models/user';
+import { EventUserResponse, IUser } from '../../../models/user';
 
 interface IEventData {
 	eventTitle: String;
 	eventDescription: String;
 	eventParticipants: Number;
+	eventShoppingDesignees: IUser[];
 	eventParticipantLimit: Number;
 	eventCook: String;
 	eventAvgRate: number;
@@ -31,7 +32,7 @@ interface IEventData {
 interface IEventCardProps {
 	eventId: string;
 	eventState: TEventState;
-	eventUserIsDebtor: string;
+	eventUserIsDebtor: string[];
 	eventDateTime: Date;
 	eventData: IEventData;
 	userId: string | undefined;
@@ -50,6 +51,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	const evParticipants = props.eventData.eventParticipants;
 	const evParticipantsLimit = props.eventData.eventParticipantLimit;
 	const evCook = props.eventData.eventCook;
+	const evShoppingDesignees = props.eventData.eventShoppingDesignees;
 	const evId = props.eventId;
 	const evUserIsDebtor = props.eventUserIsDebtor;
 	const evRatingsAmount = props.eventData.eventRatingsAmount;
@@ -114,11 +116,11 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		if (!user?.id) {
 			return false;
 		}
-		if (evUserIsDebtor !== null) {
-			if (evUserIsDebtor === evId) {
-				return false;
-			} else {
+		if (evUserIsDebtor.length > 0) {
+			if (!evUserIsDebtor.includes(evId) && !evShoppingDesignees.some(designee => designee._id === user.id)) {
 				return true;
+			} else {
+				return false;
 			}
 		} else {
 			return false;
@@ -126,8 +128,8 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 	}
 
 	function isThisEventBlocking(): boolean {
-		if (evUserIsDebtor !== null) {
-			if (evUserIsDebtor === evId) {
+		if (evUserIsDebtor.length > 0) {
+			if (evUserIsDebtor.includes(evId)) {
 				return true;
 			} else {
 				return false;

@@ -54,7 +54,6 @@ export function Event(): JSX.Element {
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [modalFastAproval, setModalFastAproval] = useState(false);
 	const [modalAssignation, setModalAssignation] = useState(false);
-	//const [userHasPaid, setUserHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState<IPurchaseReceipt[]>([]);
 	const baseUrl = getBaseUrl();
 	const currentUrl = `${baseUrl}${location.pathname}${location.search}${location.hash}`;
@@ -561,9 +560,6 @@ export function Event(): JSX.Element {
 									{event.organizer?._id === user?.id && (
 										<button className={styles.editEventBtn} onClick={() => editCurrentEvent()}></button>
 									)}
-									{/* {event.state === EventStatesEnum.CLOSED && (
-										<button className={styles.assignEventBtn} onClick={() => console.log()}></button>
-									)} */}
 								</section>
 
 								<div className={styles.sectionTitle}>
