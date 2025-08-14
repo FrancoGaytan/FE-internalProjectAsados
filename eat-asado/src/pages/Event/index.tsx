@@ -531,11 +531,7 @@ export function Event(): JSX.Element {
 					<p className={styles.backText}>{lang.backBtn}</p>
 				</section>
 
-				<section className={styles.header}>
-					<Button kind="primary" size="large" onClick={() => navigate('/createEvent/new')}>
-						{lang.newEventButton}
-					</Button>
-				</section>
+				<section className={styles.header}></section>
 				{!!event && (
 					<section className={styles.event}>
 						{/* TODO: NO deberían haber dos h1 en la misma página */}
