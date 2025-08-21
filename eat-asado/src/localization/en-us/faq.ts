@@ -19,7 +19,7 @@ export const faq = Object.seal({
 		},
 		{
 			question: 'How do penalties work in events?',
-			answer: 'Penalties are configured when creating an event. You select the additional amount that will be charged per day of delay and from which day it starts to be charged. If you do not attend or do not pay on time, penalties will be applied according to the event rules and will increase as days pass.'
+			answer: 'Penalties are configured when creating an event. You select the additional amount that will be charged per day of delay and from which day it starts to be charged. If you do not pay on time, penalties will be applied according to the event rules and will increase as days pass.'
 		},
 		{
 			question: 'How do I upload my purchase receipt?',
@@ -35,7 +35,7 @@ export const faq = Object.seal({
 		},
 		{
 			question: "Which are the possible event's states?",
-			answer: 'The possible states of an event are: Available, from when an event is created until purchases are made and the people in charge of purchases decide to close it. Closed, from when an event is closed until payments from all participants are approved. Ready for payment, from when the people in charge of purchases finish entering and assigning purchases. Finished, from when payments from all participants are approved.'
+			answer: 'The possible states of an event are: Available, from when an event is created until purchases are made and the people in charge of purchases decide to close it. Closed, from when an event is closed until all purchase receipts are uploaded, in this period of time no more participants can be registered and purchase receipts can be uploaded. Ready for payment, from when the people in charge of purchases finish entering and assigning purchases. Finished, from when payments from all participants are approved.'
 		}
 	],
 	backBtn: 'BACK'

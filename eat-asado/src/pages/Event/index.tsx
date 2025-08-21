@@ -54,7 +54,6 @@ export function Event(): JSX.Element {
 	const [modalPurchaseRecipt, setModalPurchaseRecipt] = useState(false);
 	const [modalFastAproval, setModalFastAproval] = useState(false);
 	const [modalAssignation, setModalAssignation] = useState(false);
-	//const [userHasPaid, setUserHasPaid] = useState(false);
 	const [purchasesMade, setPurchasesMade] = useState<IPurchaseReceipt[]>([]);
 	const baseUrl = getBaseUrl();
 	const currentUrl = `${baseUrl}${location.pathname}${location.search}${location.hash}`;
@@ -208,7 +207,11 @@ export function Event(): JSX.Element {
 
 	function closeEvent(): void {
 		if (!event) return;
-		event.chef && event.shoppingDesignee.length > 0
+		if (eventParticipants.some(member => member.hasReceiptApproved)) {
+			setAlert(`${lang.eventWithApprovedReceiptsCannotBeReclosed}`, AlertTypes.ERROR);
+			return;
+		}
+		event.shoppingDesignee.length > 0
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.CLOSED, isPrivate: event.isPrivate ?? false })
 					.then(res => {
 						refetchEvent();
@@ -224,7 +227,7 @@ export function Event(): JSX.Element {
 			setAlert(`${lang.eventCantBeReadyForPaymentWithoutPurchases}`, AlertTypes.ERROR);
 			return;
 		}
-		event.chef && event.shoppingDesignee.length > 0
+		event.shoppingDesignee.length > 0
 			? editEvent(event?._id, { ...event, state: EventStatesEnum.READYFORPAYMENT, isPrivate: event.isPrivate ?? false })
 					.then(res => {
 						refetchEvent();
@@ -523,16 +526,12 @@ export function Event(): JSX.Element {
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
-				<section className={styles.backBtnSection}>
-					<button className={styles.backBtn} onClick={handleGoToMain}></button>
+				<section className={styles.backBtnSection} onClick={handleGoToMain}>
+					<button className={styles.backBtn}></button>
 					<p className={styles.backText}>{lang.backBtn}</p>
 				</section>
 
-				<section className={styles.header}>
-					<Button kind="primary" size="large" onClick={() => navigate('/createEvent/new')}>
-						{lang.newEventButton}
-					</Button>
-				</section>
+				<section className={styles.header}></section>
 				{!!event && (
 					<section className={styles.event}>
 						{/* TODO: NO deberían haber dos h1 en la misma página */}
@@ -557,9 +556,6 @@ export function Event(): JSX.Element {
 									{event.organizer?._id === user?.id && (
 										<button className={styles.editEventBtn} onClick={() => editCurrentEvent()}></button>
 									)}
-									{/* {event.state === EventStatesEnum.CLOSED && (
-										<button className={styles.assignEventBtn} onClick={() => console.log()}></button>
-									)} */}
 								</section>
 
 								<div className={styles.sectionTitle}>
@@ -683,7 +679,7 @@ export function Event(): JSX.Element {
 													? lang.empty
 													: isUserShoppingDesignee() || !isUserIntoEvent()
 													? lang.assignedOpt
-													: lang.addmeOpt}
+													: event.state === EventStatesEnum.AVAILABLE && lang.addmeOpt}
 											</h5>
 
 											<div className={styles.assignTransitionWrapper}>
@@ -813,7 +809,8 @@ export function Event(): JSX.Element {
 								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
 								event.state !== 'finished' &&
 								event.state !== EventStatesEnum.READYFORPAYMENT &&
-								event.state !== EventStatesEnum.AVAILABLE && (
+								event.state !== EventStatesEnum.AVAILABLE &&
+								event.purchaseReceipts.length > 0 && (
 									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => setEventToReadyForPay()}>
 										{lang.readyForPaymentBtn}
 									</Button>

@@ -341,6 +341,18 @@ export function UserProfile(): JSX.Element {
 								/>
 								{lang.celiacDiet}
 							</label>
+							<label htmlFor="alternativeEmail" className={styles.cbuLabel}>
+								{lang.alternativeEmail}
+							</label>
+							<input
+								className={styles.input}
+								id="alternativeEmail"
+								type="text"
+								value={userProfile.alternativeEmail}
+								onChange={e => {
+									setUser({ ...userProfile, alternativeEmail: e.target.value });
+								}}
+							/>
 						</section>
 
 						<section className={styles.notificationsSection}>
@@ -368,20 +380,9 @@ export function UserProfile(): JSX.Element {
 								/>
 								{lang.activateNotifications}
 							</label>
+
 							{activateNotifications && (
 								<div className={styles.visibleNotificationSettings}>
-									<label htmlFor="alternativeEmail" className={styles.cbuLabel}>
-										{lang.alternativeEmail}
-									</label>
-									<input
-										className={styles.input}
-										id="alternativeEmail"
-										type="text"
-										value={userProfile.alternativeEmail}
-										onChange={e => {
-											setUser({ ...userProfile, alternativeEmail: e.target.value });
-										}}
-									/>
 									<p className={styles.notificationDescription}>{lang.notificationDescription}</p>
 									<label className={styles.alternativeEmail}>
 										<input

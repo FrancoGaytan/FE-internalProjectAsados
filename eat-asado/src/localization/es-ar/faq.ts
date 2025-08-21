@@ -19,7 +19,7 @@ export const faq = Object.seal({
 		},
 		{
 			question: '¿Cómo funcionan las penalizaciones en los eventos?',
-			answer: 'Las penalizaciones se configuran al crear un evento. Se selecciona la cantidad adicional que se cobrará por día de atraso, y a partir de qué día se comienza a cobrar. Si no asistís o no pagás a tiempo, se aplicarán las penalizaciones según las reglas del evento y se irán incrementando a medida que pasen los días.'
+			answer: 'Las penalizaciones se configuran al crear un evento. Se selecciona la cantidad adicional que se cobrará por día de atraso, y a partir de qué día se comienza a cobrar. Si no pagás a tiempo, se aplicarán las penalizaciones según las reglas del evento y se irán incrementando a medida que pasen los días.'
 		},
 		{
 			question: '¿Cómo cargo mi recibo de compras?',
@@ -35,7 +35,7 @@ export const faq = Object.seal({
 		},
 		{
 			question: '¿Cuáles son los posibles estados de un evento?',
-			answer: 'Los posibles estados de un evento son: Disponible — desde que un evento se crea hasta que se realizan las compras y se cierra; Cerrado — desde el cierre hasta que se aprueban todos los pagos; Listo para abonar — desde que se cargan y asignan todas las compras; y Finalizado — cuando se aprobaron todos los pagos.'
+			answer: 'Los posibles estados de un evento son: Disponible — desde que un evento se crea hasta que se realizan las compras y se cierra; Cerrado — desde el cierre hasta que se cargan todos los recibos de compras, en este período de tiempo no se pueden incribir más participantes y se pueden cargar los recibos de compra; Listo para abonar — desde que se cargan y asignan todas las compras; y Finalizado — cuando se aprobaron todos los pagos.'
 		}
 	],
 	backBtn: 'VOLVER'

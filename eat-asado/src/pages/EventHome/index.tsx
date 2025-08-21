@@ -23,7 +23,7 @@ export function EventHome(): JSX.Element {
 	const { publicEvents } = useEvent();
 	const { setPublicEvents } = useEvent();
 	const navigate = useNavigate();
-	const [userDebtor, setUserDebtor] = useState('null');
+	const [userDebtor, setUserDebtor] = useState<string[]>([]);
 	const [isScrolling, setIsScrolling] = useState(false);
 
 	const { user } = useAuth();
@@ -82,7 +82,7 @@ export function EventHome(): JSX.Element {
 		}
 		isUserDebtor(user?.id as string)
 			.then(res => {
-				setUserDebtor(res.eventId);
+				setUserDebtor(res);
 			})
 			.catch(e => {
 				console.error('Catch in context: ', e);
@@ -134,12 +134,15 @@ export function EventHome(): JSX.Element {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, []);
-
 	return (
 		<PrivateFormLayout>
 			<div className={styles.content}>
 				<section className={styles.header}>
-					<Button kind="primary" size="large" onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}>
+					<Button
+						kind="primary"
+						size="large"
+						onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}
+						disabled={userDebtor?.length > 0}>
 						{lang.newEventButton}
 					</Button>
 				</section>
@@ -158,12 +161,13 @@ export function EventHome(): JSX.Element {
 								key={event._id}
 								eventId={event._id}
 								eventDateTime={event.datetime}
-								eventUserIsDebtor={userDebtor}
+								eventUserIsDebtor={userDebtor} //mepa que le voy a tener que mandar el arreglo para que pueda saber si esta blockeado o no para la f isAnotherEventBlocking
 								userId={user?.id}
 								eventState={event.state as TEventState}
 								eventData={{
 									eventTitle: event.title,
 									eventCook: event.chef,
+									eventShoppingDesignees: event.shoppingDesignee ?? [],
 									eventDescription: event.description,
 									eventParticipants: event.members,
 									eventParticipantLimit: event.memberLimit,

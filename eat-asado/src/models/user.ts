@@ -71,7 +71,4 @@ export interface EditUserResponse {
 	imageId: string;
 }
 
-export interface IsUserDebtorResponse {
-	eventId: string;
-	reason: string;
-}
+export type IsUserDebtorResponse = string[];

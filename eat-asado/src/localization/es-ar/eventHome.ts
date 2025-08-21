@@ -64,7 +64,7 @@ export const eventHome = Object.seal({
 	addmeOpt: 'Agregarme',
 	payBtn: 'Pagar',
 	modifyPay: 'Modificar Pago',
-	unassignAtClosing: 'No se puede cerrar un evento sin responsables asignados',
+	unassignAtClosing: 'No se puede cerrar un evento sin responsable de compra asignado',
 	needsLogin: 'Necesitás iniciar sesión para acceder a esta funcionalidad',
 	noLoggedMsg: 'Necesitás estar logueado para acceder al evento',
 	noLoggedMsgParticipate: 'Necesitás estar logueado para participar del evento',
@@ -94,5 +94,6 @@ export const eventHome = Object.seal({
 	readyForPaymentBtn: 'Listo para pagar',
 	sdCanNotRemove: 'No podés desasignarte si tenés compras registradas',
 	awaitingNoti: 'EN ESPERA',
-	backBtn: 'VOLVER'
+	backBtn: 'VOLVER',
+	eventWithApprovedReceiptsCannotBeReclosed: 'El evento con recibos aprobados no puede volver al estado previo'
 });

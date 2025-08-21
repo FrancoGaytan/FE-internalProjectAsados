@@ -20,5 +20,6 @@ export const createEvent = Object.seal({
 	hasPenalization: 'Penalización por deudor',
 	amountPenalization: 'Monto de penalización',
 	penalizationStartingDate: 'Día de inicio de penalidad',
-	wrongPenalizationDate: 'El día de penalización debe ser posterior al día del evento'
+	wrongPenalizationDate: 'El día de penalización debe ser posterior al día del evento',
+	cantEditLimitWithMembersSubscribed: 'No podés reducir el límite de participantes a menor cantidad que los ya suscriptos'
 });

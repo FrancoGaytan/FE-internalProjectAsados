@@ -88,6 +88,10 @@ export function CreateEvent(): JSX.Element {
 			setAlert(lang.wrongPenalizationDate, AlertTypes.ERROR);
 			return;
 		}
+		if (event.memberLimit < event.members.length) {
+			setAlert(lang.cantEditLimitWithMembersSubscribed, AlertTypes.ERROR);
+			return;
+		}
 		setIsLoading(true);
 
 		setEvent({ ...event, members: [fullUser as IUser], organizer: fullUser as IUser }); //TODO: chequear que no haya roto algo esto
@@ -152,6 +156,7 @@ export function CreateEvent(): JSX.Element {
 					datetime: new Date(res.datetime),
 					description: res.description,
 					memberLimit: res.memberLimit,
+					members: res.members,
 					isPrivate: res.isPrivate as boolean,
 					penalization: res.penalization,
 					penalizationStartDate:
@@ -205,6 +210,7 @@ export function CreateEvent(): JSX.Element {
 							placeholder="Fecha y Hora"
 							type="datetime-local"
 							value={event.datetime.toISOString().slice(0, -8)}
+							min={new Date().toISOString().slice(0, -8)}
 							onChange={e => {
 								const inputValue = e.target.value;
 								if (inputValue) {
@@ -364,6 +370,7 @@ export function CreateEvent(): JSX.Element {
 										ref={dateTimeRef}
 										className={styles.calendarInput}
 										value={event.penalizationStartDate.toISOString().slice(0, -8)}
+										min={new Date(event.datetime.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, -8)}
 										onChange={e => {
 											const inputValue = e.target.value;
 											if (inputValue) {
