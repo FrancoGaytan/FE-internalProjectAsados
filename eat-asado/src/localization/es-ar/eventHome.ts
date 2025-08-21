@@ -95,5 +95,6 @@ export const eventHome = Object.seal({
 	sdCanNotRemove: 'No podés desasignarte si tenés compras registradas',
 	awaitingNoti: 'EN ESPERA',
 	backBtn: 'VOLVER',
-	eventWithApprovedReceiptsCannotBeReclosed: 'El evento con recibos aprobados no puede volver al estado previo'
+	eventWithApprovedReceiptsCannotBeReclosed: 'El evento con recibos aprobados no puede volver al estado previo',
+	userDebtorWarning: 'No podés inscribirte a un evento si tenés deudas pendientes'
 });

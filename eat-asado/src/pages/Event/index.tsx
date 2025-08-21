@@ -11,12 +11,13 @@ import {
 	getMembersAmount,
 	getMembersAndReceiptsInfo,
 	getTransferReceipt,
+	isUserDebtor,
 	subscribeToAnEvent,
 	unsubscribeToAnEvent
 } from '../../service';
 import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useParams, useLocation } from 'react-router-dom';
-import { EventUserResponse, IUser, IPublicUser } from '../../models/user';
+import { EventUserResponse, IUser, IPublicUser, IsUserDebtorResponse } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
@@ -67,8 +68,8 @@ export function Event(): JSX.Element {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
 	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
+	const [userDebtor, setUserDebtor] = useState<boolean>(false);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
-
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
 		if (Number(minutes) < 10) {
@@ -100,6 +101,10 @@ export function Event(): JSX.Element {
 
 	function subscribeUserToEvent(): void {
 		if (!event) return;
+		if (userDebtor) {
+			setAlert(lang.userDebtorWarning, AlertTypes.WARNING);
+			return;
+		}
 		if (Object.keys(user as Object).length === 0) {
 			setAlert(lang.needLoginRedirecting, AlertTypes.INFO);
 			setTimeout(() => {
@@ -490,6 +495,13 @@ export function Event(): JSX.Element {
 				console.error('Catch in context: ', e);
 			});
 	}, [transferReceiptId]);
+
+	useEffect(() => {
+		if (event?.state !== EventStatesEnum.AVAILABLE) return;
+		isUserDebtor(user?.id as string).then((res: IsUserDebtorResponse) => {
+			setUserDebtor(res.length > 0);
+		});
+	}, [event]);
 
 	function refetchEvent(): void {
 		if (!userIdParams?.eventId) return;
