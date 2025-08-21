@@ -94,7 +94,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		}
 		return eventParticipants.find(member => member.userId === user?.id);
 	}
-
+        
 	function handleParticipation() {
 		if (!!user?.name) {
 			subscribeUserToEvent();
