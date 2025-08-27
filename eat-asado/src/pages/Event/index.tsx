@@ -8,6 +8,7 @@ import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
 	getEventById,
+	getMemberIndividualCost,
 	getMembersAmount,
 	getMembersAndReceiptsInfo,
 	getTransferReceipt,
@@ -69,6 +70,7 @@ export function Event(): JSX.Element {
 	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
 	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
 	const [userDebtor, setUserDebtor] = useState<boolean>(false);
+	const [userPrice, setUserPrice] = useState<number>(0);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -514,6 +516,17 @@ export function Event(): JSX.Element {
 	}
 
 	useEffect(() => {
+		if (!event) return;
+		if(!userIdParams?.eventId) return;
+		if (event.state !== (EventStatesEnum.READYFORPAYMENT ||  EventStatesEnum.FINISHED)) return;
+		getMemberIndividualCost( userIdParams.eventId, user?.id as string)
+			.then(res => setUserPrice(res.userAmount))
+			.catch(err => {
+				console.error('Error refreshing event:', err);
+			});
+	}, [event, user?.id, userIdParams.eventId]);
+
+	useEffect(() => {
 		if (!userIdParams?.eventId) return;
 
 		const interval = setInterval(() => {
@@ -595,6 +608,12 @@ export function Event(): JSX.Element {
 								{event.penalization > 0 && (
 									<h5 className={styles.infoData}>
 										{lang.penalizationStartDate} {getOnlyDate(new Date(event.penalizationStartDate))}
+									</h5>
+								)}
+
+								{isUserIntoEvent() && (event.state === EventStatesEnum.READYFORPAYMENT || event.state === EventStatesEnum.FINISHED) && (
+									<h5 className={styles.infoData}>
+										{lang.myEventPrice + ':'} {'$' + userPrice.toFixed(1)}
 									</h5>
 								)}
 

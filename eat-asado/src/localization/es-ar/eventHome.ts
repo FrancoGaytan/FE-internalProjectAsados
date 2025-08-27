@@ -96,5 +96,6 @@ export const eventHome = Object.seal({
 	awaitingNoti: 'EN ESPERA',
 	backBtn: 'VOLVER',
 	eventWithApprovedReceiptsCannotBeReclosed: 'El evento con recibos aprobados no puede volver al estado previo',
-	userDebtorWarning: 'No podés inscribirte a un evento si tenés deudas pendientes'
+	userDebtorWarning: 'No podés inscribirte a un evento si tenés deudas pendientes',
+	myEventPrice: 'Costo del evento'
 });
