@@ -613,7 +613,7 @@ export function Event(): JSX.Element {
 
 								{isUserIntoEvent() && (event.state === EventStatesEnum.READYFORPAYMENT || event.state === EventStatesEnum.FINISHED) && (
 									<h5 className={styles.infoData}>
-										{lang.myEventPrice + ':'} {'$' + userPrice.toFixed(1)}
+										{lang.myEventPrice + ':'} {'$' + Math.round(userPrice)}
 									</h5>
 								)}
 
