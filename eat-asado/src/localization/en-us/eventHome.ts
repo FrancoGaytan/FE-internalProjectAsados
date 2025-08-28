@@ -95,5 +95,7 @@ export const eventHome = Object.seal({
 	sdCanNotRemove: 'You cannot unassign yourself if you have made purchases',
 	awaitingNoti: 'AWAITING',
 	backBtn: 'BACK',
-	eventWithApprovedReceiptsCannotBeReclosed: 'The event with approved receipts cannot be re-closed'
+	eventWithApprovedReceiptsCannotBeReclosed: 'The event with approved receipts cannot be re-closed',
+	userDebtorWarning: 'You cannot sign up for an event if you have pending debts',
+	myEventPrice: 'Event cost'
 });

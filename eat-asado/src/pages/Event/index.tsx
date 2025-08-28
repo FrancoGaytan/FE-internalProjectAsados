@@ -8,15 +8,17 @@ import { useAuth } from '../../stores/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
 	getEventById,
+	getMemberIndividualCost,
 	getMembersAmount,
 	getMembersAndReceiptsInfo,
 	getTransferReceipt,
+	isUserDebtor,
 	subscribeToAnEvent,
 	unsubscribeToAnEvent
 } from '../../service';
 import { EventStatesEnum } from '../../enums/EventState.enum';
 import { useParams, useLocation } from 'react-router-dom';
-import { EventUserResponse, IUser, IPublicUser } from '../../models/user';
+import { EventUserResponse, IUser, IPublicUser, IsUserDebtorResponse } from '../../models/user';
 import AssignBtn from '../../components/micro/AssignBtn/AssignBtn';
 import { useAlert } from '../../stores/AlertContext';
 import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
@@ -67,8 +69,9 @@ export function Event(): JSX.Element {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
 	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
+	const [userDebtor, setUserDebtor] = useState<boolean>(false);
+	const [userPrice, setUserPrice] = useState<number>(0);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
-
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
 		if (Number(minutes) < 10) {
@@ -100,6 +103,10 @@ export function Event(): JSX.Element {
 
 	function subscribeUserToEvent(): void {
 		if (!event) return;
+		if (userDebtor) {
+			setAlert(lang.userDebtorWarning, AlertTypes.WARNING);
+			return;
+		}
 		if (Object.keys(user as Object).length === 0) {
 			setAlert(lang.needLoginRedirecting, AlertTypes.INFO);
 			setTimeout(() => {
@@ -491,6 +498,13 @@ export function Event(): JSX.Element {
 			});
 	}, [transferReceiptId]);
 
+	useEffect(() => {
+		if (event?.state !== EventStatesEnum.AVAILABLE) return;
+		isUserDebtor(user?.id as string).then((res: IsUserDebtorResponse) => {
+			setUserDebtor(res.length > 0);
+		});
+	}, [event]);
+
 	function refetchEvent(): void {
 		if (!userIdParams?.eventId) return;
 
@@ -500,6 +514,17 @@ export function Event(): JSX.Element {
 				console.error('Error refreshing event:', err);
 			});
 	}
+
+	useEffect(() => {
+		if (!event) return;
+		if(!userIdParams?.eventId) return;
+		if (event.state !== (EventStatesEnum.READYFORPAYMENT ||  EventStatesEnum.FINISHED)) return;
+		getMemberIndividualCost( userIdParams.eventId, user?.id as string)
+			.then(res => setUserPrice(res.userAmount))
+			.catch(err => {
+				console.error('Error refreshing event:', err);
+			});
+	}, [event, user?.id, userIdParams.eventId]);
 
 	useEffect(() => {
 		if (!userIdParams?.eventId) return;
@@ -583,6 +608,12 @@ export function Event(): JSX.Element {
 								{event.penalization > 0 && (
 									<h5 className={styles.infoData}>
 										{lang.penalizationStartDate} {getOnlyDate(new Date(event.penalizationStartDate))}
+									</h5>
+								)}
+
+								{isUserIntoEvent() && (event.state === EventStatesEnum.READYFORPAYMENT || event.state === EventStatesEnum.FINISHED) && (
+									<h5 className={styles.infoData}>
+										{lang.myEventPrice + ':'} {'$' + Math.round(userPrice)}
 									</h5>
 								)}
 

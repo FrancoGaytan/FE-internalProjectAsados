@@ -48,3 +48,7 @@ export interface ITransferReceiptResponse {
 export interface IUploadFileResponse {
 	imageId: string;
 }
+
+export interface IndividualCostResponse {
+	userAmount: number;
+}
