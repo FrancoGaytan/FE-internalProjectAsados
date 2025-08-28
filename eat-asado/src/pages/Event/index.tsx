@@ -518,7 +518,7 @@ export function Event(): JSX.Element {
 	useEffect(() => {
 		if (!event) return;
 		if(!userIdParams?.eventId) return;
-		if (event.state !== (EventStatesEnum.READYFORPAYMENT ||  EventStatesEnum.FINISHED)) return;
+		if (![EventStatesEnum.READYFORPAYMENT, EventStatesEnum.FINISHED].includes(event.state as EventStatesEnum)) return;
 		getMemberIndividualCost( userIdParams.eventId, user?.id as string)
 			.then(res => setUserPrice(res.userAmount))
 			.catch(err => {
