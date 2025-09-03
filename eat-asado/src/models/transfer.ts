@@ -17,6 +17,7 @@ export interface ITransferReceiptRequest {
 	user: string;
 	paymentMethod: string;
 	file: any;
+	receiver?: string;
 }
 
 export interface ITransferReceiptImage {

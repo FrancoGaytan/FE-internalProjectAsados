@@ -97,5 +97,6 @@ export const eventHome = Object.seal({
 	backBtn: 'BACK',
 	eventWithApprovedReceiptsCannotBeReclosed: 'The event with approved receipts cannot be re-closed',
 	userDebtorWarning: 'You cannot sign up for an event if you have pending debts',
-	myEventPrice: 'Event cost'
+	myEventPrice: 'Event cost',
+	userHasPendingApprovals: 'You have pending approvals, event: '
 });

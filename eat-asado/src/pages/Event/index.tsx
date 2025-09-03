@@ -34,7 +34,7 @@ import ConfirmationPayForm from '../../components/macro/ConfirmationPayForm/Conf
 import Tooltip from '../../components/micro/Tooltip/Tooltip';
 import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
 import AssignationTable from '../../components/macro/AssignationTable/AssignationTable';
-import { EventByIdResponse, IEvent } from '../../models/event';
+import { EventByIdResponse } from '../../models/event';
 
 export interface FilePreview {
 	uri: string;
@@ -70,7 +70,7 @@ export function Event(): JSX.Element {
 	const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
 	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
 	const [userDebtor, setUserDebtor] = useState<boolean>(false);
-	const [userPrice, setUserPrice] = useState<number>(0);
+	const [userPrice, setUserPrice] = useState<number>(0)
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
