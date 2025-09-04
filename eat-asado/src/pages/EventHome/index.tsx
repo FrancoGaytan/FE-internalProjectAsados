@@ -160,8 +160,8 @@ export function EventHome(): JSX.Element {
 	return (
 		<>
 			<PrivateFormLayout>
-				<div className={styles.content}>
-					<section className={styles.header}>
+				<div className={styles.content} data-testid="eventhome-content">
+					<section className={styles.header} data-testid="eventhome-header">
 						<Button
 							kind="primary"
 							size="large"
@@ -171,21 +171,21 @@ export function EventHome(): JSX.Element {
 						</Button>
 					</section>
 
-					<section className={styles.incomingEvents}>
+					<section className={styles.incomingEvents} data-testid="eventhome-incoming-events">
 						{/* TODO: Ya lo puse en otro archivo pero va de nuevo: NO debería haber dos h1 en una misma página. */}
 						<h1>{lang.incomingEvents}</h1>
 
-						<div className={styles.underlineBlock}></div>
+						<div className={styles.underlineBlock} data-testid="eventhome-underline-block"></div>
 					</section>
 
-					<section className={styles.eventsContainer}>
+					<section className={styles.eventsContainer} data-testid="eventhome-events-container">
 						{publicEvents.map(event => {
 							return (
 								<EventCard
 									key={event._id}
 									eventId={event._id}
 									eventDateTime={event.datetime}
-									eventUserIsDebtor={userDebtor} //mepa que le voy a tener que mandar el arreglo para que pueda saber si esta blockeado o no para la f isAnotherEventBlocking
+									eventUserIsDebtor={userDebtor}
 									userId={user?.id}
 									eventState={event.state as TEventState}
 									eventData={{
@@ -203,14 +203,14 @@ export function EventHome(): JSX.Element {
 						})}
 					</section>
 
-					<section className={styles.participationInfo}>
+					<section className={styles.participationInfo} data-testid="eventhome-participation-info">
 						<ImageSlider images={eventImages} altText="Event image" />
 
-						<div className={styles.description}>
+						<div className={styles.description} data-testid="eventhome-description">
 							<h1>{lang.participationInfoTitle}</h1>
 
 							<p>{lang.participationInfoDescription}</p>
-							<div className={styles.buttonContainer}>
+							<div className={styles.buttonContainer} data-testid="eventhome-description-btn-container">
 								<Button kind="primary" size="large" onClick={goToFaq}>
 									{' '}
 									{lang.moreAbout}{' '}
@@ -219,11 +219,11 @@ export function EventHome(): JSX.Element {
 						</div>
 					</section>
 
-					<section className={styles.participationSteps}>
-						<div className={styles.container}>
+					<section className={styles.participationSteps} data-testid="eventhome-participation-steps">
+						<div className={styles.container} data-testid="eventhome-steps-container">
 							<h2 className={styles.title}>{lang.participationStepsTitle}</h2>
 
-							<ul className={styles.icons}>
+							<ul className={styles.icons} data-testid="eventhome-steps-icons">
 								{itemStepsData.map((item, index) => (
 									<StepItem
 										key={`step-item-${index}`}
@@ -236,7 +236,7 @@ export function EventHome(): JSX.Element {
 
 							<p>{lang.participationStepsDescriptionPart2}</p>
 
-							<div className={styles.participateButton}>
+							<div className={styles.participateButton} data-testid="eventhome-participate-btn-container">
 								<Button kind="primary" size="large" onClick={handleScrollToStart}>
 									{lang.participateButton}
 								</Button>
