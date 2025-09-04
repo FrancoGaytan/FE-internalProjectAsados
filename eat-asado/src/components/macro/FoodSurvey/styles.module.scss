@@ -1,0 +1,138 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.wrapper {
+  min-width: 580px;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto; /* título arriba a la derecha */
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.modalTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--textMain);
+}
+
+.content {
+  max-height: 360px;
+  overflow: auto;
+  padding-bottom: 12px;
+
+  &::-webkit-scrollbar { width: 4px; height: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,.4); border-radius: 2px; }
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.4) transparent;
+}
+
+.emptyState { display: grid; gap: 12px; justify-items: center; padding: 18px 0; }
+.helperText { color: var(--textMain); opacity: .8; text-align: center; }
+
+.gridHeader, .gridRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr 60px 80px 90px; /* desc | range | num | check | actions */
+  gap: 10px;
+  align-items: center;
+}
+
+.gridHeader {
+  position: sticky;
+  top: 0;
+  padding: 8px 2px 6px;
+  background-color: var(--backgroundMain);
+  color: #fff;
+  z-index: 2;
+
+  span { font-weight: 600; font-size: .9rem; }
+}
+
+.gridBody { display: grid; gap: 8px; padding-top: 6px; }
+
+.colDescription { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.colRange { display: flex; align-items: center; }
+
+.range {
+  width: 100%;
+  appearance: none;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,.15);
+  outline: none;
+
+  &::-webkit-slider-thumb { appearance: none; width: 0; height: 0; }
+  &::-moz-range-thumb { width: 0; height: 0; border: 0; }
+}
+
+.rangeVoted { filter: brightness(1.2); background: rgba(255,255,255,.75); }
+.rangeMuted { background: rgba(255,255,255,.18); }
+
+.colVotes { text-align: center; }
+.voteCount { color: var(--textMain); font-weight: 600; }
+
+.colCheckbox { text-align: center; }
+.checkbox { transform: scale(1.2); transition: filter .2s; }
+.checkboxOn { filter: brightness(1.6); }
+.checkboxOff { opacity: .6; }
+
+.colActions { display: flex; gap: 6px; justify-content: flex-end; }
+
+.iconBtn {
+  width: 28px; height: 28px; border: none; background: transparent; cursor: pointer;
+  display: grid; place-items: center;
+  filter: brightness(1.2);
+  transition: filter .2s ease, transform .08s ease;
+
+  &:hover { filter: brightness(1.6); }
+  &:active { transform: scale(.96); }
+}
+
+/* Usando /public (recomendado) */
+.iconPlus  { width: 20px; height: 20px; background-image: url('../../../.././public/assets/pictures/plus.png');  background-size: contain; background-repeat: no-repeat; }
+.iconEdit  { width: 18px; height: 18px; background-image: url('../../../.././public/assets/pictures/editLogo.png');  background-size: contain; background-repeat: no-repeat; }
+.iconTrash { width: 18px; height: 18px; background-image: url('../../../.././public/assets/pictures/trash.png'); background-size: contain; background-repeat: no-repeat; }
+
+/* Si querés la ruta relativa como tu ejemplo, usa estas (ajusta niveles según tu árbol):
+.iconPlus  { background-image: url('../../../../../public/assets/icons/plus.svg'); }
+.iconEdit  { background-image: url('../../../../../public/assets/icons/edit.svg'); }
+.iconTrash { background-image: url('../../../../../public/assets/icons/trash.svg'); }
+*/
+
+.addRow {
+  display: grid;
+  grid-template-columns: 1fr 34px;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+
+  &.addRowCompact { margin-top: 0; }
+}
+
+.addInput, .editInput {
+  width: 100%;
+  background: rgba(255,255,255,.08);
+  color: var(--textMain);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border .15s ease, box-shadow .15s ease;
+
+  &::placeholder { color: rgba(255,255,255,.55); }
+  &:focus { border-color: rgba(255,255,255,.4); box-shadow: 0 0 0 2px rgba(255,255,255,.08) inset; }
+}
+
+.footer {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+.missingVotes { color: var(--textMain); opacity: .85; }

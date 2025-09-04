@@ -37,7 +37,8 @@ export function CreateEvent(): JSX.Element {
 		shoppingDesignee: [],
 		isPrivate: false,
 		penalization: 0,
-		penalizationStartDate: new Date()
+		penalizationStartDate: new Date(),
+		options: []
 	});
 
 	function handleDinersChange(e: React.ChangeEvent<HTMLInputElement>) {

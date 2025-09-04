@@ -200,7 +200,7 @@
 							align-self: center;
 							margin-left: auto;
 							width: 29px;
-							height: 29px;
+							height: 28px;
 							border-radius: 0;
 							box-shadow: none;
 							background-size: contain;
@@ -209,7 +209,20 @@
 							&:hover {
 								scale: 1.05;
 							}
-							@media #{variables.media-query(max, sm)} {
+						}
+						.surveyEventBtn {
+							margin-bottom: 10px;
+							align-self: center;
+							margin-left: auto;
+							width: 29px;
+							height: 29px;
+							border-radius: 0;
+							box-shadow: none;
+							background-size: contain;
+							background-color: transparent;
+							background-image: url('../../../public/assets/pictures/icons-encuesta.png');
+							&:hover {
+								scale: 1.05;
 							}
 						}
 					}

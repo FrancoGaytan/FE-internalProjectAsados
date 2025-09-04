@@ -35,6 +35,8 @@ import Tooltip from '../../components/micro/Tooltip/Tooltip';
 import ConfirmationFastAprovalForm from '../../components/macro/ConfirmationFastAprovalForm/ConfimationPayForm';
 import AssignationTable from '../../components/macro/AssignationTable/AssignationTable';
 import { EventByIdResponse } from '../../models/event';
+import FoodSurvey from '../../components/macro/FoodSurvey/FoodSurvey';
+import { IOption } from '../../models/options';
 
 export interface FilePreview {
 	uri: string;
@@ -71,6 +73,7 @@ export function Event(): JSX.Element {
 	const [openFilePreview, setOpenFilePreview] = useState<boolean>(false);
 	const [userDebtor, setUserDebtor] = useState<boolean>(false);
 	const [userPrice, setUserPrice] = useState<number>(0);
+	const [modalSurvey, setModalSurvey] = useState<boolean>(false);
 	//faltaria un estado para  el  userHasPaid para el  usuario que esta abriendo el evento, hacerlo junto con el setUserHasUploaded
 	function parseMinutes(minutes: string) {
 		let newMinutes = minutes;
@@ -276,8 +279,16 @@ export function Event(): JSX.Element {
 		setModalAssignation(false);
 	}
 
+	function closeModalSurvey(): void {
+		setModalSurvey(false);
+	}
+
 	function openModalAssignation(): void {
 		setModalAssignation(true);
+	}
+
+	function openModalSurvey(): void {
+		setModalSurvey(true);
 	}
 
 	function openModal(): void {
@@ -548,389 +559,338 @@ export function Event(): JSX.Element {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, []);
-return (
-    <PrivateFormLayout>
-        <div className={styles.content} data-testid="event-content">
-            <section className={styles.backBtnSection} onClick={handleGoToMain} data-testid="event-back-btn-section">
-                <button className={styles.backBtn}></button>
-                <p className={styles.backText}>{lang.backBtn}</p>
-            </section>
+	return (
+		<PrivateFormLayout>
+			<div className={styles.content} data-testid="event-content">
+				<section className={styles.backBtnSection} onClick={handleGoToMain} data-testid="event-back-btn-section">
+					<button className={styles.backBtn}></button>
+					<p className={styles.backText}>{lang.backBtn}</p>
+				</section>
 
-            <section className={styles.header} data-testid="event-header"></section>
-            {!!event && (
-                <section className={styles.event} data-testid="event-main-section">
-                    <h1 className={styles.eventTitle} data-testid="event-title">
-                        {event.title}
-                    </h1>
-                    {isUserIntoEvent() &&
-                        (event.state === EventStatesEnum.CLOSED ||
-                            event.state === EventStatesEnum.READYFORPAYMENT ||
-                            event.state === EventStatesEnum.FINISHED) && (
-                            <Stars iconSize={25} count={5} defaultRating={0} icon={'★'} color="rgb(240, 191, 28)" idEvent={event._id}></Stars>
-                        )}
+				<section className={styles.header} data-testid="event-header"></section>
+				{!!event && (
+					<section className={styles.event} data-testid="event-main-section">
+						<h1 className={styles.eventTitle} data-testid="event-title">
+							{event.title}
+						</h1>
+						{isUserIntoEvent() &&
+							(event.state === EventStatesEnum.CLOSED ||
+								event.state === EventStatesEnum.READYFORPAYMENT ||
+								event.state === EventStatesEnum.FINISHED) && (
+								<Stars iconSize={25} count={5} defaultRating={0} icon={'★'} color="rgb(240, 191, 28)" idEvent={event._id}></Stars>
+							)}
 
-                    {event.isPrivate && (
-                        <section className={styles.eventPrivate} data-testid="event-private-section">
-                            <div className={styles.privateLogo}></div>
-                            <p className={styles.privateDescription}>{lang.privateEvent}</p>
-                        </section>
-                    )}
-                    <main className={styles.eventData} data-testid="event-data-main">
-                        <div className={styles.eventOrganization} data-testid="event-organization">
-                            <section className={styles.eventBtns} data-testid="event-btns-section">
-                                {event.isPrivate && (
-                                    <button
-                                        className={styles.copyLinkToEvent}
-                                        onClick={() => copyLinkEvent()}></button>
-                                )}
-                                {event.organizer?._id === user?.id && (
-                                    <button
-                                        className={styles.editEventBtn}
-                                        onClick={() => editCurrentEvent()}></button>
-                                )}
-                            </section>
+						{event.isPrivate && (
+							<section className={styles.eventPrivate} data-testid="event-private-section">
+								<div className={styles.privateLogo}></div>
+								<p className={styles.privateDescription}>{lang.privateEvent}</p>
+							</section>
+						)}
+						<main className={styles.eventData} data-testid="event-data-main">
+							<div className={styles.eventOrganization} data-testid="event-organization">
+								<section className={styles.eventBtns} data-testid="event-btns-section">
+									{event.isPrivate && <button className={styles.copyLinkToEvent} onClick={() => copyLinkEvent()}></button>}
+									{event.organizer?._id === user?.id && (
+										<button className={styles.editEventBtn} onClick={() => editCurrentEvent()}></button>
+									)}
+								</section>
 
-                            <div className={styles.sectionTitle} data-testid="event-organization-title">
-                                <div className={styles.calendarLogo}></div>
-                                <h3 className={styles.logoTitle}>{lang.organizationTitle}</h3>
-                            </div>
+								<div className={styles.sectionTitle} data-testid="event-organization-title">
+									<div className={styles.calendarLogo}></div>
+									<h3 className={styles.logoTitle}>{lang.organizationTitle}</h3>
+								</div>
 
-                            <h5 className={styles.infoData}>
-                                {lang.date} {getOnlyDate(new Date(event.datetime))}
-                            </h5>
+								<h5 className={styles.infoData}>
+									{lang.date} {getOnlyDate(new Date(event.datetime))}
+								</h5>
 
-                            <h5 className={styles.infoData}>
-                                {lang.time} {getOnlyHour(new Date(event.datetime))}
-                            </h5>
+								<h5 className={styles.infoData}>
+									{lang.time} {getOnlyHour(new Date(event.datetime))}
+								</h5>
 
-                            <h5 className={styles.infoData}>
-                                {lang.organizer} {event.organizer.name}
-                            </h5>
+								<h5 className={styles.infoData}>
+									{lang.organizer} {event.organizer.name}
+								</h5>
 
-                            <h5 className={styles.infoData}>
-                                {lang.penalizationAmount + ':'} {event.penalization ? '$' + event.penalization : lang.noPenalizationAmount}
-                            </h5>
+								<h5 className={styles.infoData}>
+									{lang.penalizationAmount + ':'} {event.penalization ? '$' + event.penalization : lang.noPenalizationAmount}
+								</h5>
 
-                            {event.penalization > 0 && (
-                                <h5 className={styles.infoData}>
-                                    {lang.penalizationStartDate} {getOnlyDate(new Date(event.penalizationStartDate))}
-                                </h5>
-                            )}
+								{event.penalization > 0 && (
+									<h5 className={styles.infoData}>
+										{lang.penalizationStartDate} {getOnlyDate(new Date(event.penalizationStartDate))}
+									</h5>
+								)}
 
-                            {isUserIntoEvent() &&
-                                (event.state === EventStatesEnum.READYFORPAYMENT || event.state === EventStatesEnum.FINISHED) && (
-                                    <h5 className={styles.infoData}>
-                                        {lang.myEventPrice + ':'} {'$' + Math.round(userPrice)}
-                                    </h5>
-                                )}
+								{isUserIntoEvent() &&
+									(event.state === EventStatesEnum.READYFORPAYMENT || event.state === EventStatesEnum.FINISHED) && (
+										<h5 className={styles.infoData}>
+											{lang.myEventPrice + ':'} {'$' + Math.round(userPrice)}
+										</h5>
+									)}
 
-                            <div className={styles.secondRow} data-testid="event-menu-row">
-                                <div className={styles.sectionTitle}>
-                                    <div className={styles.restaurantLogo} />
-                                    <h3 className={styles.logoTitle}>{lang.menu}</h3>
-                                </div>
-                                <h5 className={styles.infoData}>{event.description}</h5>
-                            </div>
+								<div className={styles.secondRow} data-testid="event-menu-row">
+									<div className={styles.sectionTitle}>
+										<div className={styles.restaurantLogo} />
+										<h3 className={styles.logoTitle}>{lang.menu}</h3>
+										{event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
+											<button className={styles.surveyEventBtn} onClick={openModalSurvey}></button>
+										)}
+									</div>
+									<h5 className={styles.infoData}>{event.description}</h5>
+								</div>
 
-                            <div className={styles.secondRow} data-testid="event-purchases-row">
-                                <div className={styles.sectionTitle}>
-                                    <div className={styles.cartLogo}></div>
-                                    <h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
-                                    {event.state === EventStatesEnum.CLOSED && purchasesMade.length > 0 && (
-                                        <button
-                                            className={styles.assignEventBtn}
-                                            onClick={openModalAssignation}></button>
-                                    )}
-                                </div>
-                                {isUserIntoEvent() && (
-                                    <section className={styles.purchasesList} data-testid="event-purchases-list">
-                                        {purchasesMade.map((purchase: IPurchaseReceipt) => (
-                                            <div key={purchase?._id} className={styles.purchasesRow} data-testid="event-purchase-row">
-                                                <span>{purchase.description}</span>
-                                                <span>{purchase.shoppingDesignee.name}</span>
-                                                <span>{'$ ' + purchase.amount}</span>
-                                                <span className={styles.actions} data-testid="event-purchase-actions">
-                                                    {event.shoppingDesignee?.some((d: IUser) => d._id === user?.id) &&
-                                                        event.state !== EventStatesEnum.AVAILABLE &&
-                                                        event.state !== EventStatesEnum.READYFORPAYMENT && (
-                                                            <button
-                                                                className={styles.deleteBtn}
-                                                                onClick={e => {
-                                                                    e.preventDefault();
-                                                                    deletePurchase(purchase);
-                                                                }}></button>
-                                                        )}
-                                                    <button
-                                                        className={styles.previewBtn}
-                                                        onClick={e => {
-                                                            e.preventDefault();
-                                                            PreviewPurchase(purchase);
-                                                        }}></button>
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </section>
-                                )}
-                            </div>
-                        </div>
-                        <div className={styles.eventParticipants} data-testid="event-participants-section">
-                            <div className={styles.sectionTitle}>
-                                <div className={styles.inChargeLogo}></div>
-                                <h3 className={styles.logoTitle}>{lang.inchargeTitle}</h3>
-                            </div>
+								<div className={styles.secondRow} data-testid="event-purchases-row">
+									<div className={styles.sectionTitle}>
+										<div className={styles.cartLogo}></div>
+										<h3 className={styles.logoTitle}>{lang.purchasesMade}</h3>
+										{event.state === EventStatesEnum.CLOSED && purchasesMade.length > 0 && (
+											<button className={styles.assignEventBtn} onClick={openModalAssignation}></button>
+										)}
+									</div>
+									{isUserIntoEvent() && (
+										<section className={styles.purchasesList} data-testid="event-purchases-list">
+											{purchasesMade.map((purchase: IPurchaseReceipt) => (
+												<div key={purchase?._id} className={styles.purchasesRow} data-testid="event-purchase-row">
+													<span>{purchase.description}</span>
+													<span>{purchase.shoppingDesignee.name}</span>
+													<span>{'$ ' + purchase.amount}</span>
+													<span className={styles.actions} data-testid="event-purchase-actions">
+														{event.shoppingDesignee?.some((d: IUser) => d._id === user?.id) &&
+															event.state !== EventStatesEnum.AVAILABLE &&
+															event.state !== EventStatesEnum.READYFORPAYMENT && (
+																<button
+																	className={styles.deleteBtn}
+																	onClick={e => {
+																		e.preventDefault();
+																		deletePurchase(purchase);
+																	}}></button>
+															)}
+														<button
+															className={styles.previewBtn}
+															onClick={e => {
+																e.preventDefault();
+																PreviewPurchase(purchase);
+															}}></button>
+													</span>
+												</div>
+											))}
+										</section>
+									)}
+								</div>
+							</div>
+							<div className={styles.eventParticipants} data-testid="event-participants-section">
+								<div className={styles.sectionTitle}>
+									<div className={styles.inChargeLogo}></div>
+									<h3 className={styles.logoTitle}>{lang.inchargeTitle}</h3>
+								</div>
 
-                            <div className={styles.responsibilitiesSection} data-testid="event-responsibilities-section">
-                                <div className={styles.inChargeOpt} data-testid="event-chef-section">
-                                    <div className={styles.chefDesigneeSection}>
-                                        <h5 className={styles.infoData}>
-                                            {lang.cook}
-                                            {event.chef ? (event.chef?._id === user?.id ? lang.me : event.chef.name) : lang.empty}
-                                        </h5>
-                                        <div className={styles.assignTransitionWrapper} data-testid="event-chef-assign-wrapper">
-                                            {event.chef &&
-                                                event.chef?._id === user?.id &&
-                                                event.state === EventStatesEnum.AVAILABLE &&
-                                                isUserIntoEvent() && (
-                                                    <AssignBtn
-                                                        key={`unassign-${user?.id}`}
-                                                        kind="unAssign"
-                                                        onClick={() => toogleChef()}></AssignBtn>
-                                                )}
+								<div className={styles.responsibilitiesSection} data-testid="event-responsibilities-section">
+									<div className={styles.inChargeOpt} data-testid="event-chef-section">
+										<div className={styles.chefDesigneeSection}>
+											<h5 className={styles.infoData}>
+												{lang.cook}
+												{event.chef ? (event.chef?._id === user?.id ? lang.me : event.chef.name) : lang.empty}
+											</h5>
+											<div className={styles.assignTransitionWrapper} data-testid="event-chef-assign-wrapper">
+												{event.chef &&
+													event.chef?._id === user?.id &&
+													event.state === EventStatesEnum.AVAILABLE &&
+													isUserIntoEvent() && (
+														<AssignBtn
+															key={`unassign-${user?.id}`}
+															kind="unAssign"
+															onClick={() => toogleChef()}></AssignBtn>
+													)}
 
-                                            {!event.chef && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
-                                                <AssignBtn
-                                                    key={`assign-${user?.id}`}
-                                                    kind="assign"
-                                                    onClick={() => toogleChef()}></AssignBtn>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={styles.inChargeOpt} data-testid="event-shopdesignee-section">
-                                    <div className={styles.shoppingDesigneeDescSection}>
-                                        <h5 className={styles.infoData}>
-                                            {lang.buyer}{' '}
-                                            {event.shoppingDesignee.length === 0
-                                                ? lang.empty
-                                                : isUserShoppingDesignee() || !isUserIntoEvent()
-                                                ? lang.assignedOpt
-                                                : event.state === EventStatesEnum.AVAILABLE && lang.addmeOpt}
-                                        </h5>
+												{!event.chef && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
+													<AssignBtn key={`assign-${user?.id}`} kind="assign" onClick={() => toogleChef()}></AssignBtn>
+												)}
+											</div>
+										</div>
+									</div>
+									<div className={styles.inChargeOpt} data-testid="event-shopdesignee-section">
+										<div className={styles.shoppingDesigneeDescSection}>
+											<h5 className={styles.infoData}>
+												{lang.buyer}{' '}
+												{event.shoppingDesignee.length === 0
+													? lang.empty
+													: isUserShoppingDesignee() || !isUserIntoEvent()
+													? lang.assignedOpt
+													: event.state === EventStatesEnum.AVAILABLE && lang.addmeOpt}
+											</h5>
 
-                                        <div className={styles.assignTransitionWrapper} data-testid="event-shopdesignee-assign-wrapper">
-                                            {!event.shoppingDesignee.length && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
-                                                <AssignBtn
-                                                    key="assign"
-                                                    kind="assign"
-                                                    onClick={() => toogleShopDesignee()}></AssignBtn>
-                                            )}
-                                            {Boolean(
-                                                event.shoppingDesignee.length &&
-                                                    event.state === EventStatesEnum.AVAILABLE &&
-                                                    isUserIntoEvent() &&
-                                                    event.shoppingDesignee.find(sd => sd._id === user?.id)
-                                            ) && (
-                                                <AssignBtn
-                                                    key="unassign"
-                                                    kind="unAssign"
-                                                    onClick={() => toogleShopDesignee()}></AssignBtn>
-                                            )}
-                                            {event.shoppingDesignee.length > 0 &&
-                                                event.state === EventStatesEnum.AVAILABLE &&
-                                                isUserIntoEvent() &&
-                                                !event.shoppingDesignee.some((d: IUser) => d._id === user?.id) && (
-                                                    <AssignBtn
-                                                        key="add"
-                                                        kind="add"
-                                                        onClick={() => toogleShopDesignee()}></AssignBtn>
-                                                )}
-                                        </div>
-                                    </div>
-                                    <div className={styles.shoppingDesigneeSection} data-testid="event-shopdesignee-list">
-                                        {event.shoppingDesignee.length
-                                            ? event.shoppingDesignee.map((designee: IUser, i: number) => (
-                                                    <div
-                                                        key={designee._id}
-                                                        className={styles.singleDesigneeSection}
-                                                        data-testid="event-shopdesignee-item">
-                                                        <h5>{designee._id === user?.id ? lang.meOpt : designee.name}</h5>
-                                                    </div>
-                                              ))
-                                            : ''}
-                                    </div>
-                                </div>
-                            </div>
+											<div className={styles.assignTransitionWrapper} data-testid="event-shopdesignee-assign-wrapper">
+												{!event.shoppingDesignee.length && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
+													<AssignBtn key="assign" kind="assign" onClick={() => toogleShopDesignee()}></AssignBtn>
+												)}
+												{Boolean(
+													event.shoppingDesignee.length &&
+														event.state === EventStatesEnum.AVAILABLE &&
+														isUserIntoEvent() &&
+														event.shoppingDesignee.find(sd => sd._id === user?.id)
+												) && <AssignBtn key="unassign" kind="unAssign" onClick={() => toogleShopDesignee()}></AssignBtn>}
+												{event.shoppingDesignee.length > 0 &&
+													event.state === EventStatesEnum.AVAILABLE &&
+													isUserIntoEvent() &&
+													!event.shoppingDesignee.some((d: IUser) => d._id === user?.id) && (
+														<AssignBtn key="add" kind="add" onClick={() => toogleShopDesignee()}></AssignBtn>
+													)}
+											</div>
+										</div>
+										<div className={styles.shoppingDesigneeSection} data-testid="event-shopdesignee-list">
+											{event.shoppingDesignee.length
+												? event.shoppingDesignee.map((designee: IUser, i: number) => (
+														<div
+															key={designee._id}
+															className={styles.singleDesigneeSection}
+															data-testid="event-shopdesignee-item">
+															<h5>{designee._id === user?.id ? lang.meOpt : designee.name}</h5>
+														</div>
+												  ))
+												: ''}
+										</div>
+									</div>
+								</div>
 
-                            <div className={styles.secondRow} data-testid="event-participants-row">
-                                <div className={styles.participantsTitle}></div>
+								<div className={styles.secondRow} data-testid="event-participants-row">
+									<div className={styles.participantsTitle}></div>
 
-                                <div className={styles.sectionTitle}>
-                                    <div className={styles.participantsLogo} />
-                                    <h3 className={styles.logoTitle}>
-                                        {lang.diners} {event.members.length}/{event.memberLimit}
-                                    </h3>
-                                </div>
+									<div className={styles.sectionTitle}>
+										<div className={styles.participantsLogo} />
+										<h3 className={styles.logoTitle}>
+											{lang.diners} {event.members.length}/{event.memberLimit}
+										</h3>
+									</div>
 
-                                <section className={styles.infoParticipants} data-testid="event-participants-list">
-                                    {eventParticipants.map((member: EventUserResponse, i: number) => (
-                                        <div key={`participants-key-${i}`} className={styles.infoData} data-testid="event-participant-item">
-                                            {showDiets() ? (
-                                                <Tooltip
-                                                    infoText={!!member.specialDiet.length ? member.specialDiet.join(', ') : lang.noSpecialDiet}>
-                                                    <h5 className={styles.infoDataUsername}>
-                                                        {member.userName} {member.userLastName}
-                                                    </h5>
-                                                </Tooltip>
-                                            ) : (
-                                                <h5 className={styles.infoDataUsername}>
-                                                    {member.userName} {member.userLastName}
-                                                </h5>
-                                            )}
+									<section className={styles.infoParticipants} data-testid="event-participants-list">
+										{eventParticipants.map((member: EventUserResponse, i: number) => (
+											<div key={`participants-key-${i}`} className={styles.infoData} data-testid="event-participant-item">
+												{showDiets() ? (
+													<Tooltip
+														infoText={!!member.specialDiet.length ? member.specialDiet.join(', ') : lang.noSpecialDiet}>
+														<h5 className={styles.infoDataUsername}>
+															{member.userName} {member.userLastName}
+														</h5>
+													</Tooltip>
+												) : (
+													<h5 className={styles.infoDataUsername}>
+														{member.userName} {member.userLastName}
+													</h5>
+												)}
 
-                                            {showPaymentData() &&
-                                                (member.hasReceiptApproved || currentUserHasNoDebts(member) ? (
-                                                    <h5 className={styles.infoDataUsernamePayed}>{lang.paidNoti}</h5>
-                                                ) : member.hasUploaded ? (
-                                                    currentUserPaysHasToPayMe(member) ? (
-                                                        <Button
-                                                            className={styles.btnEvent}
-                                                            kind="validation"
-                                                            size="micro"
-                                                            onClick={() => {
-                                                                setTransferReceiptId(member.transferReceipt as string);
-                                                                setUserToApprove(member.userId);
-                                                                openValidationPopup();
-                                                            }}>
-                                                            {lang.validateBtn}
-                                                        </Button>
-                                                    ) : (
-                                                        <h5 className={styles.waitingValidationPay}>{lang.awaitingNoti}</h5>
-                                                    )
-                                                ) : (
-                                                    <>
-                                                        <h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
-                                                        {currentUserPaysHasToPayMe(member) && (
-                                                            <button
-                                                                className={styles.fastAproveBtn}
-                                                                onClick={e => {
-                                                                    e.preventDefault();
-                                                                    openModalFastAproval(member.userId);
-                                                                }}></button>
-                                                        )}
-                                                    </>
-                                                ))}
-                                        </div>
-                                    ))}
-                                </section>
-                            </div>
-                        </div>
-                    </main>
-                    <section className={styles.btnSection} data-testid="event-main-btn-section">
-                        {event.state === EventStatesEnum.AVAILABLE && !isLoading && (
-                            <div data-testid="event-participation-btn-wrapper">
-                                {!isUserIntoEvent() && isEventFull() ? (
-                                    <Button className={styles.btnEvent} kind="tertiary" size="short">
-                                        {EventStatesEnum.FULL}
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        className={styles.btnEvent}
-                                        kind="secondary"
-                                        size="short"
-                                        onClick={() => toogleParticipation()}>
-                                        {isUserIntoEvent() ? lang.getOff : !isEventFull() && lang.getInto}
-                                    </Button>
-                                )}
-                            </div>
-                        )}
-                        {event.organizer && event.organizer?._id === user?.id && (
-                            <Button
-                                className={styles.btnEvent}
-                                kind="secondary"
-                                size="short"
-                                onClick={() => deleteTheEvent()}>
-                                {lang.deleteEventBtn}
-                            </Button>
-                        )}
-                        {event.organizer &&
-                            isUserIntoEvent() &&
-                            (event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
-                            event.state !== 'finished' &&
-                            event.state !== EventStatesEnum.READYFORPAYMENT &&
-                            event.state !== EventStatesEnum.AVAILABLE &&
-                            event.purchaseReceipts.length > 0 && (
-                                <Button
-                                    className={styles.btnEvent}
-                                    kind="secondary"
-                                    size="short"
-                                    onClick={() => setEventToReadyForPay()}>
-                                    {lang.readyForPaymentBtn}
-                                </Button>
-                            )}
-                        {event.organizer &&
-                            isUserIntoEvent() &&
-                            (event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
-                            event.state !== 'finished' &&
-                            event.state !== EventStatesEnum.CLOSED && (
-                                <Button
-                                    className={styles.btnEvent}
-                                    kind="secondary"
-                                    size="short"
-                                    onClick={() => closeEvent()}>
-                                    {lang.closeEventBtn}
-                                </Button>
-                            )}
-                        {event.organizer &&
-                            isUserIntoEvent() &&
-                            (event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
-                            event.state === EventStatesEnum.CLOSED && (
-                                <Button
-                                    className={styles.btnEvent}
-                                    kind="secondary"
-                                    size="short"
-                                    onClick={() => reopenEvent()}>
-                                    {lang.reopenEventBtn}
-                                </Button>
-                            )}
-                        {event.shoppingDesignee &&
-                            event.state === EventStatesEnum.READYFORPAYMENT &&
-                            isUserIntoEvent() &&
-                            paymentInfo.amount !== 0 &&
-                            (event.purchaseReceipts.length as number) !== 0 &&
-                            (!checkIfUserHasUploaded() ? (
-                                <Button
-                                    className={styles.btnEvent}
-                                    kind="primary"
-                                    size="short"
-                                    onClick={() => payCheck()}>
-                                    {lang.payBtn}
-                                </Button>
-                            ) : (
-                                !checkIfUserHasPaid() && (
-                                    <Button
-                                        className={styles.btnEvent}
-                                        kind="secondary"
-                                        size="short"
-                                        onClick={() => payCheck()}>
-                                        {lang.modifyPay}
-                                    </Button>
-                                )
-                            ))}
-                        {event.shoppingDesignee &&
-                            event.shoppingDesignee.some((d: IUser) => d._id === user?.id) &&
-                            event.state === EventStatesEnum.CLOSED && (
-                                <Button
-                                    className={styles.btnEvent}
-                                    kind="primary"
-                                    size="short"
-                                    onClick={() => openModalPurchaseRecipt()}>
-                                    {lang.loadPurchase}
-                                </Button>
-                            )}
-                    </section>
-                </section>
-            )}
-        </div>
+												{showPaymentData() &&
+													(member.hasReceiptApproved || currentUserHasNoDebts(member) ? (
+														<h5 className={styles.infoDataUsernamePayed}>{lang.paidNoti}</h5>
+													) : member.hasUploaded ? (
+														currentUserPaysHasToPayMe(member) ? (
+															<Button
+																className={styles.btnEvent}
+																kind="validation"
+																size="micro"
+																onClick={() => {
+																	setTransferReceiptId(member.transferReceipt as string);
+																	setUserToApprove(member.userId);
+																	openValidationPopup();
+																}}>
+																{lang.validateBtn}
+															</Button>
+														) : (
+															<h5 className={styles.waitingValidationPay}>{lang.awaitingNoti}</h5>
+														)
+													) : (
+														<>
+															<h5 className={styles.infoDataUsernameDidntPay}>{lang.pendingNoti}</h5>
+															{currentUserPaysHasToPayMe(member) && (
+																<button
+																	className={styles.fastAproveBtn}
+																	onClick={e => {
+																		e.preventDefault();
+																		openModalFastAproval(member.userId);
+																	}}></button>
+															)}
+														</>
+													))}
+											</div>
+										))}
+									</section>
+								</div>
+							</div>
+						</main>
+						<section className={styles.btnSection} data-testid="event-main-btn-section">
+							{event.state === EventStatesEnum.AVAILABLE && !isLoading && (
+								<div data-testid="event-participation-btn-wrapper">
+									{!isUserIntoEvent() && isEventFull() ? (
+										<Button className={styles.btnEvent} kind="tertiary" size="short">
+											{EventStatesEnum.FULL}
+										</Button>
+									) : (
+										<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => toogleParticipation()}>
+											{isUserIntoEvent() ? lang.getOff : !isEventFull() && lang.getInto}
+										</Button>
+									)}
+								</div>
+							)}
+							{event.organizer && event.organizer?._id === user?.id && (
+								<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => deleteTheEvent()}>
+									{lang.deleteEventBtn}
+								</Button>
+							)}
+							{event.organizer &&
+								isUserIntoEvent() &&
+								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
+								event.state !== 'finished' &&
+								event.state !== EventStatesEnum.READYFORPAYMENT &&
+								event.state !== EventStatesEnum.AVAILABLE &&
+								event.purchaseReceipts.length > 0 && (
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => setEventToReadyForPay()}>
+										{lang.readyForPaymentBtn}
+									</Button>
+								)}
+							{event.organizer &&
+								isUserIntoEvent() &&
+								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
+								event.state !== 'finished' &&
+								event.state !== EventStatesEnum.CLOSED && (
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => closeEvent()}>
+										{lang.closeEventBtn}
+									</Button>
+								)}
+							{event.organizer &&
+								isUserIntoEvent() &&
+								(event.organizer?._id === user?.id || event.shoppingDesignee.some((d: IUser) => d._id === user?.id)) &&
+								event.state === EventStatesEnum.CLOSED && (
+									<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => reopenEvent()}>
+										{lang.reopenEventBtn}
+									</Button>
+								)}
+							{event.shoppingDesignee &&
+								event.state === EventStatesEnum.READYFORPAYMENT &&
+								isUserIntoEvent() &&
+								paymentInfo.amount !== 0 &&
+								(event.purchaseReceipts.length as number) !== 0 &&
+								(!checkIfUserHasUploaded() ? (
+									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => payCheck()}>
+										{lang.payBtn}
+									</Button>
+								) : (
+									!checkIfUserHasPaid() && (
+										<Button className={styles.btnEvent} kind="secondary" size="short" onClick={() => payCheck()}>
+											{lang.modifyPay}
+										</Button>
+									)
+								))}
+							{event.shoppingDesignee &&
+								event.shoppingDesignee.some((d: IUser) => d._id === user?.id) &&
+								event.state === EventStatesEnum.CLOSED && (
+									<Button className={styles.btnEvent} kind="primary" size="short" onClick={() => openModalPurchaseRecipt()}>
+										{lang.loadPurchase}
+									</Button>
+								)}
+						</section>
+					</section>
+				)}
+			</div>
 
 			{event && (
 				<Modal isOpen={modalPaycheckState} closeModal={closeModal} data-testid="event-modal-paycheck">
@@ -983,6 +943,18 @@ return (
 						refetchEvent();
 					}}></ConfirmationFastAprovalForm>
 			</Modal>
+
+			{event && user && (
+				<Modal isOpen={modalSurvey} closeModal={closeModalSurvey} data-testid="event-modal-survey">
+					<FoodSurvey
+						eventId={event._id}
+						userId={user.id}
+						options={event.options as IOption[]}
+						participantsCount={event.members.length}
+						onOptionsChange={opts => setEvent((e: any) => ({ ...e, options: opts }))}
+					/>
+				</Modal>
+			)}
 
 			<Modal isOpen={modalAssignation} closeModal={closeModalAssignation} data-testid="event-modal-assignation">
 				<AssignationTable
