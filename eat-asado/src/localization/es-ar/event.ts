@@ -37,5 +37,7 @@ export const event = Object.seal({
 	confirmChangeBtn: 'Confirmar Cambio',
 	purchasesMadeTitle: 'Compras realizadas',
 	assignationsUpdatedSuccessfully: 'Asignaciones actualizadas correctamente',
-	errorUpdatingAssignations: 'Ocurrió un error al guardar las asignaciones.'
+	errorUpdatingAssignations: 'Ocurrió un error al guardar las asignaciones.',
+	pendingTransferWarning: 'Tienes una transferencia pendiente de aprobación para el evento ',
+	goToEvent: 'Ir al Evento'
 });

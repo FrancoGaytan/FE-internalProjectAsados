@@ -54,3 +54,8 @@ export async function isUserDebtor(idUser: string, signal?: AbortSignal): Promis
 	const url = `/users/isDebtor/${idUser}`;
 	return await _get(url, signal);
 }
+
+export async function hasPendingTransfers(idUser: string, signal?: AbortSignal): Promise<Array<string>> {
+	const url = `/users/hasPendingTransfers/${idUser}`;
+	return await _get(url, signal);
+}

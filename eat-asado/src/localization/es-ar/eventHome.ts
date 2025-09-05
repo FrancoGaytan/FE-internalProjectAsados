@@ -97,5 +97,6 @@ export const eventHome = Object.seal({
 	backBtn: 'VOLVER',
 	eventWithApprovedReceiptsCannotBeReclosed: 'El evento con recibos aprobados no puede volver al estado previo',
 	userDebtorWarning: 'No podés inscribirte a un evento si tenés deudas pendientes',
-	myEventPrice: 'Costo del evento'
+	myEventPrice: 'Costo del evento',
+	userHasPendingApprovals: 'Tenés aprobaciones pendientes, evento: '
 });

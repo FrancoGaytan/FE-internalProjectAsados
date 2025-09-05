@@ -6,11 +6,15 @@ import EventCard from '../../components/macro/EventCard/EventCard';
 import { TEventState } from '../../types/eventState';
 import { useEvent } from '../../stores/EventContext';
 import { useNavigate } from 'react-router-dom';
-import { getPublicAndPrivateEvents, getPublicEvents, isUserDebtor } from '../../service';
+import { getPublicAndPrivateEvents, getPublicEvents, hasPendingTransfers, isUserDebtor } from '../../service';
 import { useAuth } from '../../stores/AuthContext';
 import ImageSlider from '../../components/macro/Slider/ImageSlider';
 import { eventImages } from '../../utils/eventImages';
 import styles from './styles.module.scss';
+import { AlertTypes } from '../../components/micro/AlertPopup/AlertPopup';
+import { useAlert } from '../../stores/AlertContext';
+import Modal from '../../components/macro/Modal/Modal';
+import PendingApprovalWarning from '../../components/macro/PendingApprovalWarning/PendingApprovalWarning';
 
 interface IStepItem {
 	title: string;
@@ -25,6 +29,8 @@ export function EventHome(): JSX.Element {
 	const navigate = useNavigate();
 	const [userDebtor, setUserDebtor] = useState<string[]>([]);
 	const [isScrolling, setIsScrolling] = useState(false);
+	const { setAlert } = useAlert();
+	const [modalPendingTransfer, setModalPendingTransfer] = useState<string[]>([]);
 
 	const { user } = useAuth();
 
@@ -48,6 +54,10 @@ export function EventHome(): JSX.Element {
 		});
 		setIsScrolling(true);
 	};
+
+	function closeModalPendingTransfer(): void {
+		setModalPendingTransfer([]);
+	}
 
 	/**
 	 * Fetches the public events when page initialize.
@@ -89,6 +99,19 @@ export function EventHome(): JSX.Element {
 			});
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user]);
+
+	useEffect(() => {
+		if (!user) {
+			return;
+		}
+		hasPendingTransfers(user?.id as string)
+			.then((res: Array<string>) => {
+				setModalPendingTransfer(res);
+			})
+			.catch(e => {
+				console.error('Catch in context: ', e);
+			});
 	}, [user]);
 
 	useEffect(() => {
@@ -135,87 +158,97 @@ export function EventHome(): JSX.Element {
 		};
 	}, []);
 	return (
-		<PrivateFormLayout>
-			<div className={styles.content}>
-				<section className={styles.header}>
-					<Button
-						kind="primary"
-						size="large"
-						onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}
-						disabled={userDebtor?.length > 0}>
-						{lang.newEventButton}
-					</Button>
-				</section>
+		<>
+			<PrivateFormLayout>
+				<div className={styles.content} data-testid="eventhome-content">
+					<section className={styles.header} data-testid="eventhome-header">
+						<Button
+							kind="primary"
+							size="large"
+							onClick={!!user?.id ? () => navigate('/createEvent/new') : () => navigate('/login')}
+							disabled={userDebtor?.length > 0}>
+							{lang.newEventButton}
+						</Button>
+					</section>
 
-				<section className={styles.incomingEvents}>
-					{/* TODO: Ya lo puse en otro archivo pero va de nuevo: NO debería haber dos h1 en una misma página. */}
-					<h1>{lang.incomingEvents}</h1>
+					<section className={styles.incomingEvents} data-testid="eventhome-incoming-events">
+						{/* TODO: Ya lo puse en otro archivo pero va de nuevo: NO debería haber dos h1 en una misma página. */}
+						<h1>{lang.incomingEvents}</h1>
 
-					<div className={styles.underlineBlock}></div>
-				</section>
+						<div className={styles.underlineBlock} data-testid="eventhome-underline-block"></div>
+					</section>
 
-				<section className={styles.eventsContainer}>
-					{publicEvents.map(event => {
-						return (
-							<EventCard
-								key={event._id}
-								eventId={event._id}
-								eventDateTime={event.datetime}
-								eventUserIsDebtor={userDebtor} //mepa que le voy a tener que mandar el arreglo para que pueda saber si esta blockeado o no para la f isAnotherEventBlocking
-								userId={user?.id}
-								eventState={event.state as TEventState}
-								eventData={{
-									eventTitle: event.title,
-									eventCook: event.chef,
-									eventShoppingDesignees: event.shoppingDesignee ?? [],
-									eventDescription: event.description,
-									eventParticipants: event.members,
-									eventParticipantLimit: event.memberLimit,
-									eventAvgRate: event.ratings.avgScore,
-									eventRatingsAmount: event.ratings.ratingsAmount
-								}}
-							/>
-						);
-					})}
-				</section>
+					<section className={styles.eventsContainer} data-testid="eventhome-events-container">
+						{publicEvents.map(event => {
+							return (
+								<EventCard
+									key={event._id}
+									eventId={event._id}
+									eventDateTime={event.datetime}
+									eventUserIsDebtor={userDebtor}
+									userId={user?.id}
+									eventState={event.state as TEventState}
+									eventData={{
+										eventTitle: event.title,
+										eventCook: event.chef,
+										eventShoppingDesignees: event.shoppingDesignee ?? [],
+										eventDescription: event.description,
+										eventParticipants: event.members,
+										eventParticipantLimit: event.memberLimit,
+										eventAvgRate: event.ratings.avgScore,
+										eventRatingsAmount: event.ratings.ratingsAmount
+									}}
+								/>
+							);
+						})}
+					</section>
 
-				<section className={styles.participationInfo}>
-					<ImageSlider images={eventImages} altText="Event image" />
+					<section className={styles.participationInfo} data-testid="eventhome-participation-info">
+						<ImageSlider images={eventImages} altText="Event image" />
 
-					<div className={styles.description}>
-						<h1>{lang.participationInfoTitle}</h1>
+						<div className={styles.description} data-testid="eventhome-description">
+							<h1>{lang.participationInfoTitle}</h1>
 
-						<p>{lang.participationInfoDescription}</p>
-						<div className={styles.buttonContainer}>
-							<Button kind="primary" size="large" onClick={goToFaq}>
-								{' '}
-								{lang.moreAbout}{' '}
-							</Button>
+							<p>{lang.participationInfoDescription}</p>
+							<div className={styles.buttonContainer} data-testid="eventhome-description-btn-container">
+								<Button kind="primary" size="large" onClick={goToFaq}>
+									{' '}
+									{lang.moreAbout}{' '}
+								</Button>
+							</div>
 						</div>
-					</div>
-				</section>
+					</section>
 
-				<section className={styles.participationSteps}>
-					<div className={styles.container}>
-						<h2 className={styles.title}>{lang.participationStepsTitle}</h2>
+					<section className={styles.participationSteps} data-testid="eventhome-participation-steps">
+						<div className={styles.container} data-testid="eventhome-steps-container">
+							<h2 className={styles.title}>{lang.participationStepsTitle}</h2>
 
-						<ul className={styles.icons}>
-							{itemStepsData.map((item, index) => (
-								<StepItem key={`step-item-${index}`} title={item.title} description={item.description} imagePath={item.imagePath} />
-							))}
-						</ul>
+							<ul className={styles.icons} data-testid="eventhome-steps-icons">
+								{itemStepsData.map((item, index) => (
+									<StepItem
+										key={`step-item-${index}`}
+										title={item.title}
+										description={item.description}
+										imagePath={item.imagePath}
+									/>
+								))}
+							</ul>
 
-						<p>{lang.participationStepsDescriptionPart2}</p>
+							<p>{lang.participationStepsDescriptionPart2}</p>
 
-						<div className={styles.participateButton}>
-							<Button kind="primary" size="large" onClick={handleScrollToStart}>
-								{lang.participateButton}
-							</Button>
+							<div className={styles.participateButton} data-testid="eventhome-participate-btn-container">
+								<Button kind="primary" size="large" onClick={handleScrollToStart}>
+									{lang.participateButton}
+								</Button>
+							</div>
 						</div>
-					</div>
-				</section>
-			</div>
-		</PrivateFormLayout>
+					</section>
+				</div>
+			</PrivateFormLayout>
+			<Modal isOpen={modalPendingTransfer.length > 0} closeModal={closeModalPendingTransfer}>
+				<PendingApprovalWarning eventId={modalPendingTransfer[0] as string} closeModal={closeModalPendingTransfer} />
+			</Modal>
+		</>
 	);
 }
 

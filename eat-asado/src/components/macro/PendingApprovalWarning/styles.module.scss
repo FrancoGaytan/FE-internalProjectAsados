@@ -1,0 +1,29 @@
+@use '/src/styles/variables' as variables;
+@use '/src/styles/shared';
+@use '/src/styles/custom-properties';
+
+.popupContainer {
+	.popupTitle {
+		color: white;
+		font-size: 22px;
+		font-family: var(--primaryFont);
+		margin-bottom: 18px;
+		text-align: center;
+		line-height: 1.3;
+	}
+
+	.eventName {
+		color: var(--primaryFont);
+		font-size: 20px;
+		font-family: var(--primaryFont);
+		font-weight: bold;
+		margin-bottom: 24px;
+		text-align: center;
+	}
+
+	.btnSection {
+		display: flex;
+		justify-content: center;
+		margin-top: 10px;
+	}
+}

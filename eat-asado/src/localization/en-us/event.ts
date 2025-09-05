@@ -37,5 +37,7 @@ export const event = Object.seal({
 	confirmChangeBtn: 'Confirm Change',
 	purchasesMadeTitle: 'Purchases Made',
 	assignationsUpdatedSuccessfully: 'Assignments updated successfully',
-	errorUpdatingAssignations: 'There has been an error updating assignments'
+	errorUpdatingAssignations: 'There has been an error updating assignments',
+	pendingTransferWarning: 'You have a pending transfer approval for the event ',
+	goToEvent: 'Go to the Event'
 });
