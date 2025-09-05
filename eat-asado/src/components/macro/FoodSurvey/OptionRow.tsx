@@ -21,7 +21,12 @@ export default function OptionRow({ option, userId, participantsCount, onToggleV
   return (
     <div className={styles.gridRow}>
       {/* col 1: descripción editable */}
-      <div className={styles.colDescription}>
+      <div
+        className={styles.colDescription}
+        onClick={() => !editing && setEditing(true)}
+        tabIndex={0}
+        style={{ cursor: editing ? 'text' : 'pointer' }}
+      >
         {editing ? (
           <input
             autoFocus
@@ -77,9 +82,6 @@ export default function OptionRow({ option, userId, participantsCount, onToggleV
 
       {/* col 5: acciones */}
       <div className={styles.colActions}>
-        <button className={styles.iconBtn} aria-label="Editar opción" onClick={() => setEditing(v => !v)}>
-          <span className={styles.iconEdit} />
-        </button>
         <button className={styles.iconBtn} aria-label="Eliminar opción" onClick={onDelete}>
           <span className={styles.iconTrash} />
         </button>

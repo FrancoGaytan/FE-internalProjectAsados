@@ -2,137 +2,325 @@
 @use '/src/styles/shared';
 @use '/src/styles/custom-properties';
 
+/* ===== Contenedor general del modal de encuesta ===== */
 .wrapper {
-  min-width: 580px;
+    width: min(96vw, 560px);
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
+/* ===== Header (título arriba a la derecha) ===== */
 .header {
-  display: grid;
-  grid-template-columns: 1fr auto; /* título arriba a la derecha */
-  align-items: center;
-  margin-bottom: 8px;
+    display: flex;
 }
 
 .modalTitle {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--textMain);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--textMain);
 }
 
+/* ===== Contenido scrollable ===== */
 .content {
-  max-height: 360px;
-  overflow: auto;
-  padding-bottom: 12px;
+    max-height: min(60vh, 420px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px 14px 0px;
 
-  &::-webkit-scrollbar { width: 4px; height: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,.4); border-radius: 2px; }
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,.4) transparent;
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 2px;
+    }
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 }
 
-.emptyState { display: grid; gap: 12px; justify-items: center; padding: 18px 0; }
-.helperText { color: var(--textMain); opacity: .8; text-align: center; }
+/* ===== Estado vacío ===== */
+.emptyState {
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+    padding: 10px 0 4px;
+}
 
-.gridHeader, .gridRow {
-  display: grid;
-  grid-template-columns: 1.2fr 1.5fr 60px 80px 90px; /* desc | range | num | check | actions */
-  gap: 10px;
-  align-items: center;
+.helperText {
+    color: var(--textMain);
+    font-size: small;
+    opacity: 0.85;
+    text-align: center;
+    margin: 0 8px;
+    max-width: 48ch;
+    text-wrap: balance;
+}
+
+/* ===== Grid (cabecera y filas) ===== */
+.gridHeader,
+.gridRow {
+    display: grid;
+    grid-template-columns: 1.1fr minmax(140px, 1.2fr) 20px 20px 20px; /* desc | range | # | check | acciones */
+    gap: 8px;
+    align-items: center;
 }
 
 .gridHeader {
-  position: sticky;
-  top: 0;
-  padding: 8px 2px 6px;
-  background-color: var(--backgroundMain);
-  color: #fff;
-  z-index: 2;
+    position: sticky;
+    top: 0;
+    padding: 6px 2px;
+    background-color: var(--backgroundMain);
+    color: #fff;
+    z-index: 2;
 
-  span { font-weight: 600; font-size: .9rem; }
+    span {
+        font-weight: 600;
+        font-size: 0.88rem;
+    }
 }
 
-.gridBody { display: grid; gap: 8px; padding-top: 6px; }
+.gridBody {
+    display: grid;
+    gap: 6px;
+    padding-top: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 
-.colDescription { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    &::-webkit-scrollbar {
+        width: 4px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 2px;
+    }
+}
 
-.colRange { display: flex; align-items: center; }
+.colDescription {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.colRange {
+    display: flex;
+    align-items: center;
+}
+.colVotes {
+    text-align: center;
+    max-width: fit-content;
+}
+.colCheckbox {
+    text-align: center;
+    max-width: fit-content;
+}
+.colActions {
+    display: flex;
+    gap: 2px;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: fit-content;
+}
 
+/* ===== Controles ===== */
 .range {
-  width: 100%;
-  appearance: none;
-  height: 6px;
-  border-radius: 4px;
-  background: rgba(255,255,255,.15);
-  outline: none;
+    width: 100%;
+    appearance: none;
+    height: 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    outline: none;
 
-  &::-webkit-slider-thumb { appearance: none; width: 0; height: 0; }
-  &::-moz-range-thumb { width: 0; height: 0; border: 0; }
+    &::-webkit-slider-thumb {
+        appearance: none;
+        width: 0;
+        height: 0;
+    }
+    &::-moz-range-thumb {
+        width: 0;
+        height: 0;
+        border: 0;
+    }
+}
+.rangeVoted {
+    filter: brightness(1.2);
+    background: rgba(255, 255, 255, 0.75);
+}
+.rangeMuted {
+    background: rgba(255, 255, 255, 0.18);
 }
 
-.rangeVoted { filter: brightness(1.2); background: rgba(255,255,255,.75); }
-.rangeMuted { background: rgba(255,255,255,.18); }
+.colVotes .voteCount {
+    color: var(--textMain);
+    font-weight: 600;
+}
 
-.colVotes { text-align: center; }
-.voteCount { color: var(--textMain); font-weight: 600; }
+.checkbox {
+    transform: scale(1.1);
+    transition: filter 0.2s;
+}
+.checkboxOn {
+    filter: brightness(1.6);
+}
+.checkboxOff {
+    opacity: 0.65;
+}
 
-.colCheckbox { text-align: center; }
-.checkbox { transform: scale(1.2); transition: filter .2s; }
-.checkboxOn { filter: brightness(1.6); }
-.checkboxOff { opacity: .6; }
-
-.colActions { display: flex; gap: 6px; justify-content: flex-end; }
-
+/* ===== Botones de icono ===== */
 .iconBtn {
-  width: 28px; height: 28px; border: none; background: transparent; cursor: pointer;
-  display: grid; place-items: center;
-  filter: brightness(1.2);
-  transition: filter .2s ease, transform .08s ease;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    filter: brightness(1.2);
+    transition: filter 0.2s ease, transform 0.08s ease;
+    margin: 0;
 
-  &:hover { filter: brightness(1.6); }
-  &:active { transform: scale(.96); }
+    &:hover {
+        filter: brightness(1.6);
+    }
+    &:active {
+        transform: scale(0.96);
+    }
 }
 
-/* Usando /public (recomendado) */
-.iconPlus  { width: 20px; height: 20px; background-image: url('../../../.././public/assets/pictures/plus.png');  background-size: contain; background-repeat: no-repeat; }
-.iconEdit  { width: 18px; height: 18px; background-image: url('../../../.././public/assets/pictures/editLogo.png');  background-size: contain; background-repeat: no-repeat; }
-.iconTrash { width: 18px; height: 18px; background-image: url('../../../.././public/assets/pictures/trash.png'); background-size: contain; background-repeat: no-repeat; }
+/* Rutas a tus imágenes en /public */
+.iconPlus {
+    width: 25px;
+    height: 25px;
+    background-image: url('../../../.././public/assets/pictures/plus.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.iconEdit {
+    width: 16px;
+    height: 16px;
+    background-image: url('../../../.././public/assets/pictures/editLogo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.iconTrash {
+    width: 16px;
+    height: 16px;
+    background-image: url('../../../.././public/assets/pictures/trash.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
 
-/* Si querés la ruta relativa como tu ejemplo, usa estas (ajusta niveles según tu árbol):
-.iconPlus  { background-image: url('../../../../../public/assets/icons/plus.svg'); }
-.iconEdit  { background-image: url('../../../../../public/assets/icons/edit.svg'); }
-.iconTrash { background-image: url('../../../../../public/assets/icons/trash.svg'); }
-*/
-
+/* ===== Add option: botón + dentro del input ===== */
 .addRow {
-  display: grid;
-  grid-template-columns: 1fr 34px;
-  gap: 8px;
-  align-items: center;
-  margin-top: 8px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 6px;
+    position: relative;
 
-  &.addRowCompact { margin-top: 0; }
+    &.addRowCompact {
+        margin-top: 0;
+    }
 }
 
-.addInput, .editInput {
-  width: 100%;
+.addInput,
+.editInput {
+    flex: 1 1 auto;
+    min-width: 80px;
+    max-width: 100%;
+    height: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--textMain);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 6px 12px;
+    outline: none;
+    transition: border 0.15s ease, box-shadow 0.15s ease;
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.55);
+    }
+    &:focus {
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
+    }
+}
+
+.addRow .iconBtn {
+    width: 28px;
+    height: 28px;
+    margin-left: 8px;
+    position: static;
+    z-index: 2;
+}
+
+/* ===== Footer ===== */
+.footer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    align-items: center;
+    margin-top: 30px;
+}
+.missingVotes {
+    color: var(--textMain);
+    opacity: 0.9;
+    text-align: center;
+}
+
+/* ===== Responsive (≤ 560px) ===== */
+@media #{variables.media-query(max, sm)} {
+    .gridHeader {
+        display: none;
+    }
+    .gridRow {
+        grid-template-columns: 1fr 56px;
+        gap: 4px;
+    }
+    .colDescription {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        word-break: break-word;
+        min-width: 80px;
+        max-width: 220px;
+    }
+    .colRange {
+        grid-area: range;
+    }
+    .colVotes {
+        grid-area: votes;
+        text-align: left;
+    }
+    .colCheckbox {
+        grid-area: checkbox;
+        text-align: right;
+    }
+    .colActions {
+        gap: 2px;
+    }
+    .addInput,
+.editInput {
+  flex: 1 1 auto;
+  min-width: 60px;
+  max-width: 100%;
+  height: 25px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.08);
   color: var(--textMain);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 8px;
-  padding: 10px 12px;
   outline: none;
-  transition: border .15s ease, box-shadow .15s ease;
-
-  &::placeholder { color: rgba(255,255,255,.55); }
-  &:focus { border-color: rgba(255,255,255,.4); box-shadow: 0 0 0 2px rgba(255,255,255,.08) inset; }
+  transition: border .15s, box-shadow .15s;
 }
-
-.footer {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 12px;
-  align-items: center;
-  margin-top: 12px;
 }
-.missingVotes { color: var(--textMain); opacity: .85; }
