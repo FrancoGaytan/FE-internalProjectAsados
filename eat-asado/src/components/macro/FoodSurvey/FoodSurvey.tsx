@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createOption, deleteOption, editOption, getMembersWhoHaventVoted, toggleVoteOption } from '../../../service/optionsService.mock'; //cambialo al posta
+import { createOption, deleteOption, editOption, getMembersWhoHaventVoted, toggleVoteOption } from '../../../service/optionsService';
 import AddOptionInput from './AddOptionInput';
 import OptionRow from './OptionRow';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
