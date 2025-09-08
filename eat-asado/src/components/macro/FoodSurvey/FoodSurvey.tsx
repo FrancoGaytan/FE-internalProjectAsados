@@ -11,12 +11,13 @@ import { IOption } from '../../../models/options';
 type Props = {
 	eventId: string;
 	userId: string;
+	canUserEdit: boolean;
 	options: IOption[]; // viene de getEventById().options
 	participantsCount: number; // total de miembros del evento
 	onOptionsChange?: (opts: IOption[]) => void; // callback al padre
 };
 
-export default function FoodSurvey({ eventId, userId, options = [], participantsCount = 0, onOptionsChange }: Props) {
+export default function FoodSurvey({ eventId, userId, canUserEdit, options = [], participantsCount = 0, onOptionsChange }: Props) {
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
 
@@ -60,9 +61,9 @@ export default function FoodSurvey({ eventId, userId, options = [], participants
 		createOption(eventId, title.trim(), abortRef.current.signal)
 			.then(newOpt => {
 				updateState([...rows, newOpt]);
-				setAlert(lang.optionAdded ?? 'Opción agregada', AlertTypes.SUCCESS);
+				setAlert(lang.optionAdded, AlertTypes.SUCCESS);
 			})
-			.catch(() => setAlert(lang.errorAddingOption ?? 'Error al agregar opción', AlertTypes.ERROR))
+			.catch(() => setAlert(lang.errorAddingOption, AlertTypes.ERROR))
 			.finally(() => setAdding(false));
 	}
 
@@ -73,9 +74,9 @@ export default function FoodSurvey({ eventId, userId, options = [], participants
 		deleteOption(id, abortRef.current.signal)
 			.then(() => {
 				updateState(rows.filter(r => r._id !== id));
-				setAlert(lang.optionDeleted ?? 'Opción eliminada', AlertTypes.SUCCESS);
+				setAlert(lang.optionDeleted, AlertTypes.SUCCESS);
 			})
-			.catch(() => setAlert(lang.errorDeletingOption ?? 'Error al eliminar opción', AlertTypes.ERROR));
+			.catch(() => setAlert(lang.errorDeletingOption, AlertTypes.ERROR));
 	}
 
 	function handleEdit(id: string, title: string) {
@@ -85,9 +86,9 @@ export default function FoodSurvey({ eventId, userId, options = [], participants
 		editOption(id, { title: title.trim() }, abortRef.current.signal)
 			.then(updated => {
 				updateState(rows.map(r => (r._id === id ? { ...r, title: updated.title } : r)));
-				setAlert(lang.optionUpdated ?? 'Opción actualizada', AlertTypes.SUCCESS);
+				setAlert(lang.optionUpdated, AlertTypes.SUCCESS);
 			})
-			.catch(() => setAlert(lang.errorUpdatingOption ?? 'Error al editar opción', AlertTypes.ERROR));
+			.catch(() => setAlert(lang.errorUpdatingOption, AlertTypes.ERROR));
 	}
 
 	function handleToggleVote(option: IOption) {
@@ -96,7 +97,7 @@ export default function FoodSurvey({ eventId, userId, options = [], participants
 
 		toggleVoteOption(option, userId, abortRef.current.signal)
 			.then(updated => updateState(rows.map(r => (r._id === updated._id ? updated : r))))
-			.catch(() => setAlert(lang.errorVoting ?? 'Error al votar', AlertTypes.ERROR));
+			.catch(() => setAlert(lang.errorVoting, AlertTypes.ERROR));
 	}
 
 	const hasOptions = rows.length > 0;
@@ -124,20 +125,13 @@ export default function FoodSurvey({ eventId, userId, options = [], participants
 
 				{hasOptions && (
 					<>
-						{/* <div className={styles.gridHeader}>
-              <span>{lang.option ?? 'Opción'}</span>
-              <span>{lang.progress ?? 'Progreso'}</span>
-              <span>{lang.votes ?? 'Votos'}</span>
-              <span>{lang.yourVote ?? 'Tu voto'}</span>
-              <span>{lang.actions ?? 'Acciones'}</span>
-            </div>
- */}
 						<div className={styles.gridBody}>
 							{rows.map(opt => (
 								<OptionRow
 									key={opt._id}
 									option={opt}
 									userId={userId}
+									canUserEdit={canUserEdit}
 									participantsCount={participantsCountSafe}
 									onToggleVote={() => handleToggleVote(opt)}
 									onEdit={title => handleEdit(opt._id, title)}
@@ -150,7 +144,7 @@ export default function FoodSurvey({ eventId, userId, options = [], participants
 							<div className={styles.missingVotes}>
 								{(lang.peopleWithoutVote ?? 'Quedan {n} personas sin votar').replace('{n}', String(missing))}
 							</div>
-							<AddOptionInput compact loading={adding} onAdd={handleAdd} />
+							{canUserEdit && <AddOptionInput compact loading={adding} onAdd={handleAdd} />}
 						</div>
 					</>
 				)}

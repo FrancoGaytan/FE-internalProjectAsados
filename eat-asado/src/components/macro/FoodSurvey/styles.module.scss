@@ -4,323 +4,400 @@
 
 /* ===== Contenedor general del modal de encuesta ===== */
 .wrapper {
-    width: min(96vw, 560px);
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0 auto;
+	width: min(96vw, 560px);
+	max-width: 100%;
+	box-sizing: border-box;
+	margin: 0 auto;
 }
 
 /* ===== Header (título arriba a la derecha) ===== */
 .header {
-    display: flex;
+	display: flex;
 }
 
 .modalTitle {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--textMain);
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: var(--textMain);
 }
 
 /* ===== Contenido scrollable ===== */
 .content {
-    max-height: min(60vh, 420px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 12px 14px 0px;
+	max-height: min(60vh, 420px);
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 12px 14px 0px;
 
-    &::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
-    }
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.4);
-        border-radius: 2px;
-    }
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+	&::-webkit-scrollbar {
+		width: 4px;
+		height: 4px;
+	}
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: rgba(255, 255, 255, 0.4);
+		border-radius: 2px;
+	}
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 }
 
 /* ===== Estado vacío ===== */
 .emptyState {
-    display: grid;
-    gap: 10px;
-    justify-items: center;
-    padding: 10px 0 4px;
+	display: grid;
+	gap: 10px;
+	justify-items: center;
+	padding: 10px 0 4px;
 }
 
 .helperText {
-    color: var(--textMain);
-    font-size: small;
-    opacity: 0.85;
-    text-align: center;
-    margin: 0 8px;
-    max-width: 48ch;
-    text-wrap: balance;
+	color: var(--textMain);
+	font-size: small;
+	opacity: 0.85;
+	text-align: center;
+	margin: 0 8px;
+	max-width: 48ch;
+	text-wrap: balance;
 }
 
 /* ===== Grid (cabecera y filas) ===== */
 .gridHeader,
 .gridRow {
-    display: grid;
-    grid-template-columns: 1.1fr minmax(140px, 1.2fr) 20px 20px 20px; /* desc | range | # | check | acciones */
-    gap: 8px;
-    align-items: center;
+	display: grid;
+	grid-template-columns: 1.1fr minmax(140px, 1.2fr) 20px 20px 20px; /* desc | range | # | check | acciones */
+	gap: 8px;
+	align-items: center;
 }
 
 .gridHeader {
-    position: sticky;
-    top: 0;
-    padding: 6px 2px;
-    background-color: var(--backgroundMain);
-    color: #fff;
-    z-index: 2;
+	position: sticky;
+	top: 0;
+	padding: 6px 2px;
+	background-color: var(--backgroundMain);
+	color: #fff;
+	z-index: 2;
 
-    span {
-        font-weight: 600;
-        font-size: 0.88rem;
-    }
+	span {
+		font-weight: 600;
+		font-size: 0.88rem;
+	}
 }
 
 .gridBody {
-    display: grid;
-    gap: 6px;
-    padding-top: 4px;
-    max-height: 200px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+	display: grid;
+	gap: 6px;
+	padding-top: 4px;
+	max-height: 200px;
+	overflow-y: auto;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 
-    &::-webkit-scrollbar {
-        width: 4px;
-        background: transparent;
-    }
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.4);
-        border-radius: 2px;
-    }
+	&::-webkit-scrollbar {
+		width: 4px;
+		background: transparent;
+	}
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: rgba(255, 255, 255, 0.4);
+		border-radius: 2px;
+	}
 }
 
 .colDescription {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .colRange {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 .colVotes {
-    text-align: center;
-    max-width: fit-content;
+	text-align: center;
+	max-width: fit-content;
 }
 .colCheckbox {
-    text-align: center;
-    max-width: fit-content;
+	text-align: center;
+	max-width: fit-content;
 }
 .colActions {
-    display: flex;
-    gap: 2px;
-    justify-content: flex-end;
-    align-items: center;
-    max-width: fit-content;
+	display: flex;
+	gap: 2px;
+	justify-content: flex-end;
+	align-items: center;
+	max-width: fit-content;
 }
 
 /* ===== Controles ===== */
 .range {
-    width: 100%;
-    appearance: none;
-    height: 6px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.15);
-    outline: none;
+	width: 100%;
+	appearance: none;
+	height: 6px;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.15);
+	outline: none;
 
-    &::-webkit-slider-thumb {
-        appearance: none;
-        width: 0;
-        height: 0;
-    }
-    &::-moz-range-thumb {
-        width: 0;
-        height: 0;
-        border: 0;
-    }
+	&::-webkit-slider-thumb {
+		appearance: none;
+		width: 0;
+		height: 0;
+	}
+	&::-moz-range-thumb {
+		width: 0;
+		height: 0;
+		border: 0;
+	}
 }
 .rangeVoted {
-    filter: brightness(1.2);
-    background: rgba(255, 255, 255, 0.75);
+	filter: brightness(1.2);
+	background: rgba(255, 255, 255, 0.75);
 }
 .rangeMuted {
-    background: rgba(255, 255, 255, 0.18);
+	background: rgba(255, 255, 255, 0.18);
 }
 
 .colVotes .voteCount {
-    color: var(--textMain);
-    font-weight: 600;
+	color: var(--textMain);
+	font-weight: 600;
 }
 
 .checkbox {
-    transform: scale(1.1);
-    transition: filter 0.2s;
+	transform: scale(1.1);
+	transition: filter 0.2s;
 }
 .checkboxOn {
-    filter: brightness(1.6);
+	filter: brightness(1.6);
 }
 .checkboxOff {
-    opacity: 0.65;
+	opacity: 0.65;
 }
 
 /* ===== Botones de icono ===== */
 .iconBtn {
-    width: 28px;
-    height: 28px;
-    border: none;
-    background: transparent;
-    box-shadow: none;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    filter: brightness(1.2);
-    transition: filter 0.2s ease, transform 0.08s ease;
-    margin: 0;
+	width: 28px;
+	height: 28px;
+	border: none;
+	background: transparent;
+	box-shadow: none;
+	cursor: pointer;
+	display: grid;
+	place-items: center;
+	filter: brightness(1.2);
+	transition: filter 0.2s ease, transform 0.08s ease;
+	margin: 0;
 
-    &:hover {
-        filter: brightness(1.6);
-    }
-    &:active {
-        transform: scale(0.96);
-    }
+	&:hover {
+		filter: brightness(1.6);
+	}
+	&:active {
+		transform: scale(0.96);
+	}
 }
 
 /* Rutas a tus imágenes en /public */
 .iconPlus {
-    width: 25px;
-    height: 25px;
-    background-image: url('../../../.././public/assets/pictures/plus.png');
-    background-size: contain;
-    background-repeat: no-repeat;
+	width: 25px;
+	height: 25px;
+	background-image: url('../../../.././public/assets/pictures/plus.png');
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 .iconEdit {
-    width: 16px;
-    height: 16px;
-    background-image: url('../../../.././public/assets/pictures/editLogo.png');
-    background-size: contain;
-    background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	background-image: url('../../../.././public/assets/pictures/editLogo.png');
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 .iconTrash {
-    width: 16px;
-    height: 16px;
-    background-image: url('../../../.././public/assets/pictures/trash.png');
-    background-size: contain;
-    background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	background-image: url('../../../.././public/assets/pictures/trash.png');
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 
 /* ===== Add option: botón + dentro del input ===== */
 .addRow {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-top: 6px;
-    position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	margin-top: 6px;
+	position: relative;
 
-    &.addRowCompact {
-        margin-top: 0;
-    }
+	&.addRowCompact {
+		margin-top: 0;
+	}
+}
+
+input[type='checkbox'] {
+	transform: scale(1.2);
+	cursor: default;
+
+	&.editableCheckbox {
+		cursor: pointer;
+		filter: brightness(1.6);
+		transition: all 0.2s ease;
+
+		&:hover {
+			box-shadow: 0px 3px 3px rgba(230, 230, 230, 0.15);
+			outline-offset: 2px;
+		}
+	}
+
+	&:disabled {
+		opacity: 0.2;
+	}
+}
+
+.customCheckbox {
+	position: relative;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+}
+
+.customCheckbox input[type='checkbox'] {
+	opacity: 0;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 2;
+	cursor: pointer;
+}
+
+.customCheckbox .checkmark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 16px;
+	height: 16px;
+	background: rgba(255, 255, 255, 0.07);
+	border: 2px solid #bbb;
+	border-radius: 6px;
+	transition: border-color 0.2s, background 0.2s;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+	pointer-events: none;
+}
+
+.customCheckbox input[type='checkbox']:checked + .checkmark {
+	background: #5fcbcf;
+	border-color: #5fcbcf;
+}
+
+.customCheckbox .checkmark:after {
+	content: '';
+	position: absolute;
+	display: none;
+}
+
+.customCheckbox input[type='checkbox']:checked + .checkmark:after {
+	display: block;
+}
+
+.customCheckbox .checkmark:after {
+	left: 5px;
+	top: 2px;
+	width: 4px;
+	height: 8px;
+	border: solid #fff;
+	border-width: 0 3px 3px 0;
+	border-radius: 1px;
+	transform: rotate(45deg);
+	content: '';
 }
 
 .addInput,
 .editInput {
-    flex: 1 1 auto;
-    min-width: 80px;
-    max-width: 100%;
-    height: 25px;
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--textMain);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 10px;
-    padding: 6px 12px;
-    outline: none;
-    transition: border 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.08);
+  color: var(--textMain);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.15s, box-shadow 0.15s;
 
-    &::placeholder {
-        color: rgba(255, 255, 255, 0.55);
-    }
-    &:focus {
-        border-color: rgba(255, 255, 255, 0.4);
-        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
-    }
+	&::placeholder {
+		color: rgba(255, 255, 255, 0.55);
+	}
+	&:focus {
+		border-color: rgba(255, 255, 255, 0.4);
+		box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08) inset;
+	}
 }
 
 .addRow .iconBtn {
-    width: 28px;
-    height: 28px;
-    margin-left: 8px;
-    position: static;
-    z-index: 2;
+	width: 28px;
+	height: 28px;
+	margin-left: 8px;
+	position: static;
+	z-index: 2;
 }
 
 /* ===== Footer ===== */
 .footer {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-    align-items: center;
-    margin-top: 30px;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 8px;
+	align-items: center;
+	margin-top: 30px;
 }
 .missingVotes {
-    color: var(--textMain);
-    opacity: 0.9;
-    text-align: center;
+	color: var(--textMain);
+	opacity: 0.9;
+	text-align: center;
 }
 
 /* ===== Responsive (≤ 560px) ===== */
 @media #{variables.media-query(max, sm)} {
-    .gridHeader {
-        display: none;
-    }
-    .gridRow {
-        grid-template-columns: 1fr 56px;
-        gap: 4px;
-    }
-    .colDescription {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: normal;
-        word-break: break-word;
-        min-width: 80px;
-        max-width: 220px;
-    }
-    .colRange {
-        grid-area: range;
-    }
-    .colVotes {
-        grid-area: votes;
-        text-align: left;
-    }
-    .colCheckbox {
-        grid-area: checkbox;
-        text-align: right;
-    }
-    .colActions {
-        gap: 2px;
-    }
-    .addInput,
-.editInput {
-  flex: 1 1 auto;
-  min-width: 60px;
-  max-width: 100%;
-  height: 25px;
-  padding: 6px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.08);
-  color: var(--textMain);
-  outline: none;
-  transition: border .15s, box-shadow .15s;
-}
+  .gridHeader {
+    display: none;
+  }
+  .gridRow {
+    grid-template-columns: 1.2fr 1.2fr 24px 32px 32px; // desc | range | # | checkbox | acciones
+    gap: 4px;
+    align-items: center;
+  }
+  .colDescription {
+    min-width: 0;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .colRange {
+    justify-self: center;
+  }
+  .colVotes,
+  .colCheckbox,
+  .colActions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+	.addInput,
+	.editInput {
+		flex: 1 1 auto;
+		min-width: 60px;
+		max-width: 100%;
+		height: 25px;
+		padding: 6px 12px;
+		border-radius: 10px;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(255, 255, 255, 0.08);
+		color: var(--textMain);
+		outline: none;
+		transition: border 0.15s, box-shadow 0.15s;
+	}
 }

@@ -39,5 +39,15 @@ export const event = Object.seal({
 	assignationsUpdatedSuccessfully: 'Assignments updated successfully',
 	errorUpdatingAssignations: 'There has been an error updating assignments',
 	pendingTransferWarning: 'You have a pending transfer approval for the event ',
-	goToEvent: 'Go to the Event'
+	goToEvent: 'Go to the Event',
+	optionAdded: 'Option added',
+	errorAddingOption: 'Error adding option',
+	optionDeleted: 'Option deleted',
+	errorDeletingOption: 'Error deleting option',
+	optionUpdated: 'Option updated',
+	errorUpdatingOption: 'Error updating option',
+	errorVoting: 'Error voting option',
+	surveyTitle: 'Survey',
+	surveyEmptyText: 'Add food options so attendees can vote',
+	peopleWithoutVotes: 'There are {n} people without votes'
 });
