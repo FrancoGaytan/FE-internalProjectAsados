@@ -1,3 +1,4 @@
+import { useTranslation } from '../../../stores/LocalizationContext';
 import styles from './styles.module.scss';
 import { useState } from 'react';
 
@@ -5,12 +6,13 @@ type Props = { onAdd: (title: string) => void; loading?: boolean; compact?: bool
 
 export default function AddOptionInput({ onAdd, loading, compact }: Props) {
   const [value, setValue] = useState('');
+  	const lang = useTranslation('event');
 
   return (
     <div className={`${styles.addRow} ${compact ? styles.addRowCompact : ''}`}>
       <input
         className={styles.addInput}
-        placeholder="Escribí una opción…"
+        placeholder={lang.addOptionPlaceholder}
         value={value}
         disabled={loading}
         onChange={e => setValue(e.target.value)}
@@ -24,7 +26,7 @@ export default function AddOptionInput({ onAdd, loading, compact }: Props) {
       <button
         type="button"
         className={styles.iconBtn}
-        aria-label="Agregar opción"
+        aria-label={lang.addOptionAriaLabel}
         disabled={loading || !value.trim()}
         onClick={() => {
           if (!value.trim()) return;

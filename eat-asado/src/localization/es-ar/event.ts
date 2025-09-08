@@ -50,4 +50,6 @@ export const event = Object.seal({
 	surveyTitle: 'Encuesta',
 	surveyEmptyText: 'Agregá opciones de comidas para que los comensales puedan votar',
 	peopleWithoutVotes: 'Hay {n} personas sin votos',
+	addOptionPlaceholder: 'Escribí una opción…',
+	addOptionAriaLabel: 'Agregar opción',
 });
