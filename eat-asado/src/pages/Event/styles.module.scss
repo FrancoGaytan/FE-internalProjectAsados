@@ -199,17 +199,34 @@
 							margin-bottom: 10px;
 							align-self: center;
 							margin-left: auto;
-							width: 29px;
-							height: 29px;
-							border-radius: 0;
+							width: 35px;
+							height: 35px;
+							border-radius: 50%;
 							box-shadow: none;
-							background-size: contain;
-							background-color: transparent;
+							background-size: 80% 80%;
+							background-repeat: no-repeat;
+							background-position: center;
+							background-color: white;
+							box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15);
 							background-image: url('../../../public/assets/pictures/assignIcon.png');
 							&:hover {
 								scale: 1.05;
 							}
-							@media #{variables.media-query(max, sm)} {
+						}
+						.surveyEventBtn {
+							margin-bottom: 10px;
+							align-self: center;
+							margin-left: auto;
+							width: 35px;
+							height: 35px;
+							background-size: 80% 80%;
+							background-repeat: no-repeat;
+							background-position: center;
+							box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.15);
+							background-color: white;
+							background-image: url('../../../public/assets/pictures/icons-encuesta.png');
+							&:hover {
+								scale: 1.05;
 							}
 						}
 					}
