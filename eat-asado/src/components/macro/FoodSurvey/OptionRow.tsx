@@ -18,13 +18,15 @@ export default function OptionRow({ option, userId, participantsCount, canUserEd
 
 	const votes = option.participants.length;
 	const checked = option.participants.includes(userId);
+	const totalVotes = participantsCount > 0 ? participantsCount : 1;
+	const percent = Math.round((votes / totalVotes) * 100);
 
 	return (
 		<div className={styles.gridRow}>
 			{/* col 1: descripción editable */}
 			<div
 				className={styles.colDescription}
-				onClick={() => !editing && canUserEdit &&setEditing(true)}
+				onClick={() => !editing && canUserEdit && setEditing(true)}
 				tabIndex={0}
 				style={{ cursor: editing ? 'text' : 'pointer' }}>
 				{editing ? (
@@ -54,15 +56,12 @@ export default function OptionRow({ option, userId, participantsCount, canUserEd
 
 			{/* col 2: barra range proporcional (read-only) */}
 			<div className={styles.colRange}>
-				<input
-					type="range"
-					min={0}
-					max={participantsCount}
-					value={votes}
-					readOnly
-					disabled
-					className={`${styles.range} ${checked ? styles.rangeVoted : styles.rangeMuted}`}
-				/>
+				<div className={styles.progressBarBg}>
+					<div
+						className={`${styles.progressBarFill} ${checked ? styles.rangeVoted : styles.rangeMuted}`}
+						style={{ width: `${percent}%` }}
+					/>
+				</div>
 			</div>
 
 			{/* col 3: numerito de votos */}
