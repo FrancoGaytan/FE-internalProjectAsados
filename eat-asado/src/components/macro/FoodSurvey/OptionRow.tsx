@@ -7,23 +7,24 @@ type Props = {
 	userId: string;
 	participantsCount: number;
 	canUserEdit: boolean;
+	peopleWhoHaventPaid: number;
 	onToggleVote: () => void;
 	onEdit: (title: string) => void;
 	onDelete: () => void;
 };
 
-export default function OptionRow({ option, userId, participantsCount, canUserEdit, onToggleVote, onEdit, onDelete }: Props) {
+export default function OptionRow({ option, userId, participantsCount, peopleWhoHaventPaid, canUserEdit, onToggleVote, onEdit, onDelete }: Props) {
 	const [editing, setEditing] = useState(false);
 	const [temp, setTemp] = useState(option.title);
 
 	const votes = option.participants.length;
 	const checked = option.participants.includes(userId);
-	const totalVotes = participantsCount > 0 ? participantsCount : 1;
+	const totalVotes = participantsCount > 0 ? participantsCount - peopleWhoHaventPaid : 1;
 	const percent = Math.round((votes / totalVotes) * 100);
 
 	return (
 		<div className={styles.gridRow}>
-			{/* col 1: descripción editable */}
+			{/* col 1: editable description */}
 			<div
 				className={styles.colDescription}
 				onClick={() => !editing && canUserEdit && setEditing(true)}
@@ -54,7 +55,7 @@ export default function OptionRow({ option, userId, participantsCount, canUserEd
 				)}
 			</div>
 
-			{/* col 2: barra range proporcional (read-only) */}
+			{/* col 2: progress bar (read-only) */}
 			<div className={styles.colRange}>
 				<div className={styles.progressBarBg}>
 					<div
@@ -64,12 +65,12 @@ export default function OptionRow({ option, userId, participantsCount, canUserEd
 				</div>
 			</div>
 
-			{/* col 3: numerito de votos */}
+			{/* col 3: votes number */}
 			<div className={styles.colVotes}>
 				<span className={styles.voteCount}>{votes}</span>
 			</div>
 
-			{/* col 4: tu voto */}
+			{/* col 4: your vote */}
 			<div className={styles.colCheckbox}>
 				<label className={styles.customCheckbox}>
 					<input type="checkbox" checked={checked} onChange={onToggleVote} />
@@ -77,7 +78,7 @@ export default function OptionRow({ option, userId, participantsCount, canUserEd
 				</label>
 			</div>
 
-			{/* col 5: acciones */}
+			{/* col 5: actions */}
 			{canUserEdit && (
 				<div className={styles.colActions}>
 					<button className={styles.iconBtn} aria-label="Eliminar opción" onClick={onDelete}>
