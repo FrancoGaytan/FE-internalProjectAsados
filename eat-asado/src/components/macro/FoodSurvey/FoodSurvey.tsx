@@ -12,9 +12,9 @@ type Props = {
 	eventId: string;
 	userId: string;
 	canUserEdit: boolean;
-	options: IOption[]; // viene de getEventById().options
-	participantsCount: number; // total de miembros del evento
-	onOptionsChange?: (opts: IOption[]) => void; // callback al padre
+	options: IOption[];
+	participantsCount: number;
+	onOptionsChange?: (opts: IOption[]) => void;
 };
 
 export default function FoodSurvey({ eventId, userId, canUserEdit, options = [], participantsCount = 0, onOptionsChange }: Props) {
@@ -27,7 +27,6 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, options = [],
 	const abortRef = useRef<AbortController | null>(null);
 
 	useEffect(() => {
-		// Solo actualiza si las opciones realmente cambiaron
 		if (JSON.stringify(rows) !== JSON.stringify(options ?? [])) {
 			setRows(options ?? []);
 		}
@@ -48,7 +47,6 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, options = [],
 	function updateState(next: IOption[]) {
 		setRows(next);
 		onOptionsChange?.(next);
-		// refrescamos “quedan sin votar”
 		refreshMissing();
 	}
 
@@ -101,23 +99,20 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, options = [],
 	}
 
 	const hasOptions = rows.length > 0;
-
-	// (opcional) cálculo local del % por si lo querés usar en tooltips
 	const participantsCountSafe = useMemo(() => Math.max(participantsCount, 1), [participantsCount]);
 
 	return (
 		<div className={styles.wrapper}>
-			{/* título arriba a la derecha */}
 			<div className={styles.header}>
 				<div />
-				<div className={styles.modalTitle}>{lang.surveyTitle ?? 'Encuesta'}</div>
+				<div className={styles.modalTitle}>{lang.surveyTitle}</div>
 			</div>
 
 			<div className={styles.content}>
 				{!hasOptions && (
 					<div className={styles.emptyState}>
 						<p className={styles.helperText}>
-							{lang.surveyEmptyText ?? 'Agregá opciones de comidas para que los comensales puedan votar'}
+							{lang.surveyEmptyText}
 						</p>
 						<AddOptionInput loading={adding} onAdd={handleAdd} />
 					</div>
@@ -133,6 +128,7 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, options = [],
 									userId={userId}
 									canUserEdit={canUserEdit}
 									participantsCount={participantsCountSafe}
+									peopleWhoHaventPaid={missing}
 									onToggleVote={() => handleToggleVote(opt)}
 									onEdit={title => handleEdit(opt._id, title)}
 									onDelete={() => handleDelete(opt._id)}
@@ -142,7 +138,7 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, options = [],
 
 						<div className={styles.footer}>
 							<div className={styles.missingVotes}>
-								{(lang.peopleWithoutVote ?? 'Quedan {n} personas sin votar').replace('{n}', String(missing))}
+								{ String(missing)=== '0' ? lang.everyoneHasVoted : String(missing)=== '1' ? (lang.peopleWithoutVotesP1one + String(missing) + lang.peopleWithoutVotesP2one) : (lang.peopleWithoutVotesP1 + String(missing) + lang.peopleWithoutVotesP2)}
 							</div>
 							{canUserEdit && <AddOptionInput compact loading={adding} onAdd={handleAdd} />}
 						</div>
