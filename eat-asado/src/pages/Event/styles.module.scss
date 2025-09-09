@@ -533,6 +533,7 @@
 
 		@media #{variables.media-query(max, sm)} {
 			flex-direction: column;
+			align-items: center;
 		}
 	}
 }
