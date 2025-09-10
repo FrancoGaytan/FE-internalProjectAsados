@@ -94,7 +94,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 		}
 		return eventParticipants.find(member => member.userId === user?.id);
 	}
-        
+
 	function handleParticipation() {
 		if (!!user?.name) {
 			subscribeUserToEvent();
@@ -173,7 +173,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 
 	return (
 		//la clase cardContainer tiene que ir acompañado con una clase que represente al estado del evento que trae por props
-		<div {...className(styles.cardContainer)}>
+		<div {...className(styles.cardContainer)} data-testid="event-card-container">
 			<EventHeader
 				evState={evState}
 				isEventBlocking={isThisEventBlocking()}
@@ -186,34 +186,40 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 				subscribedUser={verifySubscription()}
 			/>
 
-			<section className={styles.cardMainInfo}>
-				<section className={styles.cardMainData}>
-					<div className={styles.eventTime}>{evTime} hrs</div>
-					<section className={styles.mainInfo}>
-						<div className={styles.eventTitle}>{evTitle}</div>
+			<section className={styles.cardMainInfo} data-testid="event-card-main-info">
+				<section className={styles.cardMainData} data-testid="event-card-main-data">
+					<div className={styles.eventTime} data-testid="event-card-time">
+						{evTime} hrs
+					</div>
+					<section className={styles.mainInfo} data-testid="event-card-main-info-section">
+						<div className={styles.eventTitle} data-testid="event-card-title">
+							{evTitle}
+						</div>
 						{privateEvent?.isPrivate && (
 							<Tooltip infoText={lang.privateEvent}>
-								<div className={styles.privateLogo}></div>
+								<div className={styles.privateLogo} data-testid="event-card-private-logo"></div>
 							</Tooltip>
 						)}
 					</section>
 
-					<div className={styles.eventDescription}>{evDescription}</div>
+					<div className={styles.eventDescription} data-testid="event-card-description">
+						{evDescription}
+					</div>
 
-					<div className={styles.eventParticipants}>
+					<div className={styles.eventParticipants} data-testid="event-card-participants">
 						{lang.currentParticipants}
-						<p>
+						<p data-testid="event-card-participants-count">
 							{evParticipants.toString()}/{evParticipantsLimit.toString()}
 						</p>
 					</div>
 
-					<div className={styles.eventCook}>
-						{lang.cook} <p>{evCook}</p>
+					<div className={styles.eventCook} data-testid="event-card-cook">
+						{lang.cook} <p data-testid="event-card-cook-name">{evCook}</p>
 					</div>
 				</section>
 
-				<section className={styles.cardBtn}>
-					<div className={styles.participateBtn}>
+				<section className={styles.cardBtn} data-testid="event-card-btn-section">
+					<div className={styles.participateBtn} data-testid="event-card-participate-btn">
 						{!verifySubscription() &&
 							!isAnotherEventBlocking() &&
 							evState === EventStatesEnum.AVAILABLE &&
@@ -227,24 +233,29 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 									onClick={e => {
 										//e.preventDefault();
 										handleParticipation();
-									}}>
+									}}
+									data-testid="event-card-participate-action">
 									{lang.participateBtn}
 								</Button>
 							)}
 					</div>
 					{(evState === EventStatesEnum.FINISHED || evState === EventStatesEnum.READYFORPAYMENT || evState === EventStatesEnum.CLOSED) && (
-						<section className={styles.ratingSection}>
+						<section className={styles.ratingSection} data-testid="event-card-rating-section">
 							<StarRating rating={evAvgRate} />
-							{evRatingsAmount > 0 && <p className={styles.ratingAvg}>{Number(evAvgRate).toFixed(1)}</p>}
+							{evRatingsAmount > 0 && (
+								<p className={styles.ratingAvg} data-testid="event-card-rating-avg">
+									{Number(evAvgRate).toFixed(1)}
+								</p>
+							)}
 
 							{evRatingsAmount === 1 ? (
-								<p className={styles.ratingRatingsAmoung}>
+								<p className={styles.ratingRatingsAmoung} data-testid="event-card-rating-count">
 									{'('}
 									{evRatingsAmount} {lang.reviewText}
 									{')'}
 								</p>
 							) : (
-								<p className={styles.ratingRatingsAmoung}>
+								<p className={styles.ratingRatingsAmoung} data-testid="event-card-rating-count">
 									{'('}
 									{evRatingsAmount} {lang.reviewTexts}
 									{')'}
@@ -253,7 +264,7 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 						</section>
 					)}
 
-					<div className={styles.infoBtn}>
+					<div className={styles.infoBtn} data-testid="event-card-info-btn">
 						<Button
 							kind={isAnotherEventBlocking() ? 'tertiary' : 'secondary'}
 							size="small"
@@ -264,7 +275,8 @@ export default function EventCard(props: IEventCardProps): JSX.Element {
 									e.preventDefault();
 									handleInfo();
 								}
-							}}>
+							}}
+							data-testid="event-card-info-action">
 							{lang.infoBtn}
 						</Button>
 					</div>
