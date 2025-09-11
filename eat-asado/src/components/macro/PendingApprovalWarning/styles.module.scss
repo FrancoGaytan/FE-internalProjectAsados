@@ -5,7 +5,7 @@
 .popupContainer {
 	.popupTitle {
 		color: white;
-		font-size: 22px;
+		font-size: 20px;
 		font-family: var(--primaryFont);
 		margin-bottom: 18px;
 		text-align: center;
@@ -25,5 +25,9 @@
 		display: flex;
 		justify-content: center;
 		margin-top: 10px;
+	}
+
+	.goToEventBtn{
+		color: rgb(2, 111, 2);
 	}
 }

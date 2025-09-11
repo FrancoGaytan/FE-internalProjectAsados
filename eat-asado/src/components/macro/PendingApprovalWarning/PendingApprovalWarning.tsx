@@ -34,7 +34,7 @@ export default function PendingApprovalWarning(props: ConfirmationPayProps) {
       <p className={styles.eventName}>{event?.title}</p>
       <div className={styles.btnSection}>
         <Button
-          className={styles.confirmPayBtn}
+          className={styles.goToEventBtn}
           kind="whitePrimary"
           size="short"
           onClick={() => goToEvent(props.eventId)}
