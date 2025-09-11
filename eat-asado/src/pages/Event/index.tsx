@@ -600,6 +600,7 @@ export function Event(): JSX.Element {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, []);
+
 	useEffect(() => {
 		if (!modalSurvey || !userIdParams?.eventId) return;
 
