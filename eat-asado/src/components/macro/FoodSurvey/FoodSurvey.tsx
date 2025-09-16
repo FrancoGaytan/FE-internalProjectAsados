@@ -6,7 +6,7 @@ import OptionRow from './OptionRow';
 import { AlertTypes } from '../../micro/AlertPopup/AlertPopup';
 import { useAlert } from '../../../stores/AlertContext';
 import { useTranslation } from '../../../stores/LocalizationContext';
-import { IOption } from '../../../models/options';
+import { IOption, ISurveyParticipant } from '../../../models/options';
 
 type Props = {
 	eventId: string;
@@ -15,16 +15,20 @@ type Props = {
 	options: IOption[];
 	participantsCount: number;
 	onOptionsChange?: (opts: IOption[]) => void;
+	open: boolean;
 };
 
-export default function FoodSurvey({ eventId, userId, canUserEdit, options = [], participantsCount = 0, onOptionsChange }: Props) {
+export default function FoodSurvey({ eventId, userId, canUserEdit, open, options = [], participantsCount = 0, onOptionsChange }: Props) {
 	const lang = useTranslation('event');
 	const { setAlert } = useAlert();
 
 	const [rows, setRows] = useState<IOption[]>(options);
-	const [missing, setMissing] = useState<number>(0);
+	const [missing, setMissing] = useState<ISurveyParticipant[]>([]);
 	const [adding, setAdding] = useState(false);
 	const abortRef = useRef<AbortController | null>(null);
+	const [pendingToggleId, setPendingToggleId] = useState<string | null>(null);
+	const [bulkSelecting, setBulkSelecting] = useState<boolean>(false);
+	const [toogleView, setToogleView] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (JSON.stringify(rows) !== JSON.stringify(options ?? [])) {
@@ -40,8 +44,10 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, options = [],
 		abortRef.current?.abort();
 		abortRef.current = new AbortController();
 		getMembersWhoHaventVoted(eventId, abortRef.current.signal)
-			.then(setMissing)
-			.catch(() => setMissing(0));
+			.then(res => {
+				setMissing(res.membersWhoHaventVoted ?? []);
+			})
+			.catch(() => setMissing([]));
 	}
 
 	function updateState(next: IOption[]) {
@@ -92,11 +98,45 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, options = [],
 	function handleToggleVote(option: IOption) {
 		abortRef.current?.abort();
 		abortRef.current = new AbortController();
+		setPendingToggleId(option._id);
 
 		toggleVoteOption(option, userId, abortRef.current.signal)
 			.then(updated => updateState(rows.map(r => (r._id === updated._id ? updated : r))))
-			.catch(() => setAlert(lang.errorVoting, AlertTypes.ERROR));
+			.catch(() => setAlert(lang.errorVoting, AlertTypes.ERROR))
+			.finally(() => setPendingToggleId(null));
 	}
+
+	async function handleSelectAll() {
+		if (!canUserEdit || bulkSelecting) return;
+
+		const toUpdate = rows.filter(o => !o.participants.some(p => p._id === userId));
+		if (toUpdate.length === 0) return;
+
+		setBulkSelecting(true);
+
+		try {
+			const updates = await Promise.all(
+				toUpdate.map(opt => {
+					const ids = [...opt.participants.map(p => p._id), userId];
+					return editOption(opt._id, { participants: ids as any });
+				})
+			);
+
+			const map = new Map(updates.map(u => [u._id, u]));
+			updateState(rows.map(r => map.get(r._id) ?? r));
+			setAlert(lang?.allSelected, AlertTypes.SUCCESS);
+		} catch {
+			setAlert(lang?.errorVoting, AlertTypes.ERROR);
+		} finally {
+			setBulkSelecting(false);
+		}
+	}
+
+	useEffect(() => {
+    if (!open) {
+        setToogleView(false);
+    }
+}, [open]);
 
 	const hasOptions = rows.length > 0;
 	const participantsCountSafe = useMemo(() => Math.max(participantsCount, 1), [participantsCount]);
@@ -108,43 +148,99 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, options = [],
 				<div className={styles.modalTitle}>{lang.surveyTitle}</div>
 			</div>
 
-			<div className={styles.content}>
-				{!hasOptions && (
-					<div className={styles.emptyState}>
-						<p className={styles.helperText}>
-							{lang.surveyEmptyText}
-						</p>
-						<AddOptionInput loading={adding} onAdd={handleAdd} />
-					</div>
-				)}
-
-				{hasOptions && (
-					<>
-						<div className={styles.gridBody}>
-							{rows.map(opt => (
-								<OptionRow
-									key={opt._id}
-									option={opt}
-									userId={userId}
-									canUserEdit={canUserEdit}
-									participantsCount={participantsCountSafe}
-									peopleWhoHaventPaid={missing}
-									onToggleVote={() => handleToggleVote(opt)}
-									onEdit={title => handleEdit(opt._id, title)}
-									onDelete={() => handleDelete(opt._id)}
-								/>
-							))}
+			{!toogleView ? (
+				<div className={styles.content}>
+					{!hasOptions && canUserEdit && (
+						<div className={styles.emptyState}>
+							<p className={styles.helperText}>{lang.surveyEmptyText}</p>
+							<AddOptionInput loading={adding} onAdd={handleAdd} />
 						</div>
+					)}
+					{!hasOptions && !canUserEdit && (
+						<div className={styles.emptyState}>
+							<p className={styles.helperText}>{lang.noOptionsForSurvey}</p>
+						</div>
+					)}
 
-						<div className={styles.footer}>
-							<div className={styles.missingVotes}>
-								{ String(missing)=== '0' ? lang.everyoneHasVoted : String(missing)=== '1' ? (lang.peopleWithoutVotesP1one + String(missing) + lang.peopleWithoutVotesP2one) : (lang.peopleWithoutVotesP1 + String(missing) + lang.peopleWithoutVotesP2)}
+					{hasOptions && (
+						<>
+							<div className={styles.gridBody}>
+								{rows.map(opt => (
+									<OptionRow
+										key={opt._id}
+										option={opt}
+										userId={userId}
+										canUserEdit={canUserEdit}
+										participantsCount={participantsCountSafe}
+										peopleWhoHaventVoted={missing}
+										pending={pendingToggleId === opt._id}
+										onToggleVote={() => handleToggleVote(opt)}
+										onEdit={title => handleEdit(opt._id, title)}
+										onDelete={() => handleDelete(opt._id)}
+										onView={() => {
+											setToogleView(true);
+										}}
+									/>
+								))}
 							</div>
-							{canUserEdit && <AddOptionInput compact loading={adding} onAdd={handleAdd} />}
-						</div>
-					</>
-				)}
-			</div>
+
+							{rows.length > 1 && (
+								<div className={styles.toolbar}>
+									<button
+										className={styles.selectAllBtn}
+										onClick={handleSelectAll}
+										disabled={!!pendingToggleId}
+										aria-busy={bulkSelecting}
+										aria-label={lang?.selectAll}>
+										{bulkSelecting ? lang?.processing : lang?.selectAll}
+									</button>
+								</div>
+							)}
+
+							<div className={styles.footer}>
+								<div className={styles.missingVotes}>
+									{String(missing.length) === '0'
+										? lang.everyoneHasVoted
+										: String(missing.length) === '1'
+										? lang.peopleWithoutVotesP1one + String(missing.length) + lang.peopleWithoutVotesP2one
+										: lang.peopleWithoutVotesP1 + String(missing.length) + lang.peopleWithoutVotesP2}
+								</div>
+								{canUserEdit && <AddOptionInput compact loading={adding} onAdd={handleAdd} />}
+							</div>
+						</>
+					)}
+				</div>
+			) : (
+				<>
+					<section className={styles.votesParticipantsSection}>
+						{options.map(opt => (
+							<div key={opt._id} className={styles.participantsListArea}>
+								<h3 className={styles.optionTitle}>{opt.title}</h3>
+								{opt.participants.length === 0 && <p className={styles.noVotes}>{lang.noVotesYet}</p>}
+								{opt.participants.length > 0 && (
+									<ul className={styles.participantsList}>
+										{opt.participants.map(p => (
+											<li key={p._id} className={styles.participantItem}>
+												{p.name + ' ' + p.lastName}
+											</li>
+										))}
+									</ul>
+								)}
+							</div>
+						))}
+					</section>
+					<div className={styles.toolbar}>
+						<button
+							className={styles.selectAllBtn}
+							onClick={() => setToogleView(false)}
+							disabled={!!pendingToggleId}
+							aria-busy={bulkSelecting}
+							aria-label={lang?.selectAll}>
+							{'volver'}
+						</button>
+					</div>
+				</>
+			)}
 		</div>
 	);
 }

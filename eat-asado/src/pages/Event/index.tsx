@@ -619,7 +619,7 @@ export function Event(): JSX.Element {
 					})
 					.catch(err => console.error('Error refreshing event:', err));
 			}
-		}, 5000);
+		}, 3000);
 
 		return () => clearInterval(interval);
 	}, [modalSurvey, userIdParams?.eventId]);
@@ -1079,6 +1079,7 @@ export function Event(): JSX.Element {
 					<FoodSurvey
 						eventId={event._id}
 						userId={user.id}
+						open={modalSurvey}
 						canUserEdit={event.organizer._id === user.id || !!isUserShoppingDesignee()}
 						options={event.options as IOption[]}
 						participantsCount={event.members.length}

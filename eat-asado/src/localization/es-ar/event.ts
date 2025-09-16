@@ -48,6 +48,7 @@ export const event = Object.seal({
 	errorUpdatingOption: 'Error al actualizar opción',
 	errorVoting: 'Error al votar opción',
 	surveyTitle: 'Encuesta',
+	noOptionsForSurvey: 'Aún no hay opciones para la encuesta',
 	surveyEmptyText: 'Agregá opciones de comidas para que los comensales puedan votar',
 	peopleWithoutVotesP1: 'Quedan ',
 	peopleWithoutVotesP2: ' personas sin votar',
@@ -56,4 +57,8 @@ export const event = Object.seal({
 	peopleWithoutVotesP1one: 'Queda ',
 	peopleWithoutVotesP2one: ' persona sin votar',
 	everyoneHasVoted: '¡Todos han votado!',
+	allSelected: 'Todas las opciones seleccionadas',
+	processing: 'Procesando...',
+	selectAll: 'Seleccionar todo',
+	noVotesYet: 'No hay votos',
 });
