@@ -1,5 +1,5 @@
 import { _delete, _get, _post, _put } from './httpService';
-import { IMembersWhoHaventVotedResponse, IOption, ISurveyParticipant } from '../models/options';
+import { IMembersWhoHaventVotedResponse, IOption } from '../models/options';
 
 export async function getMembersWhoHaventVoted(eventId: string, signal?: AbortSignal): Promise<IMembersWhoHaventVotedResponse> {
   const url = `/options/getMembersWhoHaventVoted/${eventId}`;
@@ -31,18 +31,14 @@ export async function toggleVoteOption(
   userId: string,
   signal?: AbortSignal
 ): Promise<IOption> {
-  // 1) normalizamos el array actual a IDs (soporta objetos o strings, por las dudas)
   const currentIds: string[] = (option.participants ?? []).map((p: any) =>
     typeof p === 'string' ? p : p?._id
   );
 
-  // 2) toggle: si ya está, lo saco; si no, lo agrego
   const already = currentIds.includes(userId);
   const nextIds = already
     ? currentIds.filter(id => id !== userId)
     : [...currentIds, userId];
 
-  // 3) enviamos SOLO IDs al backend (el PUT sigue igual)
-  //    casteamos para satisfacer el tipo del payload sin tocar la firma de editOption
   return await editOption(option._id, { participants: nextIds as unknown as any }, signal);
 }
