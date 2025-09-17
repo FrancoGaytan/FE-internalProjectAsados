@@ -792,7 +792,7 @@ export function Event(): JSX.Element {
 											</h5>
 
 											<div className={styles.assignTransitionWrapper} data-testid="event-shopdesignee-assign-wrapper">
-												{!event.shoppingDesignee.length && event.state === EventStatesEnum.AVAILABLE && isUserIntoEvent() && (
+												{!event.shoppingDesignee.length && (event.state === EventStatesEnum.AVAILABLE || event.state === EventStatesEnum.CLOSED) && isUserIntoEvent() && (
 													<AssignBtn
 														key="assign"
 														kind="assign"
@@ -802,7 +802,7 @@ export function Event(): JSX.Element {
 												)}
 												{Boolean(
 													event.shoppingDesignee.length &&
-														event.state === EventStatesEnum.AVAILABLE &&
+														(event.state === EventStatesEnum.AVAILABLE || event.state === EventStatesEnum.CLOSED) &&
 														isUserIntoEvent() &&
 														event.shoppingDesignee.find(sd => sd._id === user?.id)
 												) && (
@@ -814,7 +814,7 @@ export function Event(): JSX.Element {
 														onClick={() => toogleShopDesignee()}></AssignBtn>
 												)}
 												{event.shoppingDesignee.length > 0 &&
-													event.state === EventStatesEnum.AVAILABLE &&
+													(event.state === EventStatesEnum.AVAILABLE || event.state === EventStatesEnum.CLOSED) &&
 													isUserIntoEvent() &&
 													!event.shoppingDesignee.some((d: IUser) => d._id === user?.id) && (
 														<AssignBtn
