@@ -28,7 +28,8 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 	const abortRef = useRef<AbortController | null>(null);
 	const [pendingToggleId, setPendingToggleId] = useState<string | null>(null);
 	const [bulkSelecting, setBulkSelecting] = useState<boolean>(false);
-	const [toogleView, setToogleView] = useState<boolean>(false);
+	const [viewOptionId, setViewOptionId] = useState<string | null>(null);
+	const optionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
 	useEffect(() => {
 		if (JSON.stringify(rows) !== JSON.stringify(options ?? [])) {
@@ -133,10 +134,19 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 	}
 
 	useEffect(() => {
-    if (!open) {
-        setToogleView(false);
-    }
-}, [open]);
+		if (!open) {
+			setViewOptionId(null);
+		}
+	}, [open]);
+
+	useEffect(() => {
+		if (viewOptionId && optionRefs.current[viewOptionId]) {
+			optionRefs.current[viewOptionId]?.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center'
+			});
+		}
+	}, [viewOptionId]);
 
 	const hasOptions = rows.length > 0;
 	const participantsCountSafe = useMemo(() => Math.max(participantsCount, 1), [participantsCount]);
@@ -148,7 +158,7 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 				<div className={styles.modalTitle}>{lang.surveyTitle}</div>
 			</div>
 
-			{!toogleView ? (
+			{!viewOptionId ? (
 				<div className={styles.content}>
 					{!hasOptions && canUserEdit && (
 						<div className={styles.emptyState}>
@@ -177,9 +187,7 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 										onToggleVote={() => handleToggleVote(opt)}
 										onEdit={title => handleEdit(opt._id, title)}
 										onDelete={() => handleDelete(opt._id)}
-										onView={() => {
-											setToogleView(true);
-										}}
+										onView={() => setViewOptionId(opt._id)}
 									/>
 								))}
 							</div>
@@ -214,8 +222,8 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 				<>
 					<section className={styles.votesParticipantsSection}>
 						{options.map(opt => (
-							<div key={opt._id} className={styles.participantsListArea}>
-								<h3 className={styles.optionTitle}>{opt.title}</h3>
+							<div key={opt._id} className={styles.participantsListArea} ref={el => { optionRefs.current[opt._id] = el; }}>
+								<h3 className={`${styles.optionTitle} ${viewOptionId === opt._id ? styles.selectedOptionTitle : ''}`}>{opt.title}</h3>
 								{opt.participants.length === 0 && <p className={styles.noVotes}>{lang.noVotesYet}</p>}
 								{opt.participants.length > 0 && (
 									<ul className={styles.participantsList}>
@@ -232,10 +240,8 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 					<div className={styles.toolbar}>
 						<button
 							className={styles.selectAllBtn}
-							onClick={() => setToogleView(false)}
-							disabled={!!pendingToggleId}
-							aria-busy={bulkSelecting}
-							aria-label={lang?.selectAll}>
+							onClick={() => setViewOptionId(null)}
+							disabled={!!pendingToggleId}>
 							{'volver'}
 						</button>
 					</div>

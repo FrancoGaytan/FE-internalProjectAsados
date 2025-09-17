@@ -437,7 +437,7 @@
 		color: var(--textMain);
 		margin-bottom: 8px;
 		margin-top: 0;
-		text-transform: capitalize
+		text-transform: capitalize;
 	}
 
 	.noVotes {
@@ -461,6 +461,10 @@
 		padding-left: 2px;
 		letter-spacing: 0.01em;
 		margin-bottom: 10px;
+	}
+	.selectedOptionTitle {
+		color: #00ffee;
+		text-decoration: solid underline;
 	}
 }
 
