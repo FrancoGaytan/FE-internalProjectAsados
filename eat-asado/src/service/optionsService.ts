@@ -1,11 +1,14 @@
 import { _delete, _get, _post, _put } from './httpService';
-import { IOption } from '../models/options';
+import { IMembersWhoHaventVotedResponse, IOption } from '../models/options';
 
-export async function getMembersWhoHaventVoted(eventId: string, signal?: AbortSignal): Promise<number> {
+export async function getMembersWhoHaventVoted(eventId: string, signal?: AbortSignal): Promise<IMembersWhoHaventVotedResponse> {
   const url = `/options/getMembersWhoHaventVoted/${eventId}`;
   const res = await _get<any>(url, signal);
-  // tolerante al shape del backend: número directo o { count }
-  return typeof res === 'number' ? res : (res?.count ?? 0);
+  return {
+    membersWhoHaventVoted: Array.isArray(res.membersWhoHaventVoted)
+      ? res.membersWhoHaventVoted
+      : [],
+  };
 }
 
 export async function createOption(eventId: string, title: string, signal?: AbortSignal): Promise<IOption> {
@@ -23,12 +26,19 @@ export async function deleteOption(optionId: string, signal?: AbortSignal): Prom
   await _delete<void>(url, signal);
 }
 
-/** Helper conveniente para toggle de voto sin endpoint específico */
-export async function toggleVoteOption(option: IOption, userId: string, signal?: AbortSignal): Promise<IOption> {
-  const already = option.participants.includes(userId);
-  const participants = already
-    ? option.participants.filter(id => id !== userId)
-    : [...option.participants, userId];
+export async function toggleVoteOption(
+  option: IOption,
+  userId: string,
+  signal?: AbortSignal
+): Promise<IOption> {
+  const currentIds: string[] = (option.participants ?? []).map((p: any) =>
+    typeof p === 'string' ? p : p?._id
+  );
 
-  return await editOption(option._id, { participants }, signal);
+  const already = currentIds.includes(userId);
+  const nextIds = already
+    ? currentIds.filter(id => id !== userId)
+    : [...currentIds, userId];
+
+  return await editOption(option._id, { participants: nextIds as unknown as any }, signal);
 }
