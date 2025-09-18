@@ -242,7 +242,7 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 							className={styles.selectAllBtn}
 							onClick={() => setViewOptionId(null)}
 							disabled={!!pendingToggleId}>
-							{'volver'}
+							{lang.backToOptions}
 						</button>
 					</div>
 				</>

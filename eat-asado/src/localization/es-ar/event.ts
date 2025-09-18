@@ -61,4 +61,5 @@ export const event = Object.seal({
 	processing: 'Procesando...',
 	selectAll: 'Seleccionar todo',
 	noVotesYet: 'No hay votos',
+	backToOptions: 'Volver',
 });
