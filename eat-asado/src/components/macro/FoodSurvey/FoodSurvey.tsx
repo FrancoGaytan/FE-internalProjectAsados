@@ -147,7 +147,7 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 			});
 		}
 	}, [viewOptionId]);
-
+      
 	const hasOptions = rows.length > 0;
 	const participantsCountSafe = useMemo(() => Math.max(participantsCount, 1), [participantsCount]);
 
