@@ -108,7 +108,7 @@ export default function FoodSurvey({ eventId, userId, canUserEdit, open, options
 	}
 
 	async function handleSelectAll() {
-		if (!canUserEdit || bulkSelecting) return;
+		if (bulkSelecting) return;
 
 		const toUpdate = rows.filter(o => !o.participants.some(p => p._id === userId));
 		if (toUpdate.length === 0) return;
