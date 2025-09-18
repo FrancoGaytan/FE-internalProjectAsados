@@ -130,7 +130,7 @@ export default function OptionRow({
 			{/* col 6: view */}
 			<div className={styles.colActions}>
 				<button className={styles.iconBtn} aria-label="view participants" onClick={onView}>
-					<span className={styles.iconView} />
+					<span style={canUserEdit ? { transform: 'translateX(-6px)' } : undefined} className={styles.iconView} />
 				</button>
 			</div>
 		</div>

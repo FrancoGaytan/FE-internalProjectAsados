@@ -473,7 +473,7 @@
 		display: none;
 	}
 	.gridRow {
-		grid-template-columns: 1.1fr 1.1fr 24px 32px 32px 32px;
+		grid-template-columns: 80px 1fr 22px 22px 22px 22px;
 		gap: 4px;
 		align-items: center;
 	}
@@ -481,11 +481,10 @@
 		grid-template-columns: 1.1fr 1.1fr 24px 32px 32px;
 	}
 	.colDescription {
-		min-width: 0;
-		max-width: 100%;
-		white-space: nowrap;
+		max-width: 100px;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 	.colRange {
 		justify-self: center;
@@ -502,12 +501,11 @@
 		height: 100%;
 	}
 
-	.colVotes,
+	.colActions,
 	.colCheckbox,
-	.colActions {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+	.colVotes {
+		max-width: 26px;
+		min-width: 22px;
 	}
 
 	.addInput,
