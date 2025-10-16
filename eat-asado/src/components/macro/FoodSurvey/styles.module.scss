@@ -66,6 +66,7 @@
 	grid-template-columns: 1.1fr minmax(140px, 1.2fr) 20px 20px 20px 20px;
 	gap: 8px;
 	align-items: center;
+	min-width: 0;
 }
 .noEdit {
 	grid-template-columns: 1.1fr minmax(140px, 1.2fr) 20px 20px 20px;
@@ -91,6 +92,7 @@
 	padding-top: 4px;
 	max-height: 200px;
 	overflow-y: auto;
+	overflow-x: hidden;
 	scrollbar-width: thin;
 	scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 
@@ -107,7 +109,6 @@
 	}
 }
 
-/* feedback sutil mientras está pendiente */
 .pending {
 	opacity: 0.95;
 }
@@ -117,10 +118,12 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	min-width: 0;
 }
 .colRange {
 	display: flex;
 	align-items: center;
+	min-width: 0;
 }
 .colVotes {
 	text-align: center;
