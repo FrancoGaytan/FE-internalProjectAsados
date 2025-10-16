@@ -1,4 +1,5 @@
 import { EventStatesEnum } from '../enums/EventState.enum';
+import { IOption } from './options';
 import { EventRatingData } from './ratings';
 import { IUser } from './user';
 
@@ -15,6 +16,7 @@ export interface IEvent {
 	isPrivate: boolean;
 	penalization: number;
 	penalizationStartDate: Date;
+	options: IOption[];
 }
 
 export interface IPublicEvent {
@@ -44,6 +46,7 @@ export interface createEventRequest {
 	isPrivate: boolean;
 	penalization: number;
 	penalizationStartDate: Date;
+	options: IOption[];
 }
 
 export interface createRequest {
@@ -95,4 +98,5 @@ export interface EventByIdResponse {
 	isPrivate?: boolean;
 	penalization: number;
 	penalizationStartDate: Date;
+	options: IOption[];
 }

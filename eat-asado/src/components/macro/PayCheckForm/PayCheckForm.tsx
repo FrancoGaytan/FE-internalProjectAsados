@@ -52,7 +52,8 @@ export default function PayCheckForm(props: PayCheckProps) {
 		amount: 0,
 		file: undefined,
 		description: '',
-		user: user ? user.id : ''
+		user: user ? user.id : '',
+		receiver: undefined
 	};
 
 	const [payForm, setPayForm] = useState<ITransferReceiptRequest>(initialPayForm);
@@ -164,6 +165,10 @@ export default function PayCheckForm(props: PayCheckProps) {
 	useEffect(() => {
 		setPayForm(prev => ({ ...prev, user: user?.id as string }));
 	}, [user]);
+
+	useEffect(() => {
+		setPayForm(prev => ({ ...prev, receiver: paymentInfo.receiver.receiverId }));
+	}, [paymentInfo]);
 
 	return (
 		<div {...className(styles.paycheck)}>

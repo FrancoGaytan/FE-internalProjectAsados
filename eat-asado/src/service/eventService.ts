@@ -1,6 +1,6 @@
 import { PayCheckInfoResponse } from '../components/macro/PayCheckForm/PayCheckForm';
 import { createEventRequest, EventByIdResponse, IEvent, IPublicEvent } from '../models/event';
-import { ITransferReceiptInfoResponse } from '../models/transfer';
+import { IndividualCostResponse, ITransferReceiptInfoResponse } from '../models/transfer';
 import { _delete, _get, _post, _put } from './httpService';
 
 /**
@@ -87,5 +87,10 @@ export async function getMembersAndReceiptsInfo(eventId: string, signal?: AbortS
  */
 export async function getMembersAmount(eventId: string, signal?: AbortSignal): Promise<PayCheckInfoResponse[]> {
 	const url = `/events/getMembersAmount/${eventId}`;
+	return await _get(url, signal);
+}
+
+export async function getMemberIndividualCost(eventId: string, userId: string, signal?: AbortSignal): Promise<IndividualCostResponse> {//cambiar por userAmount
+	const url = `/events/getMemberIndividualCost/${userId}/${eventId}`;
 	return await _get(url, signal);
 }
